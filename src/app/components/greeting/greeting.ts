@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 
 @Component({
   selector: "app-greeting",
   imports: [],
-  templateUrl: './greeting.html',
-  styleUrl: './greeting.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./greeting.html",
+  styleUrl: "./greeting.css",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Greeting implements OnInit {
-  greeting: string = '';
+  greeting: string = "";
 
   ngOnInit(): void {
     this.setGreeting();

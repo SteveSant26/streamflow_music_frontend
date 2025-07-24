@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 
 @Component({
   selector: "app-player-volume-control",

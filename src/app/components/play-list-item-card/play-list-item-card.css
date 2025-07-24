@@ -8,7 +8,9 @@
 
 /* Animación suave para la imagen */
 .playlist-item img {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 /* Efecto de sombra más pronunciado en hover */
@@ -33,5 +35,5 @@
 
 /* Fallback para imágenes que no cargan */
 .playlist-item img[src=""] {
-  background: linear-gradient(45deg, #374151, #6B7280);
+  background: linear-gradient(45deg, #374151, #6b7280);
 }

@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, ElementRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  ElementRef,
+} from "@angular/core";
 
 @Component({
   selector: "app-player-sound-control",
@@ -20,14 +25,14 @@ export class PlayerSoundControl {
   formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   }
 
   onSeek(event: Event): void {
     const target = event.target as HTMLInputElement;
     const seekTime = parseFloat(target.value);
     this.currentTime = seekTime;
-    
+
     if (this.audioElement) {
       this.audioElement.nativeElement.currentTime = seekTime;
     }
@@ -37,7 +42,7 @@ export class PlayerSoundControl {
   ngOnInit(): void {
     // Simular duración de 3:45
     this.duration = 225; // 3:45 en segundos
-    
+
     // Simular progreso
     setInterval(() => {
       if (this.currentTime < this.duration) {

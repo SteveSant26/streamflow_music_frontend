@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 interface Playlist {
   id: number;
@@ -17,6 +17,6 @@ export class SideMenuCard {
 
   onImageError(event: any) {
     // Fallback a una imagen placeholder si la imagen original falla
-    event.target.src = '/assets/playlists/placeholder.jpg';
+    event.target.src = "/assets/playlists/placeholder.jpg";
   }
 }

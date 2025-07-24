@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MusicsTablePlay } from '../musics-table-play/musics-table-play';
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { MusicsTablePlay } from "../musics-table-play/musics-table-play";
 
 interface Song {
   id: number;
@@ -12,10 +12,10 @@ interface Song {
 }
 
 @Component({
-  selector: 'app-musics-table',
+  selector: "app-musics-table",
   imports: [MusicsTablePlay],
-  templateUrl: './musics-table.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./musics-table.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MusicsTable {
   @Input() songs: Song[] = [];
@@ -25,8 +25,10 @@ export class MusicsTable {
   currentPlaylistId: number | null = null;
 
   isCurrentSong(song: Song): boolean {
-    return this.currentSong?.id === song.id && 
-           this.currentPlaylistId === song.albumId;
+    return (
+      this.currentSong?.id === song.id &&
+      this.currentPlaylistId === song.albumId
+    );
   }
 
   // Mock songs data para testing
@@ -39,7 +41,7 @@ export class MusicsTable {
         album: "A Night at the Opera",
         albumId: 101,
         duration: "5:55",
-        image: "/assets/playlists/playlist1.jpg"
+        image: "/assets/playlists/playlist1.jpg",
       },
       {
         id: 2,
@@ -48,7 +50,7 @@ export class MusicsTable {
         album: "Hotel California",
         albumId: 102,
         duration: "6:30",
-        image: "/assets/playlists/playlist2.webp"
+        image: "/assets/playlists/playlist2.webp",
       },
       {
         id: 3,
@@ -57,7 +59,7 @@ export class MusicsTable {
         album: "Led Zeppelin IV",
         albumId: 103,
         duration: "8:02",
-        image: "/assets/playlists/playlist3.jpg"
+        image: "/assets/playlists/playlist3.jpg",
       },
       {
         id: 4,
@@ -66,8 +68,8 @@ export class MusicsTable {
         album: "Appetite for Destruction",
         albumId: 104,
         duration: "5:03",
-        image: "/assets/playlists/playlist4.jpg"
-      }
+        image: "/assets/playlists/playlist4.jpg",
+      },
     ];
   }
 }

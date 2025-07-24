@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 
 @Component({
   selector: "app-player-control-button-bar",
@@ -15,10 +21,10 @@ export class PlayerControlButtonBar {
   }
 
   onPreviousClick(): void {
-    console.log('Previous song');
+    console.log("Previous song");
   }
 
   onNextClick(): void {
-    console.log('Next song');
+    console.log("Next song");
   }
 }

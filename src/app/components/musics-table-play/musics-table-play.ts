@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 interface Song {
   id: number;
@@ -30,7 +30,7 @@ export class MusicsTablePlay {
   currentMusic: CurrentMusic = {
     song: null,
     playlist: null,
-    songs: []
+    songs: [],
   };
   isPlaying: boolean = false;
 
@@ -39,9 +39,11 @@ export class MusicsTablePlay {
   }
 
   isCurrentSongRunning(song: Song): boolean {
-    return (this.currentMusic.song?.id === song.id) &&
-           (this.currentMusic.playlist?.albumId === song.albumId) &&
-           this.isPlaying;
+    return (
+      this.currentMusic.song?.id === song.id &&
+      this.currentMusic.playlist?.albumId === song.albumId &&
+      this.isPlaying
+    );
   }
 
   setNewCurrentMusic(song: Song): void {
@@ -50,7 +52,7 @@ export class MusicsTablePlay {
       this.currentMusic = {
         song: song,
         playlist: { id: song.albumId, albumId: song.albumId },
-        songs: [song]
+        songs: [song],
       };
       this.isPlaying = true;
     }, 100);
@@ -71,7 +73,7 @@ export class MusicsTablePlay {
     if (this.currentMusic.song?.id !== song.id) {
       this.currentMusic = {
         ...this.currentMusic,
-        song: song
+        song: song,
       };
     }
     this.isPlaying = true;

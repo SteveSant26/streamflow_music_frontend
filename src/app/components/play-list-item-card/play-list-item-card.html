@@ -1,32 +1,40 @@
-<article class="group relative hover:bg-white/10 shadow-lg hover:shadow-2xl bg-black/20 backdrop-blur-sm rounded-2xl transition-all duration-300 border border-white/10 hover:border-white/20 hover:scale-105">
-  
+<article
+  class="group relative hover:bg-white/10 shadow-lg hover:shadow-2xl bg-black/20 backdrop-blur-sm rounded-2xl transition-all duration-300 border border-white/10 hover:border-white/20 hover:scale-105"
+>
   <!-- Botón de reproducción que aparece en hover -->
-  <div class="absolute right-3 sm:right-4 bottom-16 sm:bottom-20 translate-y-4 transition-all duration-500 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 z-10">
-    <div class="bg-gradient-to-r from-pink-500 to-violet-500 rounded-full p-2 shadow-lg hover:shadow-xl">
-      <app-card-play-button 
-        [id]="playlist.id" 
-        size="small">
+  <div
+    class="absolute right-3 sm:right-4 bottom-16 sm:bottom-20 translate-y-4 transition-all duration-500 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 z-10"
+  >
+    <div
+      class="bg-gradient-to-r from-pink-500 to-violet-500 rounded-full p-2 shadow-lg hover:shadow-xl"
+    >
+      <app-card-play-button [id]="playlist.id" size="small">
       </app-card-play-button>
     </div>
   </div>
 
   <!-- Link principal de la playlist -->
-  <a 
-    [href]="'/playlist/' + playlist.id" 
-    class="playlist-item transition-all duration-300 flex relative p-3 sm:p-4 overflow-hidden gap-3 pb-4 sm:pb-6 rounded-2xl w-full sm:w-44 flex-col hover:bg-gradient-to-b hover:from-white/5 hover:to-transparent">
-    
+  <a
+    [href]="'/playlist/' + playlist.id"
+    class="playlist-item transition-all duration-300 flex relative p-3 sm:p-4 overflow-hidden gap-3 pb-4 sm:pb-6 rounded-2xl w-full sm:w-44 flex-col hover:bg-gradient-to-b hover:from-white/5 hover:to-transparent"
+  >
     <!-- Imagen de la playlist -->
-    <picture class="aspect-square w-full h-auto flex-none flex items-center justify-center">
-      <img 
+    <picture
+      class="aspect-square w-full h-auto flex-none flex items-center justify-center"
+    >
+      <img
         [src]="playlist.cover"
         [alt]="'Cover of ' + playlist.title + ' by ' + artistsString"
         class="object-contain w-full h-full rounded-xl mx-auto shadow-lg"
-        (error)="onImageError($event)">
+        (error)="onImageError($event)"
+      />
     </picture>
 
     <!-- Información de la playlist -->
     <div class="flex flex-auto flex-col px-1 sm:px-2">
-      <h4 class="text-white text-sm sm:text-base font-semibold mb-1 line-clamp-2">
+      <h4
+        class="text-white text-sm sm:text-base font-semibold mb-1 line-clamp-2"
+      >
         {{ playlist.title }}
       </h4>
 

@@ -1,16 +1,16 @@
-<button 
-  class="text-black hover:text-gray-700 hover:scale-125 transition-all duration-200" 
-  (click)="handleClick(song)">
-  
+<button
+  class="text-black hover:text-gray-700 hover:scale-125 transition-all duration-200"
+  (click)="handleClick(song)"
+>
   @if (isCurrentSongRunning(song)) {
-    <!-- Pause Icon -->
-    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-    </svg>
+  <!-- Pause Icon -->
+  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+  </svg>
   } @else {
-    <!-- Play Icon -->
-    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M8 5v14l11-7z"/>
-    </svg>
+  <!-- Play Icon -->
+  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M8 5v14l11-7z" />
+  </svg>
   }
 </button>

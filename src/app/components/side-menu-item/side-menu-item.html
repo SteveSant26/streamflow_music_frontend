@@ -1,6 +1,10 @@
 <li>
-  <a [href]="href" (click)="onClick($event)" class="flex gap-3 text-black hover:text-white hover:bg-white/10 items-center py-3 px-4 font-medium transition-all duration-200 rounded-lg group">
-    <div class="flex-shrink-0 group-hover:text-white   transition-colors">
+  <a
+    [href]="href"
+    (click)="onClick($event)"
+    class="flex gap-3 text-black hover:text-white hover:bg-white/10 items-center py-3 px-4 font-medium transition-all duration-200 rounded-lg group"
+  >
+    <div class="flex-shrink-0 group-hover:text-white transition-colors">
       <ng-content></ng-content>
     </div>
   </a>

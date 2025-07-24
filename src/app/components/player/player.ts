@@ -1,8 +1,16 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { PlayerControlButtonBar } from '../player-control-button-bar/player-control-button-bar';
-import { PlayerCurrentSong } from '../player-current-song/player-current-song';
-import { PlayerSoundControl } from '../player-sound-control/player-sound-control';
-import { PlayerVolumeControl } from '../player-volume-control/player-volume-control';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit,
+} from "@angular/core";
+import { PlayerControlButtonBar } from "../player-control-button-bar/player-control-button-bar";
+import { PlayerCurrentSong } from "../player-current-song/player-current-song";
+import { PlayerSoundControl } from "../player-sound-control/player-sound-control";
+import { PlayerVolumeControl } from "../player-volume-control/player-volume-control";
 
 interface Song {
   id: number;
@@ -21,21 +29,27 @@ interface CurrentMusic {
 }
 
 @Component({
-  selector: 'app-player',
-  imports: [PlayerControlButtonBar, PlayerCurrentSong, PlayerSoundControl, PlayerVolumeControl],
-  templateUrl: './player.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "app-player",
+  imports: [
+    PlayerControlButtonBar,
+    PlayerCurrentSong,
+    PlayerSoundControl,
+    PlayerVolumeControl,
+  ],
+  templateUrl: "./player.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Player implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('audioElement', { static: false }) audioRef!: ElementRef<HTMLAudioElement>;
+  @ViewChild("audioElement", { static: false })
+  audioRef!: ElementRef<HTMLAudioElement>;
 
   // Mock state para el reproductor
   currentMusic: CurrentMusic = {
     song: null,
     playlist: null,
-    songs: []
+    songs: [],
   };
-  
+
   isPlaying: boolean = false;
   volume: number = 0.5;
 
@@ -49,10 +63,10 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
         album: "A Night at the Opera",
         albumId: 101,
         duration: "5:55",
-        image: "/assets/playlists/playlist1.jpg"
+        image: "/assets/playlists/playlist1.jpg",
       },
       playlist: { id: 101 },
-      songs: []
+      songs: [],
     };
   }
 
@@ -63,20 +77,33 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.audioRef && this.audioRef.nativeElement && typeof this.audioRef.nativeElement.pause === 'function') {
+    if (
+      this.audioRef &&
+      this.audioRef.nativeElement &&
+      typeof this.audioRef.nativeElement.pause === "function"
+    ) {
       this.audioRef.nativeElement.pause();
     }
   }
 
   play(): void {
-    if (this.audioRef && this.audioRef.nativeElement && typeof this.audioRef.nativeElement.play === 'function') {
-      this.audioRef.nativeElement.play()
-        .catch((e) => console.log('Error playing: ', e));
+    if (
+      this.audioRef &&
+      this.audioRef.nativeElement &&
+      typeof this.audioRef.nativeElement.play === "function"
+    ) {
+      this.audioRef.nativeElement
+        .play()
+        .catch((e) => console.log("Error playing: ", e));
     }
   }
 
   pause(): void {
-    if (this.audioRef && this.audioRef.nativeElement && typeof this.audioRef.nativeElement.pause === 'function') {
+    if (
+      this.audioRef &&
+      this.audioRef.nativeElement &&
+      typeof this.audioRef.nativeElement.pause === "function"
+    ) {
       this.audioRef.nativeElement.pause();
     }
   }

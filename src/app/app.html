@@ -1,20 +1,39 @@
-<div class="flex flex-col h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+<div
+  class="flex flex-col h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100"
+>
   <!-- Header Bar -->
-  <header class="bg-white/80 backdrop-blur-md border-b border-gray-200 p-4 shadow-sm">
+  <header
+    class="bg-white/80 backdrop-blur-md border-b border-gray-200 p-4 shadow-sm"
+  >
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
-          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        <div
+          class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center"
+        >
+          <svg
+            class="w-5 h-5 text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
+            />
           </svg>
         </div>
         <h1 class="text-gray-900 font-bold text-xl">StreamFlow</h1>
       </div>
       <div class="hidden lg:flex items-center gap-4">
         <nav class="flex gap-6">
-          <a href="/" class="text-gray-700 hover:text-gray-900 transition-colors">Inicio</a>
-          <a href="/explore" class="text-gray-700 hover:text-gray-900 transition-colors">Explorar</a>
-
+          <a
+            href="/"
+            class="text-gray-700 hover:text-gray-900 transition-colors"
+            >Inicio</a
+          >
+          <a
+            href="/explore"
+            class="text-gray-700 hover:text-gray-900 transition-colors"
+            >Explorar</a
+          >
         </nav>
       </div>
     </div>
@@ -23,80 +42,122 @@
   <!-- Contenido principal -->
   <div class="flex flex-col lg:flex-row flex-1 overflow-hidden">
     <!-- Aside menu - hidden on mobile, visible on lg+ -->
-    <div class="hidden lg:block w-64 bg-white/60 backdrop-blur-sm border-r border-gray-200">
+    <div
+      class="hidden lg:block w-64 bg-white/60 backdrop-blur-sm border-r border-gray-200"
+    >
       <app-aside-menu></app-aside-menu>
     </div>
-    
+
     <main class="flex-1 p-3 sm:p-4 md:p-6 overflow-y-auto">
       <router-outlet />
-      
+
       <!-- Hero Section -->
       <div class="text-gray-900 mb-8 text-center lg:text-left">
         <div class="mb-6">
           <app-greeting></app-greeting>
-          <p class="text-gray-700 mt-3 text-sm sm:text-base">Descubre tu próxima canción favorita</p>
+          <p class="text-gray-700 mt-3 text-sm sm:text-base">
+            Descubre tu próxima canción favorita
+          </p>
           <div class="mt-4">
-            <button class="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 hover:shadow-lg hover:scale-105 transition-all">
+            <button
+              class="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 hover:shadow-lg hover:scale-105 transition-all"
+            >
               Reproducir todo
             </button>
           </div>
         </div>
       </div>
-      
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
-        <app-card 
-          title="Expande tus oidos mundialmente:D " 
-          body="Explora las últimas tendencias musicales y encuentra tus nuevos artistas favoritos." 
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8"
+      >
+        <app-card
+          title="Expande tus oidos mundialmente:D "
+          body="Explora las últimas tendencias musicales y encuentra tus nuevos artistas favoritos."
           href="/discover"
           [playlistId]="1"
-          [showPlayButton]="true">
+          [showPlayButton]="true"
+        >
         </app-card>
 
-        <app-card 
-          title="Visita a tus Playlists favoritas" 
-          body="Crea y gestiona tus listas de reproducción personalizadas para cada momento." 
+        <app-card
+          title="Visita a tus Playlists favoritas"
+          body="Crea y gestiona tus listas de reproducción personalizadas para cada momento."
           href="/playlists"
           [playlistId]="2"
-          [showPlayButton]="true">
+          [showPlayButton]="true"
+        >
         </app-card>
 
-        <app-card 
-          title="Artistas Favoritos" 
-          body="Sigue a tus artistas preferidos y mantente al día con sus últimos lanzamientos." 
+        <app-card
+          title="Artistas Favoritos"
+          body="Sigue a tus artistas preferidos y mantente al día con sus últimos lanzamientos."
           href="/artists"
           [playlistId]="3"
-          [showPlayButton]="true">
+          [showPlayButton]="true"
+        >
         </app-card>
       </div>
 
       <!-- Playlists Recomendadas - nuevo diseño -->
       <div class="mb-8">
         <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Mixes para ti</h2>
-          <button class="text-black hover:text-gray-700 text-sm font-medium">Ver todo</button>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
+            Mixes para ti
+          </h2>
+          <button class="text-black hover:text-gray-700 text-sm font-medium">
+            Ver todo
+          </button>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+        <div
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6"
+        >
           @for (playlist of featuredPlaylists; track playlist.id) {
-            <app-play-list-item-card [playlist]="playlist"></app-play-list-item-card>
+          <app-play-list-item-card
+            [playlist]="playlist"
+          ></app-play-list-item-card>
           }
         </div>
       </div>
 
       <!-- Tabla de canciones - nuevo diseño -->
       <div class="mb-32 lg:mb-24">
-        <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+        <div
+          class="bg-white/60 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm"
+        >
           <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Trending Now</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
+              Trending Now
+            </h2>
             <div class="flex gap-2">
               <button class="text-black hover:text-gray-700 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 </svg>
               </button>
               <button class="text-black hover:text-gray-700 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm12-3c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2z"/>
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 19V6l12-3v13M9 19c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm12-3c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2z"
+                  />
                 </svg>
               </button>
             </div>
@@ -104,44 +165,89 @@
           <app-musics-table></app-musics-table>
         </div>
       </div>
-
     </main>
   </div>
 
   <!-- Mobile bottom navigation - light theme -->
-  <nav class="lg:hidden bg-white/80 backdrop-blur-md border-t border-gray-200 px-4 py-3 shadow-lg">
+  <nav
+    class="lg:hidden bg-white/80 backdrop-blur-md border-t border-gray-200 px-4 py-3 shadow-lg"
+  >
     <div class="flex justify-around items-center">
-      <a href="/" class="flex flex-col items-center gap-1 text-gray-900 hover:text-blue-600 transition-colors">
-        <div class="p-2 rounded-full bg-gradient-to-r from-blue-100 to-purple-100">
+      <a
+        href="/"
+        class="flex flex-col items-center gap-1 text-gray-900 hover:text-blue-600 transition-colors"
+      >
+        <div
+          class="p-2 rounded-full bg-gradient-to-r from-blue-100 to-purple-100"
+        >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
           </svg>
         </div>
         <span class="text-xs font-medium">Inicio</span>
       </a>
-      
-      <a href="/search" class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors">
+
+      <a
+        href="/search"
+        class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors"
+      >
         <div class="p-2 rounded-full hover:bg-gray-100">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
           </svg>
         </div>
         <span class="text-xs font-medium">Buscar</span>
       </a>
-      
-      <a href="/explore" class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors">
+
+      <a
+        href="/explore"
+        class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors"
+      >
         <div class="p-2 rounded-full hover:bg-gray-100">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"
+            />
           </svg>
         </div>
         <span class="text-xs font-medium">Explorar</span>
       </a>
-      
-      <a href="/library" class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors">
+
+      <a
+        href="/library"
+        class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors"
+      >
         <div class="p-2 rounded-full hover:bg-gray-100">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+            />
           </svg>
         </div>
         <span class="text-xs font-medium">Biblioteca</span>
@@ -150,7 +256,9 @@
   </nav>
 
   <!-- Reproductor fijo en la parte inferior - light theme -->
-  <footer class="bg-white/80 backdrop-blur-md border-t border-gray-200 p-2 sm:p-3 md:p-4 shadow-lg">
+  <footer
+    class="bg-white/80 backdrop-blur-md border-t border-gray-200 p-2 sm:p-3 md:p-4 shadow-lg"
+  >
     <app-player></app-player>
   </footer>
 </div>

@@ -1,43 +1,60 @@
 <!-- Mobile view - Card layout -->
 <div class="block sm:hidden space-y-3">
   @for (song of songs; track song.id; let i = $index) {
-    <div class="bg-white/5 rounded-lg p-3 hover:bg-white/10 transition duration-300 group">
-      <div class="flex items-center gap-3">
-        <!-- Play button / Number -->
-        <div class="relative w-8 flex justify-center">
-          <span class="opacity-100 transition-all group-hover:opacity-0 text-zinc-400 text-sm">
-            {{ i + 1 }}
-          </span>
-          <div class="absolute top-0 opacity-0 transition-all group-hover:opacity-100">
-            <app-musics-table-play 
-              [song]="song" 
-              [isCurrentSong]="isCurrentSong(song)">
-            </app-musics-table-play>
-          </div>
+  <div
+    class="bg-white/5 rounded-lg p-3 hover:bg-white/10 transition duration-300 group"
+  >
+    <div class="flex items-center gap-3">
+      <!-- Play button / Number -->
+      <div class="relative w-8 flex justify-center">
+        <span
+          class="opacity-100 transition-all group-hover:opacity-0 text-zinc-400 text-sm"
+        >
+          {{ i + 1 }}
+        </span>
+        <div
+          class="absolute top-0 opacity-0 transition-all group-hover:opacity-100"
+        >
+          <app-musics-table-play
+            [song]="song"
+            [isCurrentSong]="isCurrentSong(song)"
+          >
+          </app-musics-table-play>
         </div>
-        
-        <!-- Song info -->
-        <div class="flex items-center gap-3 flex-1 min-w-0">
-          <picture>
-            <img [src]="song.image" [alt]="song.title" class="w-10 h-10 rounded"/>
-          </picture>
-          <div class="flex flex-col min-w-0 flex-1">
-            <h3 [class]="'text-sm font-normal truncate ' + (isCurrentSong(song) ? 'text-green-400' : 'text-white')">
-              {{ song.title }}
-            </h3>
-            <span class="text-gray-400 text-xs truncate">{{ song.artists.join(', ') }}</span>
-          </div>
-        </div>
-        
-        <!-- Duration -->
-        <span class="text-black-400 text-xs">{{ song.duration }}</span>
       </div>
+
+      <!-- Song info -->
+      <div class="flex items-center gap-3 flex-1 min-w-0">
+        <picture>
+          <img
+            [src]="song.image"
+            [alt]="song.title"
+            class="w-10 h-10 rounded"
+          />
+        </picture>
+        <div class="flex flex-col min-w-0 flex-1">
+          <h3
+            [class]="'text-sm font-normal truncate ' + (isCurrentSong(song) ? 'text-green-400' : 'text-white')"
+          >
+            {{ song.title }}
+          </h3>
+          <span class="text-gray-400 text-xs truncate"
+            >{{ song.artists.join(', ') }}</span
+          >
+        </div>
+      </div>
+
+      <!-- Duration -->
+      <span class="text-black-400 text-xs">{{ song.duration }}</span>
     </div>
+  </div>
   }
 </div>
 
 <!-- Desktop view - Table layout -->
-<table class="hidden sm:table table-auto text-left min-w-full divide-y divide-gray-500/20">
+<table
+  class="hidden sm:table table-auto text-left min-w-full divide-y divide-gray-500/20"
+>
   <thead>
     <tr class="text-zinc-400 text-sm">
       <th class="px-4 py-2 font-bold">#</th>
@@ -46,7 +63,9 @@
       <th class="px-4 py-2 font-bold">
         <!-- Time Icon -->
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+          />
         </svg>
       </th>
     </tr>
@@ -55,32 +74,45 @@
   <tbody>
     <tr class="h-4"></tr>
     @for (song of songs; track song.id; let i = $index) {
-      <tr class="text-black-300 border-spacing-0 text-sm font-bold hover:bg-white/10 overflow-hidden transition duration-300 group">
-        <td class="relative px-4 py-2 rounded-tl-lg rounded-bl-lg w-5">
-          <span class="absolute top-5 opacity-100 transition-all group-hover:opacity-0">
-            {{ i + 1 }}
-          </span>
-          <div class="absolute top-5 opacity-0 transition-all group-hover:opacity-100">
-            <app-musics-table-play 
-              [song]="song" 
-              [isCurrentSong]="isCurrentSong(song)">
-            </app-musics-table-play>
-          </div>
-        </td>
-        <td class="px-4 py-2 flex gap-3">
-          <picture>
-            <img [src]="song.image" [alt]="song.title" class="w-11 h-11 rounded"/>
-          </picture>
-          <div class="flex flex-col">
-            <h3 [class]="'text-base font-normal ' + (isCurrentSong(song) ? 'text-black-400' : 'text-black')">
-              {{ song.title }}
-            </h3>
-            <span class="text-black-400">{{ song.artists.join(', ') }}</span>
-          </div>
-        </td>
-        <td class="px-4 py-2 hidden md:table-cell">{{ song.album }}</td>
-        <td class="px-4 py-2 rounded-tr-lg rounded-br-lg">{{ song.duration }}</td>
-      </tr>
+    <tr
+      class="text-black-300 border-spacing-0 text-sm font-bold hover:bg-white/10 overflow-hidden transition duration-300 group"
+    >
+      <td class="relative px-4 py-2 rounded-tl-lg rounded-bl-lg w-5">
+        <span
+          class="absolute top-5 opacity-100 transition-all group-hover:opacity-0"
+        >
+          {{ i + 1 }}
+        </span>
+        <div
+          class="absolute top-5 opacity-0 transition-all group-hover:opacity-100"
+        >
+          <app-musics-table-play
+            [song]="song"
+            [isCurrentSong]="isCurrentSong(song)"
+          >
+          </app-musics-table-play>
+        </div>
+      </td>
+      <td class="px-4 py-2 flex gap-3">
+        <picture>
+          <img
+            [src]="song.image"
+            [alt]="song.title"
+            class="w-11 h-11 rounded"
+          />
+        </picture>
+        <div class="flex flex-col">
+          <h3
+            [class]="'text-base font-normal ' + (isCurrentSong(song) ? 'text-black-400' : 'text-black')"
+          >
+            {{ song.title }}
+          </h3>
+          <span class="text-black-400">{{ song.artists.join(', ') }}</span>
+        </div>
+      </td>
+      <td class="px-4 py-2 hidden md:table-cell">{{ song.album }}</td>
+      <td class="px-4 py-2 rounded-tr-lg rounded-br-lg">{{ song.duration }}</td>
+    </tr>
     }
   </tbody>
 </table>
