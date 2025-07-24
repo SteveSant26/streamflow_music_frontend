@@ -58,11 +58,11 @@ export class MusicsTablePlay {
     setTimeout(() => {
       this.currentMusic = {
         song: song,
-        playlist: { 
-          id: song.albumId, 
+        playlist: {
+          id: song.albumId,
           albumId: song.albumId,
           name: `Album ${song.album}`,
-          description: `Playlist for ${song.album}`
+          description: `Playlist for ${song.album}`,
         },
         songs: [song],
       };
