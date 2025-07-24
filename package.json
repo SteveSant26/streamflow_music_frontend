@@ -16,12 +16,8 @@
     "lint": "eslint . --legacy-config"
   },
   "lint-staged": {
-    "*.{js,ts,tsx,jsx,json,css,scss,md}": [
-      "bunx prettier --write"
-    ],
-    "*.{js,ts,tsx}": [
-      "bunx eslint --fix"
-    ]
+    "*.{js,ts,tsx,jsx,json,css,scss,md}": "bunx prettier --write",
+    "*.{js,ts,tsx}": "bunx eslint --fix"
   },
   "private": true,
   "dependencies": {
