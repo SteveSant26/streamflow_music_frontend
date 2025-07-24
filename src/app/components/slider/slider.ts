@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
-  selector: 'app-slider',
+  selector: "app-slider",
   imports: [],
-  templateUrl: './slider.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./slider.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Slider {
-
-}
+export class Slider {}

@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
-  selector: 'app-player-sound-control',
+  selector: "app-player-sound-control",
   imports: [],
-  templateUrl: './player-sound-control.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./player-sound-control.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerSoundControl {
-
-}
+export class PlayerSoundControl {}

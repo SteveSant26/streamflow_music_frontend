@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
-  selector: 'app-musics-table',
+  selector: "app-musics-table",
   imports: [],
-  templateUrl: './musics-table.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./musics-table.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MusicsTable {
-
-}
+export class MusicsTable {}

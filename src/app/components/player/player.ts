@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
-  selector: 'app-player',
+  selector: "app-player",
   imports: [],
-  templateUrl: './player.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./player.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Player {
-
-}
+export class Player {}
