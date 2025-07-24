@@ -22,9 +22,15 @@ interface Song {
   image: string;
 }
 
+interface Playlist {
+  id: number;
+  name?: string;
+  description?: string;
+}
+
 interface CurrentMusic {
   song: Song | null;
-  playlist: any | null;
+  playlist: Playlist | null;
   songs: Song[];
 }
 
@@ -71,41 +77,22 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (this.audioRef && this.audioRef.nativeElement) {
+    if (this.audioRef?.nativeElement) {
       this.audioRef.nativeElement.volume = this.volume;
     }
   }
 
   ngOnDestroy(): void {
-    if (
-      this.audioRef &&
-      this.audioRef.nativeElement &&
-      typeof this.audioRef.nativeElement.pause === "function"
-    ) {
-      this.audioRef.nativeElement.pause();
-    }
+    this.audioRef?.nativeElement?.pause();
   }
 
   play(): void {
-    if (
-      this.audioRef &&
-      this.audioRef.nativeElement &&
-      typeof this.audioRef.nativeElement.play === "function"
-    ) {
-      this.audioRef.nativeElement
-        .play()
-        .catch((e) => console.log("Error playing: ", e));
-    }
+    this.audioRef?.nativeElement?.play()
+      .catch((e) => console.log("Error playing: ", e));
   }
 
   pause(): void {
-    if (
-      this.audioRef &&
-      this.audioRef.nativeElement &&
-      typeof this.audioRef.nativeElement.pause === "function"
-    ) {
-      this.audioRef.nativeElement.pause();
-    }
+    this.audioRef?.nativeElement?.pause();
   }
 
   togglePlayPause(): void {
@@ -115,7 +102,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
   setVolume(newVolume: number): void {
     this.volume = newVolume;
-    if (this.audioRef && this.audioRef.nativeElement) {
+    if (this.audioRef?.nativeElement) {
       this.audioRef.nativeElement.volume = this.volume;
     }
   }

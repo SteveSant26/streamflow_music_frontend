@@ -10,9 +10,16 @@ interface Song {
   image: string;
 }
 
+interface Playlist {
+  id: number;
+  albumId?: number;
+  name?: string;
+  description?: string;
+}
+
 interface CurrentMusic {
   song: Song | null;
-  playlist: any | null;
+  playlist: Playlist | null;
   songs: Song[];
 }
 
@@ -51,7 +58,12 @@ export class MusicsTablePlay {
     setTimeout(() => {
       this.currentMusic = {
         song: song,
-        playlist: { id: song.albumId, albumId: song.albumId },
+        playlist: { 
+          id: song.albumId, 
+          albumId: song.albumId,
+          name: `Album ${song.album}`,
+          description: `Playlist for ${song.album}`
+        },
         songs: [song],
       };
       this.isPlaying = true;
