@@ -1,1 +1,36 @@
-<p>player-control-button-bar works!</p>
+<div class="flex items-center gap-4">
+  <!-- Previous Button -->
+  <button 
+    (click)="onPreviousClick()"
+    class="text-black hover:text-gray-700 transition-colors">
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+    </svg>
+  </button>
+
+  <!-- Play/Pause Button -->
+  <button 
+    (click)="onPlayPauseClick()"
+    class="bg-black text-white rounded-full p-2 hover:scale-105 hover:bg-gray-800 transition-all shadow-lg">
+    @if (isPlaying) {
+      <!-- Pause Icon -->
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+      </svg>
+    } @else {
+      <!-- Play Icon -->
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    }
+  </button>
+
+  <!-- Next Button -->
+  <button 
+    (click)="onNextClick()"
+    class="text-black hover:text-gray-700 transition-colors">
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+    </svg>
+  </button>
+</div>

@@ -1,0 +1,37 @@
+.playlist-item {
+  cursor: pointer;
+}
+
+.playlist-item:hover {
+  transform: scale(1.02);
+}
+
+/* Animación suave para la imagen */
+.playlist-item img {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Efecto de sombra más pronunciado en hover */
+.group:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* Transiciones suaves para todos los elementos */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mejora visual en hover del grupo */
+.group:hover .playlist-item img {
+  transform: scale(1.05);
+}
+
+/* Efecto de hover en el título */
+.group:hover h4 {
+  color: rgb(62, 12, 69); /* text-purple-500 */
+}
+
+/* Fallback para imágenes que no cargan */
+.playlist-item img[src=""] {
+  background: linear-gradient(45deg, #374151, #6B7280);
+}
