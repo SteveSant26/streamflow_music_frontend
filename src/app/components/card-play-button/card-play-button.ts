@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
-  selector: 'app-card-play-button',
+  selector: "app-card-play-button",
   imports: [],
-  templateUrl: './card-play-button.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./card-play-button.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardPlayButton {
-
-}
+export class CardPlayButton {}

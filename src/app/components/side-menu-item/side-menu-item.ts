@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 
 @Component({
-  selector: 'app-side-menu-item',
+  selector: "app-side-menu-item",
   imports: [],
-  templateUrl: './side-menu-item.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./side-menu-item.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SideMenuItem {
-
-}
+export class SideMenuItem {}
