@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-greeting',
+  selector: "app-greeting",
   imports: [],
   templateUrl: './greeting.html',
   styleUrl: './greeting.css',

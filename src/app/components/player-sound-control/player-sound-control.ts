@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'app-player-sound-control',
+  selector: "app-player-sound-control",
   imports: [],
-  templateUrl: './player-sound-control.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./player-sound-control.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerSoundControl {
   @Input() audioElement: ElementRef<HTMLAudioElement> | null = null;

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-card-play-button',
+  selector: "app-card-play-button",
   imports: [],
   templateUrl: './card-play-button.html',
   styleUrl: './card-play-button.css',

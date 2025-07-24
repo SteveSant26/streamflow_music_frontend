@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-player-control-button-bar',
+  selector: "app-player-control-button-bar",
   imports: [],
-  templateUrl: './player-control-button-bar.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./player-control-button-bar.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerControlButtonBar {
   @Input() isPlaying: boolean = false;

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-side-menu-item',
+  selector: "app-side-menu-item",
   imports: [],
-  templateUrl: './side-menu-item.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./side-menu-item.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideMenuItem {
   @Input() href: string = '#';

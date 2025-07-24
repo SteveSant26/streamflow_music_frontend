@@ -17,10 +17,10 @@ interface CurrentMusic {
 }
 
 @Component({
-  selector: 'app-musics-table-play',
+  selector: "app-musics-table-play",
   imports: [],
-  templateUrl: './musics-table-play.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: "./musics-table-play.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MusicsTablePlay {
   @Input() song!: Song;
