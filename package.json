@@ -13,11 +13,17 @@
     "compodoc:build-and-serve": "compodoc -p tsconfig.doc.json -s",
     "compodoc:serve": "compodoc -s",
     "prepare": "husky install",
-    "lint": "eslint . --legacy-config"
+    "lint": "eslint . --legacy-config",
+    "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,tsx,jsx,json,css,scss,md}": "bunx prettier --write",
-    "*.{js,ts,tsx}": "bunx eslint --fix"
+    "*.{js,ts,tsx}": [
+      "bunx eslint --fix",
+      "bunx prettier --write"
+    ],
+    "*.{css,html,json,md}": [
+      "bunx prettier --write"
+    ]
   },
   "private": true,
   "dependencies": {
