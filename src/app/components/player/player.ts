@@ -92,7 +92,8 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   play(): void {
-    this.audioRef?.nativeElement?.play?.()
+    this.audioRef?.nativeElement
+      ?.play?.()
       .catch((e) => console.log("Error playing: ", e));
   }
 

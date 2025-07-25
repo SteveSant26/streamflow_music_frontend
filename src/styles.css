@@ -2,7 +2,8 @@
 @import "tailwindcss";
 
 /* Custom slider styles - Progress and Volume controls */
-.progress-slider, .volume-slider {
+.progress-slider,
+.volume-slider {
   /* Webkit browsers (Chrome, Safari, Edge) */
   -webkit-appearance: none;
   appearance: none;
@@ -12,7 +13,8 @@
   outline: none;
 }
 
-.progress-slider::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb {
+.progress-slider::-webkit-slider-thumb,
+.volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 16px;
@@ -24,13 +26,15 @@
   margin-top: -6.2px; /* Adjust vertical position */
 }
 
-.progress-slider::-webkit-slider-thumb:hover, .volume-slider::-webkit-slider-thumb:hover {
+.progress-slider::-webkit-slider-thumb:hover,
+.volume-slider::-webkit-slider-thumb:hover {
   background: #374151; /* gray-700 on hover */
   transform: scale(1.1);
 }
 
 /* Firefox */
-.progress-slider::-moz-range-thumb, .volume-slider::-moz-range-thumb {
+.progress-slider::-moz-range-thumb,
+.volume-slider::-moz-range-thumb {
   width: 16px;
   height: 16px;
   background: #000000; /* Black color */
@@ -41,18 +45,21 @@
   margin-top: -6px; /* Adjust vertical position */
 }
 
-.progress-slider::-moz-range-thumb:hover, .volume-slider::-moz-range-thumb:hover {
+.progress-slider::-moz-range-thumb:hover,
+.volume-slider::-moz-range-thumb:hover {
   background: #374151; /* gray-700 on hover */
 }
 
 /* Track styles for filled portion */
-.progress-slider::-webkit-slider-runnable-track, .volume-slider::-webkit-slider-runnable-track {
+.progress-slider::-webkit-slider-runnable-track,
+.volume-slider::-webkit-slider-runnable-track {
   background: #d1d5db; /* gray-300 */
   height: 4px;
   border-radius: 5px;
 }
 
-.progress-slider::-moz-range-track, .volume-slider::-moz-range-track {
+.progress-slider::-moz-range-track,
+.volume-slider::-moz-range-track {
   background: #d1d5db; /* gray-300 */
   height: 4px;
   border-radius: 5px;
