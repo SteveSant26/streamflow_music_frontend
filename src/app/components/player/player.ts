@@ -83,7 +83,9 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.audioRef?.nativeElement?.pause();
+    if (this.audioRef?.nativeElement && typeof this.audioRef.nativeElement.pause === 'function') {
+      this.audioRef.nativeElement.pause();
+    }
   }
 
   play(): void {
