@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 
 @Component({
   selector: "app-player-control-button-bar",
@@ -6,4 +12,19 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
   templateUrl: "./player-control-button-bar.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerControlButtonBar {}
+export class PlayerControlButtonBar {
+  @Input() isPlaying: boolean = false;
+  @Output() playPauseClick = new EventEmitter<void>();
+
+  onPlayPauseClick(): void {
+    this.playPauseClick.emit();
+  }
+
+  onPreviousClick(): void {
+    console.log("Previous song");
+  }
+
+  onNextClick(): void {
+    console.log("Next song");
+  }
+}

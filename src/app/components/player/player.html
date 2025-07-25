@@ -1,1 +1,40 @@
-<p>player works!</p>
+<div
+  class="flex flex-col sm:flex-row justify-between w-full px-1 z-50 gap-2 sm:gap-0"
+>
+  <!-- Song info - full width on mobile, fixed width on desktop -->
+  <div class="w-full sm:w-[200px] order-1 sm:order-1">
+    <app-player-current-song [song]="currentMusic.song">
+    </app-player-current-song>
+  </div>
+
+  <!-- Controls - center on mobile and desktop -->
+  <div
+    class="grid place-content-center gap-2 sm:gap-4 flex-1 order-2 sm:order-2"
+  >
+    <div class="flex justify-center flex-col items-center">
+      <app-player-control-button-bar
+        [isPlaying]="isPlaying"
+        (playPauseClick)="onPlayPauseClick()"
+      >
+      </app-player-control-button-bar>
+
+      <app-player-sound-control [audioElement]="audioRef">
+      </app-player-sound-control>
+
+      <audio
+        #audioElement
+        (ended)="onNextSong()"
+        [src]="currentMusic.song ? '/music/' + currentMusic.playlist?.id + '/0' + currentMusic.song.id + '.mp3' : ''"
+      ></audio>
+    </div>
+  </div>
+
+  <!-- Volume - hidden on mobile, visible on sm+ -->
+  <div class="hidden sm:grid place-content-center order-3">
+    <app-player-volume-control
+      [volume]="volume"
+      (volumeChange)="onVolumeChange($event)"
+    >
+    </app-player-volume-control>
+  </div>
+</div>

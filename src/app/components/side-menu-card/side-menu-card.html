@@ -1,1 +1,19 @@
-<p>side-menu-card works!</p>
+<ul>
+  <a
+    href="#"
+    class="playlist-item flex gap-2 text-black hover:text-white items-center py-2 px-5 text-sm font-normal transition-colors"
+  >
+    <picture class="h-12 w-12 flex-none">
+      <img
+        [src]="playlist.cover"
+        [alt]="'Cover of ' + playlist.name"
+        class="object-cover w-full h-full rounded bg-zinc-800"
+        (error)="onImageError($event)"
+      />
+    </picture>
+    <div class="flex flex-auto flex-col truncate text-black">
+      <h4 class="text-black font-bold text-sm">{{ playlist.name }}</h4>
+      <span class="text-xs text-black-400">Playlist</span>
+    </div>
+  </a>
+</ul>
