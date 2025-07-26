@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, Inject, PLATFORM_ID } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  Inject,
+  PLATFORM_ID,
+} from "@angular/core";
 import { CommonModule, DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { Router } from "@angular/router";
 
@@ -31,25 +38,25 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
     @Inject(DOCUMENT) private readonly document: Document,
-    @Inject(PLATFORM_ID) private readonly platformId: Object
+    @Inject(PLATFORM_ID) private readonly platformId: Object,
   ) {}
 
   ngOnInit() {
     this.loadCurrentSong();
     // Evitar scroll en el body solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
-      this.document.body.style.overflow = 'hidden';
-      this.document.body.style.margin = '0';
-      this.document.body.style.padding = '0';
+      this.document.body.style.overflow = "hidden";
+      this.document.body.style.margin = "0";
+      this.document.body.style.padding = "0";
     }
   }
 
   ngOnDestroy() {
     // Restaurar scroll cuando se salga de la vista solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
-      this.document.body.style.overflow = '';
-      this.document.body.style.margin = '';
-      this.document.body.style.padding = '';
+      this.document.body.style.overflow = "";
+      this.document.body.style.margin = "";
+      this.document.body.style.padding = "";
     }
   }
 
@@ -76,7 +83,10 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   toggleLyricsPanel() {
     this.showLyricsPanel = !this.showLyricsPanel;
-    console.log("Panel de letras:", this.showLyricsPanel ? "Abierto" : "Cerrado");
+    console.log(
+      "Panel de letras:",
+      this.showLyricsPanel ? "Abierto" : "Cerrado",
+    );
   }
 
   goBack() {

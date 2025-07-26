@@ -14,17 +14,47 @@
   overflow: hidden;
   animation: fadeIn 0.5s ease-out;
   box-sizing: border-box;
+  transition: all 0.3s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* El contenedor principal cubre toda la pantalla con gradiente */
+.main-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* El reproductor ocupa toda la pantalla por defecto */
+.reproductor-content {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem;
+  color: white;
+  overflow: hidden;
+  box-sizing: border-box;
   transition: width 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
 }
 
-/* Cuando las letras están activas, el reproductor ocupa menos espacio */
-.current-song-container.with-lyrics {
+/* Cuando las letras están activas, ambos paneles ocupan 50vw */
+.main-container.with-lyrics .reproductor-content {
   width: 50vw;
-  background-size: 100vw 100vh !important;
-  background-position: 0 0 !important;
 }
 
-.current-song-container::before {
+.main-container::before {
   content: "";
   position: absolute;
   top: 0;
@@ -35,7 +65,7 @@
   z-index: 1;
 }
 
-.current-song-container > * {
+.main-container > * {
   position: relative;
   z-index: 2;
 }
@@ -105,7 +135,7 @@
   max-height: 250px;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(255, 255, 255, 0.1);
   animation: slideUp 0.6s ease-out 0.2s both;
@@ -113,12 +143,13 @@
 }
 
 /* Cuando las letras están activas, hacer la imagen más pequeña */
-.current-song-container.with-lyrics .song-artwork-wrapper {
+.main-container.with-lyrics .song-artwork-wrapper {
   width: min(150px, 40vw);
   height: min(150px, 40vw);
   max-width: 180px;
   max-height: 180px;
-}.song-artwork {
+}
+.song-artwork {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -445,39 +476,19 @@
 
 /* Panel de letras deslizante */
 .lyrics-panel {
-  position: fixed;
-  top: 0;
-  right: -50vw;
-  width: 50vw;
+  width: 0;
   height: 100vh;
-  z-index: 999;
-  transition: right 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
   color: white;
   overflow: hidden;
-  background-position: -50vw 0 !important;
-  background-size: 100vw 100vh !important;
-}
-
-.lyrics-panel::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 1;
-}
-
-.lyrics-panel > * {
   position: relative;
   z-index: 2;
 }
 
-.lyrics-panel.show {
-  right: 0;
+.main-container.with-lyrics .lyrics-panel {
+  width: 50vw;
 }
 
 .lyrics-header {
@@ -550,42 +561,36 @@
 
 /* Responsive para pantallas móviles */
 @media (max-width: 768px) {
-  .current-song-container.with-lyrics {
-    width: 100vw;
+  .main-container.with-lyrics .reproductor-content {
     display: none;
   }
-  
-  .lyrics-panel {
+
+  .main-container.with-lyrics .lyrics-panel {
     width: 100vw;
-    right: -100vw;
-  }
-  
-  .lyrics-panel.show {
-    right: 0;
   }
 }
 
 /* Ajustes adicionales para vista dividida */
-.current-song-container.with-lyrics .song-info {
+.main-container.with-lyrics .song-info {
   margin-bottom: 0.5rem;
 }
 
-.current-song-container.with-lyrics .song-title {
+.main-container.with-lyrics .song-title {
   font-size: min(1.5rem, 6vw);
 }
 
-.current-song-container.with-lyrics .song-artist {
+.main-container.with-lyrics .song-artist {
   font-size: min(1rem, 4vw);
 }
 
-.current-song-container.with-lyrics .song-album {
+.main-container.with-lyrics .song-album {
   font-size: min(0.875rem, 3.5vw);
 }
 
-.current-song-container.with-lyrics .progress-section {
+.main-container.with-lyrics .progress-section {
   margin-bottom: 0.75rem;
 }
 
-.current-song-container.with-lyrics .player-controls {
+.main-container.with-lyrics .player-controls {
   margin-bottom: 0.5rem;
 }
