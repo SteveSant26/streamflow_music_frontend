@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Inject, PLATFORM_ID } from "@angular/core";
+import { CommonModule, DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { Router } from "@angular/router";
 
 interface Song {
@@ -13,6 +13,7 @@ interface Song {
   cover: string;
   gradient: string;
   isPlaying: boolean;
+  lyrics?: string;
 }
 
 @Component({
@@ -22,16 +23,34 @@ interface Song {
   templateUrl: "./currentsong.html",
   styleUrls: ["./current-song.css"],
 })
-export class CurrentSongComponent implements OnInit {
+export class CurrentSongComponent implements OnInit, OnDestroy {
   currentSong: Song | null = null;
+  showLyricsPanel = false;
 
   constructor(
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
+    @Inject(DOCUMENT) private readonly document: Document,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
   ngOnInit() {
     this.loadCurrentSong();
+    // Evitar scroll en el body solo en el navegador
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.body.style.overflow = 'hidden';
+      this.document.body.style.margin = '0';
+      this.document.body.style.padding = '0';
+    }
+  }
+
+  ngOnDestroy() {
+    // Restaurar scroll cuando se salga de la vista solo en el navegador
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.body.style.overflow = '';
+      this.document.body.style.margin = '';
+      this.document.body.style.padding = '';
+    }
   }
 
   onImageLoad(event: Event) {
@@ -53,6 +72,11 @@ export class CurrentSongComponent implements OnInit {
       this.currentSong.isPlaying = !this.currentSong.isPlaying;
       console.log(this.currentSong.isPlaying ? "Reproduciendo" : "Pausado");
     }
+  }
+
+  toggleLyricsPanel() {
+    this.showLyricsPanel = !this.showLyricsPanel;
+    console.log("Panel de letras:", this.showLyricsPanel ? "Abierto" : "Cerrado");
   }
 
   goBack() {
@@ -83,8 +107,13 @@ export class CurrentSongComponent implements OnInit {
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {
+    if (!isPlatformBrowser(this.platformId)) {
+      this.applyFallbackGradient();
+      return;
+    }
+
     try {
-      const canvas = document.createElement("canvas");
+      const canvas = this.document.createElement("canvas");
       const ctx = canvas.getContext("2d");
 
       if (!ctx) {

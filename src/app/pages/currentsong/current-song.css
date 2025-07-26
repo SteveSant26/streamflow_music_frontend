@@ -1,15 +1,27 @@
-/* Container principal - Mobile First */
+/* Container principal - Pantalla completa sin scroll */
 .current-song-container {
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  padding: 1.5rem;
+  padding: 1rem;
   color: white;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   overflow: hidden;
   animation: fadeIn 0.5s ease-out;
+  box-sizing: border-box;
+  transition: width 0.3s ease;
+}
+
+/* Cuando las letras están activas, el reproductor ocupa menos espacio */
+.current-song-container.with-lyrics {
+  width: 50vw;
+  background-size: 100vw 100vh !important;
+  background-position: 0 0 !important;
 }
 
 .current-song-container::before {
@@ -33,7 +45,9 @@
   width: 100%;
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  flex: 0 0 auto;
 }
 
 .back-button {
@@ -57,7 +71,9 @@
 }
 
 .current-song-title {
-  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
   font-size: 1.125rem;
   font-weight: 600;
@@ -65,95 +81,89 @@
   opacity: 0.9;
 }
 
-/* Artwork de la canción */
+/* Artwork de la canción - Optimizado para pantalla completa */
 .song-artwork-container {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 2rem 0;
+  margin: 1rem 0;
+  max-height: 35vh; /* Reducido para dar más espacio a los controles */
+}
+
+/* Espaciador flexible para centrar el contenido */
+.flexible-spacer {
+  flex: 1;
+  min-height: 1rem;
 }
 
 .song-artwork-wrapper {
   position: relative;
-  width: 280px;
-  height: 280px;
+  width: min(200px, 60vw);
+  height: min(200px, 60vw);
+  max-width: 250px;
+  max-height: 250px;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow:
+  box-shadow: 
     0 25px 50px -12px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(255, 255, 255, 0.1);
   animation: slideUp 0.6s ease-out 0.2s both;
+  transition: all 0.3s ease;
 }
 
-.song-artwork {
+/* Cuando las letras están activas, hacer la imagen más pequeña */
+.current-song-container.with-lyrics .song-artwork-wrapper {
+  width: min(150px, 40vw);
+  height: min(150px, 40vw);
+  max-width: 180px;
+  max-height: 180px;
+}.song-artwork {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.vinyl-effect {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60px;
-  height: 60px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
+.song-artwork:hover {
+  transform: scale(1.05);
 }
 
-.vinyl-effect::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 8px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.vinyl-effect.spinning {
-  animation: spin 3s linear infinite;
-}
-
-/* Información de la canción */
+/* Información de la canción - Espaciado optimizado */
 .song-info {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   animation: slideUp 0.6s ease-out 0.4s both;
+  max-width: 90vw;
+  flex: 0 0 auto;
 }
 
 .song-title {
-  font-size: 1.75rem;
+  font-size: min(1.75rem, 7vw);
   font-weight: 700;
   margin: 0 0 0.5rem 0;
   line-height: 1.2;
 }
 
 .song-artist {
-  font-size: 1.25rem;
+  font-size: min(1.25rem, 5vw);
   font-weight: 500;
   margin: 0 0 0.25rem 0;
   opacity: 0.9;
 }
 
 .song-album {
-  font-size: 1rem;
+  font-size: min(1rem, 4vw);
   margin: 0;
   opacity: 0.7;
 }
 
-/* Sección de progreso */
+/* Sección de progreso - Espaciado optimizado */
 .progress-section {
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   animation: slideUp 0.6s ease-out 0.6s both;
+  flex: 0 0 auto;
 }
 
 .time-display {
@@ -196,14 +206,15 @@
   transition: left 0.1s ease;
 }
 
-/* Controles de reproducción */
+/* Controles de reproducción - Espaciado optimizado */
 .player-controls {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   animation: slideUp 0.6s ease-out 0.8s both;
+  flex: 0 0 auto;
 }
 
 .control-button {
@@ -247,6 +258,8 @@
 .song-footer {
   width: 100%;
   animation: slideUp 0.6s ease-out 1s both;
+  flex: 0 0 auto;
+  margin-bottom: 1rem;
 }
 
 .footer-actions {
@@ -275,13 +288,18 @@
   transform: scale(1.05);
 }
 
-/* Loading state */
+/* Loading state - Pantalla completa */
 .loading-container {
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
 }
 
 .loading-content {
@@ -360,12 +378,12 @@
   }
 
   .song-artwork-wrapper {
-    width: 400px;
-    height: 400px;
+    width: min(400px, 50vw);
+    height: min(400px, 50vw);
   }
 
   .song-title {
-    font-size: 2.5rem;
+    font-size: min(2.5rem, 6vw);
   }
 
   .player-controls {
@@ -381,4 +399,193 @@
     width: 4.5rem;
     height: 4.5rem;
   }
+}
+
+/* Evitar scroll en toda la página cuando esta vista está activa */
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Asegurar que no hay margin/padding del body afectando */
+:host-context(body) {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Botón de letras en el header */
+.lyrics-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  margin-left: auto;
+}
+
+.lyrics-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.lyrics-button.active {
+  background: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+/* Panel de letras deslizante */
+.lyrics-panel {
+  position: fixed;
+  top: 0;
+  right: -50vw;
+  width: 50vw;
+  height: 100vh;
+  z-index: 999;
+  transition: right 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  overflow: hidden;
+  background-position: -50vw 0 !important;
+  background-size: 100vw 100vh !important;
+}
+
+.lyrics-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.lyrics-panel > * {
+  position: relative;
+  z-index: 2;
+}
+
+.lyrics-panel.show {
+  right: 0;
+}
+
+.lyrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex: 0 0 auto;
+}
+
+.lyrics-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+}
+
+.close-lyrics-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.close-lyrics-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.lyrics-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.lyrics-text {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.lyrics-line {
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  padding: 0.5rem 0;
+  color: white;
+}
+
+.lyrics-line.active {
+  opacity: 1;
+  color: white;
+  font-weight: 600;
+  transform: scale(1.02);
+}
+
+.lyrics-line.chorus {
+  font-weight: 500;
+  color: white;
+}
+
+/* Responsive para pantallas móviles */
+@media (max-width: 768px) {
+  .current-song-container.with-lyrics {
+    width: 100vw;
+    display: none;
+  }
+  
+  .lyrics-panel {
+    width: 100vw;
+    right: -100vw;
+  }
+  
+  .lyrics-panel.show {
+    right: 0;
+  }
+}
+
+/* Ajustes adicionales para vista dividida */
+.current-song-container.with-lyrics .song-info {
+  margin-bottom: 0.5rem;
+}
+
+.current-song-container.with-lyrics .song-title {
+  font-size: min(1.5rem, 6vw);
+}
+
+.current-song-container.with-lyrics .song-artist {
+  font-size: min(1rem, 4vw);
+}
+
+.current-song-container.with-lyrics .song-album {
+  font-size: min(0.875rem, 3.5vw);
+}
+
+.current-song-container.with-lyrics .progress-section {
+  margin-bottom: 0.75rem;
+}
+
+.current-song-container.with-lyrics .player-controls {
+  margin-bottom: 0.5rem;
 }

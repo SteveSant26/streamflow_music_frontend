@@ -2,6 +2,7 @@
   class="current-song-container"
   [style.background]="currentSong.gradient"
   *ngIf="currentSong"
+  [class.with-lyrics]="showLyricsPanel"
 >
   <!-- Header con botón de regreso -->
   <div class="current-song-header">
@@ -22,6 +23,29 @@
       </svg>
     </button>
     <h1 class="current-song-title">Reproduciendo ahora</h1>
+    
+    <!-- Botón de letras en la esquina superior derecha -->
+    <button 
+      (click)="toggleLyricsPanel()" 
+      class="lyrics-button" 
+      aria-label="Ver letras"
+      [class.active]="showLyricsPanel"
+    >
+      <svg
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        />
+      </svg>
+    </button>
   </div>
 
   <!-- Imagen de la canción -->
@@ -36,9 +60,12 @@
         crossorigin="anonymous"
       />
       <!-- Efecto de vinilo giratorio cuando está reproduciendo -->
-      <div class="vinyl-effect" [class.spinning]="currentSong.isPlaying"></div>
+
     </div>
   </div>
+
+  <!-- Espaciador flexible -->
+  <div class="flexible-spacer"></div>
 
   <!-- Información de la canción -->
   <div class="song-info">
@@ -175,5 +202,63 @@
   <div class="loading-content">
     <div class="loading-spinner"></div>
     <p>Cargando canción...</p>
+  </div>
+</div>
+
+<!-- Panel de letras deslizante -->
+<div class="lyrics-panel" [class.show]="showLyricsPanel" [style.background]="currentSong?.gradient">
+  <div class="lyrics-header">
+    <h3>Letras</h3>
+    <button 
+      (click)="toggleLyricsPanel()" 
+      class="close-lyrics-button"
+      aria-label="Cerrar letras"
+    >
+      <svg
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+  </div>
+  
+  <div class="lyrics-content">
+    <div class="lyrics-text">
+      <p class="lyrics-line active">City's breaking down on a camel's back</p>
+      <p class="lyrics-line">They just have to go, 'cause they don't know wack</p>
+      <p class="lyrics-line">So while you fill the streets, it's appealing to see</p>
+      <p class="lyrics-line">You won't get out the county, 'cause you're bad and free</p>
+      <p class="lyrics-line">You've got a new horizon, it's ephemeral style</p>
+      <p class="lyrics-line">A melancholy town where we never smile</p>
+      <p class="lyrics-line">And all I wanna hear is the message beep</p>
+      <p class="lyrics-line">My dreams, they got a kissing</p>
+      <p class="lyrics-line">'Cause I don't get sleep, no</p>
+      
+      <p class="lyrics-line chorus">Windmill, windmill for the land</p>
+      <p class="lyrics-line chorus">Turn forever, hand in hand</p>
+      <p class="lyrics-line chorus">Take it all in on your stride</p>
+      <p class="lyrics-line chorus">It is ticking, falling down</p>
+      <p class="lyrics-line chorus">Love forever, love has freely</p>
+      <p class="lyrics-line chorus">Turned forever, you and me</p>
+      <p class="lyrics-line chorus">Windmill, windmill for the land</p>
+      <p class="lyrics-line chorus">Is everybody in?</p>
+      
+      <p class="lyrics-line">Laughing gas these hazmats, fast cats</p>
+      <p class="lyrics-line">Lining 'em up like ass cracks</p>
+      <p class="lyrics-line">Play these ponies at the track</p>
+      <p class="lyrics-line">It's my chocolate attack</p>
+      <p class="lyrics-line">Shit, I'm stepping in the heart of this here (yeah)</p>
+      <p class="lyrics-line">Care Bear rappin' in harder this year (yeah)</p>
+      <p class="lyrics-line">Watch me as I gravitate, ha-ha-ha-ha-ha</p>
+    </div>
   </div>
 </div>
