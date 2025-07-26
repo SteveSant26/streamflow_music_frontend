@@ -1,0 +1,11 @@
+.explore-container {
+  padding: 1.5rem;
+}
+
+.genre-card {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

@@ -1,0 +1,91 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <div class="hero-section text-gray-900 mb-8 text-center lg:text-left">
+    <div class="mb-6">
+      <app-greeting></app-greeting>
+      <p class="text-gray-700 mt-3 text-sm sm:text-base">
+        Descubre tu próxima canción favorita
+      </p>
+      <div class="mt-4">
+        <button
+          class="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 hover:shadow-lg hover:scale-105 transition-all"
+        >
+          Reproducir todo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards Section -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
+    <app-card
+      title="Expande tus oidos mundialmente:D "
+      body="Explora las últimas tendencias musicales y encuentra tus nuevos artistas favoritos."
+      href="/discover"
+      [playlistId]="1"
+      [showPlayButton]="true"
+    >
+    </app-card>
+
+    <app-card
+      title="Visita a tus Playlists favoritas"
+      body="Crea y gestiona tus listas de reproducción personalizadas para cada momento."
+      href="/playlists"
+      [playlistId]="2"
+      [showPlayButton]="true"
+    >
+    </app-card>
+
+    <app-card
+      title="Artistas Favoritos"
+      body="Sigue a tus artistas preferidos y mantente al día con sus últimos lanzamientos."
+      href="/artists"
+      [playlistId]="3"
+      [showPlayButton]="true"
+    >
+    </app-card>
+  </div>
+
+  <!-- Playlists Recomendadas -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
+        Mixes para ti
+      </h2>
+      <button class="text-black hover:text-gray-700 text-sm font-medium">
+        Ver todo
+      </button>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+      @for (playlist of featuredPlaylists; track playlist.id) {
+      <app-play-list-item-card
+        [playlist]="playlist"
+      ></app-play-list-item-card>
+      }
+    </div>
+  </div>
+
+  <!-- Trending Now -->
+  <div class="mb-32 lg:mb-24">
+    <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
+          Trending Now
+        </h2>
+        <div class="flex gap-2">
+          <button class="text-black hover:text-gray-700 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+          <button class="text-black hover:text-gray-700 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm12-3c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <app-musics-table></app-musics-table>
+    </div>
+  </div>
+</div>

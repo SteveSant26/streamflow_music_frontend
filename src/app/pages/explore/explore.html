@@ -1,0 +1,24 @@
+<div class="explore-container">
+  <h1 class="text-3xl font-bold mb-8">Explorar</h1>
+  
+  <!-- Géneros musicales -->
+  <section class="genres-section mb-12">
+    <h2 class="text-2xl font-semibold mb-6">Géneros</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div 
+        *ngFor="let genre of genres" 
+        class="genre-card bg-gradient-to-br from-blue-500 to-purple-600 text-white p-6 rounded-xl cursor-pointer hover:scale-105 transition-transform"
+      >
+        <h3 class="font-semibold">{{ genre }}</h3>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Secciones adicionales -->
+  <section class="trending-section">
+    <h2 class="text-2xl font-semibold mb-6">Tendencias</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Cards de tendencias -->
+    </div>
+  </section>
+</div>
