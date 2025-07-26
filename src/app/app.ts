@@ -7,12 +7,7 @@ import { filter } from "rxjs";
 
 @Component({
   selector: "app-root",
-  imports: [
-    RouterOutlet,
-    AsideMenu,
-    Player,
-    CommonModule,
-  ],
+  imports: [RouterOutlet, AsideMenu, Player, CommonModule],
   templateUrl: "./app.html",
   styleUrl: "./app.css",
 })
@@ -21,10 +16,11 @@ export class App {
 
   constructor(private readonly router: Router) {
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         // Hide layout for login and register pages
-        this.showLayout = !event.url.includes('/login') && !event.url.includes('/register');
+        this.showLayout =
+          !event.url.includes("/login") && !event.url.includes("/register");
       });
   }
 }

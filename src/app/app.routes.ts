@@ -2,44 +2,52 @@ import { Routes } from "@angular/router";
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/home',
-    pathMatch: 'full'
-  },
-  { 
-    path: 'login',
-    loadComponent: () => import('./pages/login/login').then(m => m.LoginComponent)
-  },
-  { 
-    path: 'register',
-    loadComponent: () => import('./pages/register/register').then(m => m.RegisterComponent)
+    path: "",
+    redirectTo: "/home",
+    pathMatch: "full",
   },
   {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home').then(m => m.HomeComponent)
+    path: "login",
+    loadComponent: () =>
+      import("./pages/login/login").then((m) => m.LoginComponent),
   },
   {
-    path: 'search',
-    loadComponent: () => import('./pages/search/search').then(m => m.SearchComponent)
+    path: "register",
+    loadComponent: () =>
+      import("./pages/register/register").then((m) => m.RegisterComponent),
   },
   {
-    path: 'explore',
-    loadComponent: () => import('./pages/explore/explore').then(m => m.ExploreComponent)
+    path: "home",
+    loadComponent: () =>
+      import("./pages/home/home").then((m) => m.HomeComponent),
   },
   {
-    path: 'playlist/:id',
-    loadComponent: () => import('./pages/playlist/playlist').then(m => m.PlaylistComponent)
+    path: "search",
+    loadComponent: () =>
+      import("./pages/search/search").then((m) => m.SearchComponent),
   },
   {
-    path: 'library',
-    loadComponent: () => import('./pages/library/library').then(m => m.LibraryComponent)
+    path: "explore",
+    loadComponent: () =>
+      import("./pages/explore/explore").then((m) => m.ExploreComponent),
   },
   {
-    path: 'artist/:id',
-    loadComponent: () => import('./pages/artist/artist').then(m => m.ArtistComponent)
+    path: "playlist/:id",
+    loadComponent: () =>
+      import("./pages/playlist/playlist").then((m) => m.PlaylistComponent),
   },
   {
-    path: '**',
-    redirectTo: '/home'
-  }
+    path: "library",
+    loadComponent: () =>
+      import("./pages/library/library").then((m) => m.LibraryComponent),
+  },
+  {
+    path: "artist/:id",
+    loadComponent: () =>
+      import("./pages/artist/artist").then((m) => m.ArtistComponent),
+  },
+  {
+    path: "**",
+    redirectTo: "/home",
+  },
 ];

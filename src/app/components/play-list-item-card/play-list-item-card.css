@@ -20,7 +20,6 @@
 /* Efecto de sombra más pronunciado en hover */
 .group:hover {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-
 }
 
 /* Transiciones suaves para todos los elementos */
