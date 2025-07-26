@@ -1,0 +1,143 @@
+/* Container principal - layout centrado (Mobile First) */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+  padding: 2rem 1.5rem; /* Padding móvil primero */
+}
+
+/* Tarjeta de registro (Mobile First) */
+.register-header {
+  width: 100%;
+  max-width: 28rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem; /* Padding móvil primero */
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Formulario */
+.register-form {
+  margin-top: 1.5rem;
+}
+
+/* Inputs de texto */
+.register-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  color: black;
+  font-weight: bold;
+  font-size: 0.875rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.register-input::placeholder {
+  color: #6b7280;
+}
+
+.register-input:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkbox */
+.register-checkbox {
+  height: 1rem;
+  width: 1rem;
+  color: #000000;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+}
+
+.register-checkbox:focus {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón principal */
+.register-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  color: white;
+  background-color: #000000;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.register-button:hover {
+  background-color: #374151;
+  transform: scale(1.02);
+}
+
+.register-button:active {
+  transform: scale(0.98);
+}
+
+.register-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Enlaces */
+.register-link {
+  color: #000000;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.register-link:hover {
+  color: #374151;
+}
+
+.register-link:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Animaciones */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive - Mobile First (Desktop y pantallas grandes) */
+@media (min-width: 640px) {
+  .register-container {
+    padding: 3rem 1rem;
+  }
+
+  .register-header {
+    padding: 2rem;
+  }
+}
+
+/* Responsive - Pantallas extra grandes */
+@media (min-width: 1024px) {
+  .register-container {
+    padding: 4rem 1rem;
+  }
+
+  .register-header {
+    padding: 2.5rem;
+  }
+}

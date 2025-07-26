@@ -1,0 +1,346 @@
+/* Container principal */
+.artist-container {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  min-height: 100vh;
+}
+
+/* Header del artista */
+.artist-header {
+  margin-bottom: 2rem;
+}
+
+/* Hero section */
+.artist-hero {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  color: white;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  transition: all 1s ease;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.artist-image {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.artist-info {
+  flex: 1;
+}
+
+.artist-name {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+
+.artist-genre {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.artist-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.test-button {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.test-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Biografía */
+.artist-bio {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.artist-bio h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.artist-bio p {
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Contenido del artista */
+.artist-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.artist-content section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+/* Canciones populares */
+.popular-songs {
+  margin-bottom: 2rem;
+}
+
+.songs-container {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.song-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.song-item:hover {
+  background: #f9fafb;
+}
+
+.song-item:last-child {
+  border-bottom: none;
+}
+
+.song-number {
+  color: #6b7280;
+  width: 2rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.song-details {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+.song-details h3 {
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.song-details p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.song-duration {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Álbumes */
+.albums {
+  margin-bottom: 2rem;
+}
+
+.albums-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.album-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.album-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.album-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.album-card h3 {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #1f2937;
+}
+
+.album-year {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.album-tracks {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Premios */
+.awards {
+  margin-bottom: 2rem;
+}
+
+.awards-container {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+}
+
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.award-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+.award-icon {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #eab308;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.award-details h4 {
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.award-details p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Vista por defecto */
+.default-view {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.default-view h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.default-view p {
+  color: #6b7280;
+  font-size: 1.125rem;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .hero-content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .artist-name {
+    font-size: 3.5rem;
+  }
+
+  .albums-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .artist-container {
+    padding: 1rem;
+  }
+
+  .artist-hero {
+    padding: 1.5rem;
+  }
+
+  .artist-image {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .artist-name {
+    font-size: 2rem;
+  }
+
+  .artist-genre {
+    font-size: 1rem;
+  }
+
+  .artist-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .albums-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .awards-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -3,9 +3,12 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "npm",
-      "script": "start",
+      "type": "shell",
+      "label": "bun start",
+      "command": "bun",
+      "args": ["start"],
       "isBackground": true,
+      "group": "build",
       "problemMatcher": {
         "owner": "typescript",
         "pattern": "$tsc",
@@ -21,9 +24,12 @@
       }
     },
     {
-      "type": "npm",
-      "script": "test",
+      "type": "shell",
+      "label": "bun test",
+      "command": "bun",
+      "args": ["test"],
       "isBackground": true,
+      "group": "test",
       "problemMatcher": {
         "owner": "typescript",
         "pattern": "$tsc",

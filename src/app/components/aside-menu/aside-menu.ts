@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { SideMenuItem } from "../side-menu-item/side-menu-item";
 import { SideMenuCard } from "../side-menu-card/side-menu-card";
 
 @Component({
   selector: "app-aside-menu",
-  imports: [SideMenuItem, SideMenuCard],
+  imports: [RouterLink, SideMenuItem, SideMenuCard],
   templateUrl: "./aside-menu.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
