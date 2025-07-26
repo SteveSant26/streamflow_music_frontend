@@ -164,13 +164,6 @@
   transition: all 0.3s ease;
 }
 
-/* Cuando las letras están activas, hacer la imagen más pequeña */
-.main-container.with-lyrics .song-artwork-wrapper {
-  width: min(150px, 40vw);
-  height: min(150px, 40vw);
-  max-width: 180px;
-  max-height: 180px;
-}
 .song-artwork {
   width: 100%;
   height: 100%;
@@ -611,29 +604,39 @@
     width: 50vw;
     height: 100vh;
   }
+
+  /* En desktop, ajustar tamaño de artwork cuando las letras están activas */
+  .main-container.with-lyrics .song-artwork-wrapper {
+    width: min(150px, 40vw);
+    height: min(150px, 40vw);
+    max-width: 180px;
+    max-height: 180px;
+  }
 }
 
-/* Ajustes adicionales para vista dividida */
-.main-container.with-lyrics .song-info {
-  margin-bottom: 0.5rem;
-}
+/* Ajustes adicionales para vista dividida - Solo en desktop */
+@media (min-width: 769px) {
+  .main-container.with-lyrics .song-info {
+    margin-bottom: 0.5rem;
+  }
 
-.main-container.with-lyrics .song-title {
-  font-size: min(1.5rem, 6vw);
-}
+  .main-container.with-lyrics .song-title {
+    font-size: min(1.5rem, 6vw);
+  }
 
-.main-container.with-lyrics .song-artist {
-  font-size: min(1rem, 4vw);
-}
+  .main-container.with-lyrics .song-artist {
+    font-size: min(1rem, 4vw);
+  }
 
-.main-container.with-lyrics .song-album {
-  font-size: min(0.875rem, 3.5vw);
-}
+  .main-container.with-lyrics .song-album {
+    font-size: min(0.875rem, 3.5vw);
+  }
 
-.main-container.with-lyrics .progress-section {
-  margin-bottom: 0.75rem;
-}
+  .main-container.with-lyrics .progress-section {
+    margin-bottom: 0.75rem;
+  }
 
-.main-container.with-lyrics .player-controls {
-  margin-bottom: 0.5rem;
+  .main-container.with-lyrics .player-controls {
+    margin-bottom: 0.5rem;
+  }
 }
