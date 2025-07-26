@@ -588,25 +588,25 @@
   .main-container {
     flex-direction: row;
   }
-  
+
   /* En desktop, el reproductor vuelve a ocupar toda la pantalla por defecto */
   .reproductor-content {
     height: 100vh;
   }
-  
+
   /* En desktop con letras activas, layout lado a lado */
   .main-container.with-lyrics .reproductor-content {
     width: 50vw;
     height: 100vh; /* Volver a altura completa en desktop */
   }
-  
+
   /* En desktop, panel de letras al lado derecho */
   .lyrics-panel {
     width: 0;
     height: 100vh;
     transition: width 0.3s ease-in-out;
   }
-  
+
   .main-container.with-lyrics .lyrics-panel {
     width: 50vw;
     height: 100vh;
