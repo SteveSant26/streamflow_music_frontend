@@ -2,135 +2,54 @@ import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 
+interface Song {
+  title: string;
+  album: string;
+  duration: string;
+}
+
+interface Album {
+  title: string;
+  year: string;
+  tracks: number;
+  cover: string;
+}
+
+interface Award {
+  name: string;
+  year: string;
+  category: string;
+}
+
+interface Artist {
+  id: number;
+  name: string;
+  genre: string;
+  image: string;
+  gradient: string;
+  monthlyListeners: string;
+  followers: string;
+  activeYears: string;
+  biography: string;
+  popularSongs: Song[];
+  albums: Album[];
+  awards: Award[];
+}
+
 @Component({
   selector: "app-artist",
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="artist-container p-6">
-      <div class="artist-header mb-8" *ngIf="artist">
-        <!-- Artist Hero Section -->
-        <div
-          class="relative rounded-2xl overflow-hidden text-white p-8 mb-6 transition-all duration-1000"
-          [style.background]="artist.gradient"
-        >
-          <div class="flex flex-col md:flex-row items-start gap-6">
-            <img
-              [src]="artist.image"
-              [alt]="artist.name"
-              class="w-48 h-48 rounded-full object-cover shadow-2xl"
-              (load)="onImageLoad($event)"
-              (error)="onImageError($event)"
-              crossorigin="anonymous"
-            />
-            <div class="flex-1">
-              <h1 class="text-5xl font-bold mb-2">{{ artist.name }}</h1>
-              <p class="text-xl opacity-90 mb-4">{{ artist.genre }}</p>
-              <div class="flex flex-wrap gap-4 text-sm opacity-80">
-                <span>{{ artist.monthlyListeners }} oyentes mensuales</span>
-                <span>{{ artist.followers }} seguidores</span>
-                <span>Activo desde {{ artist.activeYears }}</span>
-              </div>
-              <!-- Botón de prueba para cambiar imagen -->
-              <button
-                (click)="testDifferentImage()"
-                class="mt-4 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm transition-colors"
-              >
-                🎨 Probar otra imagen
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artist Bio -->
-        <div
-          class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6"
-        >
-          <h2 class="text-2xl font-semibold mb-4">Biografía</h2>
-          <p class="text-gray-700 leading-relaxed">{{ artist.biography }}</p>
-        </div>
-      </div>
-
-      <div class="artist-content" *ngIf="artist">
-        <!-- Popular Songs -->
-        <section class="popular-songs mb-8">
-          <h2 class="text-2xl font-semibold mb-4">Canciones populares</h2>
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div
-              *ngFor="let song of artist.popularSongs; let i = index"
-              class="flex items-center p-4 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
-            >
-              <span class="text-gray-500 w-8 text-center">{{ i + 1 }}</span>
-              <div class="flex-1 ml-4">
-                <h3 class="font-medium">{{ song.title }}</h3>
-                <p class="text-sm text-gray-600">{{ song.album }}</p>
-              </div>
-              <div class="text-sm text-gray-500">
-                {{ song.duration }}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Albums -->
-        <section class="albums mb-8">
-          <h2 class="text-2xl font-semibold mb-4">Álbumes</h2>
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-          >
-            <div
-              *ngFor="let album of artist.albums"
-              class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
-            >
-              <img
-                [src]="album.cover"
-                [alt]="album.title"
-                class="w-full aspect-square object-cover rounded-lg mb-3"
-              />
-              <h3 class="font-semibold mb-1">{{ album.title }}</h3>
-              <p class="text-sm text-gray-600 mb-1">{{ album.year }}</p>
-              <p class="text-xs text-gray-500">{{ album.tracks }} canciones</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Awards & Recognition -->
-        <section class="awards mb-8" *ngIf="artist.awards.length > 0">
-          <h2 class="text-2xl font-semibold mb-4">Premios y reconocimientos</h2>
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div
-                *ngFor="let award of artist.awards"
-                class="flex items-center p-3 bg-gray-50 rounded-lg"
-              >
-                <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
-                <div>
-                  <h4 class="font-medium">{{ award.name }}</h4>
-                  <p class="text-sm text-gray-600">
-                    {{ award.year }} - {{ award.category }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- Default view for other artists -->
-      <div *ngIf="!artist" class="text-center py-12">
-        <h1 class="text-4xl font-bold mb-2">Artista {{ artistId }}</h1>
-        <p class="text-gray-600">Información del artista próximamente</p>
-      </div>
-    </div>
-  `,
+  templateUrl: "./artist.html",
+  styleUrls: ["./artist.css"],
 })
 export class ArtistComponent implements OnInit {
   artistId: string | null = null;
-  artist: any = null;
+  artist: Artist | null = null;
 
   constructor(
-    private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
+    private readonly route: ActivatedRoute,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -170,11 +89,11 @@ export class ArtistComponent implements OnInit {
       "https://images.unsplash.com/photo-1446057032654-9d8885db76c6?w=400&h=400&fit=crop", // Verde
     ];
 
-    const currentIndex = testImages.indexOf(this.artist.image);
+    const currentIndex = testImages.indexOf(this.artist!.image);
     const nextIndex = (currentIndex + 1) % testImages.length;
 
     console.log("🎨 Cambiando a imagen:", testImages[nextIndex]);
-    this.artist.image = testImages[nextIndex];
+    this.artist!.image = testImages[nextIndex];
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {

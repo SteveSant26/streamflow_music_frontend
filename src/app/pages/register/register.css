@@ -1,14 +1,14 @@
-/* Container principal - layout centrado */
+/* Container principal - layout centrado (Mobile First) */
 .register-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #f9fafb;
-  padding: 3rem 1rem;
+  padding: 2rem 1.5rem; /* Padding móvil primero */
 }
 
-/* Tarjeta de registro */
+/* Tarjeta de registro (Mobile First) */
 .register-header {
   width: 100%;
   max-width: 28rem;
@@ -17,7 +17,7 @@
   box-shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  padding: 2rem;
+  padding: 1.5rem; /* Padding móvil primero */
   animation: slideUp 0.3s ease-out;
 }
 
@@ -32,7 +32,8 @@
   padding: 0.75rem 1rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
-  color: #111827;
+  color: black;
+  font-weight: bold;
   font-size: 0.875rem;
   transition: all 0.2s ease-in-out;
 }
@@ -119,13 +120,24 @@
   }
 }
 
-/* Responsive */
-@media (max-width: 640px) {
+/* Responsive - Mobile First (Desktop y pantallas grandes) */
+@media (min-width: 640px) {
   .register-container {
-    padding: 2rem 1.5rem;
+    padding: 3rem 1rem;
   }
 
   .register-header {
-    padding: 1.5rem;
+    padding: 2rem;
+  }
+}
+
+/* Responsive - Pantallas extra grandes */
+@media (min-width: 1024px) {
+  .register-container {
+    padding: 4rem 1rem;
+  }
+
+  .register-header {
+    padding: 2.5rem;
   }
 }
