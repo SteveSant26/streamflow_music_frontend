@@ -27,6 +27,13 @@ export const routes: Routes = [
       import("./pages/search/search").then((m) => m.SearchComponent),
   },
   {
+    path: "currentSong",
+    loadComponent: () =>
+      import("./pages/currentsong/current-song").then(
+        (m) => m.CurrentSongComponent,
+      ),
+  },
+  {
     path: "explore",
     loadComponent: () =>
       import("./pages/explore/explore").then((m) => m.ExploreComponent),

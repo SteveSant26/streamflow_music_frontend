@@ -18,9 +18,11 @@ export class App {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        // Hide layout for login and register pages
+        // Hide layout for login, register and current song pages
         this.showLayout =
-          !event.url.includes("/login") && !event.url.includes("/register");
+          !event.url.includes("/login") &&
+          !event.url.includes("/register") &&
+          !event.url.includes("/currentSong");
       });
   }
 }

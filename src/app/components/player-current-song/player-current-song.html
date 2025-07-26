@@ -1,5 +1,10 @@
 @if (song) {
-<div class="flex items-center gap-2 sm:gap-3">
+<button
+  class="flex items-center gap-2 sm:gap-3 cursor-pointer hover:bg-gray-100 rounded-lg p-2 transition-colors group w-full text-left border-none bg-transparent"
+  (click)="navigateToCurrentSong()"
+  type="button"
+  aria-label="Ver canción actual en pantalla completa"
+>
   <picture class="w-10 h-10 sm:w-14 sm:h-14 flex-shrink-0">
     <img
       [src]="song.image"
@@ -8,14 +13,18 @@
     />
   </picture>
   <div class="flex flex-col min-w-0">
-    <h4 class="text-black text-xs sm:text-sm font-medium truncate">
+    <h4
+      class="text-black text-xs sm:text-sm font-medium truncate group-hover:text-blue-600 transition-colors"
+    >
       {{ song.title }}
     </h4>
-    <span class="text-gray-800 text-xs truncate">
+    <span
+      class="text-gray-800 text-xs truncate group-hover:text-gray-600 transition-colors"
+    >
       {{ song.artists.join(', ') }}
     </span>
   </div>
-</div>
+</button>
 } @else {
 <div class="flex items-center gap-2 sm:gap-3">
   <div
