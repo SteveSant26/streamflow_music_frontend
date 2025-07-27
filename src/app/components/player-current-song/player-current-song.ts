@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { Router } from "@angular/router";
 
 interface Song {
   id: number;
@@ -18,4 +19,12 @@ interface Song {
 })
 export class PlayerCurrentSong {
   @Input() song: Song | null = null;
+
+  constructor(private readonly router: Router) {}
+
+  navigateToCurrentSong() {
+    if (this.song) {
+      this.router.navigate(["/currentSong"]);
+    }
+  }
 }

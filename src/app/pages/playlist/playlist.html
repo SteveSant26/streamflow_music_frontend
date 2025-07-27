@@ -1,0 +1,69 @@
+<div class="playlist-container">
+  <div class="playlist-header">
+    <h1 class="playlist-title">Playlist {{ playlistId }}</h1>
+    <p class="playlist-description">Detalles de la playlist</p>
+  </div>
+
+  <div class="playlist-content">
+    <!-- Información de la playlist -->
+    <div class="playlist-info">
+      <div class="playlist-stats">
+        <span class="stat-item">{{ songCount }} canciones</span>
+        <span class="stat-separator">•</span>
+        <span class="stat-item">{{ duration }} min</span>
+        <span class="stat-separator">•</span>
+        <span class="stat-item">{{ createdDate }}</span>
+      </div>
+    </div>
+
+    <!-- Controles de reproducción -->
+    <div class="playlist-controls">
+      <button class="play-button">
+        <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+        Reproducir
+      </button>
+
+      <button class="shuffle-button">
+        <svg class="shuffle-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M14.83 13.41L13.42 14.82L16.55 17.95L14.83 19.67L18.18 23.02L21.53 19.67L19.81 17.95L16.68 14.82L15.27 13.41L14.83 13.41Z"
+          />
+        </svg>
+        Aleatorio
+      </button>
+
+      <button class="more-button">
+        <svg class="more-icon" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="5" r="2" />
+          <circle cx="12" cy="12" r="2" />
+          <circle cx="12" cy="19" r="2" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Lista de canciones -->
+    <div class="songs-list">
+      <div class="songs-header">
+        <div class="song-number">#</div>
+        <div class="song-title">Título</div>
+        <div class="song-artist">Artista</div>
+        <div class="song-album">Álbum</div>
+        <div class="song-duration">Duración</div>
+      </div>
+
+      <!-- Ejemplo de canciones - esto será dinámico -->
+      <div class="song-item" *ngFor="let song of songs; let i = index">
+        <div class="song-number">{{ i + 1 }}</div>
+        <div class="song-info">
+          <div class="song-title">{{ song.title }}</div>
+          <div class="song-artist-name">{{ song.artist }}</div>
+        </div>
+        <div class="song-artist">{{ song.artist }}</div>
+        <div class="song-album">{{ song.album }}</div>
+        <div class="song-duration">{{ song.duration }}</div>
+      </div>
+    </div>
+  </div>
+</div>

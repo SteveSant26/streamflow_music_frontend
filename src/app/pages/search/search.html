@@ -1,0 +1,85 @@
+<div class="search-container">
+  <div class="search-header">
+    <h1 class="text-3xl font-bold mb-6">Buscar</h1>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-bar mb-8">
+      <input
+        type="text"
+        placeholder="Buscar canciones, artistas, álbumes..."
+        class="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        (input)="onSearch($any($event.target).value || '')"
+      />
+    </div>
+  </div>
+
+  <!-- Géneros Sugeridos -->
+  <div class="suggested-genres" *ngIf="!searchQuery">
+    <h2 class="text-2xl font-semibold mb-6">Buscar por género</h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <button
+        *ngFor="let genre of genres"
+        class="genre-card bg-gradient-to-br {{ genre.color }} text-white rounded-xl p-6 cursor-pointer hover:scale-105 transition-transform shadow-lg text-left border-0"
+        (click)="onGenreClick(genre.name)"
+        (keydown.enter)="onGenreClick(genre.name)"
+      >
+        <h3 class="font-bold text-lg mb-2">{{ genre.name }}</h3>
+        <p class="text-sm opacity-90">{{ genre.description }}</p>
+      </button>
+    </div>
+  </div>
+
+  <!-- Resultados de búsqueda -->
+  <div class="search-results" *ngIf="searchQuery">
+    <div class="mb-6 flex items-center justify-between">
+      <p class="text-gray-600">Resultados para: "{{ searchQuery }}"</p>
+      <button
+        (click)="clearSearch()"
+        class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        Limpiar búsqueda
+      </button>
+    </div>
+
+    <!-- Lista de resultados -->
+    <div class="grid grid-cols-1 gap-4">
+      <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <div class="text-center">
+          <svg
+            class="w-16 h-16 text-gray-400 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">
+            Implementando búsqueda...
+          </h3>
+          <p class="text-gray-500">
+            Los resultados de búsqueda aparecerán aquí próximamente
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
