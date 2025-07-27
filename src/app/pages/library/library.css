@@ -234,7 +234,7 @@
 }
 
 .play-button {
-  background-color: #8b5cf6;
+  background-color: #000000;
   color: white;
   border: none;
   border-radius: 50%;
@@ -245,7 +245,7 @@
 }
 
 .play-button:hover {
-  background-color: #7c3aed;
+  background-color: #000000;
   transform: scale(1.1);
 }
 
@@ -345,7 +345,7 @@
 }
 
 .cta-button:hover {
-  background-color: #7c3aed;
+  background-color: #040404;
   transform: scale(1.05);
 }
 

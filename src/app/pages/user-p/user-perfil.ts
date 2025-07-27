@@ -23,6 +23,10 @@ export class UserPerfilComponent implements OnInit {
     description: "",
   };
 
+  // Profile image properties
+  profileImageUrl: string | null = null;
+  selectedImageFile: File | null = null;
+
   constructor(
     readonly router: Router,
     readonly fb: FormBuilder,
@@ -84,6 +88,62 @@ export class UserPerfilComponent implements OnInit {
   private showSuccessMessage(): void {
     // Implementar notificación de éxito
     console.log("Perfil actualizado exitosamente");
+  }
+
+  // Profile image methods
+  triggerImageUpload(): void {
+    const input = document.getElementById(
+      "profileImageInput",
+    ) as HTMLInputElement;
+    input?.click();
+  }
+
+  onImageSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+
+    if (file) {
+      // Validate file type
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        alert("Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        alert("La imagen es demasiado grande. El tamaño máximo es 5MB");
+        return;
+      }
+
+      this.selectedImageFile = file;
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.profileImageUrl = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeProfileImage(): void {
+    this.selectedImageFile = null;
+    this.profileImageUrl = null;
+
+    // Clear the input
+    const input = document.getElementById(
+      "profileImageInput",
+    ) as HTMLInputElement;
+    if (input) {
+      input.value = "";
+    }
   }
 
   get username() {

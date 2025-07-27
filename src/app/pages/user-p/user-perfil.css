@@ -159,3 +159,61 @@
   background: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
 }
+
+/* Profile Image Upload Styles */
+.profile-avatar {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.02);
+}
+
+.profile-image {
+  transition: opacity 0.3s ease;
+}
+
+.profile-avatar:hover .profile-image {
+  opacity: 0.8;
+}
+
+.upload-button {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.upload-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.remove-button {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.remove-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+/* Loading animation for image upload */
+@keyframes imageUpload {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.image-upload-animation {
+  animation: imageUpload 0.5s ease-out;
+}
