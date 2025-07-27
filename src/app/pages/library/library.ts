@@ -42,6 +42,10 @@ export class LibraryComponent {
   // Modal state
   showCreateModal = false;
 
+  // Image upload state
+  selectedImageFile: File | null = null;
+  imagePreviewUrl: string | null = null;
+
   // Form data for new playlist
   newPlaylist = {
     name: "",
@@ -229,6 +233,59 @@ export class LibraryComponent {
       description: "",
       isPrivate: false,
     };
+    this.selectedImageFile = null;
+    this.imagePreviewUrl = null;
+  }
+
+  onImageSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+
+    if (file) {
+      // Validate file type
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        alert("Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        alert("La imagen es demasiado grande. El tamaño máximo es 5MB");
+        return;
+      }
+
+      this.selectedImageFile = file;
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.imagePreviewUrl = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage(): void {
+    this.selectedImageFile = null;
+    this.imagePreviewUrl = null;
+
+    // Clear the input
+    const input = document.getElementById("imageInput") as HTMLInputElement;
+    if (input) {
+      input.value = "";
+    }
+  }
+
+  triggerImageUpload(): void {
+    const input = document.getElementById("imageInput") as HTMLInputElement;
+    input?.click();
   }
 
   savePlaylist(): void {
@@ -236,11 +293,16 @@ export class LibraryComponent {
       return;
     }
 
+    // Use the selected image or a default placeholder
+    const playlistImage =
+      this.imagePreviewUrl ||
+      "https://picsum.photos/400/400?random=" + Date.now();
+
     const newPlaylist: Playlist = {
       id: Date.now().toString(),
       name: this.newPlaylist.name.trim(),
       description: this.newPlaylist.description.trim(),
-      image: "https://picsum.photos/400/400?random=" + Date.now(),
+      image: playlistImage,
       songCount: 0,
       createdAt: new Date(),
     };
