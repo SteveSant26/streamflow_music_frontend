@@ -54,6 +54,11 @@ export const routes: Routes = [
       import("./pages/artist/artist").then((m) => m.ArtistComponent),
   },
   {
+    path: "profile",
+    loadComponent: () =>
+      import("./pages/user-p/user-perfil").then((m) => m.UserPerfilComponent),
+  },
+  {
     path: "**",
     redirectTo: "/home",
   },
