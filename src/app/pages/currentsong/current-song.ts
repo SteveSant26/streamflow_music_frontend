@@ -231,7 +231,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       duration: "3:41",
       currentTime: "1:23",
       progress: 37,
-      cover: "/assets/playlists/playlist2.webp",
+      cover: "/assets/gorillaz2.jpg",
       gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       isPlaying: true,
     };
