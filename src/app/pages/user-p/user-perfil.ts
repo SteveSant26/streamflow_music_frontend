@@ -51,7 +51,7 @@ export class UserPerfilComponent implements OnInit {
   loadUserData(): void {
     // Simulamos datos del usuario - aquí conectarías con tu servicio de usuario
     const userData = {
-      username: "StreamFlow User",
+      username: "Justin el mas pro",
       description:
         "Amante de la música y los ritmos que mueven el alma. Siempre en busca de nuevos sonidos.",
     };
