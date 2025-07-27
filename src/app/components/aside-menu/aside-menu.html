@@ -1,6 +1,6 @@
 <nav class="flex flex-col flex-1 gap-4 p-4">
   <div
-    class="bg-white backdrop-blur-sm rounded-xl p-4 border border-black/10 shadow-md"
+    class="bg-white backdrop-blur-sm rounded-xl p-4 border border-black/10 shadow-md hover:bg-black/7 transition-colors duration-300"
   >
     <ul class="space-y-2">
       <app-side-menu-item href="/home">
@@ -50,12 +50,14 @@
   </div>
 
   <div
-    class="bg-white backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg border border-white/10 color:text-black-300"
+    class="bg-white backdrop-blur-sm rounded-xl p-4 flex-1 shadow-lg border border-white/5 color:text-black-300 hover:bg-black/7 transition-colors duration-300"
   >
-    <div class="flex items-center justify-between mb-4">
+    <div
+      class="flex items-center justify-between mb-4 hover:bg-black/5 transition-colors duration-300"
+    >
       <a
         routerLink="/library"
-        class="text-black font-semibold flex items-center gap-2 hover:text-gray-700 transition-colors cursor-pointer"
+        class="text-black font-semibold flex items-center gap-2 hover:bg-black/5 transition-colors duration-300 cursor-pointer"
       >
         <!-- Library Icon -->
         <svg
