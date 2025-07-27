@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 interface Playlist {
   id: string;
@@ -31,12 +32,22 @@ interface Album {
 @Component({
   selector: "app-library",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: "./library.html",
   styleUrl: "./library.css",
 })
 export class LibraryComponent {
   activeTab: "playlists" | "artists" | "albums" = "playlists";
+
+  // Modal state
+  showCreateModal = false;
+
+  // Form data for new playlist
+  newPlaylist = {
+    name: "",
+    description: "",
+    isPrivate: false,
+  };
 
   // Mock data para playlists
   mockPlaylists: Playlist[] = [
@@ -204,8 +215,44 @@ export class LibraryComponent {
   }
 
   createPlaylist(): void {
-    // Aquí iría la lógica para crear una nueva playlist
-    console.log("Crear nueva playlist");
+    this.showCreateModal = true;
+  }
+
+  closeModal(): void {
+    this.showCreateModal = false;
+    this.resetForm();
+  }
+
+  resetForm(): void {
+    this.newPlaylist = {
+      name: "",
+      description: "",
+      isPrivate: false,
+    };
+  }
+
+  savePlaylist(): void {
+    if (!this.newPlaylist.name.trim()) {
+      return;
+    }
+
+    const newPlaylist: Playlist = {
+      id: Date.now().toString(),
+      name: this.newPlaylist.name.trim(),
+      description: this.newPlaylist.description.trim(),
+      image: "https://picsum.photos/400/400?random=" + Date.now(),
+      songCount: 0,
+      createdAt: new Date(),
+    };
+
+    this.mockPlaylists.unshift(newPlaylist);
+    this.closeModal();
+  }
+
+  onModalBackdropClick(event: Event): void {
+    if (event.target === event.currentTarget) {
+      this.closeModal();
+    }
   }
 
   playPlaylist(playlist: Playlist): void {
