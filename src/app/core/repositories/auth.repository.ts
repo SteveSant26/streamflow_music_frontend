@@ -6,7 +6,7 @@ export abstract class AuthRepository {
   abstract register(
     name: string,
     email: string,
-    password: string
+    password: string,
   ): Observable<User>;
   abstract current(): Observable<User | null>;
   abstract logout(): Observable<void>;
