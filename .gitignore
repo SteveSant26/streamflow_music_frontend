@@ -57,3 +57,9 @@ Thumbs.db
 
 environments/environment.development.ts
 environments/environment.ts
+
+../environments/environment.development.ts
+../environments/environment.ts
+
+*environment.development.ts
+*environment.ts
