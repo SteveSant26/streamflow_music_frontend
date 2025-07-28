@@ -1,0 +1,18 @@
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { environment } from "../../shared/constants/environments/environment";
+
+@Injectable({ providedIn: "root" })
+export class ApiService {
+  private readonly http = inject(HttpClient);
+
+  get<T>(url: string) {
+    return this.http.get<T>(environment.API_URL + url);
+  }
+  post<T>(url: string, body: unknown) {
+    return this.http.post<T>(environment.API_URL + url, body);
+  }
+  put<T>(url: string, body: unknown) {
+    return this.http.put<T>(environment.API_URL + url, body);
+  }
+}
