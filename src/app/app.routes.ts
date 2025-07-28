@@ -9,12 +9,16 @@ export const routes: Routes = [
   {
     path: "login",
     loadComponent: () =>
-      import("./presentation/pages/auth/login/login").then((m) => m.LoginComponent),
+      import("./presentation/pages/auth/login/login").then(
+        (m) => m.LoginComponent,
+      ),
   },
   {
     path: "register",
     loadComponent: () =>
-      import("./presentation/pages/auth/register/register").then((m) => m.RegisterComponent),
+      import("./presentation/pages/auth/register/register").then(
+        (m) => m.RegisterComponent,
+      ),
   },
   {
     path: "home",
