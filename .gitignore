@@ -54,3 +54,6 @@ Thumbs.db
 /src/app/shared/constants/environments/environment.prod.ts
 /src/app/shared/constants/environments/environment.staging.ts
 /src/app/shared/constants/environments/environment.development.ts
+
+environments/environment.development.ts
+environments/environment.ts
