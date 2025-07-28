@@ -4,7 +4,36 @@
       Crear Cuenta
     </h1>
 
-    <form (submit)="onRegister()" class="register-form space-y-6">
+    @if (error()) {
+      <div class="error-message mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+        {{ error() }}
+      </div>
+    }
+
+    @if (success()) {
+      <div class="success-message mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+        {{ success() }}
+      </div>
+    }
+
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm" class="register-form space-y-6">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+          Nombre Completo
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          [(ngModel)]="credentials.name"
+          placeholder="Tu nombre completo"
+          required
+          minlength="2"
+          [disabled]="isLoading()"
+          class="register-input"
+        />
+      </div>
+
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
           Correo Electrónico
@@ -12,7 +41,12 @@
         <input
           type="email"
           id="email"
+          name="email"
+          [(ngModel)]="credentials.email"
           placeholder="Tu email aquí"
+          required
+          email
+          [disabled]="isLoading()"
           class="register-input"
         />
       </div>
@@ -27,28 +61,18 @@
         <input
           type="password"
           id="password"
+          name="password"
+          [(ngModel)]="credentials.password"
           placeholder="••••••••"
-          class="register-input"
-        />
-      </div>
-
-      <div>
-        <label
-          for="confirmPassword"
-          class="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Confirmar Contraseña
-        </label>
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="••••••••"
+          required
+          minlength="6"
+          [disabled]="isLoading()"
           class="register-input"
         />
       </div>
 
       <div class="flex items-center">
-        <input type="checkbox" id="terms" class="register-checkbox" />
+        <input type="checkbox" id="terms" class="register-checkbox" required />
         <label for="terms" class="ml-3 block text-sm text-gray-700">
           Acepto los
           <a href="#" class="register-link">términos y condiciones</a>
@@ -56,7 +80,17 @@
       </div>
 
       <div>
-        <button type="submit" class="register-button">Crear Cuenta</button>
+        <button 
+          type="submit" 
+          [disabled]="!registerForm.form.valid || isLoading()"
+          class="register-button disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (isLoading()) {
+            Creando cuenta...
+          } @else {
+            Crear Cuenta
+          }
+        </button>
       </div>
 
       <div class="text-center">

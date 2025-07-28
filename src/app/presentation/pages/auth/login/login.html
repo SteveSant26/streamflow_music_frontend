@@ -2,20 +2,46 @@
   <div class="login-header">
     <h1 class="text-3xl font-bold mb-6 text-center">Iniciar Sesión</h1>
 
+    @if (error()) {
+      <div class="error-message mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+        {{ error() }}
+      </div>
+    }
+
     <!-- Formulario de inicio de sesión -->
-    <form (submit)="onLogin()" class="login-form space-y-6">
+    <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form space-y-6">
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700"
           >Correo Electrónico</label
         >
-        <input type="email" id="email" placeholder="Aqui tu email" />
+        <input 
+          type="email" 
+          id="email" 
+          name="email"
+          [(ngModel)]="credentials.email"
+          placeholder="Aqui tu email"
+          required
+          email
+          [disabled]="isLoading()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
       <div>
         <label for="password" class="block text-sm font-medium text-gray-700"
           >Contraseña</label
         >
-        <input type="password" id="password" placeholder="••••••••" />
+        <input 
+          type="password" 
+          id="password" 
+          name="password"
+          [(ngModel)]="credentials.password"
+          placeholder="••••••••"
+          required
+          minlength="6"
+          [disabled]="isLoading()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
       <div class="flex items-center justify-between">
@@ -41,9 +67,14 @@
       <div>
         <button
           type="submit"
-          class="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-black hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          [disabled]="!loginForm.form.valid || isLoading()"
+          class="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-black hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Iniciar Sesión
+          @if (isLoading()) {
+            Iniciando sesión...
+          } @else {
+            Iniciar Sesión
+          }
         </button>
       </div>
 

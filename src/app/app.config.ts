@@ -10,6 +10,7 @@ import {
   provideClientHydration,
   withEventReplay,
 } from "@angular/platform-browser";
+import { authProviders } from "./shared/providers/auth.providers";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,5 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
+    ...authProviders,
   ],
 };

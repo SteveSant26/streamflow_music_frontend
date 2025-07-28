@@ -17,10 +17,10 @@ export interface AuthResult {
   token: AuthToken;
 }
 
-export interface AuthRepository {
-  login(credentials: LoginCredentials): Promise<AuthResult>;
-  register(credentials: RegisterCredentials): Promise<AuthResult>;
-  logout(): Promise<void>;
-  getCurrentUser(): Promise<User | null>;
-  refreshToken(refreshToken: string): Promise<AuthToken>;
+export abstract class AuthRepository {
+  abstract login(credentials: LoginCredentials): Promise<AuthResult>;
+  abstract register(credentials: RegisterCredentials): Promise<AuthResult>;
+  abstract logout(): Promise<void>;
+  abstract getCurrentUser(): Promise<User | null>;
+  abstract refreshToken(refreshToken: string): Promise<AuthToken>;
 }
