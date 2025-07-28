@@ -3,7 +3,7 @@ import {
   LoginCredentials,
   RegisterCredentials,
   AuthResult,
-  AuthRepository
+  AuthRepository,
 } from "@app/domain/repositories/auth.repository";
 import { User } from "@app/domain/entities/user.entity";
 import { AuthToken } from "@app/domain/entities/auth-token.entity";
@@ -24,12 +24,12 @@ export class AuthRepositoryImpl extends AuthRepository {
     }
 
     if (!data.user || !data.session) {
-      throw new Error('Login failed: No user or session data received');
+      throw new Error("Login failed: No user or session data received");
     }
 
     return {
       user: this.mapSupabaseUserToUser(data.user),
-      token: this.mapSupabaseSessionToToken(data.session)
+      token: this.mapSupabaseSessionToToken(data.session),
     };
   }
 
@@ -39,9 +39,9 @@ export class AuthRepositoryImpl extends AuthRepository {
       password: credentials.password,
       options: {
         data: {
-          name: credentials.name
-        }
-      }
+          name: credentials.name,
+        },
+      },
     });
 
     if (error) {
@@ -49,12 +49,12 @@ export class AuthRepositoryImpl extends AuthRepository {
     }
 
     if (!data.user || !data.session) {
-      throw new Error('Registration failed: No user or session data received');
+      throw new Error("Registration failed: No user or session data received");
     }
 
     return {
       user: this.mapSupabaseUserToUser(data.user),
-      token: this.mapSupabaseSessionToToken(data.session)
+      token: this.mapSupabaseSessionToToken(data.session),
     };
   }
 
@@ -66,8 +66,10 @@ export class AuthRepositoryImpl extends AuthRepository {
   }
 
   async getCurrentUser(): Promise<User | null> {
-    const { data: { user } } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user) {
       return null;
     }
@@ -77,11 +79,11 @@ export class AuthRepositoryImpl extends AuthRepository {
 
   async refreshToken(refreshToken: string): Promise<AuthToken> {
     const { data, error } = await supabase.auth.refreshSession({
-      refresh_token: refreshToken
+      refresh_token: refreshToken,
     });
 
     if (error || !data.session) {
-      throw new Error(error?.message || 'Failed to refresh token');
+      throw new Error(error?.message || "Failed to refresh token");
     }
 
     return this.mapSupabaseSessionToToken(data.session);
@@ -90,10 +92,10 @@ export class AuthRepositoryImpl extends AuthRepository {
   private mapSupabaseUserToUser(supabaseUser: any): User {
     return {
       id: supabaseUser.id,
-      email: supabaseUser.email || '',
-      name: supabaseUser.user_metadata?.name || supabaseUser.email || '',
+      email: supabaseUser.email || "",
+      name: supabaseUser.user_metadata?.name || supabaseUser.email || "",
       createdAt: new Date(supabaseUser.created_at),
-      updatedAt: new Date(supabaseUser.updated_at || supabaseUser.created_at)
+      updatedAt: new Date(supabaseUser.updated_at || supabaseUser.created_at),
     };
   }
 
@@ -101,7 +103,7 @@ export class AuthRepositoryImpl extends AuthRepository {
     return {
       accessToken: session.access_token,
       refreshToken: session.refresh_token,
-      expiresAt: new Date(session.expires_at * 1000)
+      expiresAt: new Date(session.expires_at * 1000),
     };
   }
 }

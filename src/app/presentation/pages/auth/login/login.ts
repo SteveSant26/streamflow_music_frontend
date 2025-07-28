@@ -16,37 +16,39 @@ import { AuthService } from "@app/shared/services/auth.service";
 })
 export class LoginComponent {
   credentials: LoginCredentials = {
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   };
-  
+
   isLoading = signal(false);
   error = signal<string | null>(null);
 
   constructor(
     private readonly router: Router,
     private readonly loginUseCase: LoginUseCase,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   async onLogin(): Promise<void> {
     if (this.isLoading()) return;
-    
+
     this.isLoading.set(true);
     this.error.set(null);
 
     try {
       const result = await this.loginUseCase.execute(this.credentials);
-      console.log('Login successful:', result);
-      
+      console.log("Login successful:", result);
+
       // Usar el servicio de auth para manejar el estado
       this.authService.setAuth(result.user, result.token);
-      
+
       // Navegar a la página principal
-      this.router.navigate(['/home']);
+      this.router.navigate(["/home"]);
     } catch (error) {
-      this.error.set(error instanceof Error ? error.message : 'Error al iniciar sesión');
-      console.error('Login error:', error);
+      this.error.set(
+        error instanceof Error ? error.message : "Error al iniciar sesión",
+      );
+      console.error("Login error:", error);
     } finally {
       this.isLoading.set(false);
     }
