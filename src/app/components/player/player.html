@@ -1,15 +1,13 @@
-<div
-  class="flex flex-col sm:flex-row justify-between w-full px-1 z-50 gap-2 sm:gap-0"
->
-  <!-- Song info - full width on mobile, fixed width on desktop -->
-  <div class="w-full sm:w-[200px] order-1 sm:order-1">
+<div class="flex flex-row justify-between w-full px-1 z-50 gap-2 sm:gap-0">
+  <!-- Song info - fixed width on mobile and desktop -->
+  <div class="w-[160px] sm:w-[200px] order-1 sm:order-1">
     <app-player-current-song [song]="currentMusic.song">
     </app-player-current-song>
   </div>
 
   <!-- Controls - center on mobile and desktop -->
   <div
-    class="grid place-content-center gap-2 sm:gap-4 flex-1 order-2 sm:order-2"
+    class="grid place-content-center gap-1 sm:gap-4 flex-1 order-2 sm:order-2"
   >
     <div class="flex justify-center flex-col items-center">
       <app-player-control-button-bar
