@@ -175,7 +175,7 @@ export abstract class UserRepository {
   abstract register(
     name: string,
     email: string,
-    password: string
+    password: string,
   ): Observable<User>;
   abstract current(): Observable<User | null>;
   abstract logout(): Observable<void>;
@@ -419,21 +419,21 @@ import {
 } from "../../shared/models/auth.dto";
 
 export const USER_REPOSITORY = new InjectionToken<UserRepository>(
-  "USER_REPOSITORY"
+  "USER_REPOSITORY",
 );
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
   constructor(
     private api: ApiService,
-    private storage: StorageService
+    private storage: StorageService,
   ) {}
 
   login(email: string, password: string): Observable<User> {
     const payload: LoginRequestDTO = { email, password };
     return this.api.post<UserDTO>("/auth/login", payload).pipe(
       map(toUser),
-      tap((u) => u.token && this.storage.setToken(u.token!))
+      tap((u) => u.token && this.storage.setToken(u.token!)),
     );
   }
 
@@ -441,7 +441,7 @@ export class UserRepositoryImpl implements UserRepository {
     const payload: RegisterRequestDTO = { name, email, password };
     return this.api.post<UserDTO>("/auth/register", payload).pipe(
       map(toUser),
-      tap((u) => u.token && this.storage.setToken(u.token!))
+      tap((u) => u.token && this.storage.setToken(u.token!)),
     );
   }
 
@@ -471,7 +471,7 @@ import { TaskDTO } from "../../shared/models/task.dto";
 import { toTask, fromTask } from "../../shared/utils/mappers";
 
 export const TASK_REPOSITORY = new InjectionToken<TaskRepository>(
-  "TASK_REPOSITORY"
+  "TASK_REPOSITORY",
 );
 
 @Injectable()
@@ -534,7 +534,7 @@ export class AuthFacade {
         catchError((err) => {
           this.error$.next("No autenticado");
           return of(null);
-        })
+        }),
       )
       .subscribe({ complete: () => this.loading$.next(false) });
   }
@@ -548,7 +548,7 @@ export class AuthFacade {
         catchError((err) => {
           this.error$.next("Credenciales inválidas");
           return of(null);
-        })
+        }),
       )
       .subscribe({ complete: () => this.loading$.next(false) });
   }
@@ -562,7 +562,7 @@ export class AuthFacade {
         catchError((err) => {
           this.error$.next("No se pudo registrar");
           return of(null);
-        })
+        }),
       )
       .subscribe({ complete: () => this.loading$.next(false) });
   }
@@ -605,7 +605,7 @@ export class TaskFacade {
         catchError((err) => {
           this.error$.next("Error cargando tareas");
           return of([]);
-        })
+        }),
       )
       .subscribe({ complete: () => this.loading$.next(false) });
   }
@@ -619,7 +619,7 @@ export class TaskFacade {
         catchError((err) => {
           this.error$.next("No se pudo crear");
           return of(null);
-        })
+        }),
       )
       .subscribe({ complete: () => this.loading$.next(false) });
   }
@@ -632,13 +632,13 @@ export class TaskFacade {
       .pipe(
         tap((t) =>
           this.tasks$.next(
-            this.tasks$.value.map((x) => (x.id === t.id ? t : x))
-          )
+            this.tasks$.value.map((x) => (x.id === t.id ? t : x)),
+          ),
         ),
         catchError((err) => {
           this.error$.next("No se pudo actualizar");
           return of(null);
-        })
+        }),
       )
       .subscribe({ complete: () => this.loading$.next(false) });
   }
