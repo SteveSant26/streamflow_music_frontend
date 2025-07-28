@@ -27,7 +27,6 @@ interface Playlist {
 })
 export class PlaylistComponent implements OnInit {
   playlistId: string | null = null;
-  // Propiedad para almacenar los datos de la playlist
   playlist: Playlist | null = null;
   playlistName: string = "";
   playlistDescription: string = "";

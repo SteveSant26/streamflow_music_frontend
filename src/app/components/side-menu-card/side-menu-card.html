@@ -1,7 +1,7 @@
 <ul>
-  <a
-    href="#"
-    class="playlist-item flex gap-2 text-black hover:text-white items-center py-2 px-5 text-sm font-normal transition-colors"
+  <button
+    (click)="navigateToPlaylist()"
+    class="playlist-item flex gap-2 text-black hover:text-white items-center py-2 px-5 text-sm font-normal transition-colors w-full text-left"
   >
     <picture class="h-12 w-12 flex-none">
       <img
@@ -15,5 +15,5 @@
       <h4 class="text-black font-bold text-sm">{{ playlist.name }}</h4>
       <span class="text-xs text-black-400">Playlist</span>
     </div>
-  </a>
+  </button>
 </ul>

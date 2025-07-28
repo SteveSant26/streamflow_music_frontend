@@ -1,21 +1,42 @@
-<div class="playlist-container">
+<div
+  class="playlist-container"
+  [ngClass]="{
+       'playlist-purple': playlistId === '1',
+       'playlist-blue': playlistId === '2', 
+       'playlist-red': playlistId === '3'
+     }"
+>
   <div class="playlist-header">
-    <h1 class="playlist-title">Playlist {{ playlistId }}</h1>
-    <p class="playlist-description">Detalles de la playlist</p>
+    <div class="playlist-hero">
+      <div class="playlist-cover">
+        <img
+          [src]="currentPlaylistImage"
+          [alt]="playlistName || 'Playlist Cover'"
+          class="playlist-image"
+          (error)="onImageError($event)"
+        />
+      </div>
+      <div class="playlist-info-text">
+        <span class="playlist-type">Lista pública</span>
+        <h1 class="playlist-title">
+          {{ playlistName || 'Mi Playlist #' + playlistId }}
+        </h1>
+        <p class="playlist-description">
+          {{ playlistDescription || 'Una colección especial de tus canciones
+          favoritas' }}
+        </p>
+        <div class="playlist-meta">
+          <span class="playlist-owner">🎵 StreamFlow Music</span>
+          <span class="meta-separator">•</span>
+          <span class="playlist-stats-inline"
+            >{{ songCount }} canciones, {{ duration }}</span
+          >
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="playlist-content">
-    <!-- Información de la playlist -->
-    <div class="playlist-info">
-      <div class="playlist-stats">
-        <span class="stat-item">{{ songCount }} canciones</span>
-        <span class="stat-separator">•</span>
-        <span class="stat-item">{{ duration }} min</span>
-        <span class="stat-separator">•</span>
-        <span class="stat-item">{{ createdDate }}</span>
-      </div>
-    </div>
-
     <!-- Controles de reproducción -->
     <div class="playlist-controls">
       <button class="play-button">
