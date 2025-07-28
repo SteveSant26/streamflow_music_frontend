@@ -6,11 +6,11 @@
     "baseUrl": "./",
     "paths": {
       "@angular/*": ["./node_modules/@angular/*"],
-      "app/*": ["src/app/*"],
-      "shared/*": ["src/app/shared/*"],
-      "core/*": ["src/app/core/*"],
-      "data/*": ["src/app/data/*"],
-      "presentation/*": ["src/app/presentation/*"]
+      "@app/*": ["src/app/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@core/*": ["src/app/core/*"],
+      "@data/*": ["src/app/data/*"],
+      "@presentation/*": ["src/app/presentation/*"]
     },
     "strict": true,
     "noImplicitOverride": true,
