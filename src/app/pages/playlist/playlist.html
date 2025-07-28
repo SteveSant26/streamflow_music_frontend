@@ -6,14 +6,16 @@
        'playlist-red': playlistId === '3'
      }"
 >
-  <div class="playlist-header">
+  <div class="playlist-header" [style.background]="dynamicGradient">
     <div class="playlist-hero">
       <div class="playlist-cover">
         <img
           [src]="currentPlaylistImage"
           [alt]="playlistName || 'Playlist Cover'"
           class="playlist-image"
+          (load)="onImageLoad($event)"
           (error)="onImageError($event)"
+          crossorigin="anonymous"
         />
       </div>
       <div class="playlist-info-text">
@@ -32,6 +34,10 @@
             >{{ songCount }} canciones, {{ duration }}</span
           >
         </div>
+        <!-- Botón de prueba para cambiar imagen y gradiente -->
+        <button (click)="testDifferentImage()" class="test-gradient-button">
+          🎨 Probar otra imagen
+        </button>
       </div>
     </div>
   </div>
