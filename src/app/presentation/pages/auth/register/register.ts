@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 
@@ -8,6 +8,7 @@ import { CommonModule } from "@angular/common";
   imports: [CommonModule, RouterModule],
   templateUrl: "./register.html",
   styleUrls: ["./register.css"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   constructor(private readonly router: Router) {}

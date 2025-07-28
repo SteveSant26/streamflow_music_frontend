@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 
@@ -8,6 +8,7 @@ import { CommonModule } from "@angular/common";
   imports: [CommonModule, RouterModule],
   templateUrl: "./login.html",
   styleUrls: ["./login.css"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
   constructor(private readonly router: Router) {}

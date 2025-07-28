@@ -40,3 +40,17 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+
+#  env files
+.env.local
+.env.*.local
+
+# environment files
+.env
+
+# environment angular
+/src/app/shared/constants/environments/environment.ts
+/src/app/shared/constants/environments/environment.prod.ts
+/src/app/shared/constants/environments/environment.staging.ts
+/src/app/shared/constants/environments/environment.development.ts
