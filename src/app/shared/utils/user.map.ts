@@ -6,5 +6,5 @@ export const toUser = (dto: UserDTO): User => ({
   email: dto.email,
   name: dto.name,
   createdAt: new Date(),
-  updatedAt: new Date()
+  updatedAt: new Date(),
 });
