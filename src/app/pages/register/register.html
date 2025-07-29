@@ -4,7 +4,15 @@
       Crear Cuenta
     </h1>
 
-    <form (submit)="onRegister()" class="register-form space-y-6">
+    <!-- Mostrar mensaje de error si existe -->
+    <div
+      *ngIf="errorMessage"
+      class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded"
+    >
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onRegister()" class="register-form space-y-6">
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
           Correo Electrónico
@@ -12,8 +20,11 @@
         <input
           type="email"
           id="email"
+          name="email"
+          [(ngModel)]="registerData.email"
           placeholder="Tu email aquí"
           class="register-input"
+          required
         />
       </div>
 
@@ -27,8 +38,11 @@
         <input
           type="password"
           id="password"
+          name="password"
+          [(ngModel)]="registerData.password"
           placeholder="••••••••"
           class="register-input"
+          required
         />
       </div>
 
@@ -42,13 +56,22 @@
         <input
           type="password"
           id="confirmPassword"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
           placeholder="••••••••"
           class="register-input"
+          required
         />
       </div>
 
       <div class="flex items-center">
-        <input type="checkbox" id="terms" class="register-checkbox" />
+        <input
+          type="checkbox"
+          id="terms"
+          name="terms"
+          [(ngModel)]="termsAccepted"
+          class="register-checkbox"
+        />
         <label for="terms" class="ml-3 block text-sm text-gray-700">
           Acepto los
           <a href="#" class="register-link">términos y condiciones</a>
@@ -56,7 +79,10 @@
       </div>
 
       <div>
-        <button type="submit" class="register-button">Crear Cuenta</button>
+        <button type="submit" class="register-button" [disabled]="isLoading">
+          <span *ngIf="isLoading">Creando cuenta...</span>
+          <span *ngIf="!isLoading">Crear Cuenta</span>
+        </button>
       </div>
 
       <div class="text-center">

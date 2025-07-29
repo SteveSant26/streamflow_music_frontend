@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { Observable, BehaviorSubject, tap } from "rxjs";
 import { ApiService } from "./api.service";
 import { User, LoginDto, RegisterDto, AuthResponse } from "../models";
@@ -15,7 +16,10 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private apiService: ApiService) {
+  constructor(
+    private apiService: ApiService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {
     // Verificar si hay un token guardado al inicializar
     this.checkAuthState();
   }
@@ -61,7 +65,10 @@ export class AuthService {
    * Refrescar token
    */
   refreshToken(): Observable<AuthResponse> {
-    const refreshToken = localStorage.getItem("refreshToken");
+    let refreshToken = null;
+    if (isPlatformBrowser(this.platformId)) {
+      refreshToken = localStorage.getItem("refreshToken");
+    }
     return this.apiService
       .post<AuthResponse>(`${this.endpoint}/refresh`, { refreshToken })
       .pipe(
@@ -178,26 +185,34 @@ export class AuthService {
   // Métodos privados para manejo de autenticación
 
   private setAuthData(authResponse: AuthResponse): void {
-    localStorage.setItem("authToken", authResponse.token);
-    if (authResponse.refreshToken) {
-      localStorage.setItem("refreshToken", authResponse.refreshToken);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem("authToken", authResponse.token);
+      if (authResponse.refreshToken) {
+        localStorage.setItem("refreshToken", authResponse.refreshToken);
+      }
+      localStorage.setItem("user", JSON.stringify(authResponse.user));
     }
-    localStorage.setItem("user", JSON.stringify(authResponse.user));
 
     this.currentUserSubject.next(authResponse.user);
     this.isLoggedInSubject.next(true);
   }
 
   private clearAuthData(): void {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
+    }
 
     this.currentUserSubject.next(null);
     this.isLoggedInSubject.next(false);
   }
 
   private checkAuthState(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return; // No hacer nada en el servidor
+    }
+
     const token = localStorage.getItem("authToken");
     const userStr = localStorage.getItem("user");
 
@@ -233,6 +248,9 @@ export class AuthService {
    * Obtener el token de autenticación
    */
   getAuthToken(): string | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
     return localStorage.getItem("authToken");
   }
 
