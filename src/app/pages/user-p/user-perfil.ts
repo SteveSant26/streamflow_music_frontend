@@ -7,6 +7,8 @@ import {
   Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
+import { AuthService } from "../../services/auth.service";
+import { User } from "../../models";
 
 @Component({
   selector: "app-user-perfil",
@@ -18,6 +20,7 @@ import { Router } from "@angular/router";
 export class UserPerfilComponent implements OnInit {
   profileForm: FormGroup;
   isEditing = false;
+  currentUser: User | null = null;
   originalValues: { username: string; description: string } = {
     username: "",
     description: "",
@@ -26,10 +29,14 @@ export class UserPerfilComponent implements OnInit {
   // Profile image properties
   profileImageUrl: string | null = null;
   selectedImageFile: File | null = null;
+  isLoading = false;
+  errorMessage = "";
+  successMessage = "";
 
   constructor(
     readonly router: Router,
     readonly fb: FormBuilder,
+    private authService: AuthService,
   ) {
     this.profileForm = this.fb.group({
       username: [
@@ -40,6 +47,7 @@ export class UserPerfilComponent implements OnInit {
           Validators.maxLength(20),
         ],
       ],
+      email: [{ value: "", disabled: true }], // Email no editable
       description: ["", [Validators.maxLength(500)]],
     });
   }
@@ -49,15 +57,35 @@ export class UserPerfilComponent implements OnInit {
   }
 
   loadUserData(): void {
-    // Simulamos datos del usuario - aquí conectarías con tu servicio de usuario
-    const userData = {
-      username: "Justin el mas pro",
-      description:
-        "Amante de la música y los ritmos que mueven el alma. Siempre en busca de nuevos sonidos.",
-    };
+    // Verificar si el usuario está autenticado
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(["/login"]);
+      return;
+    }
 
-    this.originalValues = { ...userData };
-    this.profileForm.patchValue(userData);
+    // Obtener el usuario actual del AuthService
+    this.currentUser = this.authService.getCurrentUserValue();
+
+    if (this.currentUser) {
+      const userData = {
+        username:
+          this.currentUser.username || this.currentUser.email.split("@")[0],
+        email: this.currentUser.email,
+        description: "", // Por ahora no tenemos descripción en el backend
+      };
+
+      this.originalValues = {
+        username: userData.username,
+        description: userData.description,
+      };
+
+      this.profileForm.patchValue(userData);
+
+      // Cargar imagen de perfil si existe
+      if (this.currentUser.profileImage) {
+        this.profileImageUrl = this.currentUser.profileImage;
+      }
+    }
   }
 
   enableEdit(): void {
@@ -66,22 +94,77 @@ export class UserPerfilComponent implements OnInit {
 
   cancelEdit(): void {
     this.isEditing = false;
+    this.errorMessage = "";
+    this.successMessage = "";
     this.profileForm.patchValue(this.originalValues);
   }
 
   saveProfile(): void {
     if (this.profileForm.valid) {
+      this.isLoading = true;
+      this.errorMessage = "";
+      this.successMessage = "";
+
       const formData = this.profileForm.value;
 
-      // Aquí conectarías con tu servicio para guardar los datos
-      console.log("Guardando perfil:", formData);
+      // Actualizar perfil usando AuthService
+      this.authService
+        .updateProfile({
+          username: formData.username,
+          // Agregar más campos según sea necesario
+        })
+        .subscribe({
+          next: (updatedUser) => {
+            console.log("Perfil actualizado:", updatedUser);
 
-      // Actualizamos los valores originales
-      this.originalValues = { ...formData };
-      this.isEditing = false;
+            // Actualizar datos locales
+            this.currentUser = updatedUser;
+            this.originalValues = {
+              username: formData.username,
+              description: formData.description,
+            };
+            this.isEditing = false;
+            this.isLoading = false;
+            this.successMessage = "Perfil actualizado exitosamente";
 
-      // Mostrar mensaje de éxito (puedes implementar un toast o similar)
-      this.showSuccessMessage();
+            // Limpiar mensaje después de 3 segundos
+            setTimeout(() => (this.successMessage = ""), 3000);
+          },
+          error: (error) => {
+            console.error("Error al actualizar perfil:", error);
+            this.errorMessage =
+              error.error?.message || "Error al actualizar el perfil";
+            this.isLoading = false;
+          },
+        });
+    }
+  }
+
+  // Método para subir imagen de perfil
+  uploadProfileImage(): void {
+    if (this.selectedImageFile) {
+      this.isLoading = true;
+      this.errorMessage = "";
+
+      this.authService.uploadProfileImage(this.selectedImageFile).subscribe({
+        next: (updatedUser) => {
+          console.log("Imagen de perfil actualizada:", updatedUser);
+          this.currentUser = updatedUser;
+          this.profileImageUrl = updatedUser.profileImage || null;
+          this.selectedImageFile = null;
+          this.isLoading = false;
+          this.successMessage = "Imagen de perfil actualizada exitosamente";
+
+          // Limpiar mensaje después de 3 segundos
+          setTimeout(() => (this.successMessage = ""), 3000);
+        },
+        error: (error) => {
+          console.error("Error al subir imagen:", error);
+          this.errorMessage =
+            error.error?.message || "Error al subir la imagen";
+          this.isLoading = false;
+        },
+      });
     }
   }
 
@@ -111,14 +194,16 @@ export class UserPerfilComponent implements OnInit {
         "image/webp",
       ];
       if (!allowedTypes.includes(file.type)) {
-        alert("Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)");
+        this.errorMessage =
+          "Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)";
         return;
       }
 
       // Validate file size (max 5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
-        alert("La imagen es demasiado grande. El tamaño máximo es 5MB");
+        this.errorMessage =
+          "La imagen es demasiado grande. El tamaño máximo es 5MB";
         return;
       }
 
@@ -128,6 +213,9 @@ export class UserPerfilComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.profileImageUrl = e.target?.result as string;
+
+        // Subir automáticamente la imagen al backend
+        this.uploadProfileImage();
       };
       reader.readAsDataURL(file);
     }

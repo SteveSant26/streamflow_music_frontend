@@ -17,6 +17,7 @@ import {
   withEventReplay,
 } from "@angular/platform-browser";
 import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
+import { AuthTokenInterceptor } from "./interceptors/auth-token.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,6 +29,11 @@ export const appConfig: ApplicationConfig = {
       withInterceptorsFromDi(),
       withFetch(), // 🚀 Habilitar fetch para mejor rendimiento
     ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthTokenInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

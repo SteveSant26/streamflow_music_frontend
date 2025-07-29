@@ -24,17 +24,10 @@ export class ApiService {
    * Headers por defecto para las peticiones
    */
   private getHeaders(): HttpHeaders {
-    let headers = new HttpHeaders({
+    return new HttpHeaders({
       "Content-Type": "application/json",
     });
-
-    // Agregar token de autenticación si existe
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      headers = headers.set("Authorization", `Bearer ${token}`);
-    }
-
-    return headers;
+    // El token se agrega automáticamente via AuthTokenInterceptor
   }
 
   /**
