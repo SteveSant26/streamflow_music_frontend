@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
-import { ApiService } from './api.service';
-import { User, LoginDto, RegisterDto, AuthResponse } from '../models';
+import { Injectable } from "@angular/core";
+import { Observable, BehaviorSubject, tap } from "rxjs";
+import { ApiService } from "./api.service";
+import { User, LoginDto, RegisterDto, AuthResponse } from "../models";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-  private endpoint = '/auth';
+  private endpoint = "/auth";
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
 
@@ -24,11 +24,12 @@ export class AuthService {
    * Iniciar sesión
    */
   login(credentials: LoginDto): Observable<AuthResponse> {
-    return this.apiService.post<AuthResponse>(`${this.endpoint}/login`, credentials)
+    return this.apiService
+      .post<AuthResponse>(`${this.endpoint}/login`, credentials)
       .pipe(
-        tap(response => {
+        tap((response) => {
           this.setAuthData(response);
-        })
+        }),
       );
   }
 
@@ -36,11 +37,12 @@ export class AuthService {
    * Registrarse
    */
   register(userData: RegisterDto): Observable<AuthResponse> {
-    return this.apiService.post<AuthResponse>(`${this.endpoint}/register`, userData)
+    return this.apiService
+      .post<AuthResponse>(`${this.endpoint}/register`, userData)
       .pipe(
-        tap(response => {
+        tap((response) => {
           this.setAuthData(response);
-        })
+        }),
       );
   }
 
@@ -48,24 +50,24 @@ export class AuthService {
    * Cerrar sesión
    */
   logout(): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/logout`, {})
-      .pipe(
-        tap(() => {
-          this.clearAuthData();
-        })
-      );
+    return this.apiService.post<void>(`${this.endpoint}/logout`, {}).pipe(
+      tap(() => {
+        this.clearAuthData();
+      }),
+    );
   }
 
   /**
    * Refrescar token
    */
   refreshToken(): Observable<AuthResponse> {
-    const refreshToken = localStorage.getItem('refreshToken');
-    return this.apiService.post<AuthResponse>(`${this.endpoint}/refresh`, { refreshToken })
+    const refreshToken = localStorage.getItem("refreshToken");
+    return this.apiService
+      .post<AuthResponse>(`${this.endpoint}/refresh`, { refreshToken })
       .pipe(
-        tap(response => {
+        tap((response) => {
           this.setAuthData(response);
-        })
+        }),
       );
   }
 
@@ -73,24 +75,22 @@ export class AuthService {
    * Obtener perfil del usuario actual
    */
   getCurrentUser(): Observable<User> {
-    return this.apiService.get<User>(`${this.endpoint}/me`)
-      .pipe(
-        tap(user => {
-          this.currentUserSubject.next(user);
-        })
-      );
+    return this.apiService.get<User>(`${this.endpoint}/me`).pipe(
+      tap((user) => {
+        this.currentUserSubject.next(user);
+      }),
+    );
   }
 
   /**
    * Actualizar perfil del usuario
    */
   updateProfile(userData: Partial<User>): Observable<User> {
-    return this.apiService.put<User>(`${this.endpoint}/profile`, userData)
-      .pipe(
-        tap(user => {
-          this.currentUserSubject.next(user);
-        })
-      );
+    return this.apiService.put<User>(`${this.endpoint}/profile`, userData).pipe(
+      tap((user) => {
+        this.currentUserSubject.next(user);
+      }),
+    );
   }
 
   /**
@@ -101,14 +101,19 @@ export class AuthService {
     newPassword: string;
     confirmPassword: string;
   }): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/change-password`, passwordData);
+    return this.apiService.post<void>(
+      `${this.endpoint}/change-password`,
+      passwordData,
+    );
   }
 
   /**
    * Solicitar restablecimiento de contraseña
    */
   requestPasswordReset(email: string): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/forgot-password`, { email });
+    return this.apiService.post<void>(`${this.endpoint}/forgot-password`, {
+      email,
+    });
   }
 
   /**
@@ -119,18 +124,22 @@ export class AuthService {
     newPassword: string;
     confirmPassword: string;
   }): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/reset-password`, resetData);
+    return this.apiService.post<void>(
+      `${this.endpoint}/reset-password`,
+      resetData,
+    );
   }
 
   /**
    * Subir foto de perfil
    */
   uploadProfileImage(file: File): Observable<User> {
-    return this.apiService.upload<User>(`${this.endpoint}/profile-image`, file)
+    return this.apiService
+      .upload<User>(`${this.endpoint}/profile-image`, file)
       .pipe(
-        tap(user => {
+        tap((user) => {
           this.currentUserSubject.next(user);
-        })
+        }),
       );
   }
 
@@ -138,61 +147,67 @@ export class AuthService {
    * Verificar email
    */
   verifyEmail(token: string): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/verify-email`, { token });
+    return this.apiService.post<void>(`${this.endpoint}/verify-email`, {
+      token,
+    });
   }
 
   /**
    * Reenviar email de verificación
    */
   resendVerificationEmail(): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/resend-verification`, {});
+    return this.apiService.post<void>(
+      `${this.endpoint}/resend-verification`,
+      {},
+    );
   }
 
   /**
    * Eliminar cuenta
    */
   deleteAccount(password: string): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/delete-account`, { password })
+    return this.apiService
+      .post<void>(`${this.endpoint}/delete-account`, { password })
       .pipe(
         tap(() => {
           this.clearAuthData();
-        })
+        }),
       );
   }
 
   // Métodos privados para manejo de autenticación
 
   private setAuthData(authResponse: AuthResponse): void {
-    localStorage.setItem('authToken', authResponse.token);
+    localStorage.setItem("authToken", authResponse.token);
     if (authResponse.refreshToken) {
-      localStorage.setItem('refreshToken', authResponse.refreshToken);
+      localStorage.setItem("refreshToken", authResponse.refreshToken);
     }
-    localStorage.setItem('user', JSON.stringify(authResponse.user));
-    
+    localStorage.setItem("user", JSON.stringify(authResponse.user));
+
     this.currentUserSubject.next(authResponse.user);
     this.isLoggedInSubject.next(true);
   }
 
   private clearAuthData(): void {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+
     this.currentUserSubject.next(null);
     this.isLoggedInSubject.next(false);
   }
 
   private checkAuthState(): void {
-    const token = localStorage.getItem('authToken');
-    const userStr = localStorage.getItem('user');
-    
+    const token = localStorage.getItem("authToken");
+    const userStr = localStorage.getItem("user");
+
     if (token && userStr) {
       try {
         const user = JSON.parse(userStr);
         this.currentUserSubject.next(user);
         this.isLoggedInSubject.next(true);
       } catch (error) {
-        console.error('Error parsing user data:', error);
+        console.error("Error parsing user data:", error);
         this.clearAuthData();
       }
     }
@@ -218,7 +233,7 @@ export class AuthService {
    * Obtener el token de autenticación
    */
   getAuthToken(): string | null {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem("authToken");
   }
 
   /**
@@ -229,11 +244,11 @@ export class AuthService {
     if (!token) return true;
 
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = JSON.parse(atob(token.split(".")[1]));
       const exp = payload.exp * 1000; // Convertir a milisegundos
       return Date.now() > exp;
     } catch (error) {
-      console.error('Error checking token expiration:', error);
+      console.error("Error checking token expiration:", error);
       return true;
     }
   }

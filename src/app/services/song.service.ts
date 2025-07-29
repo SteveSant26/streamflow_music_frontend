@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
-import { Song, SearchFilters, PaginatedResponse } from '../models';
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { ApiService } from "./api.service";
+import { Song, SearchFilters, PaginatedResponse } from "../models";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class SongService {
-  private endpoint = '/songs';
+  private endpoint = "/songs";
 
   constructor(private apiService: ApiService) {}
 
@@ -28,11 +28,15 @@ export class SongService {
   /**
    * Buscar canciones
    */
-  searchSongs(query: string, limit?: number, offset?: number): Observable<PaginatedResponse<Song>> {
+  searchSongs(
+    query: string,
+    limit?: number,
+    offset?: number,
+  ): Observable<PaginatedResponse<Song>> {
     return this.apiService.getPaginated<Song>(`${this.endpoint}/search`, {
       query,
       limit: limit || 20,
-      offset: offset || 0
+      offset: offset || 0,
     });
   }
 
@@ -40,14 +44,18 @@ export class SongService {
    * Obtener canciones populares
    */
   getPopularSongs(limit?: number): Observable<Song[]> {
-    return this.apiService.get<Song[]>(`${this.endpoint}/popular`, { limit: limit || 50 });
+    return this.apiService.get<Song[]>(`${this.endpoint}/popular`, {
+      limit: limit || 50,
+    });
   }
 
   /**
    * Obtener canciones recientes
    */
   getRecentSongs(limit?: number): Observable<Song[]> {
-    return this.apiService.get<Song[]>(`${this.endpoint}/recent`, { limit: limit || 20 });
+    return this.apiService.get<Song[]>(`${this.endpoint}/recent`, {
+      limit: limit || 20,
+    });
   }
 
   /**
@@ -67,11 +75,18 @@ export class SongService {
   /**
    * Obtener canciones por género
    */
-  getSongsByGenre(genre: string, limit?: number, offset?: number): Observable<PaginatedResponse<Song>> {
-    return this.apiService.getPaginated<Song>(`${this.endpoint}/genre/${genre}`, {
-      limit: limit || 20,
-      offset: offset || 0
-    });
+  getSongsByGenre(
+    genre: string,
+    limit?: number,
+    offset?: number,
+  ): Observable<PaginatedResponse<Song>> {
+    return this.apiService.getPaginated<Song>(
+      `${this.endpoint}/genre/${genre}`,
+      {
+        limit: limit || 20,
+        offset: offset || 0,
+      },
+    );
   }
 
   /**
@@ -106,9 +121,12 @@ export class SongService {
    * Obtener recomendaciones basadas en una canción
    */
   getSongRecommendations(songId: string, limit?: number): Observable<Song[]> {
-    return this.apiService.get<Song[]>(`${this.endpoint}/${songId}/recommendations`, {
-      limit: limit || 10
-    });
+    return this.apiService.get<Song[]>(
+      `${this.endpoint}/${songId}/recommendations`,
+      {
+        limit: limit || 10,
+      },
+    );
   }
 
   /**
@@ -116,7 +134,7 @@ export class SongService {
    */
   getPersonalizedRecommendations(limit?: number): Observable<Song[]> {
     return this.apiService.get<Song[]>(`${this.endpoint}/recommendations`, {
-      limit: limit || 20
+      limit: limit || 20,
     });
   }
 
@@ -124,14 +142,20 @@ export class SongService {
    * Obtener letra de una canción
    */
   getSongLyrics(songId: string): Observable<{ lyrics: string }> {
-    return this.apiService.get<{ lyrics: string }>(`${this.endpoint}/${songId}/lyrics`);
+    return this.apiService.get<{ lyrics: string }>(
+      `${this.endpoint}/${songId}/lyrics`,
+    );
   }
 
   /**
    * Subir una nueva canción (para artistas/administradores)
    */
   uploadSong(file: File, songData?: any): Observable<Song> {
-    return this.apiService.upload<Song>(`${this.endpoint}/upload`, file, songData);
+    return this.apiService.upload<Song>(
+      `${this.endpoint}/upload`,
+      file,
+      songData,
+    );
   }
 
   /**
@@ -151,10 +175,13 @@ export class SongService {
   /**
    * Obtener historial de reproducción del usuario
    */
-  getPlayHistory(limit?: number, offset?: number): Observable<PaginatedResponse<Song>> {
+  getPlayHistory(
+    limit?: number,
+    offset?: number,
+  ): Observable<PaginatedResponse<Song>> {
     return this.apiService.getPaginated<Song>(`${this.endpoint}/history`, {
       limit: limit || 50,
-      offset: offset || 0
+      offset: offset || 0,
     });
   }
 

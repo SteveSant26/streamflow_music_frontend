@@ -1,38 +1,37 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { ApiService } from './api.service';
+import { Injectable } from "@angular/core";
+import { Observable, of } from "rxjs";
+import { ApiService } from "./api.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class TestConnectionService {
-
   constructor(private apiService: ApiService) {}
 
   /**
    * Probar la conexión con Django backend
    */
   testConnection(): Observable<any> {
-    console.log('🔍 Probando conexión con Django backend...');
-    
+    console.log("🔍 Probando conexión con Django backend...");
+
     // Intentar conectar a endpoints típicos de Django
-    return this.apiService.get('/');
+    return this.apiService.get("/");
   }
 
   /**
    * Probar endpoints específicos de Django REST Framework
    */
   testDjangoEndpoints(): {
-    playlists: Observable<any>,
-    songs: Observable<any>,
-    artists: Observable<any>,
-    auth: Observable<any>
+    playlists: Observable<any>;
+    songs: Observable<any>;
+    artists: Observable<any>;
+    auth: Observable<any>;
   } {
     return {
-      playlists: this.apiService.get('/playlists/'),
-      songs: this.apiService.get('/songs/'),
-      artists: this.apiService.get('/artists/'),
-      auth: this.apiService.get('/auth/user/')
+      playlists: this.apiService.get("/playlists/"),
+      songs: this.apiService.get("/songs/"),
+      artists: this.apiService.get("/artists/"),
+      auth: this.apiService.get("/auth/user/"),
     };
   }
 
@@ -42,17 +41,17 @@ export class TestConnectionService {
   checkDjangoServer(): Promise<boolean> {
     return new Promise((resolve) => {
       // Primero probar la raíz de la API
-      this.apiService.get('/').subscribe({
+      this.apiService.get("/").subscribe({
         next: (response) => {
-          console.log('✅ Django backend conectado:', response);
+          console.log("✅ Django backend conectado:", response);
           resolve(true);
         },
         error: (error) => {
-          console.error('❌ Error conectando a Django:', error.message);
-          
+          console.error("❌ Error conectando a Django:", error.message);
+
           // Si falla, probar directamente el backend sin /api
           this.testDirectBackend().then(resolve);
-        }
+        },
       });
     });
   }
@@ -60,18 +59,21 @@ export class TestConnectionService {
   private testDirectBackend(): Promise<boolean> {
     return new Promise((resolve) => {
       // Probar directamente http://localhost:8000
-      fetch('http://localhost:8000')
-        .then(response => {
+      fetch("http://localhost:8000")
+        .then((response) => {
           if (response.ok) {
-            console.log('✅ Django servidor corriendo en puerto 8000');
+            console.log("✅ Django servidor corriendo en puerto 8000");
             resolve(true);
           } else {
-            console.log('⚠️ Django responde pero con error:', response.status);
+            console.log("⚠️ Django responde pero con error:", response.status);
             resolve(false);
           }
         })
-        .catch(error => {
-          console.error('❌ Django no está corriendo o hay problemas de CORS:', error);
+        .catch((error) => {
+          console.error(
+            "❌ Django no está corriendo o hay problemas de CORS:",
+            error,
+          );
           resolve(false);
         });
     });
@@ -124,7 +126,7 @@ export class TestConnectionService {
   /**
    * Datos mock mientras configuras el backend
    */
-  getDjangoMockData(type: 'playlists' | 'songs' | 'artists'): Observable<any> {
+  getDjangoMockData(type: "playlists" | "songs" | "artists"): Observable<any> {
     const mockData = {
       playlists: {
         count: 3,
@@ -140,20 +142,20 @@ export class TestConnectionService {
             created_at: "2024-01-15T10:00:00Z",
             updated_at: "2024-01-15T10:00:00Z",
             owner: 1,
-            songs_count: 15
+            songs_count: 15,
           },
           {
             id: 2,
-            name: "Música para Trabajar", 
+            name: "Música para Trabajar",
             description: "Concentración y productividad",
             cover_image: "https://picsum.photos/300/300?random=2",
             is_public: true,
             created_at: "2024-01-10T10:00:00Z",
             updated_at: "2024-01-10T10:00:00Z",
             owner: 1,
-            songs_count: 25
-          }
-        ]
+            songs_count: 25,
+          },
+        ],
       },
       songs: {
         count: 2,
@@ -169,9 +171,9 @@ export class TestConnectionService {
             file_url: "https://example.com/song1.mp3",
             plays_count: 1000000,
             likes_count: 50000,
-            created_at: "2024-01-01T10:00:00Z"
-          }
-        ]
+            created_at: "2024-01-01T10:00:00Z",
+          },
+        ],
       },
       artists: {
         count: 1,
@@ -185,10 +187,10 @@ export class TestConnectionService {
             followers_count: 2400000,
             is_verified: true,
             genres: ["Rock", "Classic Rock"],
-            created_at: "2024-01-01T10:00:00Z"
-          }
-        ]
-      }
+            created_at: "2024-01-01T10:00:00Z",
+          },
+        ],
+      },
     };
 
     return of(mockData[type]);

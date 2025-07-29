@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
-import { Song, Artist, Album, Playlist, SearchFilters } from '../models';
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { ApiService } from "./api.service";
+import { Song, Artist, Album, Playlist, SearchFilters } from "../models";
 
 export interface SearchResults {
   songs: Song[];
@@ -12,10 +12,10 @@ export interface SearchResults {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class SearchService {
-  private endpoint = '/search';
+  private endpoint = "/search";
 
   constructor(private apiService: ApiService) {}
 
@@ -25,18 +25,23 @@ export class SearchService {
   searchAll(query: string, limit?: number): Observable<SearchResults> {
     return this.apiService.get<SearchResults>(this.endpoint, {
       query,
-      limit: limit || 20
+      limit: limit || 20,
     });
   }
 
   /**
    * Búsqueda específica por tipo
    */
-  searchByType(query: string, type: 'song' | 'artist' | 'album' | 'playlist', limit?: number, offset?: number): Observable<any> {
+  searchByType(
+    query: string,
+    type: "song" | "artist" | "album" | "playlist",
+    limit?: number,
+    offset?: number,
+  ): Observable<any> {
     return this.apiService.get(`${this.endpoint}/${type}`, {
       query,
       limit: limit || 20,
-      offset: offset || 0
+      offset: offset || 0,
     });
   }
 
@@ -44,7 +49,10 @@ export class SearchService {
    * Búsqueda avanzada con filtros
    */
   advancedSearch(filters: SearchFilters): Observable<SearchResults> {
-    return this.apiService.get<SearchResults>(`${this.endpoint}/advanced`, filters);
+    return this.apiService.get<SearchResults>(
+      `${this.endpoint}/advanced`,
+      filters,
+    );
   }
 
   /**
@@ -53,7 +61,7 @@ export class SearchService {
   getSearchSuggestions(query: string, limit?: number): Observable<string[]> {
     return this.apiService.get<string[]>(`${this.endpoint}/suggestions`, {
       query,
-      limit: limit || 10
+      limit: limit || 10,
     });
   }
 
@@ -62,7 +70,7 @@ export class SearchService {
    */
   getPopularSearches(limit?: number): Observable<string[]> {
     return this.apiService.get<string[]>(`${this.endpoint}/popular`, {
-      limit: limit || 10
+      limit: limit || 10,
     });
   }
 
@@ -71,7 +79,7 @@ export class SearchService {
    */
   getSearchHistory(limit?: number): Observable<string[]> {
     return this.apiService.get<string[]>(`${this.endpoint}/history`, {
-      limit: limit || 20
+      limit: limit || 20,
     });
   }
 
@@ -92,22 +100,31 @@ export class SearchService {
   /**
    * Búsqueda por género
    */
-  searchByGenre(genre: string, type?: 'song' | 'artist' | 'album', limit?: number): Observable<any> {
-    const endpoint = type ? `${this.endpoint}/genre/${genre}/${type}` : `${this.endpoint}/genre/${genre}`;
+  searchByGenre(
+    genre: string,
+    type?: "song" | "artist" | "album",
+    limit?: number,
+  ): Observable<any> {
+    const endpoint = type
+      ? `${this.endpoint}/genre/${genre}/${type}`
+      : `${this.endpoint}/genre/${genre}`;
     return this.apiService.get(endpoint, { limit: limit || 20 });
   }
 
   /**
    * Búsqueda rápida (para autocompletado)
    */
-  quickSearch(query: string, limit?: number): Observable<{
+  quickSearch(
+    query: string,
+    limit?: number,
+  ): Observable<{
     songs: Song[];
     artists: Artist[];
     albums: Album[];
   }> {
     return this.apiService.get(`${this.endpoint}/quick`, {
       query,
-      limit: limit || 5
+      limit: limit || 5,
     });
   }
 }

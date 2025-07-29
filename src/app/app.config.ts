@@ -4,7 +4,12 @@ import {
   provideZonelessChangeDetection,
 } from "@angular/core";
 import { provideRouter } from "@angular/router";
-import { provideHttpClient, withInterceptorsFromDi, withFetch, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withFetch,
+  HTTP_INTERCEPTORS,
+} from "@angular/common/http";
 
 import { routes } from "./app.routes";
 import {
@@ -21,12 +26,12 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(
       withInterceptorsFromDi(),
-      withFetch() // 🚀 Habilitar fetch para mejor rendimiento
+      withFetch(), // 🚀 Habilitar fetch para mejor rendimiento
     ),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
 };

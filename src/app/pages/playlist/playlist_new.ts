@@ -28,7 +28,7 @@ export class PlaylistComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly playlistService: PlaylistService,
-    private readonly songService: SongService
+    private readonly songService: SongService,
   ) {}
 
   get currentPlaylistImage(): string {
@@ -76,7 +76,7 @@ export class PlaylistComponent implements OnInit {
   onImageLoad(event: Event) {
     const img = event.target as HTMLImageElement;
     console.log("Imagen cargada:", img.src);
-    
+
     // Pequeño delay para asegurar que la imagen está completamente cargada
     setTimeout(() => {
       this.extractColorsFromImage(img);
@@ -93,16 +93,18 @@ export class PlaylistComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    console.log(`🎵 Cargando playlist ${this.playlistId} desde Django backend...`);
+    console.log(
+      `🎵 Cargando playlist ${this.playlistId} desde Django backend...`,
+    );
 
     // Cargar datos de la playlist desde Django backend
     this.playlistService.getPlaylistById(this.playlistId).subscribe({
       next: (djangoPlaylist: any) => {
-        console.log('✅ Playlist cargada desde backend:', djangoPlaylist);
-        
+        console.log("✅ Playlist cargada desde backend:", djangoPlaylist);
+
         // Adaptar datos de Django (snake_case) a Angular (camelCase)
         this.playlist = this.adaptDjangoPlaylist(djangoPlaylist);
-        
+
         // Actualizar propiedades del componente
         this.updateComponentProperties();
         this.loading = false;
@@ -112,7 +114,7 @@ export class PlaylistComponent implements OnInit {
         this.error = error.message || "Error al cargar la playlist";
         // Cargar datos mock como fallback
         this.loadFallbackData();
-      }
+      },
     });
   }
 
@@ -121,14 +123,27 @@ export class PlaylistComponent implements OnInit {
       id: djangoData.id?.toString() || this.playlistId!,
       name: djangoData.name || "Playlist Sin Nombre",
       description: djangoData.description || "",
-      coverImage: djangoData.cover_image || djangoData.coverImage || this.getPlaylistImage(),
+      coverImage:
+        djangoData.cover_image ||
+        djangoData.coverImage ||
+        this.getPlaylistImage(),
       songs: djangoData.songs || [],
       userId: djangoData.owner?.toString() || "1",
       isPublic: djangoData.is_public ?? djangoData.isPublic ?? true,
       totalDuration: djangoData.total_duration || djangoData.totalDuration || 0,
-      totalSongs: djangoData.songs_count || djangoData.totalSongs || djangoData.songs?.length || 0,
-      createdAt: djangoData.created_at || djangoData.createdAt || new Date().toISOString(),
-      updatedAt: djangoData.updated_at || djangoData.updatedAt || new Date().toISOString()
+      totalSongs:
+        djangoData.songs_count ||
+        djangoData.totalSongs ||
+        djangoData.songs?.length ||
+        0,
+      createdAt:
+        djangoData.created_at ||
+        djangoData.createdAt ||
+        new Date().toISOString(),
+      updatedAt:
+        djangoData.updated_at ||
+        djangoData.updatedAt ||
+        new Date().toISOString(),
     };
   }
 
@@ -146,7 +161,7 @@ export class PlaylistComponent implements OnInit {
 
   private loadFallbackData() {
     console.log("🔄 Cargando datos de fallback...");
-    
+
     // Datos mock mientras configuramos el backend
     const mockPlaylist: Playlist = {
       id: this.playlistId!,
@@ -159,7 +174,7 @@ export class PlaylistComponent implements OnInit {
       totalDuration: 3600, // 1 hora
       totalSongs: 15,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     this.playlist = mockPlaylist;
@@ -171,18 +186,24 @@ export class PlaylistComponent implements OnInit {
     const names = {
       "1": "Mi Playlist Favorita",
       "2": "Música para Trabajar",
-      "3": "Relajación y Chill"
+      "3": "Relajación y Chill",
     };
-    return names[this.playlistId as keyof typeof names] || `Playlist ${this.playlistId}`;
+    return (
+      names[this.playlistId as keyof typeof names] ||
+      `Playlist ${this.playlistId}`
+    );
   }
 
   private getFallbackDescription(): string {
     const descriptions = {
       "1": "Las mejores canciones para cualquier momento",
       "2": "Música perfecta para concentrarse y ser productivo",
-      "3": "Sonidos relajantes para desconectar del estrés"
+      "3": "Sonidos relajantes para desconectar del estrés",
     };
-    return descriptions[this.playlistId as keyof typeof descriptions] || "Una playlist increíble";
+    return (
+      descriptions[this.playlistId as keyof typeof descriptions] ||
+      "Una playlist increíble"
+    );
   }
 
   private getMockSongs(): Song[] {
@@ -193,17 +214,17 @@ export class PlaylistComponent implements OnInit {
       verified: true,
       followers: 2000000,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     const mockArtist2: Artist = {
-      id: "2", 
+      id: "2",
       name: "Adele",
       image: "https://picsum.photos/100/100?random=20",
       verified: true,
       followers: 1500000,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     return [
@@ -218,7 +239,7 @@ export class PlaylistComponent implements OnInit {
         plays: 1000000,
         likes: 50000,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       },
       {
         id: "2",
@@ -231,15 +252,15 @@ export class PlaylistComponent implements OnInit {
         plays: 800000,
         likes: 40000,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      }
+        updatedAt: new Date().toISOString(),
+      },
     ];
   }
 
   private formatDuration(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    
+
     if (hours > 0) {
       return `${hours}h ${minutes}min`;
     }
@@ -248,10 +269,10 @@ export class PlaylistComponent implements OnInit {
 
   private formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return date.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   }
 
@@ -271,15 +292,15 @@ export class PlaylistComponent implements OnInit {
     const gradients = [
       "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+      "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
     ];
-    
+
     const index = parseInt(this.playlistId || "0") % gradients.length;
     this.dynamicGradient = gradients[index];
-    
+
     // Aplicar al elemento si existe
     setTimeout(() => {
-      const element = document.querySelector('.playlist-header') as HTMLElement;
+      const element = document.querySelector(".playlist-header") as HTMLElement;
       if (element) {
         element.style.background = this.dynamicGradient;
       }
@@ -289,22 +310,24 @@ export class PlaylistComponent implements OnInit {
   private extractColorsFromImage(img: HTMLImageElement) {
     try {
       // Crear canvas para extraer colores
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
       if (!ctx) return;
-      
+
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
-      
+
       // Extraer color dominante (simplificado)
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
-      
-      let r = 0, g = 0, b = 0;
+
+      let r = 0,
+        g = 0,
+        b = 0;
       let count = 0;
-      
+
       // Muestrear cada 10 píxeles para performance
       for (let i = 0; i < data.length; i += 40) {
         r += data[i];
@@ -312,27 +335,26 @@ export class PlaylistComponent implements OnInit {
         b += data[i + 2];
         count++;
       }
-      
+
       r = Math.floor(r / count);
       g = Math.floor(g / count);
       b = Math.floor(b / count);
-      
+
       // Crear gradiente con el color extraído
       const color1 = `rgb(${r}, ${g}, ${b})`;
       const color2 = `rgb(${Math.max(0, r - 50)}, ${Math.max(0, g - 50)}, ${Math.max(0, b - 50)})`;
-      
+
       this.dynamicGradient = `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`;
-      
+
       // Aplicar gradiente
-      const element = document.querySelector('.playlist-header') as HTMLElement;
+      const element = document.querySelector(".playlist-header") as HTMLElement;
       if (element) {
         element.style.background = this.dynamicGradient;
       }
-      
-      console.log('🎨 Gradiente extraído:', this.dynamicGradient);
-      
+
+      console.log("🎨 Gradiente extraído:", this.dynamicGradient);
     } catch (error) {
-      console.error('Error extrayendo colores:', error);
+      console.error("Error extrayendo colores:", error);
       this.applyFallbackGradient();
     }
   }
@@ -342,12 +364,13 @@ export class PlaylistComponent implements OnInit {
     const testImages = [
       `https://picsum.photos/300/300?random=${Math.floor(Math.random() * 1000)}`,
       `https://picsum.photos/300/300?random=${Math.floor(Math.random() * 1000)}`,
-      `https://picsum.photos/300/300?random=${Math.floor(Math.random() * 1000)}`
+      `https://picsum.photos/300/300?random=${Math.floor(Math.random() * 1000)}`,
     ];
-    
-    const randomImage = testImages[Math.floor(Math.random() * testImages.length)];
+
+    const randomImage =
+      testImages[Math.floor(Math.random() * testImages.length)];
     this.playlistCoverImage = randomImage;
-    
-    console.log('🎨 Probando nueva imagen:', randomImage);
+
+    console.log("🎨 Probando nueva imagen:", randomImage);
   }
 }

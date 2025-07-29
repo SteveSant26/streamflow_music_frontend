@@ -1,28 +1,30 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
-import { 
-  Playlist, 
-  CreatePlaylistDto, 
-  UpdatePlaylistDto, 
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { ApiService } from "./api.service";
+import {
+  Playlist,
+  CreatePlaylistDto,
+  UpdatePlaylistDto,
   AddSongToPlaylistDto,
   PlaylistFilters,
   PaginatedResponse,
-  Song
-} from '../models';
+  Song,
+} from "../models";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PlaylistService {
-  private endpoint = '/playlists';
+  private endpoint = "/playlists";
 
   constructor(private apiService: ApiService) {}
 
   /**
    * Obtener todas las playlists con filtros opcionales
    */
-  getPlaylists(filters?: PlaylistFilters): Observable<PaginatedResponse<Playlist>> {
+  getPlaylists(
+    filters?: PlaylistFilters,
+  ): Observable<PaginatedResponse<Playlist>> {
     return this.apiService.getPaginated<Playlist>(this.endpoint, filters);
   }
 
@@ -37,7 +39,9 @@ export class PlaylistService {
    * Obtener playlists del usuario actual
    */
   getUserPlaylists(userId?: string): Observable<Playlist[]> {
-    const endpoint = userId ? `${this.endpoint}/user/${userId}` : `${this.endpoint}/my-playlists`;
+    const endpoint = userId
+      ? `${this.endpoint}/user/${userId}`
+      : `${this.endpoint}/my-playlists`;
     return this.apiService.get<Playlist[]>(endpoint);
   }
 
@@ -51,8 +55,14 @@ export class PlaylistService {
   /**
    * Actualizar una playlist
    */
-  updatePlaylist(id: string, playlistData: UpdatePlaylistDto): Observable<Playlist> {
-    return this.apiService.put<Playlist>(`${this.endpoint}/${id}`, playlistData);
+  updatePlaylist(
+    id: string,
+    playlistData: UpdatePlaylistDto,
+  ): Observable<Playlist> {
+    return this.apiService.put<Playlist>(
+      `${this.endpoint}/${id}`,
+      playlistData,
+    );
   }
 
   /**
@@ -65,15 +75,23 @@ export class PlaylistService {
   /**
    * Agregar una canción a la playlist
    */
-  addSongToPlaylist(playlistId: string, songData: AddSongToPlaylistDto): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/${playlistId}/songs`, songData);
+  addSongToPlaylist(
+    playlistId: string,
+    songData: AddSongToPlaylistDto,
+  ): Observable<void> {
+    return this.apiService.post<void>(
+      `${this.endpoint}/${playlistId}/songs`,
+      songData,
+    );
   }
 
   /**
    * Remover una canción de la playlist
    */
   removeSongFromPlaylist(playlistId: string, songId: string): Observable<void> {
-    return this.apiService.delete<void>(`${this.endpoint}/${playlistId}/songs/${songId}`);
+    return this.apiService.delete<void>(
+      `${this.endpoint}/${playlistId}/songs/${songId}`,
+    );
   }
 
   /**
@@ -86,26 +104,40 @@ export class PlaylistService {
   /**
    * Reordenar canciones en una playlist
    */
-  reorderPlaylistSongs(playlistId: string, songOrders: { songId: string; order: number }[]): Observable<void> {
-    return this.apiService.patch<void>(`${this.endpoint}/${playlistId}/reorder`, { songOrders });
+  reorderPlaylistSongs(
+    playlistId: string,
+    songOrders: { songId: string; order: number }[],
+  ): Observable<void> {
+    return this.apiService.patch<void>(
+      `${this.endpoint}/${playlistId}/reorder`,
+      { songOrders },
+    );
   }
 
   /**
    * Subir imagen de portada para la playlist
    */
   uploadPlaylistCover(playlistId: string, file: File): Observable<Playlist> {
-    return this.apiService.upload<Playlist>(`${this.endpoint}/${playlistId}/cover`, file);
+    return this.apiService.upload<Playlist>(
+      `${this.endpoint}/${playlistId}/cover`,
+      file,
+    );
   }
 
   /**
    * Seguir/dejar de seguir una playlist pública
    */
   followPlaylist(playlistId: string): Observable<void> {
-    return this.apiService.post<void>(`${this.endpoint}/${playlistId}/follow`, {});
+    return this.apiService.post<void>(
+      `${this.endpoint}/${playlistId}/follow`,
+      {},
+    );
   }
 
   unfollowPlaylist(playlistId: string): Observable<void> {
-    return this.apiService.delete<void>(`${this.endpoint}/${playlistId}/follow`);
+    return this.apiService.delete<void>(
+      `${this.endpoint}/${playlistId}/follow`,
+    );
   }
 
   /**
@@ -118,18 +150,28 @@ export class PlaylistService {
   /**
    * Duplicar una playlist
    */
-  duplicatePlaylist(playlistId: string, newName?: string): Observable<Playlist> {
-    return this.apiService.post<Playlist>(`${this.endpoint}/${playlistId}/duplicate`, { name: newName });
+  duplicatePlaylist(
+    playlistId: string,
+    newName?: string,
+  ): Observable<Playlist> {
+    return this.apiService.post<Playlist>(
+      `${this.endpoint}/${playlistId}/duplicate`,
+      { name: newName },
+    );
   }
 
   /**
    * Buscar playlists públicas
    */
-  searchPlaylists(query: string, limit?: number, offset?: number): Observable<PaginatedResponse<Playlist>> {
-    return this.apiService.getPaginated<Playlist>(`${this.endpoint}/search`, { 
-      query, 
-      limit: limit || 20, 
-      offset: offset || 0 
+  searchPlaylists(
+    query: string,
+    limit?: number,
+    offset?: number,
+  ): Observable<PaginatedResponse<Playlist>> {
+    return this.apiService.getPaginated<Playlist>(`${this.endpoint}/search`, {
+      query,
+      limit: limit || 20,
+      offset: offset || 0,
     });
   }
 }

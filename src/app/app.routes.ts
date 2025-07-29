@@ -66,7 +66,9 @@ export const routes: Routes = [
   {
     path: "test-connection",
     loadComponent: () =>
-      import("./components/connection-test/connection-test.component").then((m) => m.ConnectionTestComponent),
+      import("./components/connection-test/connection-test.component").then(
+        (m) => m.ConnectionTestComponent,
+      ),
   },
   {
     path: "**",

@@ -124,11 +124,11 @@ class Playlist(models.Model):
     is_public = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     @property
     def songs_count(self):
         return self.songs.count()
-    
+
     @property
     def total_duration(self):
         return sum(song.duration for song in self.songs.all())
@@ -148,7 +148,7 @@ class ArtistSerializer(serializers.ModelSerializer):
 
 class SongSerializer(serializers.ModelSerializer):
     artist = ArtistSerializer(read_only=True)
-    
+
     class Meta:
         model = Song
         fields = '__all__'
@@ -157,7 +157,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
     songs = SongSerializer(many=True, read_only=True)
     songs_count = serializers.ReadOnlyField()
     total_duration = serializers.ReadOnlyField()
-    
+
     class Meta:
         model = Playlist
         fields = '__all__'
@@ -176,7 +176,7 @@ from .serializers import PlaylistSerializer, SongSerializer, ArtistSerializer
 class PlaylistViewSet(viewsets.ModelViewSet):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
-    
+
     def get_queryset(self):
         queryset = Playlist.objects.all()
         if self.action == 'list':
@@ -195,11 +195,13 @@ class ArtistViewSet(viewsets.ModelViewSet):
 ## 🧪 Comandos para Probar
 
 ### Iniciar Django:
+
 ```bash
 python manage.py runserver 8000
 ```
 
 ### Probar endpoints manualmente:
+
 ```bash
 curl http://localhost:8000/api/playlists/
 curl http://localhost:8000/api/songs/
@@ -231,16 +233,16 @@ class Command(BaseCommand):
             image="https://example.com/badbunny.jpg",
             verified=True
         )
-        
+
         song = Song.objects.create(
             title="Un Verano Sin Ti",
             artist=artist,
             duration=180,
             audio_url="https://example.com/song.mp3"
         )
-        
+
         user = User.objects.first() or User.objects.create_user('admin', 'admin@test.com', 'admin')
-        
+
         playlist = Playlist.objects.create(
             name="Reggaeton 2024",
             description="Los mejores hits",
