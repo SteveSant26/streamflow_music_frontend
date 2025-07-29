@@ -14,6 +14,13 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   /**
+   * Obtener la URL completa para debug
+   */
+  getFullUrl(endpoint: string): string {
+    return `${this.baseUrl}${endpoint}`;
+  }
+
+  /**
    * Headers por defecto para las peticiones
    */
   private getHeaders(): HttpHeaders {

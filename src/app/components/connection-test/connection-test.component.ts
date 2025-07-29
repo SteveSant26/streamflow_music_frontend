@@ -31,14 +31,23 @@ import { TestConnectionService } from "../../services/test-connection.service";
       <div class="endpoints">
         <h4>🎯 Endpoints a probar:</h4>
         <div class="endpoint-list">
+          <button (click)="testEndpoint('/test/')" class="endpoint-btn">
+            🔍 GET /api/test/
+          </button>
+          <button (click)="testEndpoint('/test-users/')" class="endpoint-btn">
+            👥 GET /api/test-users/
+          </button>
+          <button
+            (click)="testEndpoint('/user/test-profiles/')"
+            class="endpoint-btn"
+          >
+            👤 GET /api/user/test-profiles/
+          </button>
+          <button (click)="testEndpoint('/user/profile/')" class="endpoint-btn">
+            🔒 GET /api/user/profile/ (Auth)
+          </button>
           <button (click)="testEndpoint('/playlists/')" class="endpoint-btn">
-            GET /api/playlists/
-          </button>
-          <button (click)="testEndpoint('/songs/')" class="endpoint-btn">
-            GET /api/songs/
-          </button>
-          <button (click)="testEndpoint('/artists/')" class="endpoint-btn">
-            GET /api/artists/
+            🎵 GET /api/playlists/
           </button>
         </div>
       </div>
@@ -182,21 +191,36 @@ export class ConnectionTestComponent implements OnInit {
 
   testEndpoint(endpoint: string) {
     console.log(`🔍 Probando endpoint: ${endpoint}`);
+    console.log(`🌐 URL completa: ${this.testService.getFullUrl(endpoint)}`);
 
-    this.testService.testDjangoEndpoints().playlists.subscribe({
-      next: (data) => {
+    this.testing = true;
+    this.status = `Probando ${endpoint}...`;
+    this.statusClass = "testing";
+    this.response = null;
+
+    // Usar el servicio API directamente para probar endpoints específicos
+    this.testService.testSpecificEndpoint(endpoint).subscribe({
+      next: (data: any) => {
         console.log(`✅ Endpoint ${endpoint} funciona:`, data);
         this.response = data;
         this.status = `✅ Endpoint ${endpoint} OK`;
         this.message = "Endpoint responde correctamente";
         this.statusClass = "success";
+        this.testing = false;
       },
-      error: (error) => {
-        console.error(`❌ Error en endpoint ${endpoint}:`, error);
-        this.response = { error: error.message };
+      error: (error: any) => {
+        console.error(`❌ Error completo en endpoint ${endpoint}:`, error);
+        this.response = {
+          error: error.message || "Unknown error",
+          status: error.status || "No status",
+          statusText: error.statusText || "No status text",
+          url: error.url || "No URL",
+          name: error.name || "No name",
+        };
         this.status = `❌ Endpoint ${endpoint} Error`;
-        this.message = error.message;
+        this.message = `Error ${error.status || "Unknown"}: ${error.message || "Failed to fetch"}`;
         this.statusClass = "error";
+        this.testing = false;
       },
     });
   }

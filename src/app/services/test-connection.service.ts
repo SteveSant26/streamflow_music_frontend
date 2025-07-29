@@ -19,6 +19,21 @@ export class TestConnectionService {
   }
 
   /**
+   * Probar un endpoint específico
+   */
+  testSpecificEndpoint(endpoint: string): Observable<any> {
+    console.log(`🔍 Probando endpoint específico: ${endpoint}`);
+    return this.apiService.get(endpoint);
+  }
+
+  /**
+   * Obtener la URL completa para debug
+   */
+  getFullUrl(endpoint: string): string {
+    return this.apiService.getFullUrl(endpoint);
+  }
+
+  /**
    * Probar endpoints específicos de Django REST Framework
    */
   testDjangoEndpoints(): {
