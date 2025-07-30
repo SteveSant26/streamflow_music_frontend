@@ -7,8 +7,8 @@ import { provideRouter } from "@angular/router";
 import {
   provideHttpClient,
   withInterceptorsFromDi,
-  withFetch,
   HTTP_INTERCEPTORS,
+  withFetch,
 } from "@angular/common/http";
 
 import { routes } from "./app.routes";
@@ -25,10 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(
-      withInterceptorsFromDi(),
-      withFetch(), // 🚀 Habilitar fetch para mejor rendimiento
-    ),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptor,

@@ -20,23 +20,24 @@ import { User } from "../../models";
 export class UserPerfilComponent implements OnInit {
   profileForm: FormGroup;
   isEditing = false;
+  isLoading = false;
+  errorMessage = "";
+  successMessage = "";
   currentUser: User | null = null;
-  originalValues: { username: string; description: string } = {
+  originalValues: { username: string; email: string; description: string } = {
     username: "",
+    email: "",
     description: "",
   };
 
   // Profile image properties
   profileImageUrl: string | null = null;
   selectedImageFile: File | null = null;
-  isLoading = false;
-  errorMessage = "";
-  successMessage = "";
 
   constructor(
     readonly router: Router,
     readonly fb: FormBuilder,
-    private authService: AuthService,
+    private readonly authService: AuthService,
   ) {
     this.profileForm = this.fb.group({
       username: [
@@ -47,7 +48,7 @@ export class UserPerfilComponent implements OnInit {
           Validators.maxLength(20),
         ],
       ],
-      email: [{ value: "", disabled: true }], // Email no editable
+      email: ["", [Validators.required, Validators.email]],
       description: ["", [Validators.maxLength(500)]],
     });
   }
@@ -57,35 +58,87 @@ export class UserPerfilComponent implements OnInit {
   }
 
   loadUserData(): void {
-    // Verificar si el usuario está autenticado
-    if (!this.authService.isAuthenticated()) {
+    this.isLoading = true;
+    this.errorMessage = "";
+
+    console.log("🔍 Iniciando carga de datos del usuario...");
+
+    // Verificar si hay usuario autenticado
+    const currentUserValue = this.authService.getCurrentUserValue();
+    const isAuth = this.authService.isAuthenticated();
+    const token = this.authService.getAuthToken();
+
+    console.log("🔐 Estado de autenticación:", {
+      currentUserValue,
+      isAuthenticated: isAuth,
+      hasToken: !!token,
+      token: token ? token.substring(0, 20) + "..." : null,
+    });
+
+    if (!currentUserValue && !isAuth) {
+      console.log("❌ No hay usuario autenticado, redirigiendo al login");
       this.router.navigate(["/login"]);
       return;
     }
 
-    // Obtener el usuario actual del AuthService
-    this.currentUser = this.authService.getCurrentUserValue();
+    console.log("🔍 Cargando datos del usuario desde backend...");
 
-    if (this.currentUser) {
-      const userData = {
-        username:
-          this.currentUser.username || this.currentUser.email.split("@")[0],
-        email: this.currentUser.email,
-        description: "", // Por ahora no tenemos descripción en el backend
-      };
+    // Cargar datos del perfil desde el backend
+    this.authService.getCurrentUser().subscribe({
+      next: (user: User) => {
+        console.log("✅ Datos del usuario cargados:", user);
+        console.log("📋 Propiedades del usuario:", {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          profileImage: user.profileImage,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+          hasEmail: !!user.email,
+          emailType: typeof user.email,
+        });
 
-      this.originalValues = {
-        username: userData.username,
-        description: userData.description,
-      };
+        this.currentUser = user;
 
-      this.profileForm.patchValue(userData);
+        // Validar que los datos del usuario estén completos
+        if (!user || !user.email) {
+          console.error("❌ Datos del usuario incompletos:", user);
+          console.error("❌ user existe:", !!user);
+          console.error("❌ user.email existe:", !!user.email);
+          console.error("❌ user.email valor:", user.email);
+          this.errorMessage = "Error: Datos del usuario incompletos";
+          this.isLoading = false;
+          return;
+        }
 
-      // Cargar imagen de perfil si existe
-      if (this.currentUser.profileImage) {
-        this.profileImageUrl = this.currentUser.profileImage;
-      }
-    }
+        const userData = {
+          username: user.username || user.email.split("@")[0],
+          email: user.email,
+          description: user.profileImage || "", // Usando profileImage como descripción temporal
+        };
+
+        this.originalValues = { ...userData };
+        this.profileForm.patchValue(userData);
+
+        // Cargar imagen de perfil si existe
+        if (user.profileImage) {
+          this.profileImageUrl = user.profileImage;
+        }
+
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error("❌ Error al cargar perfil:", error);
+        this.errorMessage = "Error al cargar los datos del perfil";
+        this.isLoading = false;
+
+        // Si hay error de autenticación, redirigir al login
+        if (error.status === 401) {
+          this.authService.logout();
+          this.router.navigate(["/login"]);
+        }
+      },
+    });
   }
 
   enableEdit(): void {
@@ -94,8 +147,6 @@ export class UserPerfilComponent implements OnInit {
 
   cancelEdit(): void {
     this.isEditing = false;
-    this.errorMessage = "";
-    this.successMessage = "";
     this.profileForm.patchValue(this.originalValues);
   }
 
@@ -107,65 +158,51 @@ export class UserPerfilComponent implements OnInit {
 
       const formData = this.profileForm.value;
 
-      // Actualizar perfil usando AuthService
+      console.log("🔄 Guardando perfil en backend:", formData);
+
+      // Actualizar perfil usando el AuthService
       this.authService
         .updateProfile({
           username: formData.username,
-          // Agregar más campos según sea necesario
+          email: formData.email,
+          // description no está en el modelo User por ahora
         })
         .subscribe({
-          next: (updatedUser) => {
-            console.log("Perfil actualizado:", updatedUser);
+          next: (updatedUser: User) => {
+            console.log("✅ Perfil actualizado exitosamente:", updatedUser);
 
             // Actualizar datos locales
             this.currentUser = updatedUser;
-            this.originalValues = {
-              username: formData.username,
-              description: formData.description,
-            };
+            this.originalValues = { ...formData };
             this.isEditing = false;
             this.isLoading = false;
+
+            // Mostrar mensaje de éxito
             this.successMessage = "Perfil actualizado exitosamente";
 
             // Limpiar mensaje después de 3 segundos
-            setTimeout(() => (this.successMessage = ""), 3000);
+            setTimeout(() => {
+              this.successMessage = "";
+            }, 3000);
           },
-          error: (error) => {
-            console.error("Error al actualizar perfil:", error);
+          error: (error: any) => {
+            console.error("❌ Error al actualizar perfil:", error);
             this.errorMessage =
               error.error?.message || "Error al actualizar el perfil";
             this.isLoading = false;
           },
         });
+    } else {
+      console.log("❌ Formulario inválido");
+      this.markFormGroupTouched();
     }
   }
 
-  // Método para subir imagen de perfil
-  uploadProfileImage(): void {
-    if (this.selectedImageFile) {
-      this.isLoading = true;
-      this.errorMessage = "";
-
-      this.authService.uploadProfileImage(this.selectedImageFile).subscribe({
-        next: (updatedUser) => {
-          console.log("Imagen de perfil actualizada:", updatedUser);
-          this.currentUser = updatedUser;
-          this.profileImageUrl = updatedUser.profileImage || null;
-          this.selectedImageFile = null;
-          this.isLoading = false;
-          this.successMessage = "Imagen de perfil actualizada exitosamente";
-
-          // Limpiar mensaje después de 3 segundos
-          setTimeout(() => (this.successMessage = ""), 3000);
-        },
-        error: (error) => {
-          console.error("Error al subir imagen:", error);
-          this.errorMessage =
-            error.error?.message || "Error al subir la imagen";
-          this.isLoading = false;
-        },
-      });
-    }
+  private markFormGroupTouched(): void {
+    Object.keys(this.profileForm.controls).forEach((key) => {
+      const control = this.profileForm.get(key);
+      control?.markAsTouched();
+    });
   }
 
   private showSuccessMessage(): void {
@@ -194,16 +231,14 @@ export class UserPerfilComponent implements OnInit {
         "image/webp",
       ];
       if (!allowedTypes.includes(file.type)) {
-        this.errorMessage =
-          "Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)";
+        alert("Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)");
         return;
       }
 
       // Validate file size (max 5MB)
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
-        this.errorMessage =
-          "La imagen es demasiado grande. El tamaño máximo es 5MB";
+        alert("La imagen es demasiado grande. El tamaño máximo es 5MB");
         return;
       }
 
@@ -213,9 +248,6 @@ export class UserPerfilComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.profileImageUrl = e.target?.result as string;
-
-        // Subir automáticamente la imagen al backend
-        this.uploadProfileImage();
       };
       reader.readAsDataURL(file);
     }
@@ -236,6 +268,10 @@ export class UserPerfilComponent implements OnInit {
 
   get username() {
     return this.profileForm.get("username");
+  }
+
+  get email() {
+    return this.profileForm.get("email");
   }
 
   get description() {
