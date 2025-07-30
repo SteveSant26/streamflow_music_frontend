@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { LoginUseCase } from "../../../../domain/usecases/login.usecase";
 import { LoginCredentials } from "../../../../domain/repositories/auth.repository";
-import { AuthService } from "../../../../shared/services/auth.service";
+import { AuthService } from "../../../../shared/services/auth.service";;
 
 @Component({
   selector: "app-login",
