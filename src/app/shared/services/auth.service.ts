@@ -150,8 +150,8 @@ export class AuthService {
     this.isLoading.set(true);
     try {
       await this.supabaseService.client.auth.signOut();
-    } catch (error: any) {
-      this.error.set(error.message);
+    } catch (error:  any) {
+      this.error.set(error.message || "Error al cerrar sesión");
       console.error("Sign out error:", error);
     } finally {
       this.isLoading.set(false);

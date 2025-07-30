@@ -125,7 +125,7 @@ export class AuthRepositoryImpl extends AuthRepository {
       console.log("Login inmediato exitoso");
       return loginResult;
     } catch (loginError) {
-      console.log("Login inmediato falló, requiere confirmación de email");
+      console.log("Login inmediato falló, requiere confirmación de email", loginError);
       // Si el login falla, significa que realmente se requiere confirmación de email
       throw new Error(
         "Registro exitoso. Se ha enviado un email de confirmación a tu correo electrónico. Por favor, confirma tu cuenta e intenta iniciar sesión nuevamente."
