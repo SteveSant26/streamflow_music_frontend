@@ -1,5 +1,4 @@
-# #!/bin/sh
-# . "$(dirname "$0")/_/husky.sh"
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-# bunx lint-staged
-# bunx eslint . --fix
+bunx lint-staged
