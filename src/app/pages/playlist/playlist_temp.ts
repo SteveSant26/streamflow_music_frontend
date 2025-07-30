@@ -28,14 +28,14 @@ interface Playlist {
 export class PlaylistComponent implements OnInit {
   playlistId: string | null = null;
   playlist: Playlist | null = null;
-  playlistName: string = "";
-  playlistDescription: string = "";
-  playlistCoverImage: string = "";
-  songCount: number = 0;
-  duration: string = "0";
-  createdDate: string = "";
+  playlistName = "";
+  playlistDescription = "";
+  playlistCoverImage = "";
+  songCount = 0;
+  duration = "0";
+  createdDate = "";
   songs: Song[] = [];
-  dynamicGradient: string = "";
+  dynamicGradient = "";
 
   constructor(private readonly route: ActivatedRoute) {}
 

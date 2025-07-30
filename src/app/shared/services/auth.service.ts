@@ -1,7 +1,7 @@
 import { Injectable, signal, inject, PLATFORM_ID, computed } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { Router } from "@angular/router";
-import { SupabaseService } from "@app/infrastructure/supabase/supabase.service";
+import { SupabaseService } from "@infrastructure/supabase/supabase.service";
 import { AuthChangeEvent, Session, User as SupabaseUser } from "@supabase/supabase-js";
 import { User } from "../../domain/entities/user.entity";
 

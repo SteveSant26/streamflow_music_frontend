@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardPlayButton {
-  @Input() id: number = 0;
+  @Input() id = 0;
   @Input() size: "small" | "large" = "small";
 
   // Mock state para el reproductor

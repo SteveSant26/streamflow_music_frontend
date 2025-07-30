@@ -13,7 +13,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideMenuItem {
-  @Input() href: string = "#";
+  @Input() href = "#";
   @Output() click = new EventEmitter<void>();
 
   onClick(event: Event): void {

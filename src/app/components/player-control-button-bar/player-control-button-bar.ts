@@ -13,7 +13,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerControlButtonBar {
-  @Input() isPlaying: boolean = false;
+  @Input() isPlaying = false;
   @Output() playPauseClick = new EventEmitter<void>();
 
   onPlayPauseClick(): void {

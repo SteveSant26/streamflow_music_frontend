@@ -9,9 +9,9 @@ import { CardPlayButton } from "../card-play-button/card-play-button";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Card {
-  @Input() title: string = "";
-  @Input() body: string = "";
-  @Input() href: string = "#";
-  @Input() playlistId: number = 0;
-  @Input() showPlayButton: boolean = false;
+  @Input() title = "";
+  @Input() body = "";
+  @Input() href = "#";
+  @Input() playlistId = 0;
+  @Input() showPlayButton = false;
 }

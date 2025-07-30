@@ -56,8 +56,8 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
     songs: [],
   };
 
-  isPlaying: boolean = false;
-  volume: number = 0.5;
+  isPlaying = false;
+  volume = 0.5;
 
   ngOnInit(): void {
     // Inicializar con una canción mock

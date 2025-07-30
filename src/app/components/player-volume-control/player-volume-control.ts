@@ -13,7 +13,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerVolumeControl {
-  @Input() volume: number = 0.5;
+  @Input() volume = 0.5;
   @Output() volumeChange = new EventEmitter<number>();
 
   // Hacer Math disponible en el template

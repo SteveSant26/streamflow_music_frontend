@@ -31,7 +31,7 @@ interface CurrentMusic {
 })
 export class MusicsTablePlay {
   @Input() song!: Song;
-  @Input() isCurrentSong: boolean = false;
+  @Input() isCurrentSong = false;
 
   // Mock state para el reproductor
   currentMusic: CurrentMusic = {
@@ -39,7 +39,7 @@ export class MusicsTablePlay {
     playlist: null,
     songs: [],
   };
-  isPlaying: boolean = false;
+  isPlaying = false;
 
   isNewSongOfAnotherPlaylist(song: Song): boolean {
     return this.currentMusic.playlist?.id !== song.albumId;

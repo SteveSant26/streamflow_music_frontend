@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  ElementRef,
+  ElementRef, OnInit,
 } from "@angular/core";
 
 @Component({
@@ -11,11 +11,11 @@ import {
   templateUrl: "./player-sound-control.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerSoundControl {
+export class PlayerSoundControl implements OnInit {
   @Input() audioElement: ElementRef<HTMLAudioElement> | null = null;
 
-  currentTime: number = 0;
-  duration: number = 0;
+  currentTime = 0;
+  duration = 0;
 
   get progressPercentage(): number {
     if (this.duration === 0) return 0;
