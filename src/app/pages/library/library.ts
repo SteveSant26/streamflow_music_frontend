@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { Router } from "@angular/router";
 
 interface Playlist {
   id: string;
@@ -52,6 +53,8 @@ export class LibraryComponent {
     description: "",
     isPrivate: false,
   };
+
+  constructor(private readonly router: Router) {}
 
   // Mock data para playlists
   mockPlaylists: Playlist[] = [
@@ -318,7 +321,15 @@ export class LibraryComponent {
   }
 
   playPlaylist(playlist: Playlist): void {
-    console.log("Reproducir playlist:", playlist.name);
+    // Navegar a la vista individual de la playlist
+    this.router.navigate(["/playlist", playlist.id]);
+  }
+
+  startPlayingPlaylist(playlist: Playlist, event: Event): void {
+    // Prevenir que se navegue cuando se hace click en el botón de play
+    event.stopPropagation();
+    // Aquí iría la lógica para empezar a reproducir la playlist
+    console.log("Reproduciendo playlist:", playlist.name);
   }
 
   playAlbum(album: Album): void {
@@ -326,7 +337,8 @@ export class LibraryComponent {
   }
 
   viewArtist(artist: Artist): void {
-    console.log("Ver artista:", artist.name);
+    // Navegar a la vista individual del artista
+    this.router.navigate(["/artist", artist.id]);
   }
 
   toggleFollowArtist(artist: Artist): void {

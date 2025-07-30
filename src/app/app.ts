@@ -1,15 +1,15 @@
-import { Component } from "@angular/core";
-import { Router, RouterOutlet, NavigationEnd } from "@angular/router";
-import { AsideMenu } from "./components/aside-menu/aside-menu";
-import { Player } from "./components/player/player";
-import { CommonModule } from "@angular/common";
-import { filter } from "rxjs";
+import { Component } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { AsideMenu } from './components/aside-menu/aside-menu';
+import { Player } from './components/player/player';
+import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs';
 
 @Component({
-  selector: "app-root",
+  selector: 'app-root',
   imports: [RouterOutlet, AsideMenu, Player, CommonModule],
-  templateUrl: "./app.html",
-  styleUrl: "./app.css",
+  templateUrl: './app.html',
+  styleUrl: './app.css',
 })
 export class App {
   showLayout = true;
@@ -20,9 +20,9 @@ export class App {
       .subscribe((event: NavigationEnd) => {
         // Hide layout for login, register and current song pages
         this.showLayout =
-          !event.url.includes("/login") &&
-          !event.url.includes("/register") &&
-          !event.url.includes("/currentSong");
+          !event.url.includes('/login') &&
+          !event.url.includes('/register') &&
+          !event.url.includes('/currentSong');
       });
   }
 }

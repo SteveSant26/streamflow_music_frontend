@@ -1,76 +1,43 @@
-import js from "@eslint/js";
+// @ts-check
+const eslint = require("@eslint/js");
+const tseslint = require("typescript-eslint");
+const angular = require("angular-eslint");
 
-export default [
+module.exports = tseslint.config(
   {
-    // Ignore generated and vendor files
-    ignores: [
-      "node_modules/**",
-      "dist/**",
-      ".angular/**",
-      "coverage/**",
-      "test-out/**",
-      "**/*.min.js",
-      "**/deps/**",
-      "**/deps_ssr/**",
-      "**/vite/**",
+    files: ["**/*.ts"],
+    extends: [
+      eslint.configs.recommended,
+      ...tseslint.configs.recommended,
+      ...tseslint.configs.stylistic,
+      ...angular.configs.tsRecommended,
     ],
-  },
-  {
-    files: ["**/*.js", "**/*.mjs", "**/*.cjs"],
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: "module",
-      globals: {
-        // Node.js globals
-        module: "readonly",
-        require: "readonly",
-        exports: "readonly",
-        __dirname: "readonly",
-        __filename: "readonly",
-        global: "readonly",
-        process: "readonly",
-        Buffer: "readonly",
-        console: "readonly",
-        setTimeout: "readonly",
-        clearTimeout: "readonly",
-        setInterval: "readonly",
-        clearInterval: "readonly",
-        setImmediate: "readonly",
-        clearImmediate: "readonly",
-
-        // Browser globals
-        window: "readonly",
-        document: "readonly",
-        navigator: "readonly",
-        localStorage: "readonly",
-        sessionStorage: "readonly",
-        HTMLElement: "readonly",
-        DOMException: "readonly",
-
-        // Test globals
-        describe: "readonly",
-        it: "readonly",
-        beforeEach: "readonly",
-        afterEach: "readonly",
-        expect: "readonly",
-        jest: "readonly",
-        test: "readonly",
-        beforeAll: "readonly",
-        afterAll: "readonly",
-      },
-    },
+    processor: angular.processInlineTemplates,
     rules: {
-      ...js.configs.recommended.rules,
-      "no-unused-vars": [
-        "warn",
+      "@angular-eslint/directive-selector": [
+        "error",
         {
-          vars: "all",
-          args: "none",
-          ignoreRestSiblings: true,
-          varsIgnorePattern: "^_",
+          type: "attribute",
+          prefix: "app",
+          style: "camelCase",
         },
       ],
-      "no-undef": "error",
+      "@angular-eslint/component-selector": [
+        "error",
+        {
+          type: "element",
+          prefix: "app",
+          style: "kebab-case",
+        },
+      ],
     },
   },
-];
+  {
+    files: ["**/*.html"],
+    extends: [
+      ...angular.configs.templateRecommended,
+      ...angular.configs.templateAccessibility,
+    ],
+    rules: {},
+  }
+);
