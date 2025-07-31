@@ -15,6 +15,23 @@ import { AuthService } from "../../../../shared/services/auth.service";;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
+  // ...existing code...
+
+  loginWithGoogle() {
+    this.authService.signInWithProvider('google');
+  }
+  loginWithGithub() {
+    this.authService.signInWithProvider('github');
+  }
+  loginWithFacebook() {
+    this.authService.signInWithProvider('facebook');
+  }
+  loginWithTwitter() {
+    this.authService.signInWithProvider('twitter');
+  }
+  loginWithDiscord() {
+    this.authService.signInWithProvider('discord');
+  }
   credentials: LoginCredentials = {
     email: "",
     password: "",

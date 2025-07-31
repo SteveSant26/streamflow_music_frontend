@@ -15,6 +15,23 @@ import { AuthService } from "../../../../shared/services/auth.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
+  // ...existing code...
+
+  registerWithGoogle() {
+    this.authService.signInWithProvider('google');
+  }
+  registerWithGithub() {
+    this.authService.signInWithProvider('github');
+  }
+  registerWithFacebook() {
+    this.authService.signInWithProvider('facebook');
+  }
+  registerWithTwitter() {
+    this.authService.signInWithProvider('twitter');
+  }
+  registerWithDiscord() {
+    this.authService.signInWithProvider('discord');
+  }
   credentials: RegisterCredentials = {
     name: "",
     email: "",
