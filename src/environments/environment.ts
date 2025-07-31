@@ -1,5 +1,4 @@
 export const environment = {
-<<<<<<< HEAD
   apiUrl: "http://127.0.0.1:8000/api",
   API_URL: "http://127.0.0.1:8000/",
   STORAGE_TOKEN_KEY: "app.token",
@@ -18,10 +17,4 @@ export const environment = {
 
     SUPABASE_JWT_ALGORITHM: "HS256",
   },
-=======
-  production: false,
-  apiUrl: "http://127.0.0.1:8000/api", // Django está en 127.0.0.1:8000 - sin slash final para evitar doble slash
-  backendUrl: "http://127.0.0.1:8000",
-  wsUrl: "ws://127.0.0.1:8000/ws", // Para WebSockets si los usas
->>>>>>> 37441a955f49179a98bd6eac8335e82c15203441
 };
