@@ -10,6 +10,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { authInterceptor } from './shared/utils/auth-interceptor';
 import { authProviders } from './shared/providers/auth.providers';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
+import { AuthTokenInterceptor } from './interceptors/auth-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,11 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideHttpClient(withInterceptors([authInterceptor])),
     ...authProviders,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthTokenInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
