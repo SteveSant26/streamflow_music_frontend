@@ -11,9 +11,9 @@ import { AuthService } from "@app/shared/services/auth.service";
 
 @Injectable()
 export class AuthTokenInterceptor implements HttpInterceptor {
-  private platformId = inject(PLATFORM_ID);
-  private authService = inject(AuthService);
-  private token = this.authService.session()?.access_token;
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly authService = inject(AuthService);
+  private readonly token = this.authService.session()?.access_token;
 
   constructor() {}
 
