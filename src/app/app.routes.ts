@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './shared/guards/auth.guard';
+import { AUTH_ROUTES } from './app.routes.auth';
 
 export const routes: Routes = [
   {
@@ -7,26 +8,7 @@ export const routes: Routes = [
     redirectTo: "/home",
     pathMatch: "full",
   },
-  {
-    path: "login",
-    loadComponent: () =>
-      import("./presentation/pages/auth/login/login").then(
-        (m) => m.LoginComponent,
-      ),
-  },
-  {
-    path: "register",
-    loadComponent: () =>
-      import("./presentation/pages/auth/register/register").then(
-        (m) => m.RegisterComponent,
-      ),
-  },{
-    path: "reset-password",
-    loadComponent: () =>
-      import("./presentation/pages/auth/reset-password/reset-password").then(
-        (m) => m.ResetPasswordComponent,
-      ),
-  },
+  ...AUTH_ROUTES,
   {
     path: "home",
     loadComponent: () =>
