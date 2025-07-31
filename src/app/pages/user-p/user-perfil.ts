@@ -24,7 +24,13 @@ export class UserPerfilComponent implements OnInit {
   successMessage = "";
   currentUser: User | null = null;
   originalValues: { username: string; email: string; description: string } = {
+  isLoading = false;
+  errorMessage = "";
+  successMessage = "";
+  currentUser: User | null = null;
+  originalValues: { username: string; email: string; description: string } = {
     username: "",
+    email: "",
     email: "",
     description: "",
   };
@@ -36,6 +42,7 @@ export class UserPerfilComponent implements OnInit {
   constructor(
     readonly fb: FormBuilder,
     private readonly authService: AuthService,
+    private readonly authService: AuthService,
   ) {
     this.profileForm = this.fb.group({
       username: [
@@ -46,6 +53,7 @@ export class UserPerfilComponent implements OnInit {
           Validators.maxLength(20),
         ],
       ],
+      email: ["", [Validators.required, Validators.email]],
       email: ["", [Validators.required, Validators.email]],
       description: ["", [Validators.maxLength(500)]],
     });
@@ -142,8 +150,57 @@ export class UserPerfilComponent implements OnInit {
       this.errorMessage = "";
       this.successMessage = "";
 
+      this.isLoading = true;
+      this.errorMessage = "";
+      this.successMessage = "";
+
       const formData = this.profileForm.value;
 
+      console.log("🔄 Guardando perfil en backend:", formData);
+
+      // Actualizar perfil usando el AuthService
+      this.authService
+        .updateProfile({
+          username: formData.username,
+          email: formData.email,
+          // description no está en el modelo User por ahora
+        })
+        .subscribe({
+          next: (updatedUser: User) => {
+            console.log("✅ Perfil actualizado exitosamente:", updatedUser);
+
+            // Actualizar datos locales
+            this.currentUser = updatedUser;
+            this.originalValues = { ...formData };
+            this.isEditing = false;
+            this.isLoading = false;
+
+            // Mostrar mensaje de éxito
+            this.successMessage = "Perfil actualizado exitosamente";
+
+            // Limpiar mensaje después de 3 segundos
+            setTimeout(() => {
+              this.successMessage = "";
+            }, 3000);
+          },
+          error: (error: any) => {
+            console.error("❌ Error al actualizar perfil:", error);
+            this.errorMessage =
+              error.error?.message || "Error al actualizar el perfil";
+            this.isLoading = false;
+          },
+        });
+    } else {
+      console.log("❌ Formulario inválido");
+      this.markFormGroupTouched();
+    }
+  }
+
+  private markFormGroupTouched(): void {
+    Object.keys(this.profileForm.controls).forEach((key) => {
+      const control = this.profileForm.get(key);
+      control?.markAsTouched();
+    });
       console.log("🔄 Guardando perfil en backend:", formData);
 
       // Actualizar perfil usando el AuthService
@@ -254,6 +311,10 @@ export class UserPerfilComponent implements OnInit {
 
   get username() {
     return this.profileForm.get("username");
+  }
+
+  get email() {
+    return this.profileForm.get("email");
   }
 
   get email() {
