@@ -10,6 +10,19 @@ import { User } from "../../domain/entities/user.entity";
 })
 export class AuthService {
   /**
+   * Envía el correo de recuperación de contraseña usando Supabase
+   */
+  async sendPasswordResetEmail(email: string): Promise<void> {
+    try {
+      const { error } = await this.supabaseService.client.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/reset-password',
+      });
+      if (error) throw error;
+    } catch (error) {
+      throw error;
+    }
+  }
+  /**
    * Inicia sesión/registro con proveedor social (OAuth) usando Supabase.
    * Ejemplo de uso: this.authService.signInWithProvider('google')
    */

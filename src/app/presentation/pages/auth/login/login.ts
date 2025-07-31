@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { LoginUseCase } from '../../../../domain/usecases/login.usecase';
 import { LoginCredentials } from '../../../../domain/repositories/auth.repository';
 import { AuthService } from '../../../../shared/services/auth.service';
+import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-login',
@@ -17,20 +18,22 @@ import { MatIcon } from '@angular/material/icon';
 export class LoginComponent {
   // ...existing code...
 
+  private readonly socialLoginUseCase = inject(SocialLoginUseCase);
+
   loginWithGoogle() {
-    this.authService.signInWithProvider('google');
+    this.socialLoginUseCase.execute('google');
   }
   loginWithGithub() {
-    this.authService.signInWithProvider('github');
+    this.socialLoginUseCase.execute('github');
   }
   loginWithFacebook() {
-    this.authService.signInWithProvider('facebook');
+    this.socialLoginUseCase.execute('facebook');
   }
   loginWithTwitter() {
-    this.authService.signInWithProvider('twitter');
+    this.socialLoginUseCase.execute('twitter');
   }
   loginWithDiscord() {
-    this.authService.signInWithProvider('discord');
+    this.socialLoginUseCase.execute('discord');
   }
   credentials: LoginCredentials = {
     email: '',
