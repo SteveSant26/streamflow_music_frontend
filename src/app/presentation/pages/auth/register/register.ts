@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { RegisterUseCase } from "@app/domain/usecases/register.usecase";
 import {  RegisterCredentials } from "@app/domain/repositories/auth.repository";
 import { AuthService } from "../../../../shared/services/auth.service";
+import { SocialLoginUseCase } from "../../../../domain/usecases/social-login.usecase";
 import { MatIcon } from "@angular/material/icon";
 
 @Component({
@@ -18,20 +19,22 @@ import { MatIcon } from "@angular/material/icon";
 export class RegisterComponent {
   // ...existing code...
 
+  private readonly socialLoginUseCase = inject(SocialLoginUseCase);
+
   registerWithGoogle() {
-    this.authService.signInWithProvider('google');
+    this.socialLoginUseCase.execute('google');
   }
   registerWithGithub() {
-    this.authService.signInWithProvider('github');
+    this.socialLoginUseCase.execute('github');
   }
   registerWithFacebook() {
-    this.authService.signInWithProvider('facebook');
+    this.socialLoginUseCase.execute('facebook');
   }
   registerWithTwitter() {
-    this.authService.signInWithProvider('twitter');
+    this.socialLoginUseCase.execute('twitter');
   }
   registerWithDiscord() {
-    this.authService.signInWithProvider('discord');
+    this.socialLoginUseCase.execute('discord');
   }
   credentials: RegisterCredentials = {
     name: "",
