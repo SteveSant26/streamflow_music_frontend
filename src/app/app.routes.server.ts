@@ -1,4 +1,5 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
+import { ROUTES_CONFIG_AUTH } from './config/routes-auth.config';
 
 export const serverRoutes: ServerRoute[] = [
   {
@@ -42,11 +43,15 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
-    path: 'login',
+    path: ROUTES_CONFIG_AUTH.LOGIN.path,
     renderMode: RenderMode.Client,
   },
   {
-    path: 'register',
+    path: ROUTES_CONFIG_AUTH.REGISTER.path,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: ROUTES_CONFIG_AUTH.RESET_PASSWORD.path,
     renderMode: RenderMode.Client,
   },
   {
@@ -61,5 +66,4 @@ export const serverRoutes: ServerRoute[] = [
     path: 'currentSong',
     renderMode: RenderMode.Client,
   },
-  
 ];
