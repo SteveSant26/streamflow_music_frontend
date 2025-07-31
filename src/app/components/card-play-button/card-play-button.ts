@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: "app-card-play-button",
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: "./card-play-button.html",
   styleUrl: "./card-play-button.css",
   changeDetection: ChangeDetectionStrategy.OnPush,
