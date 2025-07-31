@@ -5,10 +5,11 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: "app-player-volume-control",
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: "./player-volume-control.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
