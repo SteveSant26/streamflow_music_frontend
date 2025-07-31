@@ -13,7 +13,7 @@
 
   <!-- Link principal de la playlist -->
   <a
-    [href]="'/playlist/' + playlist.id"
+    [routerLink]="['/playlist', playlist.id]"
     class="playlist-item transition-all duration-300 flex relative p-3 sm:p-4 overflow-hidden gap-3 pb-4 sm:pb-6 rounded-2xl w-full sm:w-44 flex-col hover:bg-gradient-to-b hover:from-gray-100 hover:to-transparent"
   >
     <!-- Imagen de la playlist -->

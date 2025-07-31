@@ -7,10 +7,13 @@ import {
 } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { isPlatformBrowser } from "@angular/common";
+import { AuthService } from "@app/shared/services/auth.service";
 
 @Injectable()
 export class AuthTokenInterceptor implements HttpInterceptor {
   private platformId = inject(PLATFORM_ID);
+  private authService = inject(AuthService);
+  private token = this.authService.session()?.access_token;
 
   constructor() {}
 
@@ -20,7 +23,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     // Solo agregar token en el navegador (no durante SSR)
     if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem("authToken");
+      const token = this.token;
 
       if (token) {
         console.log(

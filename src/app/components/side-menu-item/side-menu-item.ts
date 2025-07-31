@@ -5,10 +5,11 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: "app-side-menu-item",
-  imports: [],
+  imports: [RouterLink],
   templateUrl: "./side-menu-item.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

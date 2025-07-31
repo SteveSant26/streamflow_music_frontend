@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { User } from "../../models";
 
@@ -35,7 +34,6 @@ export class UserPerfilComponent implements OnInit {
   selectedImageFile: File | null = null;
 
   constructor(
-    readonly router: Router,
     readonly fb: FormBuilder,
     private readonly authService: AuthService,
   ) {
@@ -74,12 +72,6 @@ export class UserPerfilComponent implements OnInit {
       hasToken: !!token,
       token: token ? token.substring(0, 20) + "..." : null,
     });
-
-    if (!currentUserValue && !isAuth) {
-      console.log("❌ No hay usuario autenticado, redirigiendo al login");
-      this.router.navigate(["/login"]);
-      return;
-    }
 
     console.log("🔍 Cargando datos del usuario desde backend...");
 
@@ -131,12 +123,6 @@ export class UserPerfilComponent implements OnInit {
         console.error("❌ Error al cargar perfil:", error);
         this.errorMessage = "Error al cargar los datos del perfil";
         this.isLoading = false;
-
-        // Si hay error de autenticación, redirigir al login
-        if (error.status === 401) {
-          this.authService.logout();
-          this.router.navigate(["/login"]);
-        }
       },
     });
   }
