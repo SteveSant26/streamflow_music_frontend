@@ -10,6 +10,28 @@ import { User } from "../../domain/entities/user.entity";
 })
 export class AuthService {
   /**
+   * Inicia sesión/registro con proveedor social (OAuth) usando Supabase.
+   * Ejemplo de uso: this.authService.signInWithProvider('google')
+   */
+  async signInWithProvider(provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord') {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const { error } = await this.supabaseService.client.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      this.error.set(error.message);
+      console.error("OAuth sign in error:", error);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+  /**
    * Renueva la sesión de Supabase y retorna la nueva sesión (con el nuevo access_token).
    */
   async refreshSession(): Promise<Session | null> {
