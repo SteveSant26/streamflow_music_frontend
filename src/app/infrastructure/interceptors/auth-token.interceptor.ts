@@ -13,7 +13,6 @@ import { AuthService } from "@app/shared/services/auth.service";
 export class AuthTokenInterceptor implements HttpInterceptor {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly authService = inject(AuthService);
-  private readonly token = this.authService.session()?.access_token;
 
   constructor() {}
 
@@ -23,7 +22,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     // Solo agregar token en el navegador (no durante SSR)
     if (isPlatformBrowser(this.platformId)) {
-      const token = this.token;
+      const token = this.authService.session()?.access_token;
 
       if (token) {
         console.log(

@@ -8,7 +8,7 @@ import {
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "../../services/auth.service";
 import { isPlatformBrowser } from "@angular/common";
 
 @Injectable()
