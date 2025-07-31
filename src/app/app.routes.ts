@@ -68,6 +68,13 @@ export const routes: Routes = [
       import("./pages/library/library").then((m) => m.LibraryComponent),
   },
   {
+    path: "test-connection",
+    loadComponent: () =>
+      import("./components/connection-test/connection-test.component").then(
+        (m) => m.ConnectionTestComponent,
+      ),
+  },
+  {
     path: "**",
     redirectTo: "/home",
   },
