@@ -9,6 +9,22 @@ import { User } from "../../domain/entities/user.entity";
   providedIn: "root",
 })
 export class AuthService {
+  /**
+   * Renueva la sesión de Supabase y retorna la nueva sesión (con el nuevo access_token).
+   */
+  async refreshSession(): Promise<Session | null> {
+    try {
+      const { data, error } = await this.supabaseService.client.auth.refreshSession();
+      if (error) throw error;
+      this.session.set(data.session);
+      this._supabaseUser.set(data.session?.user ?? null);
+      this.isAuthenticated.set(!!data.session);
+      return data.session;
+    } catch (error) {
+      console.error("Error refreshing session:", error);
+      return null;
+    }
+  }
   private readonly supabaseService = inject(SupabaseService);
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);

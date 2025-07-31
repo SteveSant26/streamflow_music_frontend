@@ -8,7 +8,8 @@ import {
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
-import { AuthService } from "../../services/auth.service";
+import { from } from "rxjs";
+import { AuthService } from "@app/shared/services/auth.service";
 import { isPlatformBrowser } from "@angular/common";
 
 @Injectable()
@@ -124,10 +125,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    return this.authService.refreshToken().pipe(
-      switchMap(() => {
+    return from(this.authService.refreshSession()).pipe(
+      switchMap((session) => {
         // Token renovado exitosamente, reintentar la solicitud original
-        const newToken = this.authService.getAuthToken();
+        const newToken = session?.access_token;
+        if (!newToken) {
+          return throwError(() => new Error("Sesión expirada. Por favor, inicia sesión nuevamente"));
+        }
         const authRequest = request.clone({
           setHeaders: {
             Authorization: `Bearer ${newToken}`,
@@ -140,10 +144,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         console.warn("Error al renovar token:", refreshError);
         // Solo limpiar datos localmente para evitar bucles infinitos
         // No llamar logout() para evitar petición HTTP
-        return throwError(
-          () =>
-            new Error("Sesión expirada. Por favor, inicia sesión nuevamente"),
-        );
+        return throwError(() => new Error("Sesión expirada. Por favor, inicia sesión nuevamente"));
       }),
     );
   }
