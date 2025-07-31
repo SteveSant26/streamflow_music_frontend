@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl : "http://127.0.0.1:8000/",
+  apiUrl: "http://127.0.0.1:8000/",
   API_URL: "http://127.0.0.1:8000/",
   STORAGE_TOKEN_KEY: "app.token",
 

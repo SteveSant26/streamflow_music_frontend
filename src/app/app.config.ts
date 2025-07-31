@@ -1,15 +1,15 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, provideZoneChangeDetection } from "@angular/core";
+import { provideRouter } from "@angular/router";
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptors,
-} from '@angular/common/http';
-import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
-import { authInterceptor } from './shared/utils/auth-interceptor';
-import { authProviders } from './shared/providers/auth.providers';
-import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
+} from "@angular/common/http";
+import { routes } from "./app.routes";
+import { provideClientHydration } from "@angular/platform-browser";
+import { authInterceptor } from "./shared/utils/auth-interceptor";
+import { authProviders } from "./shared/providers/auth.providers";
+import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
