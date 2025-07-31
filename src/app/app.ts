@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { AuthService } from '@app/shared/services/auth.service';
 import { AsideMenu } from './components/aside-menu/aside-menu';
 import { Player } from './components/player/player';
 import { CommonModule } from '@angular/common';
@@ -11,10 +12,13 @@ import { filter } from 'rxjs';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class App implements OnInit {
   showLayout = true;
 
-  constructor(private readonly router: Router) {
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService
+  ) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -24,5 +28,9 @@ export class App {
           !event.url.includes('/register') &&
           !event.url.includes('/currentSong');
       });
+  }
+
+  ngOnInit() {
+    this.authService.refreshSession();
   }
 }
