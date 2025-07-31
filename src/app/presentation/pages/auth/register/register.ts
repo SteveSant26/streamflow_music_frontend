@@ -7,6 +7,7 @@ import {  RegisterCredentials } from "@app/domain/repositories/auth.repository";
 import { AuthService } from "../../../../shared/services/auth.service";
 import { SocialLoginUseCase } from "../../../../domain/usecases/social-login.usecase";
 import { MatIcon } from "@angular/material/icon";
+import { ROUTES_CONFIG_AUTH } from "@app/config/routes-auth.config";
 
 @Component({
   selector: "app-register",
@@ -17,6 +18,7 @@ import { MatIcon } from "@angular/material/icon";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
+  protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   // ...existing code...
 
   private readonly socialLoginUseCase = inject(SocialLoginUseCase);

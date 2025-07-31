@@ -7,6 +7,7 @@ import { LoginCredentials } from '../../../../domain/repositories/auth.repositor
 import { AuthService } from '../../../../shared/services/auth.service';
 import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
+import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -16,6 +17,7 @@ import { MatIcon } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
+  protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   // ...existing code...
 
   private readonly socialLoginUseCase = inject(SocialLoginUseCase);
