@@ -16,6 +16,11 @@
         <mat-icon>person</mat-icon>
         Mi Perfil
       </app-side-menu-item>
+
+      <app-side-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Cerrar Sesión
+      </app-side-menu-item>
       } @else {
       <app-side-menu-item [routerLink]="['/login']">
         <mat-icon>login</mat-icon>

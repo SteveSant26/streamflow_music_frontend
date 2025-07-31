@@ -11,9 +11,14 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AsideMenu {
-  private readonly authServie = inject(AuthService);
-  isAuthenticated = this.authServie.isAuthenticated();
-  user = this.authServie.user;
+  private readonly authService = inject(AuthService);
+  isAuthenticated = this.authService.isAuthenticated();
+  user = this.authService.user;
+
+  async logout() {
+    await this.authService.signOut();
+    window.location.href = '/login';
+  }
   // Mock data para las playlists
   playlists = [
     { id: 1, name: 'Liked Songs', cover: '/assets/playlists/playlist1.jpg' },
