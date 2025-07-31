@@ -20,6 +20,12 @@ export const routes: Routes = [
       import("./presentation/pages/auth/register/register").then(
         (m) => m.RegisterComponent,
       ),
+  },{
+    path: "reset-password",
+    loadComponent: () =>
+      import("./presentation/pages/auth/reset-password/reset-password").then(
+        (m) => m.ResetPasswordComponent,
+      ),
   },
   {
     path: "home",
