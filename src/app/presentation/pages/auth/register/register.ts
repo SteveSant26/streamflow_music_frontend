@@ -5,11 +5,12 @@ import { FormsModule } from "@angular/forms";
 import { RegisterUseCase } from "@app/domain/usecases/register.usecase";
 import {  RegisterCredentials } from "@app/domain/repositories/auth.repository";
 import { AuthService } from "../../../../shared/services/auth.service";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: "app-register",
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, MatIcon],
   templateUrl: "./register.html",
   styleUrls: ["./register.css"],
   changeDetection: ChangeDetectionStrategy.OnPush,

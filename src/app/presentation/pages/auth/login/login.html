@@ -97,4 +97,21 @@
   <p class="text-sm text-gray-500">
     © 2023 StreamFlow. Todos los derechos reservados.
   </p>
+  <div class="social-login mt-6 flex flex-col gap-2 items-center">
+    <button type="button" (click)="loginWithGoogle()" class="social-btn">
+      <mat-icon>google</mat-icon> Iniciar sesión con Google
+    </button>
+    <button type="button" (click)="loginWithGithub()" class="social-btn">
+      <mat-icon>github</mat-icon> Iniciar sesión con GitHub
+    </button>
+    <button type="button" (click)="loginWithFacebook()" class="social-btn">
+      <mat-icon>facebook</mat-icon> Iniciar sesión con Facebook
+    </button>
+    <button type="button" (click)="loginWithTwitter()" class="social-btn">
+      <mat-icon>twitter</mat-icon> Iniciar sesión con Twitter
+    </button>
+    <button type="button" (click)="loginWithDiscord()" class="social-btn">
+      <mat-icon>discord</mat-icon> Iniciar sesión con Discord
+    </button>
+  </div>
 </div>
