@@ -45,7 +45,8 @@ export class GlobalPlayerStateService {
    * Initialize the global player state - should be called once in the app
    */
   async initializePlayer(): Promise<void> {
-    if (this.isInitialized) {
+    if (this.isInitialized && this.audioElement && !this.audioElement.error) {
+      console.log('Player already initialized with working audio element');
       return;
     }
 
@@ -62,6 +63,9 @@ export class GlobalPlayerStateService {
         console.log('Creating new audio element');
         this.audioElement = new Audio();
         this.audioElement.preload = 'metadata';
+        
+        // Set up critical preservation listeners BEFORE setting to PlayerUseCase
+        this.setupAudioPreservationListeners();
         
         this.playerUseCase.setAudioElement(this.audioElement);
         
@@ -231,5 +235,38 @@ export class GlobalPlayerStateService {
     } catch (error) {
       console.error('Error restoring player state:', error);
     }
+  }
+
+  /**
+   * Set up critical audio preservation listeners to prevent state loss
+   */
+  private setupAudioPreservationListeners(): void {
+    if (!this.audioElement) return;
+
+    // Preserve current state whenever audio time changes significantly
+    this.audioElement.addEventListener('timeupdate', () => {
+      if (this.audioElement && this.audioElement.currentTime > 0) {
+        this.lastKnownCurrentTime = this.audioElement.currentTime;
+        this.lastKnownIsPlaying = !this.audioElement.paused;
+      }
+    });
+
+    // Preserve state when audio starts playing
+    this.audioElement.addEventListener('play', () => {
+      this.lastKnownIsPlaying = true;
+    });
+
+    // Preserve state when audio is paused
+    this.audioElement.addEventListener('pause', () => {
+      this.lastKnownIsPlaying = false;
+    });
+
+    // Prevent audio element from being garbage collected
+    this.audioElement.addEventListener('ended', () => {
+      // Keep the element alive even after song ends
+      console.log('Song ended, but preserving audio element');
+    });
+
+    console.log('Audio preservation listeners set up');
   }
 }

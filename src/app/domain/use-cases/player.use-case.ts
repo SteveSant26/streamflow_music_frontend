@@ -46,16 +46,19 @@ export class PlayerUseCase {
 
   // Audio Element Setup
   setAudioElement(audioElement: HTMLAudioElement): void {
-    // If we already have a working audio element, DON'T replace it
-    if (this.audio && !this.audio.error && this.audio.src) {
-      console.log(`[${this.instanceId}] Audio element already exists and working, keeping current one`);
+    // CRITICAL: If we already have a working audio element with current song loaded, DON'T replace it
+    if (this.audio && !this.audio.error && this.audio.src && 
+        this.audio.duration > 0 && this.audio.currentTime >= 0) {
+      console.log(`[${this.instanceId}] PROTECTING existing audio element - refusing replacement to prevent state loss`);
       
-      // Just ensure volume is synced
+      // Just ensure volume and event listeners are synced
       const currentState = this.playerStateSubject.value;
       this.audio.volume = currentState.volume;
+      this.setupEventListeners(); // Ensure event listeners are current
       return;
     }
     
+    // Only replace if we truly need to (no audio element or broken one)
     console.log(`[${this.instanceId}] Setting new audio element`);
     this.audio = audioElement;
     
@@ -67,6 +70,19 @@ export class PlayerUseCase {
     if (currentState.currentSong?.audioUrl) {
       this.audio.src = currentState.currentSong.audioUrl;
       console.log(`[${this.instanceId}] Restored audio source: ${currentState.currentSong.audioUrl}`);
+      
+      // If we had a current time, try to restore it
+      if (currentState.currentTime > 0) {
+        // Wait for metadata to load before setting currentTime
+        const restoreTime = () => {
+          if (this.audio && currentState.currentTime > 0) {
+            this.audio.currentTime = currentState.currentTime;
+            console.log(`[${this.instanceId}] Restored currentTime: ${currentState.currentTime}`);
+          }
+          this.audio?.removeEventListener('loadedmetadata', restoreTime);
+        };
+        this.audio.addEventListener('loadedmetadata', restoreTime);
+      }
     }
     
     this.setupEventListeners();
