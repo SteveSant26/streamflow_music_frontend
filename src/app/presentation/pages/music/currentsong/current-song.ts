@@ -71,7 +71,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   private setupPlayerStateSubscription(): void {
-    this.playerUseCase.getPlayerState()
+    this.globalPlayerState.getPlayerState$()
       .pipe(takeUntil(this.destroy$))
       .subscribe((playerState: PlayerState) => {
         this.updateCurrentSongView(playerState);
@@ -80,11 +80,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   private initializePlayer(): void {
-    // Cargar la playlist por defecto si no hay ninguna cargada
-    const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
-    if (defaultPlaylist) {
-      this.playerUseCase.loadPlaylist(defaultPlaylist);
-    }
+    // Ensure global player state is initialized
+    this.globalPlayerState.ensureInitialized();
   }
 
   private updateCurrentSongView(playerState: PlayerState): void {
@@ -129,12 +126,13 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   togglePlayPause() {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     if (this.currentSong) {
       if (this.currentSong.isPlaying) {
-        this.playerUseCase.pause();
+        playerUseCase.pause();
         console.log("Pausado");
       } else {
-        this.playerUseCase.resumeMusic().catch((error: any) => {
+        playerUseCase.resumeMusic().catch((error: any) => {
           console.error("Error al reanudar:", error);
         });
         console.log("Reproduciendo");
@@ -155,14 +153,16 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   skipPrevious() {
-    this.playerUseCase.playPrevious().catch((error: any) => {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.playPrevious().catch((error: any) => {
       console.error("Error al reproducir canción anterior:", error);
     });
     console.log("Canción anterior");
   }
 
   skipNext() {
-    this.playerUseCase.playNext().catch((error: any) => {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.playNext().catch((error: any) => {
       console.error("Error al reproducir siguiente canción:", error);
     });
     console.log("Siguiente canción");
@@ -176,7 +176,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     const newProgress = (clickX / width) * 100;
 
     // Usar el PlayerUseCase para hacer seek
-    this.playerUseCase.seekToPercentage(newProgress);
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.seekToPercentage(newProgress);
     console.log("Nuevo progreso:", newProgress + "%");
   }
 
