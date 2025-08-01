@@ -7,22 +7,22 @@ import { PlayerState } from '../../domain/entities/player-state.entity';
 import { MusicLibraryService } from '../../shared/services/music-library.service';
 import { Subject, takeUntil } from 'rxjs';
 
+// Import the original components
+import { PlayerControlButtonBar } from '../player-control-button-bar/player-control-button-bar';
+import { PlayerCurrentSong } from '../player-current-song/player-current-song';
+import { PlayerVolumeControl } from '../player-volume-control/player-volume-control';
+
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, PlayerControlButtonBar, PlayerCurrentSong, PlayerVolumeControl],
   template: `
     <div class="player-container" *ngIf="playerState">
-      <!-- Song Info -->
-      <div class="song-info">
-        <div class="album-cover" *ngIf="playerState.currentSong?.albumCover">
-          <img [src]="playerState.currentSong!.albumCover" [alt]="playerState.currentSong?.title || 'Album cover'" />
-        </div>
-        <div class="song-details">
-          <h3 class="song-title">{{ playerState.currentSong?.title || 'No song selected' }}</h3>
-          <p class="song-artist">{{ playerState.currentSong?.artist || '' }}</p>
-        </div>
-      </div>
+      <!-- Current Song Component -->
+      <app-player-current-song 
+        [song]="getCurrentSongForComponent()"
+        class="song-section">
+      </app-player-current-song>
 
       <!-- Progress Bar -->
       <div class="progress-section">
@@ -42,7 +42,7 @@ import { Subject, takeUntil } from 'rxjs';
       </div>
 
       <!-- Player Controls -->
-      <div class="player-controls">
+      <div class="controls-section">
         <button 
           mat-icon-button 
           (click)="onPrevious()"
@@ -51,16 +51,10 @@ import { Subject, takeUntil } from 'rxjs';
           <mat-icon>skip_previous</mat-icon>
         </button>
 
-        <button 
-          mat-icon-button 
-          class="play-pause-btn"
-          (click)="onPlayPause()"
-          [disabled]="!playerState.currentSong || playerState.isLoading"
-          [attr.aria-label]="playerState.isPlaying ? 'Pause' : 'Play'">
-          <mat-icon *ngIf="playerState.isLoading">hourglass_empty</mat-icon>
-          <mat-icon *ngIf="!playerState.isLoading && playerState.isPlaying">pause</mat-icon>
-          <mat-icon *ngIf="!playerState.isLoading && !playerState.isPlaying">play_arrow</mat-icon>
-        </button>
+        <app-player-control-button-bar
+          [isPlaying]="playerState.isPlaying && !playerState.isLoading"
+          (playPauseClick)="onPlayPause()">
+        </app-player-control-button-bar>
 
         <button 
           mat-icon-button 
@@ -89,26 +83,15 @@ import { Subject, takeUntil } from 'rxjs';
       </div>
 
       <!-- Volume Controls -->
-      <div class="volume-controls">
-        <button 
-          mat-icon-button 
-          (click)="onMuteToggle()"
-          [attr.aria-label]="playerState.isMuted ? 'Unmute' : 'Mute'">
-          <mat-icon *ngIf="playerState.isMuted || playerState.volume === 0">volume_off</mat-icon>
-          <mat-icon *ngIf="!playerState.isMuted && playerState.volume > 0 && playerState.volume <= 0.5">volume_down</mat-icon>
-          <mat-icon *ngIf="!playerState.isMuted && playerState.volume > 0.5">volume_up</mat-icon>
-        </button>
-        
-        <div class="volume-slider-container">
-          <input 
-            type="range"
-            class="volume-slider"
-            [value]="playerState.volume * 100"
-            [min]="0"
-            [max]="100"
-            [step]="1"
-            (input)="onVolumeChange($event)">
-        </div>
+      <app-player-volume-control
+        [volume]="playerState.volume"
+        (volumeChange)="onVolumeChange($event)"
+        class="volume-section">
+      </app-player-volume-control>
+
+      <!-- User interaction required message -->
+      <div class="interaction-message" *ngIf="showInteractionMessage">
+        <p>Click play to start music (browser requires user interaction)</p>
       </div>
     </div>
   `,
@@ -116,60 +99,18 @@ import { Subject, takeUntil } from 'rxjs';
     .player-container {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
       padding: 20px;
       background: #1a1a1a;
       border-radius: 12px;
       color: white;
-      max-width: 600px;
+      max-width: 800px;
       margin: 0 auto;
     }
 
-    .song-info {
+    .song-section {
       display: flex;
       align-items: center;
-      gap: 16px;
-    }
-
-    .album-cover {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #333;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .album-cover img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .song-details {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .song-title {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-      color: white;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .song-artist {
-      margin: 4px 0 0 0;
-      font-size: 14px;
-      color: #aaa;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .progress-section {
@@ -217,88 +158,61 @@ import { Subject, takeUntil } from 'rxjs';
       text-align: center;
     }
 
-    .player-controls {
+    .controls-section {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 16px;
     }
 
-    .play-pause-btn {
-      background: #1db954 !important;
-      color: white !important;
-      width: 48px;
-      height: 48px;
-    }
-
-    .player-controls button {
+    .controls-section button {
       color: #aaa;
     }
 
-    .player-controls button:hover:not(:disabled) {
+    .controls-section button:hover:not(:disabled) {
       color: white;
     }
 
-    .player-controls button.active {
+    .controls-section button.active {
       color: #1db954;
     }
 
-    .player-controls button:disabled {
+    .controls-section button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    .volume-controls {
+    .volume-section {
       display: flex;
-      align-items: center;
-      gap: 8px;
+      justify-content: center;
     }
 
-    .volume-controls button {
-      color: #aaa;
+    .interaction-message {
+      text-align: center;
+      padding: 12px;
+      background: rgba(29, 185, 84, 0.1);
+      border: 1px solid #1db954;
+      border-radius: 8px;
+      color: #1db954;
     }
 
-    .volume-controls button:hover {
-      color: white;
+    .interaction-message p {
+      margin: 0;
+      font-size: 14px;
     }
 
-    .volume-slider-container {
-      width: 100px;
-    }
+    @media (max-width: 768px) {
+      .player-container {
+        padding: 16px;
+        gap: 16px;
+      }
 
-    .volume-slider {
-      width: 100%;
-      height: 4px;
-      background: #535353;
-      border-radius: 2px;
-      outline: none;
-      appearance: none;
-      cursor: pointer;
-    }
-
-    .volume-slider::-webkit-slider-thumb {
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #1db954;
-      cursor: pointer;
-    }
-
-    .volume-slider::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #1db954;
-      cursor: pointer;
-      border: none;
+      .controls-section {
+        gap: 12px;
+      }
     }
 
     @media (max-width: 480px) {
-      .player-container {
-        padding: 16px;
-      }
-
       .progress-section {
         flex-direction: column;
         gap: 8px;
@@ -307,15 +221,12 @@ import { Subject, takeUntil } from 'rxjs';
       .progress-container {
         width: 100%;
       }
-
-      .volume-controls {
-        justify-content: center;
-      }
     }
   `]
 })
 export class PlayerComponent implements OnInit, OnDestroy {
   playerState: PlayerState | null = null;
+  showInteractionMessage = false;
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -340,6 +251,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(error => {
         console.error('Player error:', error);
+        if (error.includes('not allowed')) {
+          this.showInteractionMessage = true;
+        }
       });
 
     this.loadDefaultPlaylist();
@@ -350,35 +264,64 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  getCurrentSongForComponent(): any {
+    if (!this.playerState?.currentSong) return null;
+    
+    // Convert our Song entity to the format expected by PlayerCurrentSong component
+    return {
+      id: parseInt(this.playerState.currentSong.id) || 1,
+      title: this.playerState.currentSong.title,
+      artists: [this.playerState.currentSong.artist],
+      album: 'Unknown Album', // Our Song entity doesn't have album property
+      albumId: 1,
+      duration: this.formatTime(this.playerState.currentSong.duration),
+      image: this.playerState.currentSong.albumCover || '/assets/gorillaz2.jpg'
+    };
+  }
+
   private loadDefaultPlaylist(): void {
     const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
     if (defaultPlaylist && defaultPlaylist.songs.length > 0) {
       this.playerUseCase.loadPlaylist(defaultPlaylist);
-      this.playerUseCase.playSong(defaultPlaylist.songs[0]).catch(error => {
-        console.error('Failed to load first song:', error);
-      });
+      // Don't auto-play, wait for user interaction
     }
   }
 
   onPlayPause(): void {
-    if (!this.playerState?.currentSong) return;
+    if (!this.playerState?.currentSong) {
+      // Load first song if none is loaded
+      const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
+      if (defaultPlaylist && defaultPlaylist.songs.length > 0) {
+        this.playerUseCase.playSong(defaultPlaylist.songs[0]).catch(error => {
+          console.error('Failed to load song:', error);
+        });
+      }
+      return;
+    }
+
+    this.showInteractionMessage = false;
 
     if (this.playerState.isPlaying) {
       this.playerUseCase.pauseMusic();
     } else {
       this.playerUseCase.resumeMusic().catch(error => {
         console.error('Failed to resume music:', error);
+        if (error.message?.includes('not allowed')) {
+          this.showInteractionMessage = true;
+        }
       });
     }
   }
 
   onNext(): void {
+    this.showInteractionMessage = false;
     this.playerUseCase.playNext().catch(error => {
       console.error('Failed to play next song:', error);
     });
   }
 
   onPrevious(): void {
+    this.showInteractionMessage = false;
     this.playerUseCase.playPrevious().catch(error => {
       console.error('Failed to play previous song:', error);
     });
@@ -402,10 +345,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.playerUseCase.toggleMute();
   }
 
-  onVolumeChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const volume = parseInt(target.value, 10);
-    this.playerUseCase.adjustVolume(volume / 100);
+  onVolumeChange(volume: number): void {
+    this.playerUseCase.adjustVolume(volume);
   }
 
   onProgressChange(event: Event): void {

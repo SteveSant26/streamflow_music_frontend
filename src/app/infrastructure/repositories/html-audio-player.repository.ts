@@ -182,15 +182,8 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     }
 
     return new Promise((resolve, reject) => {
-      // Use online sample audio files for demo
-      const audioSources: Record<string, string> = {
-        'sample1': 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
-        'sample2': 'https://www.soundjay.com/misc/sounds/bell-ringing-01.wav',
-        'test-song': 'https://www.soundjay.com/misc/sounds/bell-ringing-02.wav'
-      };
-
-      // Use demo audio URL or fallback to local file
-      const audioUrl = audioSources[song.id] || `/assets/music/${song.id}.mp3`;
+      // Use local WAV files with fallback to silent data URL
+      const audioUrl = `/assets/music/${song.id}.wav`;
       
       this.audio!.src = audioUrl;
       this.updatePlayerState({ 
@@ -201,6 +194,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       const onCanPlay = () => {
         this.audio!.removeEventListener('canplay', onCanPlay);
         this.audio!.removeEventListener('error', onError);
+        this.updatePlayerState({ isLoading: false });
         resolve();
       };
 
@@ -208,8 +202,8 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
         this.audio!.removeEventListener('canplay', onCanPlay);
         this.audio!.removeEventListener('error', onError);
         
-        // Try fallback to a silent audio data URL if online sources fail
-        const silentAudio = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMeBzyR2vLmfTAFKH/L8N2QQAoUSLPn8KhVFApGnt/yvmMcBz2S2/Lffi8FKH/M89+PQAoUUrDn8KlSFgtHpODttmQcBzuR2fLdfS8FK4DJ8d+PQAoUU7Dn8KhSFgtHpd/ttmQcBjiS2vLdfS8FKH/L8N2QQAoUT7Ln8KpTFwpJouHvvmUdBkK';
+        // Use a simple silent audio data URL as fallback
+        const silentAudio = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
         
         this.audio!.src = silentAudio;
         this.updatePlayerState({ isLoading: false });
@@ -219,6 +213,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
 
       this.audio!.addEventListener('canplay', onCanPlay);
       this.audio!.addEventListener('error', onError);
+      this.audio!.load(); // Force load
     });
   }
 
