@@ -4,7 +4,7 @@ import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthService } from '@shared/services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
-import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
+import { ROUTES_CONFIG_AUTH } from '@app/config/routes-config/routes-auth.config';
 @Component({
   selector: 'app-aside-menu',
   imports: [RouterLink, SideMenuItem, SideMenuCard, MatIconModule],

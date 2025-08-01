@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
+import { ROUTES_CONFIG_AUTH } from '@app/config/routes-config/routes-auth.config';
 export const AUTH_ROUTES: Routes = [
   {
     path: ROUTES_CONFIG_AUTH.LOGIN.path,
