@@ -22,28 +22,32 @@ export class MusicLibraryService {
         title: 'Demo Track 1',
         artist: 'Test Artist',
         duration: 0, // Will be loaded dynamically from audio file
-        albumCover: '/assets/gorillaz2.jpg'
+        albumCover: '/assets/gorillaz2.jpg',
+        audioUrl: '/assets/music/1.mp3'
       },
       {
         id: '2',
         title: 'Demo Track 2',
         artist: 'Test Artist',
         duration: 0, // Will be loaded dynamically from audio file
-        albumCover: '/assets/gorillaz2.jpg'
+        albumCover: '/assets/gorillaz2.jpg',
+        audioUrl: '/assets/music/2.mp3'
       },
       {
         id: '3',
         title: 'Demo Track 3',
         artist: 'Test Artist',
         duration: 0, // Will be loaded dynamically from audio file
-        albumCover: '/assets/gorillazzzzz.jpg'
+        albumCover: '/assets/gorillazzzzz.jpg',
+        audioUrl: '/assets/music/3.wav'
       },
       {
         id: 'TheNightWeMet',
         title: 'The Night We Met',
         artist: 'Gorillaz',
         duration: 0, // Will be loaded dynamically from audio file
-        albumCover: '/assets/gorillaz2.jpg'
+        albumCover: '/assets/gorillaz2.jpg',
+        audioUrl: '/assets/music/TheNightWeMet.mp3'
       }
     ];
 

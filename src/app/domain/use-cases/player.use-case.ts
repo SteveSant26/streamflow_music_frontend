@@ -121,22 +121,8 @@ export class PlayerUseCase {
   async playSong(song: Song): Promise<void> {
     if (!this.audio) throw new Error('Audio element not set');
     
-    // Map song IDs to their correct file formats
-    let audioUrl: string;
-    switch (song.id) {
-      case '1':
-      case '2':
-      case 'TheNightWeMet':
-        audioUrl = `/assets/music/${song.id}.mp3`;
-        break;
-      case '3':
-        audioUrl = `/assets/music/${song.id}.wav`;
-        break;
-      default:
-        audioUrl = `/assets/music/${song.id}.mp3`; // Default to mp3
-    }
-    
-    this.audio.src = audioUrl;
+    // Use the dynamic audioUrl from the song entity
+    this.audio.src = song.audioUrl;
     this.updatePlayerState({ 
       currentSong: song,
       isLoading: true 
