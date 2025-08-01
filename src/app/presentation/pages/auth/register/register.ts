@@ -32,17 +32,24 @@ export class RegisterComponent {
 
   isLoading = signal(false);
   error = signal<string | null>(null);
+  success = signal<string | null>(null);
 
   async onRegister(): Promise<void> {
     if (this.isLoading()) return;
 
     this.isLoading.set(true);
     this.error.set(null);
+    this.success.set(null);
 
     try {
       const result = await this.registerUseCase.execute(this.credentials);
       console.log('Register successful:', result);
-      this.router.navigate(['/home']);
+      this.success.set('¡Registro exitoso! Bienvenido a StreamFlow Music.');
+      
+      // Redirigir después de mostrar el mensaje de éxito
+      setTimeout(() => {
+        this.router.navigate(['/home']);
+      }, 2000);
     } catch (error) {
       this.handleError(error);
     } finally {
