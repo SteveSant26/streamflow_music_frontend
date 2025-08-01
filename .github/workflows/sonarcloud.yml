@@ -17,19 +17,16 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: "20"
-          cache: "npm"
+          bun-version: latest
 
-      - name: Clean and install dependencies
-        run: |
-          rm -rf node_modules package-lock.json
-          npm install --legacy-peer-deps
+      - name: Install dependencies with Bun
+        run: bun install
 
       - name: Run tests with coverage
-        run: npm run test:sonar
+        run: bun run test:sonar
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
