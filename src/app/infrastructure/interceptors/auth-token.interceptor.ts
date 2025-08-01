@@ -7,7 +7,7 @@ import {
 } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { isPlatformBrowser } from "@angular/common";
-import { AuthStateService } from "@app/domain/services/auth-state.service";
+import { AuthStateService } from "@app/domain/services/auth-state-service";
 
 @Injectable()
 export class AuthTokenInterceptor implements HttpInterceptor {
