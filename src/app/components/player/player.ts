@@ -11,6 +11,10 @@ import { PlayerControlButtonBar } from "../player-control-button-bar/player-cont
 import { PlayerCurrentSong } from "../player-current-song/player-current-song";
 import { PlayerSoundControl } from "../player-sound-control/player-sound-control";
 import { PlayerVolumeControl } from "../player-volume-control/player-volume-control";
+import { PlayerUseCase } from '../../domain/use-cases/player.use-case';
+import { PlayerState } from '../../domain/entities/player-state.entity';
+import { MusicLibraryService } from '../../shared/services/music-library.service';
+import { Subject, takeUntil } from 'rxjs';
 
 interface Song {
   id: number;
@@ -49,7 +53,12 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("audioElement", { static: false })
   audioRef!: ElementRef<HTMLAudioElement>;
 
-  // Mock state para el reproductor
+  // State from Clean Architecture
+  playerState: PlayerState | null = null;
+  showInteractionMessage = false;
+  private readonly destroy$ = new Subject<void>();
+
+  // Legacy state for template compatibility
   currentMusic: CurrentMusic = {
     song: null,
     playlist: null,
@@ -59,21 +68,61 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   isPlaying = false;
   volume = 0.5;
 
+  constructor(
+    private readonly playerUseCase: PlayerUseCase,
+    private readonly musicLibraryService: MusicLibraryService
+  ) {}
+
   ngOnInit(): void {
-    // Inicializar con una canción mock
-    this.currentMusic = {
-      song: {
-        id: 1,
-        title: "Bohemian Rhapsody",
-        artists: ["Queen"],
-        album: "A Night at the Opera",
-        albumId: 101,
-        duration: "5:55",
-        image: "/assets/playlists/playlist1.jpg",
-      },
-      playlist: { id: 101 },
-      songs: [],
-    };
+    // Subscribe to player state from Clean Architecture
+    this.playerUseCase.getPlayerState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(state => {
+        this.playerState = state;
+        this.updateLegacyState(state);
+      });
+
+    this.playerUseCase.onSongEnd()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        // Song ended - handled by use case
+      });
+
+    this.playerUseCase.onError()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(error => {
+        console.error('Player error:', error);
+        if (error.includes('not allowed')) {
+          this.showInteractionMessage = true;
+        }
+      });
+
+    this.loadDefaultPlaylist();
+  }
+
+  private updateLegacyState(state: PlayerState): void {
+    this.isPlaying = state.isPlaying;
+    this.volume = state.volume;
+    
+    if (state.currentSong) {
+      this.currentMusic.song = {
+        id: parseInt(state.currentSong.id) || 1,
+        title: state.currentSong.title,
+        artists: [state.currentSong.artist],
+        album: 'Unknown Album',
+        albumId: 1,
+        duration: this.formatTime(state.currentSong.duration),
+        image: state.currentSong.albumCover || '/assets/gorillaz2.jpg'
+      };
+    }
+  }
+
+  private loadDefaultPlaylist(): void {
+    const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
+    if (defaultPlaylist && defaultPlaylist.songs.length > 0) {
+      this.playerUseCase.loadPlaylist(defaultPlaylist);
+      // Don't auto-play, wait for user interaction
+    }
   }
 
   ngAfterViewInit(): void {
@@ -83,6 +132,9 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    
     if (
       this.audioRef?.nativeElement &&
       typeof this.audioRef.nativeElement.pause === "function"
@@ -102,27 +154,52 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   togglePlayPause(): void {
-    this.isPlaying = !this.isPlaying;
-    this.isPlaying ? this.play() : this.pause();
-  }
+    if (!this.playerState?.currentSong) {
+      // Load first song if none is loaded
+      const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
+      if (defaultPlaylist && defaultPlaylist.songs.length > 0) {
+        this.playerUseCase.playSong(defaultPlaylist.songs[0]).catch(error => {
+          console.error('Failed to load song:', error);
+        });
+      }
+      return;
+    }
 
-  setVolume(newVolume: number): void {
-    this.volume = newVolume;
-    if (this.audioRef?.nativeElement) {
-      this.audioRef.nativeElement.volume = this.volume;
+    this.showInteractionMessage = false;
+
+    if (this.playerState.isPlaying) {
+      this.playerUseCase.pauseMusic();
+    } else {
+      this.playerUseCase.resumeMusic().catch(error => {
+        console.error('Failed to resume music:', error);
+        if (error.message?.includes('not allowed')) {
+          this.showInteractionMessage = true;
+        }
+      });
     }
   }
 
+  setVolume(newVolume: number): void {
+    this.playerUseCase.adjustVolume(newVolume);
+  }
+
   getNextSong(): Song | null {
-    // Mock: devolver la misma canción para el prototipo
+    // Use Clean Architecture for next song logic
     return this.currentMusic.song;
   }
 
   onNextSong(): void {
-    const nextSong = this.getNextSong();
-    if (nextSong) {
-      this.currentMusic = { ...this.currentMusic, song: nextSong };
-    }
+    this.showInteractionMessage = false;
+    this.playerUseCase.playNext().catch(error => {
+      console.error('Failed to play next song:', error);
+    });
+  }
+
+  onPreviousSong(): void {
+    this.showInteractionMessage = false;
+    this.playerUseCase.playPrevious().catch(error => {
+      console.error('Failed to play previous song:', error);
+    });
   }
 
   onPlayPauseClick(): void {
@@ -131,5 +208,27 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
   onVolumeChange(volume: number): void {
     this.setVolume(volume);
+  }
+
+  onRepeat(): void {
+    if (!this.playerState) return;
+
+    const modes: ('none' | 'one' | 'all')[] = ['none', 'one', 'all'];
+    const currentIndex = modes.indexOf(this.playerState.repeatMode);
+    const nextMode = modes[(currentIndex + 1) % modes.length];
+    
+    this.playerUseCase.setRepeat(nextMode);
+  }
+
+  onShuffle(): void {
+    this.playerUseCase.enableShuffle();
+  }
+
+  formatTime(seconds: number): string {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 }

@@ -13,6 +13,8 @@
       <app-player-control-button-bar
         [isPlaying]="isPlaying"
         (playPauseClick)="onPlayPauseClick()"
+        (previousClick)="onPreviousSong()"
+        (nextClick)="onNextSong()"
       >
       </app-player-control-button-bar>
 
@@ -22,7 +24,7 @@
       <audio
         #audioElement
         (ended)="onNextSong()"
-        [src]="currentMusic.song ? '/music/' + currentMusic.playlist?.id + '/0' + currentMusic.song.id + '.mp3' : ''"
+        [src]="currentMusic.song ? '/assets/music/' + currentMusic.song.id + '.wav' : ''"
       ></audio>
     </div>
   </div>

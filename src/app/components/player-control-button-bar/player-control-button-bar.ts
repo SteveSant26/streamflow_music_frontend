@@ -17,16 +17,18 @@ import { MatIconModule } from "@angular/material/icon";
 export class PlayerControlButtonBar {
   @Input() isPlaying = false;
   @Output() playPauseClick = new EventEmitter<void>();
+  @Output() previousClick = new EventEmitter<void>();
+  @Output() nextClick = new EventEmitter<void>();
 
   onPlayPauseClick(): void {
     this.playPauseClick.emit();
   }
 
   onPreviousClick(): void {
-    console.log("Previous song");
+    this.previousClick.emit();
   }
 
   onNextClick(): void {
-    console.log("Next song");
+    this.nextClick.emit();
   }
 }
