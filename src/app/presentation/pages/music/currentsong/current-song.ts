@@ -138,6 +138,10 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       if (this.currentSong.isPlaying) {
         playerUseCase.pause();
         console.log("Pausado");
+        
+        // Immediately update local state for instant UI feedback
+        this.currentSong = { ...this.currentSong, isPlaying: false };
+        this.cdr.detectChanges();
       } else {
         // Make sure the player is properly initialized before resuming
         this.globalPlayerState.ensureInitialized();
@@ -146,8 +150,18 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         const currentState = this.globalPlayerState.getPlayerState();
         this.updateCurrentSongView(currentState);
         
+        // Immediately update local state for instant UI feedback
+        this.currentSong = { ...this.currentSong, isPlaying: true };
+        this.cdr.detectChanges();
+        
         playerUseCase.resumeMusic().catch((error: any) => {
           console.error("Error al reanudar:", error);
+          // Revert state on error
+          if (this.currentSong) {
+            this.currentSong = { ...this.currentSong, isPlaying: false };
+            this.cdr.detectChanges();
+          }
+          
           // If there's an error, try to reinitialize the player
           setTimeout(() => {
             this.globalPlayerState.ensureInitialized();
@@ -201,19 +215,55 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     const width = rect.width;
     const newProgress = (clickX / width) * 100;
 
+    // Immediately update local state for instant visual feedback
+    if (this.currentSong) {
+      const newCurrentTime = (newProgress / 100) * (parseFloat(this.currentSong.duration.toString()) || 0);
+      this.currentSong = { 
+        ...this.currentSong, 
+        progress: newProgress,
+        currentTime: this.formatTime(newCurrentTime)
+      };
+      this.cdr.detectChanges();
+    }
+
     // Usar el PlayerUseCase para hacer seek
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.seekToPercentage(newProgress);
     console.log("Nuevo progreso:", newProgress + "%");
+    
+    // Force state synchronization after seek
+    setTimeout(() => {
+      const currentState = this.globalPlayerState.getPlayerState();
+      if (currentState) {
+        this.updateCurrentSongView(currentState);
+      }
+    }, 50);
   }
 
   onVolumeChange(event: Event) {
     const input = event.target as HTMLInputElement;
     const volume = parseFloat(input.value) / 100;
     
+    // Immediately update local state for instant visual feedback
+    if (this.currentSong) {
+      this.currentSong = { 
+        ...this.currentSong, 
+        volume: volume
+      };
+      this.cdr.detectChanges();
+    }
+    
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.setVolume(volume);
     console.log("Nuevo volumen:", volume);
+    
+    // Force state synchronization after volume change
+    setTimeout(() => {
+      const currentState = this.globalPlayerState.getPlayerState();
+      if (currentState) {
+        this.updateCurrentSongView(currentState);
+      }
+    }, 50);
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {
