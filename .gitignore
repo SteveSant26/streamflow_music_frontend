@@ -43,10 +43,10 @@ Thumbs.db
 
 # env
 .env
-*environment.ts
-*environment.development.ts
-/src/environments
-*environment.ts
-*environment.development.ts
-*environment.production.ts
+# *environment.ts
+# *environment.development.ts
+# /src/environments
+# *environment.ts
+# *environment.development.ts
+# *environment.production.ts
 /environments
