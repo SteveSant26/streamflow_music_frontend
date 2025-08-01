@@ -8,6 +8,7 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { authProviders } from './infrastructure/providers/auth.providers';
 import { playerProviders } from './infrastructure/providers/player.providers';
+import { paymentProviders } from './infrastructure/providers/payment.providers';
 import { AuthTokenInterceptor } from './infrastructure/interceptors/auth-token.interceptor';
 import { HttpErrorInterceptor } from './infrastructure/interceptors/http-error.interceptor';
 
@@ -29,5 +30,6 @@ export const appConfig: ApplicationConfig = {
     },
     ...authProviders,
     ...playerProviders,
+    ...paymentProviders,
   ],
 };

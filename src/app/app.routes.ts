@@ -63,6 +63,38 @@ export const routes: Routes = [
       import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
   },
   {
+    path: 'subscription',
+    children: [
+      {
+        path: 'plans',
+        loadComponent: () =>
+          import('./pages/subscription/subscription-plans/subscription-plans.component').then(
+            (m) => m.SubscriptionPlansComponent
+          ),
+      },
+      {
+        path: 'success',
+        loadComponent: () =>
+          import('./pages/subscription/subscription-success/subscription-success.component').then(
+            (m) => m.SubscriptionSuccessComponent
+          ),
+      },
+      {
+        path: 'manage',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/subscription/subscription-management/subscription-management.component').then(
+            (m) => m.SubscriptionManagementComponent
+          ),
+      },
+      {
+        path: '',
+        redirectTo: 'plans',
+        pathMatch: 'full'
+      }
+    ]
+  },
+  {
     path: 'test-connection',
     loadComponent: () =>
       import('./components/connection-test/connection-test.component').then(
