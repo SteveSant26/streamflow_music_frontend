@@ -259,6 +259,10 @@ export class PlayerUseCase {
     return this.playerStateSubject.asObservable();
   }
 
+  getCurrentPlayerState(): PlayerState {
+    return this.playerStateSubject.value;
+  }
+
   getCurrentSong(): Song | null {
     return this.playerStateSubject.value.currentSong;
   }
