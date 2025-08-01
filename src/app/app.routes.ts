@@ -55,12 +55,12 @@ export const routes: Routes = [
     path: 'profile',
     loadComponent: () =>
       import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
+    canActivate: [authGuard],
   },
   {
     path: 'library',
     loadComponent: () =>
       import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
-    canActivate: [authGuard],
   },
   {
     path: 'test-connection',

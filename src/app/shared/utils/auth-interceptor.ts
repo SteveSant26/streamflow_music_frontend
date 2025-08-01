@@ -1,10 +1,17 @@
 import { HttpInterceptorFn } from "@angular/common/http";
 import { inject } from "@angular/core";
-import { AuthService } from "@app/shared/services/auth.service";
+import { AuthService } from "../../services/auth.service";
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const token = authService.session()?.access_token;
+  const token = authService.getAuthToken();
+
+  console.log('🔑 AuthInterceptor - Procesando petición:', {
+    url: req.url,
+    method: req.method,
+    hasToken: !!token,
+    token: token ? token.substring(0, 20) + '...' : 'No token'
+  });
 
   if (token) {
     const cloned = req.clone({
