@@ -8,8 +8,7 @@ import {
 } from "@angular/core";
 import { CommonModule, DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { Router } from "@angular/router";
-import { PlayerUseCase } from "../../../../domain/use-cases/player.use-case";
-import { MusicLibraryService } from "../../../../shared/services/music-library.service";
+import { GlobalPlayerStateService } from "../../../../shared/services/global-player-state.service";
 import { PlayerState } from "../../../../domain/entities/player-state.entity";
 import { Subject, takeUntil } from "rxjs";
 
@@ -42,8 +41,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
-    private readonly playerUseCase: PlayerUseCase,
-    private readonly musicLibraryService: MusicLibraryService,
+    private readonly globalPlayerState: GlobalPlayerStateService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {}
