@@ -4,6 +4,7 @@ import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthService } from '@shared/services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
+import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
 @Component({
   selector: 'app-aside-menu',
   imports: [RouterLink, SideMenuItem, SideMenuCard, MatIconModule],
@@ -11,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AsideMenu {
+  protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   private readonly authService = inject(AuthService);
   isAuthenticated = this.authService.isAuthenticated();
   user = this.authService.user;

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './shared/guards/auth.guard';
-import { AUTH_ROUTES } from './app.routes.auth';
+import { ROUTES_CONFIG_AUTH } from './config/routes-auth.config';
+import { AUTH_ROUTES } from './routes/app.routes.auth';
 
 export const routes: Routes = [
   {
@@ -8,7 +9,10 @@ export const routes: Routes = [
     redirectTo: "/home",
     pathMatch: "full",
   },
-  ...AUTH_ROUTES,
+  {
+    path: ROUTES_CONFIG_AUTH.BASE_URL.path,
+    children: AUTH_ROUTES,
+  },
   {
     path: "home",
     loadComponent: () =>

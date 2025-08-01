@@ -1,32 +1,32 @@
 <nav class="flex flex-col flex-1 gap-4 p-4">
   <div class="bg-white backdrop-blur-sm rounded-xl p-4 border border-black/10 shadow-md">
     <ul class="space-y-2">
-      <app-side-menu-item [routerLink]="['/home']">
+      <app-side-menu-item [href]="'/home'">
         <mat-icon>home</mat-icon>
         Inicio
       </app-side-menu-item>
 
-      <app-side-menu-item [routerLink]="['/search']">
+      <app-side-menu-item [href]="'/search'">
         <mat-icon>search</mat-icon>
         Buscar
       </app-side-menu-item>
 
       @if (user()) {
-      <app-side-menu-item [routerLink]="['/profile']">
+      <app-side-menu-item [href]="'/profile'">
         <mat-icon>person</mat-icon>
         Mi Perfil
       </app-side-menu-item>
 
-      <app-side-menu-item (click)="logout()">
+      <app-side-menu-item [href]="'#'" (click)="logout()">
         <mat-icon>logout</mat-icon>
         Cerrar Sesión
       </app-side-menu-item>
       } @else {
-      <app-side-menu-item [routerLink]="['/login']">
+      <app-side-menu-item [href]="ROUTES_CONFIG_AUTH.LOGIN.link">
         <mat-icon>login</mat-icon>
         Iniciar Sesión
       </app-side-menu-item>
-      <app-side-menu-item [routerLink]="['/register']">
+      <app-side-menu-item [href]="ROUTES_CONFIG_AUTH.REGISTER.link">
         <mat-icon>person_add</mat-icon>
         Registrarse
       </app-side-menu-item>

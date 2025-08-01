@@ -43,15 +43,15 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
-    path: ROUTES_CONFIG_AUTH.LOGIN.path,
+    path: `${ROUTES_CONFIG_AUTH.BASE_URL.path}/${ROUTES_CONFIG_AUTH.LOGIN.path}`,
     renderMode: RenderMode.Client,
   },
   {
-    path: ROUTES_CONFIG_AUTH.REGISTER.path,
+    path: `${ROUTES_CONFIG_AUTH.BASE_URL.path}/${ROUTES_CONFIG_AUTH.REGISTER.path}`,
     renderMode: RenderMode.Client,
   },
   {
-    path: ROUTES_CONFIG_AUTH.RESET_PASSWORD.path,
+    path: `${ROUTES_CONFIG_AUTH.BASE_URL.path}/${ROUTES_CONFIG_AUTH.RESET_PASSWORD.path}`,
     renderMode: RenderMode.Client,
   },
   {
