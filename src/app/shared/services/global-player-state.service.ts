@@ -26,6 +26,13 @@ export class GlobalPlayerStateService {
       return;
     }
 
+    // Only initialize audio in browser environment
+    if (!isPlatformBrowser(this.platformId)) {
+      console.log('Skipping audio initialization on server');
+      this.isInitialized = true;
+      return;
+    }
+
     try {
       // Create audio element if not exists
       if (!this.audioElement) {
@@ -54,6 +61,10 @@ export class GlobalPlayerStateService {
    * Set audio element reference from any component
    */
   setAudioElement(audioElement: HTMLAudioElement): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    
     if (!this.audioElement) {
       this.audioElement = audioElement;
       this.playerUseCase.setAudioElement(audioElement);
