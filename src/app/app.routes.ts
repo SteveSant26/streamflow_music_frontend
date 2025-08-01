@@ -27,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'currentSong',
     loadComponent: () =>
-      import('./pages/currentsong/current-song').then(
+      import('./presentation/pages/music/currentsong/current-song').then(
         (m) => m.CurrentSongComponent,
       ),
   },
