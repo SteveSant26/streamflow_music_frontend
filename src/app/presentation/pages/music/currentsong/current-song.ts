@@ -8,9 +8,13 @@ import {
 } from "@angular/core";
 import { CommonModule, DOCUMENT, isPlatformBrowser } from "@angular/common";
 import { Router } from "@angular/router";
+import { PlayerUseCase } from "../../../../domain/use-cases/player.use-case";
+import { MusicLibraryService } from "../../../../shared/services/music-library.service";
+import { PlayerState } from "../../../../domain/entities/player-state.entity";
+import { Subject, takeUntil } from "rxjs";
 
-interface Song {
-  id: number;
+interface CurrentSongView {
+  id: string;
   title: string;
   artist: string;
   album: string;
@@ -31,18 +35,23 @@ interface Song {
   styleUrls: ["./current-song.css"],
 })
 export class CurrentSongComponent implements OnInit, OnDestroy {
-  currentSong: Song | null = null;
+  currentSong: CurrentSongView | null = null;
   showLyricsPanel = false;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
+    private readonly playerUseCase: PlayerUseCase,
+    private readonly musicLibraryService: MusicLibraryService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {}
 
   ngOnInit() {
-    this.loadCurrentSong();
+    this.setupPlayerStateSubscription();
+    this.initializePlayer();
+    
     // Evitar scroll en el body solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
       this.document.body.style.overflow = "hidden";
@@ -52,12 +61,59 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    
     // Restaurar scroll cuando se salga de la vista solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
       this.document.body.style.overflow = "";
       this.document.body.style.margin = "";
       this.document.body.style.padding = "";
     }
+  }
+
+  private setupPlayerStateSubscription(): void {
+    this.playerUseCase.getPlayerState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((playerState: PlayerState) => {
+        this.updateCurrentSongView(playerState);
+        this.cdr.detectChanges();
+      });
+  }
+
+  private initializePlayer(): void {
+    // Cargar la playlist por defecto si no hay ninguna cargada
+    const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
+    if (defaultPlaylist) {
+      this.playerUseCase.loadPlaylist(defaultPlaylist);
+    }
+  }
+
+  private updateCurrentSongView(playerState: PlayerState): void {
+    if (playerState.currentSong) {
+      this.currentSong = {
+        id: playerState.currentSong.id,
+        title: playerState.currentSong.title,
+        artist: playerState.currentSong.artist,
+        album: playerState.currentSong.artist, // Usando artist como album por ahora
+        duration: this.formatTime(playerState.duration),
+        currentTime: this.formatTime(playerState.currentTime),
+        progress: playerState.progress,
+        cover: playerState.currentSong.albumCover || '/assets/gorillaz2.jpg',
+        gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        isPlaying: playerState.isPlaying,
+        lyrics: "🎵 Lyrics not available yet 🎵"
+      };
+    } else {
+      this.currentSong = null;
+    }
+  }
+
+  private formatTime(seconds: number): string {
+    if (!seconds || seconds === 0) return "0:00";
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 
   onImageLoad(event: Event) {
@@ -76,8 +132,15 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   togglePlayPause() {
     if (this.currentSong) {
-      this.currentSong.isPlaying = !this.currentSong.isPlaying;
-      console.log(this.currentSong.isPlaying ? "Reproduciendo" : "Pausado");
+      if (this.currentSong.isPlaying) {
+        this.playerUseCase.pause();
+        console.log("Pausado");
+      } else {
+        this.playerUseCase.resumeMusic().catch((error: any) => {
+          console.error("Error al reanudar:", error);
+        });
+        console.log("Reproduciendo");
+      }
     }
   }
 
@@ -94,13 +157,17 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   skipPrevious() {
+    this.playerUseCase.playPrevious().catch((error: any) => {
+      console.error("Error al reproducir canción anterior:", error);
+    });
     console.log("Canción anterior");
-    // Aquí iría la lógica para cambiar a la canción anterior
   }
 
   skipNext() {
+    this.playerUseCase.playNext().catch((error: any) => {
+      console.error("Error al reproducir siguiente canción:", error);
+    });
     console.log("Siguiente canción");
-    // Aquí iría la lógica para cambiar a la siguiente canción
   }
 
   onProgressClick(event: MouseEvent) {
@@ -110,10 +177,9 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     const width = rect.width;
     const newProgress = (clickX / width) * 100;
 
-    if (this.currentSong) {
-      this.currentSong.progress = newProgress;
-      console.log("Nuevo progreso:", newProgress + "%");
-    }
+    // Usar el PlayerUseCase para hacer seek
+    this.playerUseCase.seekToPercentage(newProgress);
+    console.log("Nuevo progreso:", newProgress + "%");
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {
@@ -219,21 +285,5 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     } else {
       return `linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 50%, ${lighterColor} 100%)`;
     }
-  }
-
-  private loadCurrentSong() {
-    // Simulando datos de la canción actual
-    this.currentSong = {
-      id: 1,
-      title: "Feel Good Inc.",
-      artist: "Gorillaz",
-      album: "Demon Days",
-      duration: "3:41",
-      currentTime: "1:23",
-      progress: 37,
-      cover: "/assets/gorillaz2.jpg",
-      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      isPlaying: true,
-    };
   }
 }
