@@ -57,6 +57,11 @@ export const routes: Routes = [
       import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
   },
   {
+    path: 'subscription-plans',
+    loadComponent: () =>
+      import('./pages/subscription-plans/subscription-plans').then((m) => m.SubscriptionPlansComponent),
+  },
+  {
     path: 'library',
     loadComponent: () =>
       import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
