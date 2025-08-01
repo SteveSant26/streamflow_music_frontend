@@ -18,6 +18,7 @@ import {
   RegisterError,
   NetworkError,
 } from '@app/domain/errors/auth.errors';
+import { AuthStateService } from '@app/domain/services/auth-state.service';
 
 @Component({
   selector: 'app-register',
@@ -33,6 +34,7 @@ export class RegisterComponent {
   private readonly socialLoginUseCase = inject(SocialLoginUseCase);
   private readonly registerUseCase = inject(RegisterUseCase);
   private readonly router = inject(Router);
+  private readonly authStateService = inject(AuthStateService);
 
   credentials: RegisterCredentials = {
     email: '',
@@ -54,6 +56,14 @@ export class RegisterComponent {
     try {
       const result = await this.registerUseCase.execute(this.credentials);
       console.log('Register successful:', result);
+      
+      // Actualizar el AuthStateService con la sesión
+      this.authStateService.updateSession({
+        user: result.user,
+        isAuthenticated: true,
+        token: result.token
+      });
+      
       this.success.set('¡Registro exitoso! Bienvenido a StreamFlow Music.');
 
       // Redirigir después de mostrar el mensaje de éxito

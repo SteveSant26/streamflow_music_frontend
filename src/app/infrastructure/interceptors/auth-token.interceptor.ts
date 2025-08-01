@@ -17,7 +17,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(
-    request: HttpRequest<unknown>,
+    request: HttpRequest<unknown>,  
     next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     // Solo agregar token en el navegador (no durante SSR)
