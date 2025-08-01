@@ -11,12 +11,20 @@ import { Observable } from 'rxjs';
 export class GlobalPlayerStateService {
   private isInitialized = false;
   private audioElement: HTMLAudioElement | null = null;
+  private lastKnownState: PlayerState | null = null;
 
   constructor(
     private readonly playerUseCase: PlayerUseCase,
     private readonly musicLibraryService: MusicLibraryService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
-  ) {}
+  ) {
+    // Subscribe to player state changes to keep track of the last known state
+    if (isPlatformBrowser(this.platformId)) {
+      this.playerUseCase.getPlayerState().subscribe(state => {
+        this.lastKnownState = state;
+      });
+    }
+  }
 
   /**
    * Initialize the global player state - should be called once in the app
@@ -65,9 +73,19 @@ export class GlobalPlayerStateService {
       return;
     }
     
-    if (!this.audioElement) {
+    // Only set if we don't have an audio element yet, or if the current one is broken
+    if (!this.audioElement || this.audioElement.error) {
+      console.log('Setting new audio element');
       this.audioElement = audioElement;
       this.playerUseCase.setAudioElement(audioElement);
+      
+      // If we have a last known state, try to restore it
+      if (this.lastKnownState?.currentSong) {
+        console.log('Restoring player state after navigation');
+        this.restorePlayerState();
+      }
+    } else {
+      console.log('Audio element already set and working, ignoring new one');
     }
   }
 
