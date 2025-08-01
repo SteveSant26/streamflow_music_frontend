@@ -12,7 +12,7 @@ import { PlayerControlButtonBar } from "../player-control-button-bar/player-cont
 import { PlayerCurrentSong } from "../player-current-song/player-current-song";
 import { PlayerSoundControl } from "../player-sound-control/player-sound-control";
 import { PlayerVolumeControl } from "../player-volume-control/player-volume-control";
-import { PlayerUseCase } from '../../domain/use-cases/player.use-case';
+import { PlayerUseCase } from '../../domain/usecases/player.use-case';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { Subject, takeUntil } from 'rxjs';

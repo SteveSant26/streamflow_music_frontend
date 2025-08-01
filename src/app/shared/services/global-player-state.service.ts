@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { PlayerUseCase } from '../../domain/use-cases/player.use-case';
+import { PlayerUseCase } from '../../domain/usecases/player.use-case';
 import { MusicLibraryService } from './music-library.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Observable } from 'rxjs';

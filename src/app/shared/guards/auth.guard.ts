@@ -2,7 +2,7 @@
 
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthUseCase } from '@app/domain/use-cases/auth.use-case';
+import { AuthUseCase } from '@app/domain/usecases/auth.use-case';
 
 
 // Guard para proteger rutas privadas (solo usuarios autenticados)
