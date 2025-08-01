@@ -152,6 +152,33 @@
       </button>
     </div>
 
+    <!-- Control de volumen -->
+    <div class="volume-section">
+      <div class="volume-container">
+        <svg
+          width="20"
+          height="20"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          class="volume-icon"
+        >
+          <path
+            d="M3 9V15H7L12 20V4L7 9H3ZM16.5 12C16.5 10.23 15.48 8.71 14 7.97V16.02C15.48 15.29 16.5 13.77 16.5 12ZM14 3.23V5.29C16.89 6.15 19 8.83 19 12C19 15.17 16.89 17.85 14 18.71V20.77C18.01 19.86 21 16.28 21 12C21 7.72 18.01 4.14 14 3.23Z"
+          />
+        </svg>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          [value]="currentSong.volume * 100"
+          (input)="onVolumeChange($event)"
+          class="volume-slider"
+          aria-label="Control de volumen"
+        />
+        <span class="volume-value">{{ Math.round(currentSong.volume * 100) }}%</span>
+      </div>
+    </div>
+
     <!-- Footer con información adicional -->
     <div class="song-footer">
       <div class="footer-actions">

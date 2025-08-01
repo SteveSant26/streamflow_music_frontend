@@ -12,6 +12,7 @@ export class GlobalPlayerStateService {
   private isInitialized = false;
   private audioElement: HTMLAudioElement | null = null;
   private lastKnownState: PlayerState | null = null;
+  private readonly VOLUME_STORAGE_KEY = 'streamflow-music-volume';
 
   constructor(
     private readonly playerUseCase: PlayerUseCase,
@@ -22,6 +23,8 @@ export class GlobalPlayerStateService {
     if (isPlatformBrowser(this.platformId)) {
       this.playerUseCase.getPlayerState().subscribe(state => {
         this.lastKnownState = state;
+        // Save volume to localStorage whenever it changes
+        this.saveVolumeToStorage(state.volume);
       });
     }
   }
@@ -47,7 +50,15 @@ export class GlobalPlayerStateService {
         console.log('Creating new audio element');
         this.audioElement = new Audio();
         this.audioElement.preload = 'metadata';
+        
+        // Load volume from localStorage
+        const savedVolume = this.loadVolumeFromStorage();
+        this.audioElement.volume = savedVolume;
+        
         this.playerUseCase.setAudioElement(this.audioElement);
+        
+        // Set the initial volume in the player use case
+        this.playerUseCase.setVolume(savedVolume);
       } else {
         console.log('Using existing audio element');
       }
@@ -159,21 +170,86 @@ export class GlobalPlayerStateService {
     }
 
     try {
+      // Don't restore if the current song is already loaded correctly
+      if (this.audioElement.src === this.lastKnownState.currentSong.audioUrl) {
+        console.log('Audio source already correct, skipping restore');
+        return;
+      }
+
+      console.log('Restoring player state...', {
+        song: this.lastKnownState.currentSong.title,
+        currentTime: this.lastKnownState.currentTime,
+        volume: this.lastKnownState.volume,
+        isPlaying: this.lastKnownState.isPlaying
+      });
+
+      // Pause first to avoid conflicts
+      this.audioElement.pause();
+      
       // Set the audio source to the current song
       this.audioElement.src = this.lastKnownState.currentSong.audioUrl;
-      this.audioElement.currentTime = this.lastKnownState.currentTime;
-      this.audioElement.volume = this.lastKnownState.volume;
       
-      // If it was playing, resume playback
-      if (this.lastKnownState.isPlaying) {
-        this.audioElement.play().catch(error => {
-          console.error('Error resuming music:', error);
-        });
-      }
+      // Wait for metadata to load before setting currentTime
+      const handleLoadedMetadata = () => {
+        if (this.audioElement && this.lastKnownState) {
+          this.audioElement.currentTime = this.lastKnownState.currentTime;
+          this.audioElement.volume = this.lastKnownState.volume;
+          
+          // If it was playing, resume playback
+          if (this.lastKnownState.isPlaying) {
+            this.audioElement.play().catch(error => {
+              console.error('Error resuming music:', error);
+            });
+          }
+        }
+        this.audioElement?.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      };
+
+      this.audioElement.addEventListener('loadedmetadata', handleLoadedMetadata);
       
-      console.log('Player state restored successfully');
+      // Force load the audio
+      this.audioElement.load();
+      
+      console.log('Player state restore initiated');
     } catch (error) {
       console.error('Error restoring player state:', error);
     }
+  }
+
+  /**
+   * Save volume to localStorage
+   */
+  private saveVolumeToStorage(volume: number): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    
+    try {
+      localStorage.setItem(this.VOLUME_STORAGE_KEY, volume.toString());
+    } catch (error) {
+      console.error('Error saving volume to localStorage:', error);
+    }
+  }
+
+  /**
+   * Load volume from localStorage
+   */
+  private loadVolumeFromStorage(): number {
+    if (!isPlatformBrowser(this.platformId)) {
+      return 0.5; // Default volume
+    }
+    
+    try {
+      const savedVolume = localStorage.getItem(this.VOLUME_STORAGE_KEY);
+      if (savedVolume !== null) {
+        const volume = parseFloat(savedVolume);
+        // Ensure volume is between 0 and 1
+        return Math.max(0, Math.min(1, volume));
+      }
+    } catch (error) {
+      console.error('Error loading volume from localStorage:', error);
+    }
+    
+    return 0.5; // Default volume
   }
 }

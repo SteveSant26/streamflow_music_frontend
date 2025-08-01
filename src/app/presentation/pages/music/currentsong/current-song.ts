@@ -20,6 +20,7 @@ interface CurrentSongView {
   duration: string;
   currentTime: string;
   progress: number;
+  volume: number;
   cover: string;
   gradient: string;
   isPlaying: boolean;
@@ -36,6 +37,7 @@ interface CurrentSongView {
 export class CurrentSongComponent implements OnInit, OnDestroy {
   currentSong: CurrentSongView | null = null;
   showLyricsPanel = false;
+  Math = Math; // Expose Math for template use
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -98,6 +100,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         duration: this.formatTime(playerState.duration),
         currentTime: this.formatTime(playerState.currentTime),
         progress: playerState.progress,
+        volume: playerState.volume,
         cover: playerState.currentSong.albumCover || '/assets/gorillaz2.jpg',
         gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
         isPlaying: playerState.isPlaying,
@@ -190,6 +193,15 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.seekToPercentage(newProgress);
     console.log("Nuevo progreso:", newProgress + "%");
+  }
+
+  onVolumeChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const volume = parseFloat(input.value) / 100;
+    
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.setVolume(volume);
+    console.log("Nuevo volumen:", volume);
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {
