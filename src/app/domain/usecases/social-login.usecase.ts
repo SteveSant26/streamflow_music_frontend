@@ -5,7 +5,7 @@ import { IAuthRepository } from "../repositories/i-auth.repository";
 export class SocialLoginUseCase {
   constructor(private readonly authRepository: IAuthRepository) {}
 
-  async execute(provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord'): Promise<void> {
+  async execute(provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord' | 'azure'): Promise<void> {
     await this.authRepository.signInWithProvider(provider);
   }
 }
