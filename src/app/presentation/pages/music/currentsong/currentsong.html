@@ -175,7 +175,7 @@
           class="volume-slider"
           aria-label="Control de volumen"
         />
-        <span class="volume-value">{{ Math.round(currentSong.volume * 100) }}%</span>
+        <span class="volume-value">{{ (currentSong.volume * 100) | number:'1.0-0' }}%</span>
       </div>
     </div>
 

@@ -94,7 +94,9 @@ export class PlayerUseCase {
 
   private updatePlayerState(updates: Partial<PlayerState>): void {
     const currentState = this.playerStateSubject.value;
-    this.playerStateSubject.next({ ...currentState, ...updates });
+    const newState = { ...currentState, ...updates };
+    this.playerStateSubject.next(newState);
+    console.log('Player state updated:', newState);
   }
 
   private handleSongEnd(): void {
@@ -217,7 +219,13 @@ export class PlayerUseCase {
     if (!this.audio) return;
     const clampedVolume = Math.max(0, Math.min(1, volume));
     this.audio.volume = clampedVolume;
-    // State will be updated automatically by volumechange event listener
+    
+    // Force immediate state update for volume changes
+    this.updatePlayerState({
+      volume: clampedVolume,
+      isMuted: this.audio.muted
+    });
+    console.log(`Volume set to ${clampedVolume}`);
   }
 
   adjustVolume(volume: number): void {
@@ -227,7 +235,12 @@ export class PlayerUseCase {
   toggleMute(): void {
     if (!this.audio) return;
     this.audio.muted = !this.audio.muted;
-    // State will be updated automatically by volumechange event listener
+    
+    // Force immediate state update for mute changes
+    this.updatePlayerState({
+      volume: this.audio.volume,
+      isMuted: this.audio.muted
+    });
   }
 
   // Repeat and Shuffle
@@ -245,13 +258,20 @@ export class PlayerUseCase {
     if (!this.audio?.duration) return;
     const clampedTime = Math.max(0, Math.min(time, this.audio.duration));
     this.audio.currentTime = clampedTime;
-    // State will be updated automatically by timeupdate event listener
+    
+    // Force immediate state update for seek operations
+    const progress = this.audio.duration > 0 ? (clampedTime / this.audio.duration) * 100 : 0;
+    this.updatePlayerState({
+      currentTime: clampedTime,
+      progress
+    });
   }
 
   seekToPercentage(percentage: number): void {
     if (!this.audio?.duration) return;
     const time = (percentage / 100) * this.audio.duration;
     this.seekTo(time);
+    console.log(`Seeking to ${percentage}% (${time}s)`);
   }
 
   // State Getters
