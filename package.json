@@ -42,6 +42,7 @@
     "@angular/platform-server": "^20.1.0",
     "@angular/router": "^20.1.0",
     "@angular/ssr": "^20.1.3",
+    "@stripe/stripe-js": "^7.7.0",
     "@supabase/supabase-js": "^2.53.0",
     "@tailwindcss/postcss": "^4.1.11",
     "compodoc": "^0.0.41",

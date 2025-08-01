@@ -14,6 +14,7 @@
         "@angular/platform-server": "^20.1.0",
         "@angular/router": "^20.1.0",
         "@angular/ssr": "^20.1.3",
+        "@stripe/stripe-js": "^7.7.0",
         "@supabase/supabase-js": "^2.53.0",
         "@tailwindcss/postcss": "^4.1.11",
         "compodoc": "^0.0.41",
@@ -613,6 +614,8 @@
     "@sigstore/verify": ["@sigstore/verify@2.1.1", "", { "dependencies": { "@sigstore/bundle": "^3.1.0", "@sigstore/core": "^2.0.0", "@sigstore/protobuf-specs": "^0.4.1" } }, "sha512-hVJD77oT67aowHxwT4+M6PGOp+E2LtLdTK3+FC0lBO9T7sYwItDMXZ7Z07IDCvR1M717a4axbIWckrW67KMP/w=="],
 
     "@socket.io/component-emitter": ["@socket.io/component-emitter@3.1.2", "", {}, "sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA=="],
+
+    "@stripe/stripe-js": ["@stripe/stripe-js@7.7.0", "", {}, "sha512-SXuhqhuR5FXaYgKTXzZJeqtVA6JKb9IZWaGeEUxHHiOcFy2p51wccO72bYpXwoK4D5pzQOIYLTuAc7etxyMmwg=="],
 
     "@supabase/auth-js": ["@supabase/auth-js@2.71.1", "", { "dependencies": { "@supabase/node-fetch": "^2.6.14" } }, "sha512-mMIQHBRc+SKpZFRB2qtupuzulaUhFYupNyxqDj5Jp/LyPvcWvjaJzZzObv6URtL/O6lPxkanASnotGtNpS3H2Q=="],
 
