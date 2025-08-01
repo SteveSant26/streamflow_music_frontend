@@ -42,6 +42,10 @@ testem.log
 Thumbs.db
 
 # env
+<<<<<<< HEAD
+# Ignorar carpeta de environments
+src/environments/
+=======
 .env
 # *environment.ts
 # *environment.development.ts
@@ -50,3 +54,4 @@ Thumbs.db
 # *environment.development.ts
 # *environment.production.ts
 /environments
+>>>>>>> main
