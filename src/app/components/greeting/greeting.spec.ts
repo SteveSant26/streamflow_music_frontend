@@ -11,11 +11,11 @@ describe("Greeting", () => {
     await TestBed.configureTestingModule({
       imports: [Greeting],
     })
-    // Override change detection strategy for testing
-    .overrideComponent(Greeting, {
-      set: { changeDetection: ChangeDetectionStrategy.Default }
-    })
-    .compileComponents();
+      // Override change detection strategy for testing
+      .overrideComponent(Greeting, {
+        set: { changeDetection: ChangeDetectionStrategy.Default },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(Greeting);
     component = fixture.componentInstance;
@@ -44,9 +44,12 @@ describe("Greeting", () => {
       fixture.detectChanges();
 
       expect(component.greeting).toBe("Buenos días, Justin");
-      
+
       // Verify it's displayed in the template
-      const greetingText = getElementText(fixture, 'h1, .greeting-text, [data-testid="greeting"]');
+      const greetingText = getElementText(
+        fixture,
+        'h1, .greeting-text, [data-testid="greeting"]',
+      );
       expect(greetingText).toContain("Buenos días");
     });
 
@@ -59,8 +62,11 @@ describe("Greeting", () => {
       fixture.detectChanges();
 
       expect(component.greeting).toBe("Buenas tardes, Justin");
-      
-      const greetingText = getElementText(fixture, 'h1, .greeting-text, [data-testid="greeting"]');
+
+      const greetingText = getElementText(
+        fixture,
+        'h1, .greeting-text, [data-testid="greeting"]',
+      );
       expect(greetingText).toContain("Buenas tardes");
     });
 
@@ -73,8 +79,11 @@ describe("Greeting", () => {
       fixture.detectChanges();
 
       expect(component.greeting).toBe("Buenas noches, Justin");
-      
-      const greetingText = getElementText(fixture, 'h1, .greeting-text, [data-testid="greeting"]');
+
+      const greetingText = getElementText(
+        fixture,
+        'h1, .greeting-text, [data-testid="greeting"]',
+      );
       expect(greetingText).toContain("Buenas noches");
     });
 
@@ -103,10 +112,10 @@ describe("Greeting", () => {
 
   describe("Component Lifecycle", () => {
     it("should set greeting on ngOnInit", () => {
-      spyOn(component as any, 'setGreeting');
-      
+      spyOn(component as any, "setGreeting");
+
       component.ngOnInit();
-      
+
       expect((component as any).setGreeting).toHaveBeenCalled();
     });
 
@@ -117,7 +126,7 @@ describe("Greeting", () => {
 
     it("should have a greeting after ngOnInit", () => {
       component.ngOnInit();
-      
+
       expect(component.greeting).not.toBe("");
       expect(component.greeting).toContain("Justin");
     });

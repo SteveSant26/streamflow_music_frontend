@@ -10,26 +10,24 @@ describe("SideMenuCard", () => {
 
   const mockPlaylist = {
     id: 1,
-    name: 'Test Playlist',
-    cover: 'test-cover.jpg'
+    name: "Test Playlist",
+    cover: "test-cover.jpg",
   };
 
   beforeEach(async () => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    mockRouter = jasmine.createSpyObj("Router", ["navigate"]);
 
     await TestBed.configureTestingModule({
       imports: [SideMenuCard],
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      providers: [{ provide: Router, useValue: mockRouter }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SideMenuCard);
     component = fixture.componentInstance;
-    
+
     // Set required input
     component.playlist = mockPlaylist;
-    
+
     fixture.detectChanges();
   });
 

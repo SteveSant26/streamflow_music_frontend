@@ -8,10 +8,10 @@ describe("PlayListItemCard", () => {
 
   const mockPlaylist = {
     id: 1,
-    cover: 'test-cover.jpg',
-    title: 'Test Playlist',
-    artists: ['Test Artist 1', 'Test Artist 2'],
-    color: '#ff0000'
+    cover: "test-cover.jpg",
+    title: "Test Playlist",
+    artists: ["Test Artist 1", "Test Artist 2"],
+    color: "#ff0000",
   };
 
   beforeEach(async () => {
@@ -21,10 +21,10 @@ describe("PlayListItemCard", () => {
 
     fixture = TestBed.createComponent(PlayListItemCard);
     component = fixture.componentInstance;
-    
+
     // Set required input
     component.playlist = mockPlaylist;
-    
+
     fixture.detectChanges();
   });
 

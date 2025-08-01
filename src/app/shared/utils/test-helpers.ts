@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { ActivatedRoute } from "@angular/router";
+import { of } from "rxjs";
 
 /**
  * Common test setup configuration for Angular components
@@ -27,7 +27,7 @@ export function setupTestEnvironment(config: TestSetupConfig = {}) {
     imports = [],
     providers = [],
     routeData = {},
-    routeParams = {}
+    routeParams = {},
   } = config;
 
   const mockActivatedRoute = {
@@ -35,8 +35,8 @@ export function setupTestEnvironment(config: TestSetupConfig = {}) {
     params: of(routeParams),
     snapshot: {
       data: routeData,
-      params: routeParams
-    }
+      params: routeParams,
+    },
   };
 
   return TestBed.configureTestingModule({
@@ -44,12 +44,12 @@ export function setupTestEnvironment(config: TestSetupConfig = {}) {
       NoopAnimationsModule,
       HttpClientTestingModule,
       RouterTestingModule,
-      ...imports
+      ...imports,
     ],
     providers: [
       { provide: ActivatedRoute, useValue: mockActivatedRoute },
-      ...providers
-    ]
+      ...providers,
+    ],
   });
 }
 
@@ -58,7 +58,7 @@ export function setupTestEnvironment(config: TestSetupConfig = {}) {
  */
 export async function createComponentFixture<T>(
   component: new (...args: any[]) => T,
-  config: TestSetupConfig = {}
+  config: TestSetupConfig = {},
 ): Promise<ComponentFixture<T>> {
   await setupTestEnvironment(config).compileComponents();
   const fixture = TestBed.createComponent(component);
@@ -69,23 +69,32 @@ export async function createComponentFixture<T>(
 /**
  * Helper to get element by selector
  */
-export function getElement(fixture: ComponentFixture<any>, selector: string): HTMLElement | null {
+export function getElement(
+  fixture: ComponentFixture<any>,
+  selector: string,
+): HTMLElement | null {
   return fixture.nativeElement.querySelector(selector);
 }
 
 /**
  * Helper to get all elements by selector
  */
-export function getAllElements(fixture: ComponentFixture<any>, selector: string): HTMLElement[] {
+export function getAllElements(
+  fixture: ComponentFixture<any>,
+  selector: string,
+): HTMLElement[] {
   return Array.from(fixture.nativeElement.querySelectorAll(selector));
 }
 
 /**
  * Helper to get text content from element
  */
-export function getTextContent(fixture: ComponentFixture<any>, selector: string): string {
+export function getTextContent(
+  fixture: ComponentFixture<any>,
+  selector: string,
+): string {
   const element = getElement(fixture, selector);
-  return element?.textContent?.trim() || '';
+  return element?.textContent?.trim() || "";
 }
 
 /**
@@ -100,6 +109,6 @@ export function clickElement(element: HTMLElement): void {
  */
 export function setInputValue(input: HTMLInputElement, value: string): void {
   input.value = value;
-  input.dispatchEvent(new Event('input', { bubbles: true }));
-  input.dispatchEvent(new Event('change', { bubbles: true }));
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  input.dispatchEvent(new Event("change", { bubbles: true }));
 }

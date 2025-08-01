@@ -8,9 +8,7 @@ describe("App", () => {
   beforeEach(async () => {
     await setupTestEnvironment({
       imports: [App],
-      providers: [
-        provideRouter([])
-      ]
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -24,7 +22,7 @@ describe("App", () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    
+
     // Check if there's any content rendered (more flexible test)
     expect(compiled).toBeTruthy();
     expect(fixture.componentInstance).toBeTruthy();
