@@ -48,6 +48,14 @@ export class AuthService {
    * Renueva la sesión de Supabase y retorna la nueva sesión (con el nuevo access_token).
    */
   async refreshSession(): Promise<Session | null> {
+    // Solo refresca si hay sesión actual
+    if (!this.session()) {
+      this.isAuthenticated.set(false);
+      this._supabaseUser.set(null);
+      this.session.set(null);
+      this.router.navigate(["/login"]);
+      return null;
+    }
     try {
       const { data, error } = await this.supabaseService.client.auth.refreshSession();
       if (error) throw error;
@@ -57,6 +65,10 @@ export class AuthService {
       return data.session;
     } catch (error) {
       console.error("Error refreshing session:", error);
+      this.isAuthenticated.set(false);
+      this._supabaseUser.set(null);
+      this.session.set(null);
+      this.router.navigate(["/login"]);
       return null;
     }
   }
@@ -94,12 +106,16 @@ export class AuthService {
             this.handleAuthStateChange(event, session);
           },
         );
-
-      // Set initial state
-      this.setInitialSession();
+      // La inicialización de sesión se debe llamar manualmente con init()
     } else {
       this.isLoading.set(false);
     }
+  }
+  /**
+   * Inicializa el estado de sesión. Llamar desde el componente principal (AppComponent).
+   */
+  public async init() {
+    await this.setInitialSession();
   }
 
   private async setInitialSession() {
