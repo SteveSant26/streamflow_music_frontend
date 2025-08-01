@@ -4,4 +4,5 @@ export interface Song {
   artist: string;
   duration: number;
   albumCover?: string;
+  audioUrl: string; // Dynamic audio file path
 }
