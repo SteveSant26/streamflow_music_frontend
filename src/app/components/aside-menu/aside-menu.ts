@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
-import { AuthService } from '@shared/services/auth.service';
+import { AuthStatusUseCase } from '@app/domain/usecases/auth-status.usecase';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 @Component({
@@ -13,12 +13,13 @@ import { ROUTES_CONFIG_AUTH } from '@app/config';
 })
 export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
-  private readonly authService = inject(AuthService);
-  isAuthenticated = this.authService.isAuthenticated();
-  user = this.authService.user;
+  private readonly authStatusUseCase = inject(AuthStatusUseCase);
+  
+  isAuthenticated = this.authStatusUseCase.isAuthenticated;
+  user = this.authStatusUseCase.user;
 
   async logout() {
-    await this.authService.signOut();
+    await this.authStatusUseCase.logout();
     window.location.href = '/login';
   }
 
