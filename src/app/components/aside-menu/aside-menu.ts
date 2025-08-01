@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
-import { AuthService } from '@shared/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 @Component({
@@ -15,11 +15,19 @@ export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   private readonly authService = inject(AuthService);
   isAuthenticated = this.authService.isAuthenticated();
-  user = this.authService.user;
+  user = () => this.authService.getCurrentUserValue();
 
   async logout() {
-    await this.authService.signOut();
-    window.location.href = '/login';
+    this.authService.logout().subscribe({
+      next: () => {
+        window.location.href = '/login';
+      },
+      error: (error) => {
+        console.error('Error during logout:', error);
+        // Limpiar datos locales incluso si hay error en el servidor
+        window.location.href = '/login';
+      }
+    });
   }
 
   onLogoutKeyDown(event: KeyboardEvent) {
