@@ -8,7 +8,7 @@ import {
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { authInterceptor } from './shared/utils/auth-interceptor';
-import { authProviders } from './shared/providers/auth.providers';
+import { authProviders } from './infrastructure/providers/auth.providers';
 import { HttpErrorInterceptor } from '@app/infrastructure/interceptors/http-error.interceptor';
 import { AuthTokenInterceptor } from '@app/infrastructure/interceptors/auth-token.interceptor';
 

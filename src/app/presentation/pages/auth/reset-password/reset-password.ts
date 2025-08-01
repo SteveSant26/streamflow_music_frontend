@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ResetPasswordUseCase } from '../../../../domain/usecases/reset-password.usecase';
+import { AuthError, ValidationError, NetworkError } from '@app/domain/errors/auth.errors';
 
 @Component({
   selector: 'app-reset-password',
@@ -30,19 +31,29 @@ export class ResetPasswordComponent {
     this.isLoading.set(true);
     this.error.set(null);
     this.success.set(null);
+    
     try {
       await this.resetPasswordUseCase.execute(this.email);
       this.success.set(
         'Te hemos enviado un correo para restablecer tu contraseña.',
       );
     } catch (error) {
-      this.error.set(
-        error instanceof Error
-          ? error.message
-          : 'Error al enviar el correo de recuperación',
-      );
+      this.handleError(error);
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  private handleError(error: any): void {
+    if (error instanceof ValidationError) {
+      this.error.set(error.message);
+    } else if (error instanceof NetworkError) {
+      this.error.set('Error de conexión. Verifica tu internet e intenta de nuevo.');
+    } else if (error instanceof AuthError) {
+      this.error.set(error.message);
+    } else {
+      this.error.set('Error inesperado. Intenta de nuevo.');
+    }
+    console.error('Reset password error:', error);
   }
 }

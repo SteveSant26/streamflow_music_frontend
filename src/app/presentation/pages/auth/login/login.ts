@@ -3,11 +3,12 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoginUseCase } from '../../../../domain/usecases/login.usecase';
-import { LoginCredentials } from '../../../../domain/repositories/auth.repository';
-import { AuthService } from '../../../../shared/services/auth.service';
+import { LoginCredentials } from '../../../../domain/repositories/i-auth.repository';
 import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
+import { AuthError, ValidationError, LoginError, NetworkError } from '@app/domain/errors/auth.errors';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -18,25 +19,11 @@ import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
 })
 export class LoginComponent {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
-  // ...existing code...
 
   private readonly socialLoginUseCase = inject(SocialLoginUseCase);
+  private readonly loginUseCase = inject(LoginUseCase);
+  private readonly router = inject(Router);
 
-  loginWithGoogle() {
-    this.socialLoginUseCase.execute('google');
-  }
-  loginWithGithub() {
-    this.socialLoginUseCase.execute('github');
-  }
-  loginWithFacebook() {
-    this.socialLoginUseCase.execute('facebook');
-  }
-  loginWithTwitter() {
-    this.socialLoginUseCase.execute('twitter');
-  }
-  loginWithDiscord() {
-    this.socialLoginUseCase.execute('discord');
-  }
   credentials: LoginCredentials = {
     email: '',
     password: '',
@@ -44,12 +31,6 @@ export class LoginComponent {
 
   isLoading = signal(false);
   error = signal<string | null>(null);
-
-  constructor(
-    private readonly router: Router,
-    private readonly loginUseCase: LoginUseCase,
-    private readonly authService: AuthService,
-  ) {}
 
   async onLogin(): Promise<void> {
     if (this.isLoading()) return;
@@ -60,19 +41,46 @@ export class LoginComponent {
     try {
       const result = await this.loginUseCase.execute(this.credentials);
       console.log('Login successful:', result);
-
-      // Usar el servicio de auth para manejar el estado
-      this.authService.setAuth(result.user, result.token.accessToken);
-
-      // Navegar a la página principal
       this.router.navigate(['/home']);
     } catch (error) {
-      this.error.set(
-        error instanceof Error ? error.message : 'Error al iniciar sesión',
-      );
-      console.error('Login error:', error);
+      this.handleError(error);
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  private handleError(error: any): void {
+    if (error instanceof ValidationError) {
+      this.error.set(error.message);
+    } else if (error instanceof LoginError) {
+      this.error.set('Credenciales inválidas. Verifica tu email y contraseña.');
+    } else if (error instanceof NetworkError) {
+      this.error.set('Error de conexión. Verifica tu internet e intenta de nuevo.');
+    } else if (error instanceof AuthError) {
+      this.error.set(error.message);
+    } else {
+      this.error.set('Error inesperado. Intenta de nuevo.');
+    }
+    console.error('Login error:', error);
+  }
+
+  loginWithGoogle() {
+    this.socialLoginUseCase.execute('google');
+  }
+
+  loginWithGithub() {
+    this.socialLoginUseCase.execute('github');
+  }
+
+  loginWithFacebook() {
+    this.socialLoginUseCase.execute('facebook');
+  }
+
+  loginWithTwitter() {
+    this.socialLoginUseCase.execute('twitter');
+  }
+
+  loginWithDiscord() {
+    this.socialLoginUseCase.execute('discord');
   }
 }

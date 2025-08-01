@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { IAuthRepository } from "../repositories/i-auth.repository";
 
 @Injectable({ providedIn: "root" })
-export class SocialLoginUseCase {
+export class AuthSessionUseCase {
   constructor(private readonly authRepository: IAuthRepository) {}
 
-  async execute(provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord'): Promise<void> {
-    await this.authRepository.signInWithProvider(provider);
+  async initSession() {
+    await this.authRepository.getCurrentSession();
   }
 }

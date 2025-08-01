@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
-import { AuthService } from '@app/shared/services/auth.service';
+import { AuthSessionUseCase } from '@app/domain/usecases/auth-session.usecase';
 import { AsideMenu } from './components/aside-menu/aside-menu';
 import { Player } from './components/player/player';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ export class App implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly authService: AuthService
+    private readonly authSessionUseCase: AuthSessionUseCase
   ) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -31,6 +31,6 @@ export class App implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.init();
+    this.authSessionUseCase.initSession();
   }
 }
