@@ -42,11 +42,14 @@ export class GlobalPlayerStateService {
     }
 
     try {
-      // Create audio element if not exists
-      if (!this.audioElement) {
+      // Create audio element if not exists or if current one is broken
+      if (!this.audioElement || this.audioElement.error) {
+        console.log('Creating new audio element');
         this.audioElement = new Audio();
         this.audioElement.preload = 'metadata';
         this.playerUseCase.setAudioElement(this.audioElement);
+      } else {
+        console.log('Using existing audio element');
       }
 
       // Load default playlist if no playlist is loaded
@@ -122,6 +125,12 @@ export class GlobalPlayerStateService {
    */
   ensureInitialized(): void {
     if (!this.isInitialized) {
+      this.initializePlayer();
+    } else if (this.audioElement?.error) {
+      // If audio element has an error, reinitialize
+      console.log('Audio element has error, reinitializing...');
+      this.isInitialized = false;
+      this.audioElement = null;
       this.initializePlayer();
     }
   }

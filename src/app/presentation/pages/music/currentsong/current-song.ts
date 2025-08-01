@@ -82,6 +82,10 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   private initializePlayer(): void {
     // Ensure global player state is initialized
     this.globalPlayerState.ensureInitialized();
+    
+    // Force a state update to ensure we have the latest player state
+    const currentState = this.globalPlayerState.getPlayerState();
+    this.updateCurrentSongView(currentState);
   }
 
   private updateCurrentSongView(playerState: PlayerState): void {
@@ -132,8 +136,15 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         playerUseCase.pause();
         console.log("Pausado");
       } else {
+        // Make sure the player is properly initialized before resuming
+        this.globalPlayerState.ensureInitialized();
+        
         playerUseCase.resumeMusic().catch((error: any) => {
           console.error("Error al reanudar:", error);
+          // If there's an error, try to reinitialize the player
+          setTimeout(() => {
+            this.globalPlayerState.ensureInitialized();
+          }, 100);
         });
         console.log("Reproduciendo");
       }
