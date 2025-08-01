@@ -8,7 +8,6 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
   HTTP_INTERCEPTORS,
-  withFetch,
 } from "@angular/common/http";
 
 import { routes } from "./app.routes";
@@ -17,7 +16,6 @@ import {
   withEventReplay,
 } from "@angular/platform-browser";
 import { HttpErrorInterceptor } from "./interceptors/http-error.interceptor";
-import { AuthTokenInterceptor } from "./interceptors/auth-token.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,12 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch(), withInterceptorsFromDi()),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthTokenInterceptor,
-      multi: true,
-    },
+    provideHttpClient(withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

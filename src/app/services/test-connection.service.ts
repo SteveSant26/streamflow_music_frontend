@@ -14,8 +14,8 @@ export class TestConnectionService {
   testConnection(): Observable<any> {
     console.log("🔍 Probando conexión con Django backend...");
 
-    // Intentar conectar al endpoint de test de Django
-    return this.apiService.get("/test/");
+    // Intentar conectar a endpoints típicos de Django
+    return this.apiService.get("/");
   }
 
   /**

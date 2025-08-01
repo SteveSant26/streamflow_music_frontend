@@ -1,4 +1,4 @@
-import { Injectable, inject, PLATFORM_ID } from "@angular/core";
+import { Injectable } from "@angular/core";
 import {
   HttpInterceptor,
   HttpRequest,
@@ -9,12 +9,9 @@ import {
 import { Observable, throwError } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
 import { AuthService } from "../services/auth.service";
-import { isPlatformBrowser } from "@angular/common";
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  private platformId = inject(PLATFORM_ID);
-
   constructor(private authService: AuthService) {}
 
   intercept(
@@ -35,12 +32,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         let errorMessage = "Ha ocurrido un error inesperado";
 
-        // Verificar si ErrorEvent está disponible (solo en el navegador)
-        const isClientError =
-          isPlatformBrowser(this.platformId) &&
-          error.error instanceof ErrorEvent;
-
-        if (isClientError) {
+        if (error.error instanceof ErrorEvent) {
           // Error del lado del cliente
           errorMessage = `Error: ${error.error.message}`;
         } else {
@@ -55,22 +47,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               // Evitar bucle infinito - no llamar logout automáticamente
               console.warn("Error 401 detectado:", error.url);
 
-              // DEBUG: Verificar estado de autenticación solo en el navegador
-              if (isPlatformBrowser(this.platformId)) {
-                const token = localStorage.getItem("authToken");
-                console.log(
-                  "Debug 401 - Token en localStorage:",
-                  token ? token.substring(0, 20) + "..." : "null",
-                );
-                console.log(
-                  "Debug 401 - Auth service isAuthenticated:",
-                  this.authService.isAuthenticated(),
-                );
-                console.log(
-                  "Debug 401 - Request headers:",
-                  request.headers.get("Authorization"),
-                );
-              }
+              // DEBUG: Verificar estado de autenticación
+              const token = localStorage.getItem("authToken");
+              console.log(
+                "Debug 401 - Token en localStorage:",
+                token ? token.substring(0, 20) + "..." : "null",
+              );
+              console.log(
+                "Debug 401 - Auth service isAuthenticated:",
+                this.authService.isAuthenticated(),
+              );
+              console.log(
+                "Debug 401 - Request headers:",
+                request.headers.get("Authorization"),
+              );
 
               // Si el token ha expirado, intentar renovarlo
               if (error.error?.code === "TOKEN_EXPIRED") {
