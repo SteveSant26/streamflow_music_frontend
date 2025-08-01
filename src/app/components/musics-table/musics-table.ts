@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { MusicsTablePlay } from "../musics-table-play/musics-table-play";
+import { MatIcon } from "@angular/material/icon";
 
 interface Song {
   id: number;
@@ -13,7 +14,7 @@ interface Song {
 
 @Component({
   selector: "app-musics-table",
-  imports: [MusicsTablePlay],
+  imports: [MusicsTablePlay, MatIcon],
   templateUrl: "./musics-table.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

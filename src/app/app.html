@@ -27,20 +27,24 @@
       <div class="hidden lg:flex items-center gap-4">
         <nav class="flex gap-3" aria-label="Main Navigation">
           <a
-            href="/"
-            class="px-4 py-2 bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/50 text-gray-700 hover:text-gray-900 hover:bg-white/90 hover:border-gray-300 transition-all duration-200 shadow-sm font-medium"
+            routerLink="/"
+            class="px-4 py-2 text-gray-700 hover:text-black rounded-xl transition-all duration-300 font-medium hover:shadow-lg hover:scale-105 border border-transparent hover:border-blue-300/30"
             >Inicio</a
           >
           <a
-            href="/explore"
-            class="px-4 py-2 bg-white/70 backdrop-blur-sm rounded-lg border border-gray-200/50 text-gray-700 hover:text-gray-900 hover:bg-white/90 hover:border-gray-300 transition-all duration-200 shadow-sm font-medium"
+            routerLink="/explore"
+            class="px-4 py-2 text-gray-700 hover:text-black rounded-xl transition-all duration-300 font-medium hover:shadow-lg hover:scale-105 border border-transparent hover:border-purple-300/30"
             >Explorar</a
           >
           <a
-            href="/plans"
-            class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 rounded-lg border border-transparent shadow-md transition-all duration-200 font-medium hover:shadow-lg transform hover:-translate-y-0.5"
-            >Planes</a
+            routerLink="/subscription-plans"
+            class="px-5 py-2.5 text-black bg-white rounded-xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-black/20 relative overflow-hidden group"
           >
+            <span class="relative z-10 flex items-center gap-2">
+               Suscripciones
+            </span>
+            <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </a>
         </nav>
       </div>
     </div>
@@ -74,7 +78,7 @@
   >
     <div class="flex justify-around items-center">
       <a
-        href="/"
+        routerLink="/"
         class="flex flex-col items-center gap-1 text-gray-900 hover:text-blue-600 transition-colors"
       >
         <div
@@ -88,7 +92,7 @@
       </a>
 
       <a
-        href="/search"
+        routerLink="/search"
         class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors"
       >
         <div class="p-2 rounded-full hover:bg-gray-100">
@@ -110,7 +114,7 @@
       </a>
 
       <a
-        href="/explore"
+        routerLink="/explore"
         class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors"
       >
         <div class="p-2 rounded-full hover:bg-gray-100">
@@ -132,7 +136,29 @@
       </a>
 
       <a
-        href="/library"
+        routerLink="/subscription-plans"
+        class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors"
+      >
+        <div class="p-2 rounded-full hover:bg-gray-100">
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <span class="text-xs font-medium">Planes</span>
+      </a>
+
+      <a
+        routerLink="/library"
         class="flex flex-col items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors"
       >
         <div class="p-2 rounded-full hover:bg-gray-100">

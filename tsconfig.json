@@ -3,7 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+      "baseUrl": "./",
     "paths": {
       "@app/*": ["src/app/*"],
       "@assets/*": ["src/assets/*"],
@@ -12,7 +12,7 @@
       "@core/*": ["src/app/core/*"],
       "@domain/*": ["src/app/domain/*"],
       "@infrastructure/*": ["src/app/infrastructure/*"],
-      "@presentation/*": ["src/app/presentation/*"]
+      "@presentation/*": ["src/app/presentation/*"],
     },
     "strict": true,
     "noImplicitOverride": true,

@@ -1,22 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
-
-interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  album: string;
-  duration: string;
-}
-
-interface Playlist {
-  name: string;
-  description: string;
-  createdDate: string;
-  coverImage: string;
-  songs: Song[];
-}
+import { PlaylistService, SongService } from "../../services";
+import { Playlist, Song } from "../../models";
 
 @Component({
   selector: "app-playlist",
@@ -36,8 +22,14 @@ export class PlaylistComponent implements OnInit {
   createdDate: string = "";
   songs: Song[] = [];
   dynamicGradient: string = "";
+  loading: boolean = true;
+  error: string | null = null;
 
-  constructor(private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly playlistService: PlaylistService,
+    private readonly songService: SongService,
+  ) {}
 
   get currentPlaylistImage(): string {
     return (
@@ -89,6 +81,77 @@ export class PlaylistComponent implements OnInit {
     setTimeout(() => {
       this.extractColorsFromImage(img);
     }, 100);
+  }
+
+  private loadPlaylistData() {
+    if (!this.playlistId) {
+      this.error = "ID de playlist no válido";
+      this.loading = false;
+      return;
+    }
+
+    this.loading = true;
+    this.error = null;
+
+    // Cargar datos de la playlist desde el backend
+    this.playlistService.getPlaylistById(this.playlistId).subscribe({
+      next: (playlist) => {
+        this.playlist = playlist;
+        this.playlistName = playlist.name;
+        this.playlistDescription = playlist.description || "";
+        this.playlistCoverImage =
+          playlist.coverImage || this.getPlaylistImage();
+        this.songs = playlist.songs || [];
+        this.songCount = playlist.totalSongs || playlist.songs?.length || 0;
+        this.duration = this.formatDuration(playlist.totalDuration || 0);
+        this.createdDate = this.formatDate(playlist.createdAt);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error("Error loading playlist:", error);
+        this.error = error.message || "Error al cargar la playlist";
+        this.loading = false;
+        // Cargar datos mock como fallback
+        this.loadMockData();
+      },
+    });
+  }
+
+  private loadMockData() {
+    // Mantener datos mock como fallback
+    const mockData = this.getPlaylistById(this.playlistId);
+    if (mockData) {
+      this.playlist = {
+        id: this.playlistId!,
+        name: mockData.name,
+        description: mockData.description,
+        coverImage: mockData.coverImage,
+        songs: mockData.songs.map((song: any) => ({
+          ...song,
+          duration: this.parseDurationToSeconds(song.duration),
+          artistId: "1",
+          fileUrl: "",
+          plays: 0,
+          likes: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        })),
+        userId: "1",
+        isPublic: true,
+        totalDuration: this.calculateTotalDurationInSeconds(mockData.songs),
+        totalSongs: mockData.songs.length,
+        createdAt: mockData.createdDate,
+        updatedAt: new Date().toISOString(),
+      };
+
+      this.playlistName = mockData.name;
+      this.playlistDescription = mockData.description;
+      this.playlistCoverImage = mockData.coverImage;
+      this.songs = this.playlist.songs;
+      this.songCount = mockData.songs.length;
+      this.duration = this.calculateTotalDuration(mockData.songs);
+      this.createdDate = mockData.createdDate;
+    }
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {
@@ -199,12 +262,41 @@ export class PlaylistComponent implements OnInit {
 
     if (!this.playlist) return;
 
-    const currentIndex = testImages.indexOf(this.playlist.coverImage);
+    const currentImage = this.playlist.coverImage || "";
+    const currentIndex = testImages.indexOf(currentImage);
     const nextIndex = (currentIndex + 1) % testImages.length;
 
     console.log("🎨 Cambiando a imagen:", testImages[nextIndex]);
     this.playlist.coverImage = testImages[nextIndex];
     this.playlistCoverImage = testImages[nextIndex];
+  }
+
+  // Métodos utilitarios privados
+
+  private formatDuration(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+    return `${minutes}m`;
+  }
+
+  private formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  }
+
+  private parseDurationToSeconds(duration: string): number {
+    const [minutes, seconds] = duration.split(":").map(Number);
+    return minutes * 60 + seconds;
+  }
+
+  private calculateTotalDurationInSeconds(songs: any[]): number {
+    return songs.reduce((total, song) => {
+      return total + this.parseDurationToSeconds(song.duration);
+    }, 0);
   }
 
   private getPlaylistColor(): string {
@@ -230,23 +322,6 @@ export class PlaylistComponent implements OnInit {
         return "🛣️";
       default:
         return "🎵";
-    }
-  }
-
-  private loadPlaylistData() {
-    // Simular carga de datos específicos según el ID de la playlist
-    // En una aplicación real, esto vendría de un servicio
-    const playlistData = this.getPlaylistById(this.playlistId);
-
-    if (playlistData) {
-      this.playlist = playlistData;
-      this.playlistName = playlistData.name;
-      this.playlistDescription = playlistData.description;
-      this.playlistCoverImage = playlistData.coverImage;
-      this.songs = playlistData.songs;
-      this.songCount = playlistData.songs.length;
-      this.duration = this.calculateTotalDuration(playlistData.songs);
-      this.createdDate = playlistData.createdDate;
     }
   }
 
@@ -345,7 +420,7 @@ export class PlaylistComponent implements OnInit {
     return mockPlaylistsData[id || "1"] || mockPlaylistsData["1"];
   }
 
-  private calculateTotalDuration(songs: Song[]): string {
+  private calculateTotalDuration(songs: any[]): string {
     let totalSeconds = 0;
 
     songs.forEach((song) => {

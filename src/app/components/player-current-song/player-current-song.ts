@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 import { Router } from "@angular/router";
 
 interface Song {
@@ -13,7 +14,7 @@ interface Song {
 
 @Component({
   selector: "app-player-current-song",
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: "./player-current-song.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -9,7 +9,7 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./search.css",
 })
 export class SearchComponent {
-  searchQuery: string = "";
+  searchQuery = "";
 
   genres = [
     {

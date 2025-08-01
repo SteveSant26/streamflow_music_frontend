@@ -18,7 +18,7 @@ export class AuthService {
 
   constructor(
     private apiService: ApiService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     // Verificar si hay un token guardado al inicializar
     this.checkAuthState();

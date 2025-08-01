@@ -1,0 +1,79 @@
+<div class="register-container">
+  <div class="register-header">
+    <h1 class="text-3xl font-bold mb-6 text-center text-gray-900">
+      Crear Cuenta
+    </h1>
+
+    @if (error()) {
+    <div class="error-message mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+      {{ error() }}
+    </div>
+    } @if (success()) {
+    <div class="success-message mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+      {{ success() }}
+    </div>
+    }
+
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm" class="register-form space-y-6">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+          Nombre Completo
+        </label>
+        <input type="text" id="name" name="name" [(ngModel)]="credentials.name" placeholder="Tu nombre completo"
+          required minlength="2" [disabled]="isLoading()" class="register-input" />
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+          Correo Electrónico
+        </label>
+        <input type="email" id="email" name="email" [(ngModel)]="credentials.email" placeholder="Tu email aquí" required
+          email [disabled]="isLoading()" class="register-input" />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+          Contraseña
+        </label>
+        <input type="password" id="password" name="password" [(ngModel)]="credentials.password" placeholder="••••••••"
+          required minlength="6" [disabled]="isLoading()" class="register-input" />
+      </div>
+
+      <div class="flex items-center">
+        <input type="checkbox" id="terms" class="register-checkbox" required />
+        <label for="terms" class="ml-3 block text-sm text-gray-700">
+          Acepto los
+          <a href="#" class="register-link">términos y condiciones</a>
+        </label>
+      </div>
+
+      <div>
+        <button type="submit" [disabled]="!registerForm.form.valid || isLoading()"
+          class="register-button disabled:opacity-50 disabled:cursor-not-allowed">
+          @if (isLoading()) { Creando cuenta... } @else { Crear Cuenta }
+        </button>
+      </div>
+
+      <div class="text-center">
+        <p class="text-sm text-gray-600">
+          ¿Ya tienes una cuenta?
+          <a [routerLink]="ROUTES_CONFIG_AUTH.LOGIN.link" class="register-link ml-1">Inicia sesión aquí</a>
+        </p>
+      </div>
+    </form>
+    <div class="social-register mt-6 flex flex-col gap-2 items-center">
+      <button type="button" (click)="registerWithGoogle()" class="social-btn">
+        <mat-icon>android</mat-icon> Registrarse con Google
+      </button>
+      <button type="button" (click)="registerWithGithub()" class="social-btn">
+        <mat-icon>commit</mat-icon> Registrarse con GitHub
+      </button>
+      <button type="button" (click)="registerWithTwitter()" class="social-btn">
+        <mat-icon>close</mat-icon> Registrarse con Twitter|X
+      </button>
+      <button type="button" (click)="registerWithDiscord()" class="social-btn">
+        <mat-icon>discord</mat-icon> Registrarse con Discord
+      </button>
+    </div>
+  </div>
+</div>

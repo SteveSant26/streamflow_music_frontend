@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: "app-card-play-button",
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: "./card-play-button.html",
   styleUrl: "./card-play-button.css",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardPlayButton {
-  @Input() id: number = 0;
+  @Input() id = 0;
   @Input() size: "small" | "large" = "small";
 
   // Mock state para el reproductor

@@ -3,14 +3,8 @@
   class="card-play-button rounded-full text-white bg-black p-4 hover:scale-105 transition hover:bg-gray-800"
 >
   @if (isPlayingPlaylist) {
-  <!-- Pause Icon -->
-  <svg [class]="iconClassName" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-  </svg>
+    <mat-icon [class]="iconClassName">pause</mat-icon>
   } @else {
-  <!-- Play Icon -->
-  <svg [class]="iconClassName" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M8 5v14l11-7z" />
-  </svg>
+    <mat-icon [class]="iconClassName">play_arrow</mat-icon>
   }
 </button>

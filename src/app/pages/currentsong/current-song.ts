@@ -38,7 +38,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
     @Inject(DOCUMENT) private readonly document: Document,
-    @Inject(PLATFORM_ID) private readonly platformId: Object,
+    @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {}
 
   ngOnInit() {
@@ -180,7 +180,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   private findDominantColor(
-    colors: Array<{ r: number; g: number; b: number }>,
+    colors: { r: number; g: number; b: number }[],
   ) {
     const colorGroups: any = {};
 
