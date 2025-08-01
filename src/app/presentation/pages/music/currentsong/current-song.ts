@@ -142,11 +142,19 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         // Make sure the player is properly initialized before resuming
         this.globalPlayerState.ensureInitialized();
         
+        // Force a state update to ensure synchronization
+        const currentState = this.globalPlayerState.getPlayerState();
+        this.updateCurrentSongView(currentState);
+        
         playerUseCase.resumeMusic().catch((error: any) => {
           console.error("Error al reanudar:", error);
           // If there's an error, try to reinitialize the player
           setTimeout(() => {
             this.globalPlayerState.ensureInitialized();
+            // Try again
+            playerUseCase.resumeMusic().catch((retryError: any) => {
+              console.error("Error al reintentar:", retryError);
+            });
           }, 100);
         });
         console.log("Reproduciendo");
