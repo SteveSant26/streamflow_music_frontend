@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthStateService } from '@app/domain/services/auth-state.service';
+import { AuthStateService } from '@app/domain/services/auth-state-service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthUseCase {

@@ -4,7 +4,7 @@ import {
   LoginCredentials,
   AuthResult,
 } from "../repositories/i-auth.repository";
-import { AuthStateService } from "@app/domain/services/auth-state.service";
+import { AuthStateService } from "@app/domain/services/auth-state-service";
 import { ValidationError } from "../errors/auth.errors";
 
 @Injectable({
