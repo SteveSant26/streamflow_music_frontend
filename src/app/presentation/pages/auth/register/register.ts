@@ -1,20 +1,30 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
-import { Router, RouterModule } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { RegisterUseCase } from "@app/domain/usecases/register.usecase";
-import { RegisterCredentials } from "@app/domain/repositories/i-auth.repository";
-import { SocialLoginUseCase } from "../../../../domain/usecases/social-login.usecase";
-import { MatIcon } from "@angular/material/icon";
-import { ROUTES_CONFIG_AUTH } from "@app/config/routes-auth.config";
-import { AuthError, ValidationError, RegisterError, NetworkError } from '@app/domain/errors/auth.errors';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RegisterUseCase } from '@app/domain/usecases/register.usecase';
+import { RegisterCredentials } from '@app/domain/repositories/i-auth.repository';
+import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
+import { MatIcon } from '@angular/material/icon';
+import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
+import {
+  AuthError,
+  ValidationError,
+  RegisterError,
+  NetworkError,
+} from '@app/domain/errors/auth.errors';
 
 @Component({
-  selector: "app-register",
+  selector: 'app-register',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, MatIcon],
-  templateUrl: "./register.html",
-  styleUrls: ["./register.css"],
+  templateUrl: './register.html',
+  styleUrls: ['./register.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
@@ -45,7 +55,7 @@ export class RegisterComponent {
       const result = await this.registerUseCase.execute(this.credentials);
       console.log('Register successful:', result);
       this.success.set('¡Registro exitoso! Bienvenido a StreamFlow Music.');
-      
+
       // Redirigir después de mostrar el mensaje de éxito
       setTimeout(() => {
         this.router.navigate(['/home']);
@@ -61,9 +71,13 @@ export class RegisterComponent {
     if (error instanceof ValidationError) {
       this.error.set(error.message);
     } else if (error instanceof RegisterError) {
-      this.error.set('Error al crear la cuenta. Verifica que el email no esté en uso.');
+      this.error.set(
+        'Error al crear la cuenta. Verifica que el email no esté en uso.',
+      );
     } else if (error instanceof NetworkError) {
-      this.error.set('Error de conexión. Verifica tu internet e intenta de nuevo.');
+      this.error.set(
+        'Error de conexión. Verifica tu internet e intenta de nuevo.',
+      );
     } else if (error instanceof AuthError) {
       this.error.set(error.message);
     } else {
@@ -78,10 +92,6 @@ export class RegisterComponent {
 
   registerWithGithub() {
     this.socialLoginUseCase.execute('github');
-  }
-
-  registerWithFacebook() {
-    this.socialLoginUseCase.execute('facebook');
   }
 
   registerWithTwitter() {

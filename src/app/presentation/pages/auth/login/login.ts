@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,7 +12,12 @@ import { LoginCredentials } from '../../../../domain/repositories/i-auth.reposit
 import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
-import { AuthError, ValidationError, LoginError, NetworkError } from '@app/domain/errors/auth.errors';
+import {
+  AuthError,
+  ValidationError,
+  LoginError,
+  NetworkError,
+} from '@app/domain/errors/auth.errors';
 
 @Component({
   selector: 'app-login',
@@ -55,7 +65,9 @@ export class LoginComponent {
     } else if (error instanceof LoginError) {
       this.error.set('Credenciales inválidas. Verifica tu email y contraseña.');
     } else if (error instanceof NetworkError) {
-      this.error.set('Error de conexión. Verifica tu internet e intenta de nuevo.');
+      this.error.set(
+        'Error de conexión. Verifica tu internet e intenta de nuevo.',
+      );
     } else if (error instanceof AuthError) {
       this.error.set(error.message);
     } else {
@@ -70,10 +82,6 @@ export class LoginComponent {
 
   loginWithGithub() {
     this.socialLoginUseCase.execute('github');
-  }
-
-  loginWithFacebook() {
-    this.socialLoginUseCase.execute('facebook');
   }
 
   loginWithTwitter() {
