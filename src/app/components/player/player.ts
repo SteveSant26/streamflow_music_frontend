@@ -158,31 +158,4 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
       this.globalPlayerState.setAudioElement(this.audioRef.nativeElement);
     }
   }
-  }
-
-  onVolumeChange(volume: number): void {
-    this.setVolume(volume);
-  }
-
-  onRepeat(): void {
-    if (!this.playerState) return;
-
-    const modes: ('none' | 'one' | 'all')[] = ['none', 'one', 'all'];
-    const currentIndex = modes.indexOf(this.playerState.repeatMode);
-    const nextMode = modes[(currentIndex + 1) % modes.length];
-    
-    this.playerUseCase.setRepeat(nextMode);
-  }
-
-  onShuffle(): void {
-    this.playerUseCase.enableShuffle();
-  }
-
-  formatTime(seconds: number): string {
-    if (!seconds || isNaN(seconds)) return '0:00';
-    
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  }
 }
