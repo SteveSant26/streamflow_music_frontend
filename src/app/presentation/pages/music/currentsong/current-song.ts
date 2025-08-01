@@ -176,6 +176,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   skipPrevious() {
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    this.globalPlayerState.ensureInitialized();
+    
     playerUseCase.playPrevious().catch((error: any) => {
       console.error("Error al reproducir canción anterior:", error);
     });
@@ -184,6 +186,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   skipNext() {
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    this.globalPlayerState.ensureInitialized();
+    
     playerUseCase.playNext().catch((error: any) => {
       console.error("Error al reproducir siguiente canción:", error);
     });
