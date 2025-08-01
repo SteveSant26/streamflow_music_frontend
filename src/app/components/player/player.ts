@@ -152,10 +152,9 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // AfterViewInit to set up audio element with global player state
-  ngAfterViewInit(): void {
-    if (this.audioRef?.nativeElement) {
-      this.globalPlayerState.setAudioElement(this.audioRef.nativeElement);
-    }
+  private formatTime(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 }
