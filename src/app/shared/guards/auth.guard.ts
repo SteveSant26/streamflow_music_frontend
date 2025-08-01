@@ -1,51 +1,34 @@
+
+
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '@app/shared/services/auth.service';;
+import { AuthUseCase } from '@app/domain/usecases/auth.use-case';
 
+
+// Guard para proteger rutas privadas (solo usuarios autenticados)
 export const authGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
+  const authUseCase = inject(AuthUseCase);
   const router = inject(Router);
-
-  if (authService.isAuthenticated()) {
-    return true;
-  }
-
-  // Si no está autenticado, redirigir a la página de login
-  return router.createUrlTree(['/login']);
+  return authUseCase.isAuthenticated() ? true : router.createUrlTree(['/login']);
 };
 
-export const authGuardRedirect: CanActivateFn = () => {
-  const authService = inject(AuthService);
+
+// Guard para rutas públicas (login/register): si ya está autenticado, redirige a home o a la página anterior
+export const publicGuard: CanActivateFn = () => {
+  const authUseCase = inject(AuthUseCase);
   const router = inject(Router);
 
-  if (authService.isAuthenticated()) {
-    return router.createUrlTree(['/home']);
+  if (authUseCase.isAuthenticated()) {
+    // Intentar redirigir a la página anterior si existe
+    const hasHistory = window.history.length > 1;
+    if (hasHistory) {
+      window.history.back();
+      // Retornar false para cancelar la navegación actual
+      return false;
+    } else {
+      // Si no hay historial, redirigir a home
+      return router.createUrlTree(['/home']);
+    }
   }
-
-  // Si no está autenticado, redirigir a la página de login
-  return router.createUrlTree(['/login']);
-};
-
-export const authGuardRedirectIfNotAuthenticated: CanActivateFn = () => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-
-  if (!authService.isAuthenticated()) {
-    return router.createUrlTree(['/login']);
-  }
-
-  return true;
-  // Si no está autenticado, redirigir a la página de login
-};
-
-export const authGuardRedirectIfAuthenticated: CanActivateFn = () => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-
-  if (authService.isAuthenticated()) {
-    return router.createUrlTree(['/home']);
-  }
-
-  // Si no está autenticado, redirigir a la página de login
   return true;
 };

@@ -9,6 +9,7 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { authInterceptor } from './shared/utils/auth-interceptor';
 import { authProviders } from './infrastructure/providers/auth.providers';
+import { playerProviders } from './infrastructure/providers/player.providers';
 import { HttpErrorInterceptor } from '@app/infrastructure/interceptors/http-error.interceptor';
 import { AuthTokenInterceptor } from '@app/infrastructure/interceptors/auth-token.interceptor';
 
@@ -19,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideHttpClient(withInterceptors([authInterceptor])),
     ...authProviders,
+    ...playerProviders,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptor,
