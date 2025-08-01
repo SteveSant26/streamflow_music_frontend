@@ -23,9 +23,8 @@
 
       <audio
         #audioElement
-        (ended)="onNextSong()"
-        [src]="currentMusic.song ? '/assets/music/' + currentMusic.song.id + '.wav' : ''"
-      ></audio>
+        preload="metadata">
+      </audio>
     </div>
   </div>
 

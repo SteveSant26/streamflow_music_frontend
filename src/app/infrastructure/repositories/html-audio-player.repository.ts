@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Observable, Subject, interval, map, takeWhile } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, interval, takeWhile } from 'rxjs';
 import { IPlayerRepository } from '../../domain/repositories/player.repository.interface';
 import { Song } from '../../domain/entities/song.entity';
 import { Playlist } from '../../domain/entities/playlist.entity';
@@ -11,21 +11,83 @@ import { PlayerState } from '../../domain/entities/player-state.entity';
 })
 export class HtmlAudioPlayerRepository implements IPlayerRepository {
   private audio: HTMLAudioElement | null = null;
-  private playerStateSubject = new BehaviorSubject<PlayerState>(this.getInitialPlayerState());
-  private currentTimeSubject = new BehaviorSubject<number>(0);
-  private durationSubject = new BehaviorSubject<number>(0);
-  private isPlayingSubject = new BehaviorSubject<boolean>(false);
-  private volumeSubject = new BehaviorSubject<number>(1);
-  private progressSubject = new BehaviorSubject<number>(0);
-  private songEndSubject = new Subject<void>();
-  private errorSubject = new Subject<string>();
+  private readonly playerStateSubject = new BehaviorSubject<PlayerState>(this.getInitialPlayerState());
+  private readonly currentTimeSubject = new BehaviorSubject<number>(0);
+  private readonly durationSubject = new BehaviorSubject<number>(0);
+  private readonly isPlayingSubject = new BehaviorSubject<boolean>(false);
+  private readonly volumeSubject = new BehaviorSubject<number>(1);
+  private readonly progressSubject = new BehaviorSubject<number>(0);
+  private readonly songEndSubject = new Subject<void>();
+  private readonly errorSubject = new Subject<string>();
 
   private currentPlaylist: Playlist | null = null;
   private currentSongIndex = 0;
   private repeatMode: 'none' | 'one' | 'all' = 'none';
   private isShuffleEnabled = false;
   private originalPlaylistOrder: Song[] = [];
-  private isBrowser: boolean;
+  private readonly isBrowser: boolean;
+
+  // Bound event listeners for proper removal
+  private readonly onLoadStart = () => {
+    this.updatePlayerState({ isLoading: true });
+  };
+
+  private readonly onCanPlay = () => {
+    this.updatePlayerState({ isLoading: false });
+    this.durationSubject.next(this.audio?.duration || 0);
+  };
+
+  private readonly onPlay = () => {
+    this.isPlayingSubject.next(true);
+    this.updatePlayerState({ isPlaying: true });
+  };
+
+  private readonly onPause = () => {
+    this.isPlayingSubject.next(false);
+    this.updatePlayerState({ isPlaying: false });
+  };
+
+  private readonly onEnded = () => {
+    this.handleSongEnd();
+  };
+
+  private readonly onAudioError = (e: Event) => {
+    console.error('Audio error event:', e);
+    const audioElement = e.target as HTMLAudioElement;
+    
+    if (audioElement?.error) {
+      const errorCode = audioElement.error.code;
+      const errorMessage = this.getAudioErrorMessage(errorCode);
+      console.error(`Audio error (${errorCode}): ${errorMessage}`);
+      console.error('Audio src:', audioElement.src);
+      
+      // Only emit error if it's not an empty src or invalid data URL
+      if (audioElement.src && !audioElement.src.startsWith('data:')) {
+        this.errorSubject.next(`Failed to play audio`);
+      }
+    }
+    
+    this.updatePlayerState({ isLoading: false });
+  };
+
+  private getAudioErrorMessage(errorCode: number): string {
+    switch (errorCode) {
+      case 1: return 'MEDIA_ERR_ABORTED - The audio download was aborted';
+      case 2: return 'MEDIA_ERR_NETWORK - A network error occurred while downloading';
+      case 3: return 'MEDIA_ERR_DECODE - An error occurred while decoding the audio';
+      case 4: return 'MEDIA_ERR_SRC_NOT_SUPPORTED - The audio format is not supported';
+      default: return 'Unknown error';
+    }
+  }
+
+  private readonly onVolumeChange = () => {
+    if (!this.audio) return;
+    this.volumeSubject.next(this.audio.volume);
+    this.updatePlayerState({ 
+      volume: this.audio.volume,
+      isMuted: this.audio.muted 
+    });
+  };
 
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -35,6 +97,46 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       this.setupAudioEventListeners();
       this.startTimeUpdater();
     }
+  }
+
+  // Method to set external audio element from component
+  setAudioElement(audioElement: HTMLAudioElement): void {
+    if (this.audio && this.audio !== audioElement) {
+      // Remove listeners from old audio element if it exists
+      this.removeAudioEventListeners();
+    }
+    
+    this.audio = audioElement;
+    
+    // Don't set any src initially - let loadSong handle it when needed
+    // This prevents invalid audio format errors
+    
+    this.setupAudioEventListeners();
+    
+    // Sync current state with the new audio element
+    if (this.audio) {
+      this.audio.volume = this.volumeSubject.value;
+      const currentState = this.playerStateSubject.value;
+      if (currentState.currentSong) {
+        // If there's already a current song, load it properly
+        this.loadSong(currentState.currentSong).catch(error => {
+          console.error('Failed to load current song:', error);
+        });
+      }
+    }
+  }
+
+  private removeAudioEventListeners(): void {
+    if (!this.audio) return;
+    
+    // Remove all event listeners
+    this.audio.removeEventListener('loadstart', this.onLoadStart);
+    this.audio.removeEventListener('canplay', this.onCanPlay);
+    this.audio.removeEventListener('play', this.onPlay);
+    this.audio.removeEventListener('pause', this.onPause);
+    this.audio.removeEventListener('ended', this.onEnded);
+    this.audio.removeEventListener('error', this.onAudioError);
+    this.audio.removeEventListener('volumechange', this.onVolumeChange);
   }
 
   private getInitialPlayerState(): PlayerState {
@@ -55,42 +157,13 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
   private setupAudioEventListeners(): void {
     if (!this.audio) return;
 
-    this.audio.addEventListener('loadstart', () => {
-      this.updatePlayerState({ isLoading: true });
-    });
-
-    this.audio.addEventListener('canplay', () => {
-      this.updatePlayerState({ isLoading: false });
-      this.durationSubject.next(this.audio?.duration || 0);
-    });
-
-    this.audio.addEventListener('play', () => {
-      this.isPlayingSubject.next(true);
-      this.updatePlayerState({ isPlaying: true });
-    });
-
-    this.audio.addEventListener('pause', () => {
-      this.isPlayingSubject.next(false);
-      this.updatePlayerState({ isPlaying: false });
-    });
-
-    this.audio.addEventListener('ended', () => {
-      this.handleSongEnd();
-    });
-
-    this.audio.addEventListener('error', (e) => {
-      this.errorSubject.next('Error loading audio file');
-      this.updatePlayerState({ isLoading: false });
-    });
-
-    this.audio.addEventListener('volumechange', () => {
-      if (!this.audio) return;
-      this.volumeSubject.next(this.audio.volume);
-      this.updatePlayerState({ 
-        volume: this.audio.volume,
-        isMuted: this.audio.muted 
-      });
-    });
+    this.audio.addEventListener('loadstart', this.onLoadStart);
+    this.audio.addEventListener('canplay', this.onCanPlay);
+    this.audio.addEventListener('play', this.onPlay);
+    this.audio.addEventListener('pause', this.onPause);
+    this.audio.addEventListener('ended', this.onEnded);
+    this.audio.addEventListener('error', this.onAudioError);
+    this.audio.addEventListener('volumechange', this.onVolumeChange);
   }
 
   private startTimeUpdater(): void {
@@ -126,28 +199,36 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     
     switch (this.repeatMode) {
       case 'one':
-        if (this.audio) {
-          this.audio.currentTime = 0;
-          this.play();
-        }
+        // Repeat current song
+        this.play().catch(error => {
+          console.error('Failed to repeat song:', error);
+        });
         break;
       case 'all':
-        this.nextSong();
+        // Go to next song, or loop back to first
+        this.nextSong().catch(error => {
+          console.error('Failed to play next song:', error);
+        });
         break;
+      case 'none':
       default:
+        // Just go to next song if available
         if (this.hasNextSong()) {
-          this.nextSong();
+          this.nextSong().catch(error => {
+            console.error('Failed to play next song:', error);
+          });
         }
         break;
     }
   }
 
   private hasNextSong(): boolean {
-    return !!(this.currentPlaylist && this.currentSongIndex < this.currentPlaylist.songs.length - 1);
+    if (!this.currentPlaylist) return false;
+    return this.currentSongIndex < this.currentPlaylist.songs.length - 1;
   }
 
   private hasPreviousSong(): boolean {
-    return !!(this.currentPlaylist && this.currentSongIndex > 0);
+    return this.currentSongIndex > 0;
   }
 
   // Audio Control Implementation
@@ -155,7 +236,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     if (!this.audio) {
       throw new Error('Audio not available');
     }
-    
+
     try {
       await this.audio.play();
     } catch (error) {
@@ -173,7 +254,6 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     if (!this.audio) return;
     this.audio.pause();
     this.audio.currentTime = 0;
-    this.updatePlayerState({ isPlaying: false, currentTime: 0, progress: 0 });
   }
 
   async loadSong(song: Song): Promise<void> {
@@ -182,8 +262,13 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     }
 
     return new Promise((resolve, reject) => {
-      // Use local WAV files with fallback to silent data URL
-      const audioUrl = `/assets/music/${song.id}.wav`;
+      // Determine the correct audio file extension based on song ID
+      let audioUrl = '';
+      if (song.id === 'TheNightWeMet') {
+        audioUrl = `/assets/music/${song.id}.mp3`;
+      } else {
+        audioUrl = `/assets/music/${song.id}.wav`;
+      }
       
       this.audio!.src = audioUrl;
       this.updatePlayerState({ 
@@ -198,17 +283,18 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
         resolve();
       };
 
-      const onError = () => {
+      const onError = (event: Event) => {
         this.audio!.removeEventListener('canplay', onCanPlay);
         this.audio!.removeEventListener('error', onError);
         
-        // Use a simple silent audio data URL as fallback
-        const silentAudio = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+        console.error(`Failed to load audio file: ${audioUrl}`);
         
-        this.audio!.src = silentAudio;
-        this.updatePlayerState({ isLoading: false });
-        console.warn(`Using silent audio for song: ${song.title}`);
-        resolve();
+        // Don't set fallback audio, just reject with clear error
+        this.updatePlayerState({ 
+          isLoading: false,
+          currentSong: null
+        });
+        reject(new Error(`Failed to load audio file: ${audioUrl}`));
       };
 
       this.audio!.addEventListener('canplay', onCanPlay);
@@ -279,7 +365,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     } else if (this.repeatMode === 'all') {
       this.currentSongIndex = 0;
     } else {
-      return;
+      return; // No next song available
     }
 
     const nextSong = this.currentPlaylist.songs[this.currentSongIndex];
@@ -290,8 +376,8 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
   async previousSong(): Promise<void> {
     if (!this.currentPlaylist || !this.audio) return;
 
+    // If more than 3 seconds have passed, restart current song
     if (this.audio.currentTime > 3) {
-      // If more than 3 seconds into the song, restart current song
       this.audio.currentTime = 0;
     } else if (this.hasPreviousSong()) {
       this.currentSongIndex--;
@@ -305,20 +391,20 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     if (!this.currentPlaylist) return;
 
     if (this.isShuffleEnabled) {
-      // Restore original order
+      // Un-shuffle: restore original order
       this.currentPlaylist.songs = [...this.originalPlaylistOrder];
       this.isShuffleEnabled = false;
     } else {
-      // Shuffle the playlist
+      // Shuffle: randomize order
       const currentSong = this.currentPlaylist.songs[this.currentSongIndex];
       const shuffled = [...this.currentPlaylist.songs];
       
-      // Fisher-Yates shuffle
+      // Fisher-Yates shuffle algorithm
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
-      
+
       this.currentPlaylist.songs = shuffled;
       this.currentSongIndex = shuffled.findIndex(song => song.id === currentSong.id);
       this.isShuffleEnabled = true;
@@ -332,7 +418,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     this.updatePlayerState({ repeatMode: mode });
   }
 
-  // Events Implementation
+  // Event Observables Implementation
   onSongEnd(): Observable<void> {
     return this.songEndSubject.asObservable();
   }

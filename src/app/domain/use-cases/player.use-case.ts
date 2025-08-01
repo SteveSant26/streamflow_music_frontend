@@ -1,130 +1,295 @@
-import { Injectable, Inject } from '@angular/core';
-import { IPlayerRepository } from '../repositories/player.repository.interface';
+import { Injectable } from '@angular/core';
 import { Song } from '../entities/song.entity';
 import { Playlist } from '../entities/playlist.entity';
 import { PlayerState } from '../entities/player-state.entity';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerUseCase {
-  constructor(@Inject('IPlayerRepository') private readonly playerRepository: IPlayerRepository) {}
+  private audio: HTMLAudioElement | null = null;
+  private readonly playerStateSubject = new BehaviorSubject<PlayerState>(this.getInitialPlayerState());
+  private currentPlaylist: Playlist | null = null;
+  private currentSongIndex = 0;
+  private readonly songEndSubject = new Subject<void>();
+  private readonly errorSubject = new Subject<string>();
 
-  // Audio Control Use Cases
-  async playSong(song: Song): Promise<void> {
-    await this.playerRepository.loadSong(song);
-    await this.playerRepository.play();
+  constructor() {}
+
+  private getInitialPlayerState(): PlayerState {
+    return {
+      currentSong: null,
+      isPlaying: false,
+      volume: 1,
+      currentTime: 0,
+      duration: 0,
+      progress: 0,
+      isLoading: false,
+      isMuted: false,
+      repeatMode: 'none',
+      isShuffleEnabled: false
+    };
   }
 
-  pauseMusic(): void {
-    this.playerRepository.pause();
+  // Audio Element Setup
+  setAudioElement(audioElement: HTMLAudioElement): void {
+    this.audio = audioElement;
+    this.setupEventListeners();
   }
 
-  resumeMusic(): Promise<void> {
-    return this.playerRepository.play();
+  private setupEventListeners(): void {
+    if (!this.audio) return;
+
+    // Set up event listeners for real-time updates
+    this.audio.addEventListener('timeupdate', () => {
+      if (this.audio) {
+        const currentTime = this.audio.currentTime;
+        const duration = this.audio.duration || 0;
+        const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+        
+        this.updatePlayerState({
+          currentTime,
+          duration,
+          progress
+        });
+      }
+    });
+
+    this.audio.addEventListener('play', () => {
+      this.updatePlayerState({ isPlaying: true });
+    });
+
+    this.audio.addEventListener('pause', () => {
+      this.updatePlayerState({ isPlaying: false });
+    });
+
+    this.audio.addEventListener('ended', () => {
+      this.songEndSubject.next();
+      this.handleSongEnd();
+    });
+
+    this.audio.addEventListener('volumechange', () => {
+      if (this.audio) {
+        this.updatePlayerState({ 
+          volume: this.audio.volume,
+          isMuted: this.audio.muted 
+        });
+      }
+    });
+
+    this.audio.addEventListener('error', (e) => {
+      console.error('Audio error:', e);
+      this.errorSubject.next('Failed to play audio');
+      this.updatePlayerState({ isLoading: false });
+    });
   }
 
-  stopMusic(): void {
-    this.playerRepository.stop();
+  private updatePlayerState(updates: Partial<PlayerState>): void {
+    const currentState = this.playerStateSubject.value;
+    this.playerStateSubject.next({ ...currentState, ...updates });
   }
 
-  // Volume Control Use Cases
-  adjustVolume(volume: number): void {
-    const clampedVolume = Math.max(0, Math.min(1, volume));
-    this.playerRepository.setVolume(clampedVolume);
-  }
-
-  toggleMute(): void {
-    const currentVolume = this.getVolume();
-    // We'll need to track mute state - for now just toggle between 0 and a default
-    if (currentVolume === 0) {
-      this.playerRepository.unmute();
-    } else {
-      this.playerRepository.mute();
+  private handleSongEnd(): void {
+    const currentState = this.playerStateSubject.value;
+    
+    if (currentState.repeatMode === 'one') {
+      // Repeat current song
+      this.play().catch(error => console.error('Failed to repeat song:', error));
+    } else if (this.hasNextSong() || currentState.repeatMode === 'all') {
+      // Play next song
+      this.playNext().catch(error => console.error('Failed to play next song:', error));
     }
   }
 
-  // Seek Control Use Cases
-  seekToTime(time: number): void {
-    this.playerRepository.seekTo(time);
+  private hasNextSong(): boolean {
+    return this.currentPlaylist !== null && this.currentSongIndex < this.currentPlaylist.songs.length - 1;
   }
 
-  seekToPercentage(percentage: number): void {
-    const duration = this.getDuration();
-    const time = (percentage / 100) * duration;
-    this.playerRepository.seekTo(time);
+  private hasPreviousSong(): boolean {
+    return this.currentSongIndex > 0;
   }
 
-  // Playlist Management Use Cases
+  // Audio Control
+  async playSong(song: Song): Promise<void> {
+    if (!this.audio) throw new Error('Audio element not set');
+    
+    const audioUrl = song.id === 'TheNightWeMet' 
+      ? `/assets/music/${song.id}.mp3`
+      : `/assets/music/${song.id}.wav`;
+    
+    this.audio.src = audioUrl;
+    this.updatePlayerState({ 
+      currentSong: song,
+      isLoading: true 
+    });
+    
+    try {
+      await this.audio.play();
+      this.updatePlayerState({ isLoading: false });
+    } catch (error) {
+      this.updatePlayerState({ isLoading: false });
+      this.errorSubject.next('Failed to play audio');
+      throw error;
+    }
+  }
+
+  pause(): void {
+    if (!this.audio) return;
+    this.audio.pause();
+  }
+
+  pauseMusic(): void {
+    this.pause();
+  }
+
+  async play(): Promise<void> {
+    if (!this.audio) throw new Error('Audio element not set');
+    await this.audio.play();
+  }
+
+  async resumeMusic(): Promise<void> {
+    return this.play();
+  }
+
+  stop(): void {
+    if (!this.audio) return;
+    this.audio.pause();
+    this.audio.currentTime = 0;
+  }
+
+  // Playlist methods
   loadPlaylist(playlist: Playlist): void {
-    this.playerRepository.setPlaylist(playlist);
+    this.currentPlaylist = playlist;
+    this.currentSongIndex = 0;
+    if (playlist.songs.length > 0) {
+      const currentState = this.playerStateSubject.value;
+      this.playerStateSubject.next({ ...currentState, currentSong: playlist.songs[0] });
+    }
   }
 
   async playNext(): Promise<void> {
-    await this.playerRepository.nextSong();
+    if (!this.currentPlaylist) {
+      console.log('No playlist loaded');
+      return;
+    }
+
+    if (this.hasNextSong()) {
+      this.currentSongIndex++;
+    } else if (this.playerStateSubject.value.repeatMode === 'all') {
+      this.currentSongIndex = 0; // Loop back to first song
+    } else {
+      console.log('No next song available');
+      return;
+    }
+
+    const nextSong = this.currentPlaylist.songs[this.currentSongIndex];
+    await this.playSong(nextSong);
   }
 
   async playPrevious(): Promise<void> {
-    await this.playerRepository.previousSong();
+    if (!this.currentPlaylist) {
+      console.log('No playlist loaded');
+      return;
+    }
+
+    // If more than 3 seconds have passed, restart current song
+    if (this.audio && this.audio.currentTime > 3) {
+      this.audio.currentTime = 0;
+      return;
+    }
+
+    if (this.hasPreviousSong()) {
+      this.currentSongIndex--;
+      const previousSong = this.currentPlaylist.songs[this.currentSongIndex];
+      await this.playSong(previousSong);
+    } else {
+      console.log('No previous song available');
+    }
+  }
+
+  // Volume Control
+  setVolume(volume: number): void {
+    if (!this.audio) return;
+    const clampedVolume = Math.max(0, Math.min(1, volume));
+    this.audio.volume = clampedVolume;
+    // State will be updated automatically by volumechange event listener
+  }
+
+  adjustVolume(volume: number): void {
+    this.setVolume(volume);
+  }
+
+  toggleMute(): void {
+    if (!this.audio) return;
+    this.audio.muted = !this.audio.muted;
+    // State will be updated automatically by volumechange event listener
+  }
+
+  // Repeat and Shuffle
+  setRepeat(mode: 'none' | 'one' | 'all'): void {
+    this.updatePlayerState({ repeatMode: mode });
   }
 
   enableShuffle(): void {
-    this.playerRepository.shufflePlaylist();
+    const currentState = this.playerStateSubject.value;
+    this.updatePlayerState({ isShuffleEnabled: !currentState.isShuffleEnabled });
   }
 
-  setRepeat(mode: 'none' | 'one' | 'all'): void {
-    this.playerRepository.setRepeatMode(mode);
+  // Seek Control
+  seekTo(time: number): void {
+    if (!this.audio?.duration) return;
+    const clampedTime = Math.max(0, Math.min(time, this.audio.duration));
+    this.audio.currentTime = clampedTime;
+    // State will be updated automatically by timeupdate event listener
   }
 
-  // State Access Use Cases
+  seekToPercentage(percentage: number): void {
+    if (!this.audio?.duration) return;
+    const time = (percentage / 100) * this.audio.duration;
+    this.seekTo(time);
+  }
+
+  // State Getters
   getPlayerState(): Observable<PlayerState> {
-    return this.playerRepository.getPlayerState();
+    return this.playerStateSubject.asObservable();
+  }
+
+  getCurrentSong(): Song | null {
+    return this.playerStateSubject.value.currentSong;
   }
 
   getCurrentTime(): number {
-    // This would need to be synchronous for immediate access
-    // The repository should maintain current state
-    return 0; // Placeholder - implement proper state access
+    return this.audio?.currentTime || 0;
   }
 
   getDuration(): number {
-    // This would need to be synchronous for immediate access
-    return 0; // Placeholder - implement proper state access
+    return this.audio?.duration || 0;
   }
 
   getVolume(): number {
-    // This would need to be synchronous for immediate access
-    return 1; // Placeholder - implement proper state access
+    return this.audio?.volume || 1;
   }
 
-  // Observable State Access
-  getCurrentTimeStream(): Observable<number> {
-    return this.playerRepository.getCurrentTime();
+  getIsPlaying(): boolean {
+    return this.audio ? !this.audio.paused : false;
   }
 
-  getDurationStream(): Observable<number> {
-    return this.playerRepository.getDuration();
+  getIsMuted(): boolean {
+    return this.audio?.muted || false;
   }
 
-  getIsPlayingStream(): Observable<boolean> {
-    return this.playerRepository.getIsPlaying();
+  getProgress(): number {
+    if (!this.audio?.duration) return 0;
+    return (this.audio.currentTime / this.audio.duration) * 100;
   }
 
-  getVolumeStream(): Observable<number> {
-    return this.playerRepository.getVolume();
-  }
-
-  getProgressStream(): Observable<number> {
-    return this.playerRepository.getProgress();
-  }
-
-  // Event Handling Use Cases
+  // Event Observables
   onSongEnd(): Observable<void> {
-    return this.playerRepository.onSongEnd();
+    return this.songEndSubject.asObservable();
   }
 
   onError(): Observable<string> {
-    return this.playerRepository.onError();
+    return this.errorSubject.asObservable();
   }
 }

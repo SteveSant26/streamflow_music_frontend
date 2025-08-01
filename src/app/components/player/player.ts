@@ -6,6 +6,7 @@ import {
   OnDestroy,
   ViewChild,
   AfterViewInit,
+  ChangeDetectorRef,
 } from "@angular/core";
 import { PlayerControlButtonBar } from "../player-control-button-bar/player-control-button-bar";
 import { PlayerCurrentSong } from "../player-current-song/player-current-song";
@@ -70,7 +71,8 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private readonly playerUseCase: PlayerUseCase,
-    private readonly musicLibraryService: MusicLibraryService
+    private readonly musicLibraryService: MusicLibraryService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +82,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(state => {
         this.playerState = state;
         this.updateLegacyState(state);
+        this.cdr.detectChanges(); // Force change detection for OnPush
       });
 
     this.playerUseCase.onSongEnd()
@@ -95,6 +98,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
         if (error.includes('not allowed')) {
           this.showInteractionMessage = true;
         }
+        this.cdr.detectChanges(); // Force change detection for errors
       });
 
     this.loadDefaultPlaylist();
@@ -105,6 +109,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
     this.volume = state.volume;
     
     if (state.currentSong) {
+      // Map Clean Architecture Song to legacy Song format
       this.currentMusic.song = {
         id: parseInt(state.currentSong.id) || 1,
         title: state.currentSong.title,
@@ -114,6 +119,11 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
         duration: this.formatTime(state.currentSong.duration),
         image: state.currentSong.albumCover || '/assets/gorillaz2.jpg'
       };
+
+      // Don't manually set the audio source - let the repository handle it
+      // The repository will manage the audio element after setAudioElement is called
+    } else {
+      this.currentMusic.song = null;
     }
   }
 
@@ -127,30 +137,19 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (this.audioRef?.nativeElement) {
-      this.audioRef.nativeElement.volume = this.volume;
+      const audioElement = this.audioRef.nativeElement;
+      
+      // Connect the template audio element to Clean Architecture
+      this.playerUseCase.setAudioElement(audioElement);
+      
+      // Set initial volume
+      audioElement.volume = this.volume;
     }
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    
-    if (
-      this.audioRef?.nativeElement &&
-      typeof this.audioRef.nativeElement.pause === "function"
-    ) {
-      this.audioRef.nativeElement.pause();
-    }
-  }
-
-  play(): void {
-    this.audioRef?.nativeElement
-      ?.play?.()
-      .catch((e) => console.log("Error playing: ", e));
-  }
-
-  pause(): void {
-    this.audioRef?.nativeElement?.pause?.();
   }
 
   togglePlayPause(): void {

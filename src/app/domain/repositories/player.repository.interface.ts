@@ -4,6 +4,9 @@ import { Playlist } from '../entities/playlist.entity';
 import { PlayerState } from '../entities/player-state.entity';
 
 export interface IPlayerRepository {
+  // Audio Element Management
+  setAudioElement?(audioElement: HTMLAudioElement): void;
+  
   // Audio Control
   play(): Promise<void>;
   pause(): void;

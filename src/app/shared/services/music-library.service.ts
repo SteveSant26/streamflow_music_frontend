@@ -15,34 +15,34 @@ export class MusicLibraryService {
   }
 
   private initializeSampleData(): void {
-    // Sample songs - using online audio files for testing
+    // Sample songs - using available audio files
     const sampleSongs: Song[] = [
-        {
-        id: 'TheNightWeMet',
-        title: 'The Night We Met',
-        artist: 'Gorillaz',
-        duration: 3.28, // 5 seconds
+      {
+        id: '1',
+        title: 'Demo Track 1',
+        artist: 'Test Artist',
+        duration: 30, // 30 seconds
         albumCover: '/assets/gorillaz2.jpg'
       },
       {
-        id: 'sample1',
-        title: 'Demo Bell Sound 1',
-        artist: 'Sound Jay',
-        duration: 5, // 5 seconds
+        id: '2',
+        title: 'Demo Track 2',
+        artist: 'Test Artist',
+        duration: 25, // 25 seconds
         albumCover: '/assets/gorillaz2.jpg'
       },
       {
-        id: 'sample2', 
-        title: 'Demo Bell Sound 2',
-        artist: 'Sound Jay',
-        duration: 3, // 3 seconds
+        id: '3', 
+        title: 'Demo Track 3',
+        artist: 'Test Artist',
+        duration: 20, // 20 seconds
         albumCover: '/assets/gorillazzzzz.jpg'
       },
       {
-        id: 'test-song',
-        title: 'Demo Bell Sound 3',
-        artist: 'Sound Jay',
-        duration: 4, // 4 seconds
+        id: 'TheNightWeMet',
+        title: 'The Night We Met',
+        artist: 'Gorillaz',
+        duration: 210, // 3.5 minutes
         albumCover: '/assets/gorillaz2.jpg'
       }
     ];
