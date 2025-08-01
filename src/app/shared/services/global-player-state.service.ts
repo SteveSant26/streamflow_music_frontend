@@ -140,4 +140,31 @@ export class GlobalPlayerStateService {
       isShuffleEnabled: false
     };
   }
+
+  /**
+   * Restore the last known player state after navigation
+   */
+  private restorePlayerState(): void {
+    if (!this.lastKnownState?.currentSong || !this.audioElement) {
+      return;
+    }
+
+    try {
+      // Set the audio source to the current song
+      this.audioElement.src = this.lastKnownState.currentSong.audioUrl;
+      this.audioElement.currentTime = this.lastKnownState.currentTime;
+      this.audioElement.volume = this.lastKnownState.volume;
+      
+      // If it was playing, resume playback
+      if (this.lastKnownState.isPlaying) {
+        this.audioElement.play().catch(error => {
+          console.error('Error resuming music:', error);
+        });
+      }
+      
+      console.log('Player state restored successfully');
+    } catch (error) {
+      console.error('Error restoring player state:', error);
+    }
+  }
 }
