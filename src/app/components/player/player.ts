@@ -152,52 +152,12 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  togglePlayPause(): void {
-    if (!this.playerState?.currentSong) {
-      // Ensure player is initialized and load default playlist
-      this.globalPlayerState.ensureInitialized();
-      return;
-    }
-
-    this.showInteractionMessage = false;
-
-    if (this.playerState.isPlaying) {
-      this.playerUseCase.pauseMusic();
-    } else {
-      this.playerUseCase.resumeMusic().catch(error => {
-        console.error('Failed to resume music:', error);
-        if (error.message?.includes('not allowed')) {
-          this.showInteractionMessage = true;
-        }
-      });
+  // AfterViewInit to set up audio element with global player state
+  ngAfterViewInit(): void {
+    if (this.audioRef?.nativeElement) {
+      this.globalPlayerState.setAudioElement(this.audioRef.nativeElement);
     }
   }
-
-  setVolume(newVolume: number): void {
-    this.playerUseCase.adjustVolume(newVolume);
-  }
-
-  getNextSong(): Song | null {
-    // Use Clean Architecture for next song logic
-    return this.currentMusic.song;
-  }
-
-  onNextSong(): void {
-    this.showInteractionMessage = false;
-    this.playerUseCase.playNext().catch(error => {
-      console.error('Failed to play next song:', error);
-    });
-  }
-
-  onPreviousSong(): void {
-    this.showInteractionMessage = false;
-    this.playerUseCase.playPrevious().catch(error => {
-      console.error('Failed to play previous song:', error);
-    });
-  }
-
-  onPlayPauseClick(): void {
-    this.togglePlayPause();
   }
 
   onVolumeChange(volume: number): void {

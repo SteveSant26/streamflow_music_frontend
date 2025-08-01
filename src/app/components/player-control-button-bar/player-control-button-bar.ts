@@ -18,21 +18,52 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: "./player-control-button-bar.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerControlButtonBar {
-  @Input() isPlaying = false;
-  @Output() playPauseClick = new EventEmitter<void>();
-  @Output() previousClick = new EventEmitter<void>();
-  @Output() nextClick = new EventEmitter<void>();
+export class PlayerControlButtonBar implements OnInit, OnDestroy {
+  private readonly globalPlayerState = inject(GlobalPlayerStateService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroy$ = new Subject<void>();
+
+  isPlaying = false;
+  playerState: PlayerState | null = null;
+
+  ngOnInit(): void {
+    // Subscribe to global player state for play/pause state updates
+    this.globalPlayerState.getPlayerState$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state: PlayerState) => {
+        this.playerState = state;
+        this.isPlaying = state.isPlaying;
+        this.cdr.detectChanges();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   onPlayPauseClick(): void {
-    this.playPauseClick.emit();
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    if (this.isPlaying) {
+      playerUseCase.pause();
+    } else {
+      playerUseCase.resumeMusic().catch((error: any) => {
+        console.error('Error resuming music:', error);
+      });
+    }
   }
 
   onPreviousClick(): void {
-    this.previousClick.emit();
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.playPrevious().catch((error: any) => {
+      console.error('Error playing previous song:', error);
+    });
   }
 
   onNextClick(): void {
-    this.nextClick.emit();
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.playNext().catch((error: any) => {
+      console.error('Error playing next song:', error);
+    });
   }
 }

@@ -1,7 +1,7 @@
 <div class="flex flex-row justify-between items-center w-full px-1 z-50 gap-2 sm:gap-0">
   <!-- Song info - fixed width on mobile and desktop -->
   <div class=" sm:w-[200px] order-1 sm:order-1">
-    <app-player-current-song [song]="currentMusic.song">
+    <app-player-current-song>
     </app-player-current-song>
   </div>
 
@@ -10,12 +10,7 @@
     class="grid place-content-center gap-1 sm:gap-4 flex-1 order-2 sm:order-2"
   >
     <div class="flex justify-center flex-col items-center">
-      <app-player-control-button-bar
-        [isPlaying]="isPlaying"
-        (playPauseClick)="onPlayPauseClick()"
-        (previousClick)="onPreviousSong()"
-        (nextClick)="onNextSong()"
-      >
+      <app-player-control-button-bar>
       </app-player-control-button-bar>
 
       <app-player-sound-control [audioElement]="audioRef">
@@ -30,10 +25,7 @@
 
   <!-- Volume - hidden on mobile, visible on sm+ -->
   <div class="hidden sm:grid place-content-center order-3">
-    <app-player-volume-control
-      [volume]="volume"
-      (volumeChange)="onVolumeChange($event)"
-    >
+    <app-player-volume-control>
     </app-player-volume-control>
   </div>
 </div>
