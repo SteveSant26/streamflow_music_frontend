@@ -62,8 +62,7 @@ export class GlobalPlayerStateService {
    * Get the current player state
    */
   getPlayerState(): PlayerState {
-    // Access the BehaviorSubject value directly from PlayerUseCase
-    return (this.playerUseCase as any).playerStateSubject?.value || this.getDefaultPlayerState();
+    return this.playerUseCase.getCurrentPlayerState();
   }
 
   /**
