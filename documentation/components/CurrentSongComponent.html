@@ -1,0 +1,2491 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>b documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">b documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  CurrentSongComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/currentsong/current-song.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+                <code>OnDestroy</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-current-song</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./current-song.css</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./currentsong.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#currentSong" >currentSong</a>
+                            </li>
+                            <li>
+                                <a href="#showLyricsPanel" >showLyricsPanel</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#applyFallbackGradient" >applyFallbackGradient</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#extractColorsFromImage" >extractColorsFromImage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#findDominantColor" >findDominantColor</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#generateGradient" >generateGradient</a>
+                            </li>
+                            <li>
+                                <a href="#goBack" >goBack</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#loadCurrentSong" >loadCurrentSong</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onImageError" >onImageError</a>
+                            </li>
+                            <li>
+                                <a href="#onImageLoad" >onImageLoad</a>
+                            </li>
+                            <li>
+                                <a href="#onProgressClick" >onProgressClick</a>
+                            </li>
+                            <li>
+                                <a href="#skipNext" >skipNext</a>
+                            </li>
+                            <li>
+                                <a href="#skipPrevious" >skipPrevious</a>
+                            </li>
+                            <li>
+                                <a href="#toggleLyricsPanel" >toggleLyricsPanel</a>
+                            </li>
+                            <li>
+                                <a href="#togglePlayPause" >togglePlayPause</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(router: Router, cdr: ChangeDetectorRef, document: Document, platformId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank">object</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/pages/currentsong/current-song.ts:35</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>cdr</td>
+                                                  
+                                                        <td>
+                                                                    <code>ChangeDetectorRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>document</td>
+                                                  
+                                                        <td>
+                                                                    <code>Document</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>platformId</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyFallbackGradient"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>applyFallbackGradient</b></span>
+                        <a href="#applyFallbackGradient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyFallbackGradient()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="175"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:175</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractColorsFromImage"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>extractColorsFromImage</b></span>
+                        <a href="#extractColorsFromImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>extractColorsFromImage(img: HTMLImageElement)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="119"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:119</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>img</td>
+                                            <td>
+                                                        <code>HTMLImageElement</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findDominantColor"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>findDominantColor</b></span>
+                        <a href="#findDominantColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findDominantColor(colors: literal type[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="182"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:182</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>colors</td>
+                                            <td>
+                                                        <code>literal type[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generateGradient"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>generateGradient</b></span>
+                        <a href="#generateGradient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>generateGradient(color: literal type)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="208"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:208</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>color</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="goBack"></a>
+                    <span class="name">
+                        <span ><b>goBack</b></span>
+                        <a href="#goBack"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>goBack()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="92"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:92</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadCurrentSong"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>loadCurrentSong</b></span>
+                        <a href="#loadCurrentSong"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadCurrentSong()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="224"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:224</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="54"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:54</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="44"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onImageError"></a>
+                    <span class="name">
+                        <span ><b>onImageError</b></span>
+                        <a href="#onImageError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onImageError(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="72"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:72</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onImageLoad"></a>
+                    <span class="name">
+                        <span ><b>onImageLoad</b></span>
+                        <a href="#onImageLoad"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onImageLoad(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="63"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:63</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onProgressClick"></a>
+                    <span class="name">
+                        <span ><b>onProgressClick</b></span>
+                        <a href="#onProgressClick"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onProgressClick(event: MouseEvent)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="106"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:106</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>MouseEvent</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="skipNext"></a>
+                    <span class="name">
+                        <span ><b>skipNext</b></span>
+                        <a href="#skipNext"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>skipNext()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="101"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:101</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="skipPrevious"></a>
+                    <span class="name">
+                        <span ><b>skipPrevious</b></span>
+                        <a href="#skipPrevious"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>skipPrevious()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="96"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:96</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleLyricsPanel"></a>
+                    <span class="name">
+                        <span ><b>toggleLyricsPanel</b></span>
+                        <a href="#toggleLyricsPanel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toggleLyricsPanel()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="84"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:84</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="togglePlayPause"></a>
+                    <span class="name">
+                        <span ><b>togglePlayPause</b></span>
+                        <a href="#togglePlayPause"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>togglePlayPause()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="77"
+                                    class="link-to-prism">src/app/pages/currentsong/current-song.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentSong"></a>
+                    <span class="name">
+                        <span ><b>currentSong</b></span>
+                        <a href="#currentSong"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Song | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/pages/currentsong/current-song.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showLyricsPanel"></a>
+                    <span class="name">
+                        <span ><b>showLyricsPanel</b></span>
+                        <a href="#showLyricsPanel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/pages/currentsong/current-song.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  Inject,
+  PLATFORM_ID,
+} from &quot;@angular/core&quot;;
+import { CommonModule, DOCUMENT, isPlatformBrowser } from &quot;@angular/common&quot;;
+import { Router } from &quot;@angular/router&quot;;
+
+interface Song {
+  id: number;
+  title: string;
+  artist: string;
+  album: string;
+  duration: string;
+  currentTime: string;
+  progress: number;
+  cover: string;
+  gradient: string;
+  isPlaying: boolean;
+  lyrics?: string;
+}
+
+@Component({
+  selector: &quot;app-current-song&quot;,
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: &quot;./currentsong.html&quot;,
+  styleUrls: [&quot;./current-song.css&quot;],
+})
+export class CurrentSongComponent implements OnInit, OnDestroy {
+  currentSong: Song | null &#x3D; null;
+  showLyricsPanel &#x3D; false;
+
+  constructor(
+    private readonly router: Router,
+    private readonly cdr: ChangeDetectorRef,
+    @Inject(DOCUMENT) private readonly document: Document,
+    @Inject(PLATFORM_ID) private readonly platformId: object,
+  ) {}
+
+  ngOnInit() {
+    this.loadCurrentSong();
+    // Evitar scroll en el body solo en el navegador
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.body.style.overflow &#x3D; &quot;hidden&quot;;
+      this.document.body.style.margin &#x3D; &quot;0&quot;;
+      this.document.body.style.padding &#x3D; &quot;0&quot;;
+    }
+  }
+
+  ngOnDestroy() {
+    // Restaurar scroll cuando se salga de la vista solo en el navegador
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.body.style.overflow &#x3D; &quot;&quot;;
+      this.document.body.style.margin &#x3D; &quot;&quot;;
+      this.document.body.style.padding &#x3D; &quot;&quot;;
+    }
+  }
+
+  onImageLoad(event: Event) {
+    const img &#x3D; event.target as HTMLImageElement;
+    console.log(&quot;Imagen de canción cargada:&quot;, img.src);
+
+    setTimeout(() &#x3D;&gt; {
+      this.extractColorsFromImage(img);
+    }, 100);
+  }
+
+  onImageError(event: Event) {
+    console.error(&quot;Error al cargar imagen de canción:&quot;, event);
+    this.applyFallbackGradient();
+  }
+
+  togglePlayPause() {
+    if (this.currentSong) {
+      this.currentSong.isPlaying &#x3D; !this.currentSong.isPlaying;
+      console.log(this.currentSong.isPlaying ? &quot;Reproduciendo&quot; : &quot;Pausado&quot;);
+    }
+  }
+
+  toggleLyricsPanel() {
+    this.showLyricsPanel &#x3D; !this.showLyricsPanel;
+    console.log(
+      &quot;Panel de letras:&quot;,
+      this.showLyricsPanel ? &quot;Abierto&quot; : &quot;Cerrado&quot;,
+    );
+  }
+
+  goBack() {
+    this.router.navigate([&quot;/home&quot;]);
+  }
+
+  skipPrevious() {
+    console.log(&quot;Canción anterior&quot;);
+    // Aquí iría la lógica para cambiar a la canción anterior
+  }
+
+  skipNext() {
+    console.log(&quot;Siguiente canción&quot;);
+    // Aquí iría la lógica para cambiar a la siguiente canción
+  }
+
+  onProgressClick(event: MouseEvent) {
+    const progressBar &#x3D; event.currentTarget as HTMLElement;
+    const rect &#x3D; progressBar.getBoundingClientRect();
+    const clickX &#x3D; event.clientX - rect.left;
+    const width &#x3D; rect.width;
+    const newProgress &#x3D; (clickX / width) * 100;
+
+    if (this.currentSong) {
+      this.currentSong.progress &#x3D; newProgress;
+      console.log(&quot;Nuevo progreso:&quot;, newProgress + &quot;%&quot;);
+    }
+  }
+
+  private extractColorsFromImage(img: HTMLImageElement) {
+    if (!isPlatformBrowser(this.platformId)) {
+      this.applyFallbackGradient();
+      return;
+    }
+
+    try {
+      const canvas &#x3D; this.document.createElement(&quot;canvas&quot;);
+      const ctx &#x3D; canvas.getContext(&quot;2d&quot;);
+
+      if (!ctx) {
+        console.error(&quot;No se pudo obtener contexto 2D del canvas&quot;);
+        return;
+      }
+
+      const analysisSize &#x3D; 150;
+      canvas.width &#x3D; analysisSize;
+      canvas.height &#x3D; analysisSize;
+
+      img.crossOrigin &#x3D; &quot;anonymous&quot;;
+      ctx.drawImage(img, 0, 0, analysisSize, analysisSize);
+
+      const colors &#x3D; [];
+      const samples &#x3D; 30;
+
+      for (let i &#x3D; 0; i &lt; samples; i++) {
+        for (let j &#x3D; 0; j &lt; samples; j++) {
+          const x &#x3D; Math.floor((analysisSize / samples) * i);
+          const y &#x3D; Math.floor((analysisSize / samples) * j);
+
+          const imageData &#x3D; ctx.getImageData(x, y, 1, 1);
+          const [r, g, b, a] &#x3D; imageData.data;
+
+          if (a &gt; 200 &amp;&amp; r + g + b &gt; 50 &amp;&amp; r + g + b &lt; 650) {
+            colors.push({ r, g, b });
+          }
+        }
+      }
+
+      if (colors.length &gt; 0) {
+        const dominantColor &#x3D; this.findDominantColor(colors);
+        const gradient &#x3D; this.generateGradient(dominantColor);
+
+        if (this.currentSong) {
+          this.currentSong.gradient &#x3D; gradient;
+          this.cdr.detectChanges();
+        }
+      } else {
+        this.applyFallbackGradient();
+      }
+    } catch (error) {
+      console.error(&quot;Error al extraer colores:&quot;, error);
+      this.applyFallbackGradient();
+    }
+  }
+
+  private applyFallbackGradient() {
+    if (this.currentSong) {
+      this.currentSong.gradient &#x3D;
+        &quot;linear-gradient(135deg, #667eea 0%, #764ba2 100%)&quot;;
+    }
+  }
+
+  private findDominantColor(
+    colors: { r: number; g: number; b: number }[],
+  ) {
+    const colorGroups: any &#x3D; {};
+
+    colors.forEach((color) &#x3D;&gt; {
+      const key &#x3D; &#x60;${Math.floor(color.r / 25) * 25}-${Math.floor(color.g / 25) * 25}-${Math.floor(color.b / 25) * 25}&#x60;;
+      if (!colorGroups[key]) {
+        colorGroups[key] &#x3D; { ...color, count: 0 };
+      }
+      colorGroups[key].count++;
+    });
+
+    let dominantColor &#x3D; colors[0];
+    let maxCount &#x3D; 0;
+
+    Object.values(colorGroups).forEach((group: any) &#x3D;&gt; {
+      if (group.count &gt; maxCount) {
+        maxCount &#x3D; group.count;
+        dominantColor &#x3D; group;
+      }
+    });
+
+    return dominantColor;
+  }
+
+  private generateGradient(color: { r: number; g: number; b: number }) {
+    const baseColor &#x3D; &#x60;rgb(${color.r}, ${color.g}, ${color.b})&#x60;;
+    const darkerColor &#x3D; &#x60;rgb(${Math.max(0, color.r - 80)}, ${Math.max(0, color.g - 80)}, ${Math.max(0, color.b - 80)})&#x60;;
+    const lighterColor &#x3D; &#x60;rgb(${Math.min(255, color.r + 50)}, ${Math.min(255, color.g + 50)}, ${Math.min(255, color.b + 50)})&#x60;;
+
+    const brightness &#x3D; (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
+
+    if (brightness &lt; 80) {
+      return &#x60;linear-gradient(135deg, ${baseColor} 0%, ${lighterColor} 100%)&#x60;;
+    } else if (brightness &gt; 180) {
+      return &#x60;linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 100%)&#x60;;
+    } else {
+      return &#x60;linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 50%, ${lighterColor} 100%)&#x60;;
+    }
+  }
+
+  private loadCurrentSong() {
+    // Simulando datos de la canción actual
+    this.currentSong &#x3D; {
+      id: 1,
+      title: &quot;Feel Good Inc.&quot;,
+      artist: &quot;Gorillaz&quot;,
+      album: &quot;Demon Days&quot;,
+      duration: &quot;3:41&quot;,
+      currentTime: &quot;1:23&quot;,
+      progress: 37,
+      cover: &quot;/assets/gorillaz2.jpg&quot;,
+      gradient: &quot;linear-gradient(135deg, #667eea 0%, #764ba2 100%)&quot;,
+      isPlaying: true,
+    };
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!-- Contenedor principal con gradiente continuo --&gt;
+&lt;div
+  class&#x3D;&quot;main-container&quot;
+  [class.with-lyrics]&#x3D;&quot;showLyricsPanel&quot;
+  [style.background]&#x3D;&quot;currentSong.gradient&quot;
+  *ngIf&#x3D;&quot;currentSong&quot;
+&gt;
+  &lt;div class&#x3D;&quot;reproductor-content&quot;&gt;
+    &lt;!-- Header con botón de regreso --&gt;
+    &lt;div class&#x3D;&quot;current-song-header&quot;&gt;
+      &lt;button (click)&#x3D;&quot;goBack()&quot; class&#x3D;&quot;back-button&quot; aria-label&#x3D;&quot;Volver&quot;&gt;
+        &lt;svg
+          width&#x3D;&quot;24&quot;
+          height&#x3D;&quot;24&quot;
+          fill&#x3D;&quot;none&quot;
+          stroke&#x3D;&quot;currentColor&quot;
+          viewBox&#x3D;&quot;0 0 24 24&quot;
+        &gt;
+          &lt;path
+            stroke-linecap&#x3D;&quot;round&quot;
+            stroke-linejoin&#x3D;&quot;round&quot;
+            stroke-width&#x3D;&quot;2&quot;
+            d&#x3D;&quot;M15 19l-7-7 7-7&quot;
+          /&gt;
+        &lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;h1 class&#x3D;&quot;current-song-title&quot;&gt;Reproduciendo ahora&lt;/h1&gt;
+
+      &lt;!-- Botón de letras en la esquina superior derecha --&gt;
+      &lt;button
+        (click)&#x3D;&quot;toggleLyricsPanel()&quot;
+        class&#x3D;&quot;lyrics-button&quot;
+        aria-label&#x3D;&quot;Ver letras&quot;
+        [class.active]&#x3D;&quot;showLyricsPanel&quot;
+      &gt;
+        &lt;svg
+          width&#x3D;&quot;24&quot;
+          height&#x3D;&quot;24&quot;
+          fill&#x3D;&quot;none&quot;
+          stroke&#x3D;&quot;currentColor&quot;
+          viewBox&#x3D;&quot;0 0 24 24&quot;
+        &gt;
+          &lt;path
+            stroke-linecap&#x3D;&quot;round&quot;
+            stroke-linejoin&#x3D;&quot;round&quot;
+            stroke-width&#x3D;&quot;2&quot;
+            d&#x3D;&quot;M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z&quot;
+          /&gt;
+        &lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Imagen de la canción --&gt;
+    &lt;div class&#x3D;&quot;song-artwork-container&quot;&gt;
+      &lt;div class&#x3D;&quot;song-artwork-wrapper&quot;&gt;
+        &lt;img
+          [src]&#x3D;&quot;currentSong.cover&quot;
+          [alt]&#x3D;&quot;currentSong.title&quot;
+          class&#x3D;&quot;song-artwork&quot;
+          (load)&#x3D;&quot;onImageLoad($event)&quot;
+          (error)&#x3D;&quot;onImageError($event)&quot;
+          crossorigin&#x3D;&quot;anonymous&quot;
+        /&gt;
+        &lt;!-- Efecto de vinilo giratorio cuando está reproduciendo --&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Espaciador flexible --&gt;
+    &lt;div class&#x3D;&quot;flexible-spacer&quot;&gt;&lt;/div&gt;
+
+    &lt;!-- Información de la canción --&gt;
+    &lt;div class&#x3D;&quot;song-info&quot;&gt;
+      &lt;h2 class&#x3D;&quot;song-title&quot;&gt;{{ currentSong.title }}&lt;/h2&gt;
+      &lt;p class&#x3D;&quot;song-artist&quot;&gt;{{ currentSong.artist }}&lt;/p&gt;
+      &lt;p class&#x3D;&quot;song-album&quot;&gt;{{ currentSong.album }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Barra de progreso --&gt;
+    &lt;div class&#x3D;&quot;progress-section&quot;&gt;
+      &lt;div class&#x3D;&quot;time-display&quot;&gt;
+        &lt;span class&#x3D;&quot;current-time&quot;&gt;{{ currentSong.currentTime }}&lt;/span&gt;
+        &lt;span class&#x3D;&quot;total-time&quot;&gt;{{ currentSong.duration }}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div
+        onkeypress
+        class&#x3D;&quot;progress-bar-container&quot;
+        (click)&#x3D;&quot;onProgressClick($event)&quot;
+      &gt;
+        &lt;div class&#x3D;&quot;progress-bar&quot;&gt;
+          &lt;div
+            class&#x3D;&quot;progress-fill&quot;
+            [style.width.%]&#x3D;&quot;currentSong.progress&quot;
+          &gt;&lt;/div&gt;
+          &lt;div
+            class&#x3D;&quot;progress-thumb&quot;
+            [style.left.%]&#x3D;&quot;currentSong.progress&quot;
+          &gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Controles de reproducción --&gt;
+    &lt;div class&#x3D;&quot;player-controls&quot;&gt;
+      &lt;button
+        (click)&#x3D;&quot;skipPrevious()&quot;
+        class&#x3D;&quot;control-button secondary&quot;
+        aria-label&#x3D;&quot;Canción anterior&quot;
+      &gt;
+        &lt;svg width&#x3D;&quot;32&quot; height&#x3D;&quot;32&quot; fill&#x3D;&quot;currentColor&quot; viewBox&#x3D;&quot;0 0 24 24&quot;&gt;
+          &lt;path
+            d&#x3D;&quot;M7 6V18L17 12L7 6Z&quot;
+            transform&#x3D;&quot;scale(-1 1) translate(-24 0)&quot;
+          /&gt;
+          &lt;rect x&#x3D;&quot;6&quot; y&#x3D;&quot;6&quot; width&#x3D;&quot;2&quot; height&#x3D;&quot;12&quot; /&gt;
+        &lt;/svg&gt;
+      &lt;/button&gt;
+
+      &lt;button
+        (click)&#x3D;&quot;togglePlayPause()&quot;
+        class&#x3D;&quot;control-button primary&quot;
+        [attr.aria-label]&#x3D;&quot;currentSong.isPlaying ? &#x27;Pausar&#x27; : &#x27;Reproducir&#x27;&quot;
+      &gt;
+        &lt;svg
+          *ngIf&#x3D;&quot;currentSong.isPlaying&quot;
+          width&#x3D;&quot;40&quot;
+          height&#x3D;&quot;40&quot;
+          fill&#x3D;&quot;currentColor&quot;
+          viewBox&#x3D;&quot;0 0 24 24&quot;
+        &gt;
+          &lt;path d&#x3D;&quot;M6 4H10V20H6V4ZM14 4H18V20H14V4Z&quot; /&gt;
+        &lt;/svg&gt;
+        &lt;svg
+          *ngIf&#x3D;&quot;!currentSong.isPlaying&quot;
+          width&#x3D;&quot;40&quot;
+          height&#x3D;&quot;40&quot;
+          fill&#x3D;&quot;currentColor&quot;
+          viewBox&#x3D;&quot;0 0 24 24&quot;
+        &gt;
+          &lt;path d&#x3D;&quot;M8 5V19L19 12L8 5Z&quot; /&gt;
+        &lt;/svg&gt;
+      &lt;/button&gt;
+
+      &lt;button
+        (click)&#x3D;&quot;skipNext()&quot;
+        class&#x3D;&quot;control-button secondary&quot;
+        aria-label&#x3D;&quot;Siguiente canción&quot;
+      &gt;
+        &lt;svg width&#x3D;&quot;32&quot; height&#x3D;&quot;32&quot; fill&#x3D;&quot;currentColor&quot; viewBox&#x3D;&quot;0 0 24 24&quot;&gt;
+          &lt;path d&#x3D;&quot;M7 6V18L17 12L7 6Z&quot; /&gt;
+          &lt;rect x&#x3D;&quot;16&quot; y&#x3D;&quot;6&quot; width&#x3D;&quot;2&quot; height&#x3D;&quot;12&quot; /&gt;
+        &lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Footer con información adicional --&gt;
+    &lt;div class&#x3D;&quot;song-footer&quot;&gt;
+      &lt;div class&#x3D;&quot;footer-actions&quot;&gt;
+        &lt;button class&#x3D;&quot;action-button&quot; aria-label&#x3D;&quot;Agregar a favoritos&quot;&gt;
+          &lt;svg
+            width&#x3D;&quot;24&quot;
+            height&#x3D;&quot;24&quot;
+            fill&#x3D;&quot;none&quot;
+            stroke&#x3D;&quot;currentColor&quot;
+            viewBox&#x3D;&quot;0 0 24 24&quot;
+          &gt;
+            &lt;path
+              stroke-linecap&#x3D;&quot;round&quot;
+              stroke-linejoin&#x3D;&quot;round&quot;
+              stroke-width&#x3D;&quot;2&quot;
+              d&#x3D;&quot;M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z&quot;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/button&gt;
+        &lt;button class&#x3D;&quot;action-button&quot; aria-label&#x3D;&quot;Compartir&quot;&gt;
+          &lt;svg
+            width&#x3D;&quot;24&quot;
+            height&#x3D;&quot;24&quot;
+            fill&#x3D;&quot;none&quot;
+            stroke&#x3D;&quot;currentColor&quot;
+            viewBox&#x3D;&quot;0 0 24 24&quot;
+          &gt;
+            &lt;path
+              stroke-linecap&#x3D;&quot;round&quot;
+              stroke-linejoin&#x3D;&quot;round&quot;
+              stroke-width&#x3D;&quot;2&quot;
+              d&#x3D;&quot;M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z&quot;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/button&gt;
+        &lt;button class&#x3D;&quot;action-button&quot; aria-label&#x3D;&quot;Más opciones&quot;&gt;
+          &lt;svg
+            width&#x3D;&quot;24&quot;
+            height&#x3D;&quot;24&quot;
+            fill&#x3D;&quot;none&quot;
+            stroke&#x3D;&quot;currentColor&quot;
+            viewBox&#x3D;&quot;0 0 24 24&quot;
+          &gt;
+            &lt;path
+              stroke-linecap&#x3D;&quot;round&quot;
+              stroke-linejoin&#x3D;&quot;round&quot;
+              stroke-width&#x3D;&quot;2&quot;
+              d&#x3D;&quot;M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z&quot;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Panel de letras deslizante --&gt;
+  &lt;div class&#x3D;&quot;lyrics-panel&quot;&gt;
+    &lt;div class&#x3D;&quot;lyrics-header&quot;&gt;
+      &lt;h3&gt;Lyrics:&lt;/h3&gt;
+      &lt;button
+        (click)&#x3D;&quot;toggleLyricsPanel()&quot;
+        class&#x3D;&quot;close-lyrics-button&quot;
+        aria-label&#x3D;&quot;Cerrar letras&quot;
+      &gt;
+        &lt;svg
+          width&#x3D;&quot;24&quot;
+          height&#x3D;&quot;24&quot;
+          fill&#x3D;&quot;none&quot;
+          stroke&#x3D;&quot;currentColor&quot;
+          viewBox&#x3D;&quot;0 0 24 24&quot;
+        &gt;
+          &lt;path
+            stroke-linecap&#x3D;&quot;round&quot;
+            stroke-linejoin&#x3D;&quot;round&quot;
+            stroke-width&#x3D;&quot;2&quot;
+            d&#x3D;&quot;M6 18L18 6M6 6l12 12&quot;
+          /&gt;
+        &lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;lyrics-content&quot;&gt;
+      &lt;div class&#x3D;&quot;lyrics-text&quot;&gt;
+        &lt;p class&#x3D;&quot;lyrics-line active&quot;&gt;City&#x27;s breaking down on a camel&#x27;s back&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;
+          They just have to go, &#x27;cause they don&#x27;t know wack
+        &lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;
+          So while you fill the streets, it&#x27;s appealing to see
+        &lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;
+          You won&#x27;t get out the county, &#x27;cause you&#x27;re bad and free
+        &lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;
+          You&#x27;ve got a new horizon, it&#x27;s ephemeral style
+        &lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;A melancholy town where we never smile&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;And all I wanna hear is the message beep&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;My dreams, they got a kissing&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;&#x27;Cause I don&#x27;t get sleep, no&lt;/p&gt;
+
+        &lt;p class&#x3D;&quot;lyrics-line chorus&quot;&gt;Windmill, windmill for the land&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line chorus&quot;&gt;Turn forever, hand in hand&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line chorus&quot;&gt;Take it all in on your stride&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line chorus&quot;&gt;It is ticking, falling down&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line chorus&quot;&gt;Love forever, love has freely&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line chorus&quot;&gt;Turned forever, you and me&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line chorus&quot;&gt;Windmill, windmill for the land&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line chorus&quot;&gt;Is everybody in?&lt;/p&gt;
+
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;Laughing gas these hazmats, fast cats&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;Lining &#x27;em up like ass cracks&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;Play these ponies at the track&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;It&#x27;s my chocolate attack&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;
+          Shit, I&#x27;m stepping in the heart of this here (yeah)
+        &lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;Care Bear rappin&#x27; in harder this year (yeah)&lt;/p&gt;
+        &lt;p class&#x3D;&quot;lyrics-line&quot;&gt;Watch me as I gravitate, ha-ha-ha-ha-ha&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Vista de carga si no hay canción --&gt;
+&lt;div *ngIf&#x3D;&quot;!currentSong&quot; class&#x3D;&quot;loading-container&quot;&gt;
+  &lt;div class&#x3D;&quot;loading-content&quot;&gt;
+    &lt;div class&#x3D;&quot;loading-spinner&quot;&gt;&lt;/div&gt;
+    &lt;p&gt;Cargando canción...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./current-song.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">/* Container principal - Pantalla completa sin scroll */
+.current-song-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* El contenedor principal cubre toda la pantalla con gradiente */
+.main-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column; /* Mobile first: columna por defecto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* El reproductor ocupa toda la pantalla por defecto */
+.reproductor-content {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem;
+  color: white;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* En móvil, cuando las letras están activas, el reproductor se reduce */
+.main-container.with-lyrics .reproductor-content {
+  height: 50vh; /* Ocupa la mitad superior en móvil */
+  padding: 0.5rem; /* Menor padding en móvil */
+}
+
+/* Ajustar tamaños en móvil cuando las letras están activas */
+.main-container.with-lyrics .song-artwork-wrapper {
+  width: min(120px, 30vw);
+  height: min(120px, 30vw);
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.main-container.with-lyrics .song-title {
+  font-size: min(1.2rem, 5vw);
+}
+
+.main-container.with-lyrics .song-artist {
+  font-size: min(0.9rem, 4vw);
+}
+
+.main-container.with-lyrics .flexible-spacer {
+  min-height: 0.5rem;
+}
+
+.main-container::before {
+  content: &quot;&quot;;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.main-container &gt; * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.current-song-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.back-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.current-song-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Artwork de la canción - Optimizado para pantalla completa */
+.song-artwork-container {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+  max-height: 35vh; /* Reducido para dar más espacio a los controles */
+}
+
+/* Espaciador flexible para centrar el contenido */
+.flexible-spacer {
+  flex: 1;
+  min-height: 1rem;
+}
+
+.song-artwork-wrapper {
+  position: relative;
+  width: min(200px, 60vw);
+  height: min(200px, 60vw);
+  max-width: 250px;
+  max-height: 250px;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  animation: slideUp 0.6s ease-out 0.2s both;
+  transition: all 0.3s ease;
+}
+
+.song-artwork {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.song-artwork:hover {
+  transform: scale(1.05);
+}
+
+/* Información de la canción - Espaciado optimizado */
+.song-info {
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: slideUp 0.6s ease-out 0.4s both;
+  max-width: 90vw;
+  flex: 0 0 auto;
+}
+
+.song-title {
+  font-size: min(1.75rem, 7vw);
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.song-artist {
+  font-size: min(1.25rem, 5vw);
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+  opacity: 0.9;
+}
+
+.song-album {
+  font-size: min(1rem, 4vw);
+  margin: 0;
+  opacity: 0.7;
+}
+
+/* Sección de progreso - Espaciado optimizado */
+.progress-section {
+  width: 100%;
+  margin-bottom: 1rem;
+  animation: slideUp 0.6s ease-out 0.6s both;
+  flex: 0 0 auto;
+}
+
+.time-display {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+.progress-bar-container {
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.progress-bar {
+  position: relative;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: white;
+  border-radius: 2px;
+  transition: width 0.1s ease;
+}
+
+.progress-thumb {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: left 0.1s ease;
+}
+
+/* Controles de reproducción - Espaciado optimizado */
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  animation: slideUp 0.6s ease-out 0.8s both;
+  flex: 0 0 auto;
+}
+
+.control-button {
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-button.secondary {
+  width: 3rem;
+  height: 3rem;
+}
+
+.control-button.primary {
+  width: 4rem;
+  height: 4rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1f2937;
+}
+
+.control-button:hover {
+  transform: scale(1.05);
+}
+
+.control-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.control-button.primary:hover {
+  background: white;
+}
+
+/* Footer */
+.song-footer {
+  width: 100%;
+  animation: slideUp 0.6s ease-out 1s both;
+  flex: 0 0 auto;
+  margin-bottom: 1rem;
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.action-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.action-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Loading state - Pantalla completa */
+.loading-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+}
+
+.loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive - Tablet y Desktop */
+@media (min-width: 640px) {
+  .current-song-container {
+    padding: 2rem;
+  }
+
+  .song-artwork-wrapper {
+    width: 350px;
+    height: 350px;
+  }
+
+  .song-title {
+    font-size: 2.25rem;
+  }
+
+  .song-artist {
+    font-size: 1.5rem;
+  }
+
+  .current-song-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Responsive - Desktop grande */
+@media (min-width: 1024px) {
+  .current-song-container {
+    padding: 3rem;
+  }
+
+  .song-artwork-wrapper {
+    width: min(400px, 50vw);
+    height: min(400px, 50vw);
+  }
+
+  .song-title {
+    font-size: min(2.5rem, 6vw);
+  }
+
+  .player-controls {
+    gap: 2rem;
+  }
+
+  .control-button.secondary {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .control-button.primary {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+
+/* Evitar scroll en toda la página cuando esta vista está activa */
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Asegurar que no hay margin/padding del body afectando */
+:host-context(body) {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Botón de letras en el header */
+.lyrics-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  margin-left: auto;
+}
+
+.lyrics-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.lyrics-button.active {
+  background: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+/* Panel de letras deslizante - Mobile first */
+.lyrics-panel {
+  width: 100vw;
+  height: 0; /* Oculto por defecto en móvil */
+  transition: height 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+/* En móvil, cuando las letras están activas, ocupan la mitad inferior */
+.main-container.with-lyrics .lyrics-panel {
+  height: 50vh;
+}
+
+.lyrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex: 0 0 auto;
+}
+
+.lyrics-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+}
+
+.close-lyrics-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.close-lyrics-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.lyrics-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.lyrics-text {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.lyrics-line {
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  padding: 0.5rem 0;
+  color: white;
+}
+
+.lyrics-line.active {
+  opacity: 1;
+  color: white;
+  font-weight: 600;
+  transform: scale(1.02);
+}
+
+.lyrics-line.chorus {
+  font-weight: 500;
+  color: white;
+}
+
+/* Responsive para pantallas desktop (768px+) */
+@media (min-width: 769px) {
+  /* En desktop, cambiar a layout horizontal */
+  .main-container {
+    flex-direction: row;
+  }
+
+  /* En desktop, el reproductor vuelve a ocupar toda la pantalla por defecto */
+  .reproductor-content {
+    height: 100vh;
+  }
+
+  /* En desktop con letras activas, layout lado a lado */
+  .main-container.with-lyrics .reproductor-content {
+    width: 50vw;
+    height: 100vh; /* Volver a altura completa en desktop */
+  }
+
+  /* En desktop, panel de letras al lado derecho */
+  .lyrics-panel {
+    width: 0;
+    height: 100vh;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .main-container.with-lyrics .lyrics-panel {
+    width: 50vw;
+    height: 100vh;
+  }
+
+  /* En desktop, ajustar tamaño de artwork cuando las letras están activas */
+  .main-container.with-lyrics .song-artwork-wrapper {
+    width: min(150px, 40vw);
+    height: min(150px, 40vw);
+    max-width: 180px;
+    max-height: 180px;
+  }
+}
+
+/* Ajustes adicionales para vista dividida - Solo en desktop */
+@media (min-width: 769px) {
+  .main-container.with-lyrics .song-info {
+    margin-bottom: 0.5rem;
+  }
+
+  .main-container.with-lyrics .song-title {
+    font-size: min(1.5rem, 6vw);
+  }
+
+  .main-container.with-lyrics .song-artist {
+    font-size: min(1rem, 4vw);
+  }
+
+  .main-container.with-lyrics .song-album {
+    font-size: min(0.875rem, 3.5vw);
+  }
+
+  .main-container.with-lyrics .progress-section {
+    margin-bottom: 0.75rem;
+  }
+
+  .main-container.with-lyrics .player-controls {
+    margin-bottom: 0.5rem;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!-- Contenedor principal con gradiente continuo --><div  class="main-container"  [class.with-lyrics]="showLyricsPanel"  [style.background]="currentSong.gradient"  *ngIf="currentSong">  <div class="reproductor-content">    <!-- Header con botón de regreso -->    <div class="current-song-header">      <button (click)="goBack()" class="back-button" aria-label="Volver">        <svg          width="24"          height="24"          fill="none"          stroke="currentColor"          viewBox="0 0 24 24"        >          <path            stroke-linecap="round"            stroke-linejoin="round"            stroke-width="2"            d="M15 19l-7-7 7-7"          />        </svg>      </button>      <h1 class="current-song-title">Reproduciendo ahora</h1>      <!-- Botón de letras en la esquina superior derecha -->      <button        (click)="toggleLyricsPanel()"        class="lyrics-button"        aria-label="Ver letras"        [class.active]="showLyricsPanel"      >        <svg          width="24"          height="24"          fill="none"          stroke="currentColor"          viewBox="0 0 24 24"        >          <path            stroke-linecap="round"            stroke-linejoin="round"            stroke-width="2"            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"          />        </svg>      </button>    </div>    <!-- Imagen de la canción -->    <div class="song-artwork-container">      <div class="song-artwork-wrapper">        <img          [src]="currentSong.cover"          [alt]="currentSong.title"          class="song-artwork"          (load)="onImageLoad($event)"          (error)="onImageError($event)"          crossorigin="anonymous"        />        <!-- Efecto de vinilo giratorio cuando está reproduciendo -->      </div>    </div>    <!-- Espaciador flexible -->    <div class="flexible-spacer"></div>    <!-- Información de la canción -->    <div class="song-info">      <h2 class="song-title">{{ currentSong.title }}</h2>      <p class="song-artist">{{ currentSong.artist }}</p>      <p class="song-album">{{ currentSong.album }}</p>    </div>    <!-- Barra de progreso -->    <div class="progress-section">      <div class="time-display">        <span class="current-time">{{ currentSong.currentTime }}</span>        <span class="total-time">{{ currentSong.duration }}</span>      </div>      <div        onkeypress        class="progress-bar-container"        (click)="onProgressClick($event)"      >        <div class="progress-bar">          <div            class="progress-fill"            [style.width.%]="currentSong.progress"          ></div>          <div            class="progress-thumb"            [style.left.%]="currentSong.progress"          ></div>        </div>      </div>    </div>    <!-- Controles de reproducción -->    <div class="player-controls">      <button        (click)="skipPrevious()"        class="control-button secondary"        aria-label="Canción anterior"      >        <svg width="32" height="32" fill="currentColor" viewBox="0 0 24 24">          <path            d="M7 6V18L17 12L7 6Z"            transform="scale(-1 1) translate(-24 0)"          />          <rect x="6" y="6" width="2" height="12" />        </svg>      </button>      <button        (click)="togglePlayPause()"        class="control-button primary"        [attr.aria-label]="currentSong.isPlaying ? \'Pausar\' : \'Reproducir\'"      >        <svg          *ngIf="currentSong.isPlaying"          width="40"          height="40"          fill="currentColor"          viewBox="0 0 24 24"        >          <path d="M6 4H10V20H6V4ZM14 4H18V20H14V4Z" />        </svg>        <svg          *ngIf="!currentSong.isPlaying"          width="40"          height="40"          fill="currentColor"          viewBox="0 0 24 24"        >          <path d="M8 5V19L19 12L8 5Z" />        </svg>      </button>      <button        (click)="skipNext()"        class="control-button secondary"        aria-label="Siguiente canción"      >        <svg width="32" height="32" fill="currentColor" viewBox="0 0 24 24">          <path d="M7 6V18L17 12L7 6Z" />          <rect x="16" y="6" width="2" height="12" />        </svg>      </button>    </div>    <!-- Footer con información adicional -->    <div class="song-footer">      <div class="footer-actions">        <button class="action-button" aria-label="Agregar a favoritos">          <svg            width="24"            height="24"            fill="none"            stroke="currentColor"            viewBox="0 0 24 24"          >            <path              stroke-linecap="round"              stroke-linejoin="round"              stroke-width="2"              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"            />          </svg>        </button>        <button class="action-button" aria-label="Compartir">          <svg            width="24"            height="24"            fill="none"            stroke="currentColor"            viewBox="0 0 24 24"          >            <path              stroke-linecap="round"              stroke-linejoin="round"              stroke-width="2"              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"            />          </svg>        </button>        <button class="action-button" aria-label="Más opciones">          <svg            width="24"            height="24"            fill="none"            stroke="currentColor"            viewBox="0 0 24 24"          >            <path              stroke-linecap="round"              stroke-linejoin="round"              stroke-width="2"              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"            />          </svg>        </button>      </div>    </div>  </div>  <!-- Panel de letras deslizante -->  <div class="lyrics-panel">    <div class="lyrics-header">      <h3>Lyrics:</h3>      <button        (click)="toggleLyricsPanel()"        class="close-lyrics-button"        aria-label="Cerrar letras"      >        <svg          width="24"          height="24"          fill="none"          stroke="currentColor"          viewBox="0 0 24 24"        >          <path            stroke-linecap="round"            stroke-linejoin="round"            stroke-width="2"            d="M6 18L18 6M6 6l12 12"          />        </svg>      </button>    </div>    <div class="lyrics-content">      <div class="lyrics-text">        <p class="lyrics-line active">City\'s breaking down on a camel\'s back</p>        <p class="lyrics-line">          They just have to go, \'cause they don\'t know wack        </p>        <p class="lyrics-line">          So while you fill the streets, it\'s appealing to see        </p>        <p class="lyrics-line">          You won\'t get out the county, \'cause you\'re bad and free        </p>        <p class="lyrics-line">          You\'ve got a new horizon, it\'s ephemeral style        </p>        <p class="lyrics-line">A melancholy town where we never smile</p>        <p class="lyrics-line">And all I wanna hear is the message beep</p>        <p class="lyrics-line">My dreams, they got a kissing</p>        <p class="lyrics-line">\'Cause I don\'t get sleep, no</p>        <p class="lyrics-line chorus">Windmill, windmill for the land</p>        <p class="lyrics-line chorus">Turn forever, hand in hand</p>        <p class="lyrics-line chorus">Take it all in on your stride</p>        <p class="lyrics-line chorus">It is ticking, falling down</p>        <p class="lyrics-line chorus">Love forever, love has freely</p>        <p class="lyrics-line chorus">Turned forever, you and me</p>        <p class="lyrics-line chorus">Windmill, windmill for the land</p>        <p class="lyrics-line chorus">Is everybody in?</p>        <p class="lyrics-line">Laughing gas these hazmats, fast cats</p>        <p class="lyrics-line">Lining \'em up like ass cracks</p>        <p class="lyrics-line">Play these ponies at the track</p>        <p class="lyrics-line">It\'s my chocolate attack</p>        <p class="lyrics-line">          Shit, I\'m stepping in the heart of this here (yeah)        </p>        <p class="lyrics-line">Care Bear rappin\' in harder this year (yeah)</p>        <p class="lyrics-line">Watch me as I gravitate, ha-ha-ha-ha-ha</p>      </div>    </div>  </div></div><!-- Vista de carga si no hay canción --><div *ngIf="!currentSong" class="loading-container">  <div class="loading-content">    <div class="loading-spinner"></div>    <p>Cargando canción...</p>  </div></div></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'ArtistComponent', 'selector': 'app-artist'},{'name': 'AsideMenu', 'selector': 'app-aside-menu'},{'name': 'Card', 'selector': 'app-card'},{'name': 'CardPlayButton', 'selector': 'app-card-play-button'},{'name': 'ConnectionTestComponent', 'selector': 'app-connection-test'},{'name': 'CurrentSongComponent', 'selector': 'app-current-song'},{'name': 'ExploreComponent', 'selector': 'app-explore'},{'name': 'Greeting', 'selector': 'app-greeting'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LibraryComponent', 'selector': 'app-library'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MusicsTable', 'selector': 'app-musics-table'},{'name': 'MusicsTablePlay', 'selector': 'app-musics-table-play'},{'name': 'Player', 'selector': 'app-player'},{'name': 'PlayerControlButtonBar', 'selector': 'app-player-control-button-bar'},{'name': 'PlayerCurrentSong', 'selector': 'app-player-current-song'},{'name': 'PlayerSoundControl', 'selector': 'app-player-sound-control'},{'name': 'PlayerVolumeControl', 'selector': 'app-player-volume-control'},{'name': 'PlaylistComponent', 'selector': 'app-playlist'},{'name': 'PlayListItemCard', 'selector': 'app-play-list-item-card'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'ResetPasswordComponent', 'selector': 'app-reset-password'},{'name': 'SearchComponent', 'selector': 'app-search'},{'name': 'SideMenuCard', 'selector': 'app-side-menu-card'},{'name': 'SideMenuItem', 'selector': 'app-side-menu-item'},{'name': 'UserPerfilComponent', 'selector': 'app-user-perfil'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'CurrentSongComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'CurrentSongComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

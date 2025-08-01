@@ -1,0 +1,3014 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>b documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">b documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  PlaylistComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/playlist/playlist.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-playlist</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./playlist.css</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./playlist.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#createdDate" >createdDate</a>
+                            </li>
+                            <li>
+                                <a href="#duration" >duration</a>
+                            </li>
+                            <li>
+                                <a href="#dynamicGradient" >dynamicGradient</a>
+                            </li>
+                            <li>
+                                <a href="#error" >error</a>
+                            </li>
+                            <li>
+                                <a href="#loading" >loading</a>
+                            </li>
+                            <li>
+                                <a href="#playlist" >playlist</a>
+                            </li>
+                            <li>
+                                <a href="#playlistCoverImage" >playlistCoverImage</a>
+                            </li>
+                            <li>
+                                <a href="#playlistDescription" >playlistDescription</a>
+                            </li>
+                            <li>
+                                <a href="#playlistId" >playlistId</a>
+                            </li>
+                            <li>
+                                <a href="#playlistName" >playlistName</a>
+                            </li>
+                            <li>
+                                <a href="#songCount" >songCount</a>
+                            </li>
+                            <li>
+                                <a href="#songs" >songs</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#applyFallbackGradient" >applyFallbackGradient</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#calculateTotalDuration" >calculateTotalDuration</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#calculateTotalDurationInSeconds" >calculateTotalDurationInSeconds</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#extractColorsFromImage" >extractColorsFromImage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#formatDate" >formatDate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#formatDuration" >formatDuration</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#generateGradient" >generateGradient</a>
+                            </li>
+                            <li>
+                                <a href="#getContainerClass" >getContainerClass</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getPlaylistById" >getPlaylistById</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getPlaylistColor" >getPlaylistColor</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getPlaylistEmoji" >getPlaylistEmoji</a>
+                            </li>
+                            <li>
+                                <a href="#getPlaylistImage" >getPlaylistImage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#loadMockData" >loadMockData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#loadPlaylistData" >loadPlaylistData</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onImageError" >onImageError</a>
+                            </li>
+                            <li>
+                                <a href="#onImageLoad" >onImageLoad</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parseDurationToSeconds" >parseDurationToSeconds</a>
+                            </li>
+                            <li>
+                                <a href="#testDifferentImage" >testDifferentImage</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#currentPlaylistImage" >currentPlaylistImage</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: ActivatedRoute, playlistService: <a href="../injectables/PlaylistService.html" target="_self">PlaylistService</a>, songService: <a href="../injectables/SongService.html" target="_self">SongService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/pages/playlist/playlist.ts:26</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>playlistService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PlaylistService.html" target="_self" >PlaylistService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>songService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SongService.html" target="_self" >SongService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyFallbackGradient"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>applyFallbackGradient</b></span>
+                        <a href="#applyFallbackGradient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyFallbackGradient()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="232"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:232</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calculateTotalDuration"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>calculateTotalDuration</b></span>
+                        <a href="#calculateTotalDuration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>calculateTotalDuration(songs: any[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="423"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:423</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>songs</td>
+                                            <td>
+                                                        <code>any[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="calculateTotalDurationInSeconds"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>calculateTotalDurationInSeconds</b></span>
+                        <a href="#calculateTotalDurationInSeconds"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>calculateTotalDurationInSeconds(songs: any[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="296"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:296</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>songs</td>
+                                            <td>
+                                                        <code>any[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractColorsFromImage"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>extractColorsFromImage</b></span>
+                        <a href="#extractColorsFromImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>extractColorsFromImage(img: HTMLImageElement)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="157"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:157</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>img</td>
+                                            <td>
+                                                        <code>HTMLImageElement</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatDate"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>formatDate</b></span>
+                        <a href="#formatDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>formatDate(dateString: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="286"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:286</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>dateString</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatDuration"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>formatDuration</b></span>
+                        <a href="#formatDuration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>formatDuration(seconds: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="276"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:276</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>seconds</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generateGradient"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>generateGradient</b></span>
+                        <a href="#generateGradient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>generateGradient(color: literal type)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="208"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:208</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>color</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getContainerClass"></a>
+                    <span class="name">
+                        <span ><b>getContainerClass</b></span>
+                        <a href="#getContainerClass"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getContainerClass()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="49"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:49</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPlaylistById"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getPlaylistById</b></span>
+                        <a href="#getPlaylistById"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getPlaylistById(id: string | null)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="328"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:328</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                        <code>string | null</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPlaylistColor"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getPlaylistColor</b></span>
+                        <a href="#getPlaylistColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getPlaylistColor()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="302"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:302</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPlaylistEmoji"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getPlaylistEmoji</b></span>
+                        <a href="#getPlaylistEmoji"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getPlaylistEmoji()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="315"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:315</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPlaylistImage"></a>
+                    <span class="name">
+                        <span ><b>getPlaylistImage</b></span>
+                        <a href="#getPlaylistImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPlaylistImage()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="42"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadMockData"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>loadMockData</b></span>
+                        <a href="#loadMockData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadMockData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="120"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:120</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadPlaylistData"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>loadPlaylistData</b></span>
+                        <a href="#loadPlaylistData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadPlaylistData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="86"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:86</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="62"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:62</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onImageError"></a>
+                    <span class="name">
+                        <span ><b>onImageError</b></span>
+                        <a href="#onImageError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onImageError(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="69"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:69</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onImageLoad"></a>
+                    <span class="name">
+                        <span ><b>onImageLoad</b></span>
+                        <a href="#onImageLoad"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onImageLoad(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="76"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:76</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseDurationToSeconds"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>parseDurationToSeconds</b></span>
+                        <a href="#parseDurationToSeconds"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parseDurationToSeconds(duration: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="291"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:291</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>duration</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="testDifferentImage"></a>
+                    <span class="name">
+                        <span ><b>testDifferentImage</b></span>
+                        <a href="#testDifferentImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>testDifferentImage()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="255"
+                                    class="link-to-prism">src/app/pages/playlist/playlist.ts:255</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createdDate"></a>
+                    <span class="name">
+                        <span ><b>createdDate</b></span>
+                        <a href="#createdDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/pages/playlist/playlist.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="duration"></a>
+                    <span class="name">
+                        <span ><b>duration</b></span>
+                        <a href="#duration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;0&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/pages/playlist/playlist.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dynamicGradient"></a>
+                    <span class="name">
+                        <span ><b>dynamicGradient</b></span>
+                        <a href="#dynamicGradient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/pages/playlist/playlist.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="error"></a>
+                    <span class="name">
+                        <span ><b>error</b></span>
+                        <a href="#error"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/pages/playlist/playlist.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loading"></a>
+                    <span class="name">
+                        <span ><b>loading</b></span>
+                        <a href="#loading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/pages/playlist/playlist.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="playlist"></a>
+                    <span class="name">
+                        <span ><b>playlist</b></span>
+                        <a href="#playlist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Playlist | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/pages/playlist/playlist.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="playlistCoverImage"></a>
+                    <span class="name">
+                        <span ><b>playlistCoverImage</b></span>
+                        <a href="#playlistCoverImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/pages/playlist/playlist.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="playlistDescription"></a>
+                    <span class="name">
+                        <span ><b>playlistDescription</b></span>
+                        <a href="#playlistDescription"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/pages/playlist/playlist.ts:18</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="playlistId"></a>
+                    <span class="name">
+                        <span ><b>playlistId</b></span>
+                        <a href="#playlistId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/pages/playlist/playlist.ts:15</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="playlistName"></a>
+                    <span class="name">
+                        <span ><b>playlistName</b></span>
+                        <a href="#playlistName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/pages/playlist/playlist.ts:17</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="songCount"></a>
+                    <span class="name">
+                        <span ><b>songCount</b></span>
+                        <a href="#songCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/pages/playlist/playlist.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="songs"></a>
+                    <span class="name">
+                        <span ><b>songs</b></span>
+                        <a href="#songs"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Song[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/pages/playlist/playlist.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="currentPlaylistImage"></a>
+                        <span class="name"><b>currentPlaylistImage</b><a href="#currentPlaylistImage"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>currentPlaylistImage()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/pages/playlist/playlist.ts:34</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &quot;@angular/core&quot;;
+import { CommonModule } from &quot;@angular/common&quot;;
+import { ActivatedRoute } from &quot;@angular/router&quot;;
+import { PlaylistService, SongService } from &quot;../../services&quot;;
+import { Playlist, Song } from &quot;../../models&quot;;
+
+@Component({
+  selector: &quot;app-playlist&quot;,
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: &quot;./playlist.html&quot;,
+  styleUrls: [&quot;./playlist.css&quot;],
+})
+export class PlaylistComponent implements OnInit {
+  playlistId: string | null &#x3D; null;
+  playlist: Playlist | null &#x3D; null;
+  playlistName: string &#x3D; &quot;&quot;;
+  playlistDescription: string &#x3D; &quot;&quot;;
+  playlistCoverImage: string &#x3D; &quot;&quot;;
+  songCount: number &#x3D; 0;
+  duration: string &#x3D; &quot;0&quot;;
+  createdDate: string &#x3D; &quot;&quot;;
+  songs: Song[] &#x3D; [];
+  dynamicGradient: string &#x3D; &quot;&quot;;
+  loading: boolean &#x3D; true;
+  error: string | null &#x3D; null;
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly playlistService: PlaylistService,
+    private readonly songService: SongService,
+  ) {}
+
+  get currentPlaylistImage(): string {
+    return (
+      this.playlistCoverImage ||
+      this.playlist?.coverImage ||
+      &#x60;https://picsum.photos/300/300?random&#x3D;${this.playlistId || 1}&#x60;
+    );
+  }
+
+  getPlaylistImage(): string {
+    if (this.playlist?.coverImage) {
+      return this.playlist.coverImage;
+    }
+    return &#x60;https://picsum.photos/300/300?random&#x3D;${this.playlistId || 1}&#x60;;
+  }
+
+  getContainerClass(): string {
+    switch (this.playlistId) {
+      case &quot;1&quot;:
+        return &quot;playlist-container playlist-purple&quot;;
+      case &quot;2&quot;:
+        return &quot;playlist-container playlist-blue&quot;;
+      case &quot;3&quot;:
+        return &quot;playlist-container playlist-red&quot;;
+      default:
+        return &quot;playlist-container playlist-purple&quot;;
+    }
+  }
+
+  ngOnInit() {
+    this.playlistId &#x3D; this.route.snapshot.paramMap.get(&quot;id&quot;);
+    this.loadPlaylistData();
+    // Aplicar gradiente de fallback inicial
+    this.applyFallbackGradient();
+  }
+
+  onImageError(event: Event) {
+    const img &#x3D; event.target as HTMLImageElement;
+    const color &#x3D; this.getPlaylistColor();
+    const emoji &#x3D; this.getPlaylistEmoji();
+    img.src &#x3D; &#x60;https://via.placeholder.com/300x300/${color}/FFFFFF?text&#x3D;${emoji}&#x60;;
+  }
+
+  onImageLoad(event: Event) {
+    const img &#x3D; event.target as HTMLImageElement;
+    console.log(&quot;Imagen cargada:&quot;, img.src);
+
+    // Pequeño delay para asegurar que la imagen está completamente cargada
+    setTimeout(() &#x3D;&gt; {
+      this.extractColorsFromImage(img);
+    }, 100);
+  }
+
+  private loadPlaylistData() {
+    if (!this.playlistId) {
+      this.error &#x3D; &quot;ID de playlist no válido&quot;;
+      this.loading &#x3D; false;
+      return;
+    }
+
+    this.loading &#x3D; true;
+    this.error &#x3D; null;
+
+    // Cargar datos de la playlist desde el backend
+    this.playlistService.getPlaylistById(this.playlistId).subscribe({
+      next: (playlist) &#x3D;&gt; {
+        this.playlist &#x3D; playlist;
+        this.playlistName &#x3D; playlist.name;
+        this.playlistDescription &#x3D; playlist.description || &quot;&quot;;
+        this.playlistCoverImage &#x3D;
+          playlist.coverImage || this.getPlaylistImage();
+        this.songs &#x3D; playlist.songs || [];
+        this.songCount &#x3D; playlist.totalSongs || playlist.songs?.length || 0;
+        this.duration &#x3D; this.formatDuration(playlist.totalDuration || 0);
+        this.createdDate &#x3D; this.formatDate(playlist.createdAt);
+        this.loading &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        console.error(&quot;Error loading playlist:&quot;, error);
+        this.error &#x3D; error.message || &quot;Error al cargar la playlist&quot;;
+        this.loading &#x3D; false;
+        // Cargar datos mock como fallback
+        this.loadMockData();
+      },
+    });
+  }
+
+  private loadMockData() {
+    // Mantener datos mock como fallback
+    const mockData &#x3D; this.getPlaylistById(this.playlistId);
+    if (mockData) {
+      this.playlist &#x3D; {
+        id: this.playlistId!,
+        name: mockData.name,
+        description: mockData.description,
+        coverImage: mockData.coverImage,
+        songs: mockData.songs.map((song: any) &#x3D;&gt; ({
+          ...song,
+          duration: this.parseDurationToSeconds(song.duration),
+          artistId: &quot;1&quot;,
+          fileUrl: &quot;&quot;,
+          plays: 0,
+          likes: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        })),
+        userId: &quot;1&quot;,
+        isPublic: true,
+        totalDuration: this.calculateTotalDurationInSeconds(mockData.songs),
+        totalSongs: mockData.songs.length,
+        createdAt: mockData.createdDate,
+        updatedAt: new Date().toISOString(),
+      };
+
+      this.playlistName &#x3D; mockData.name;
+      this.playlistDescription &#x3D; mockData.description;
+      this.playlistCoverImage &#x3D; mockData.coverImage;
+      this.songs &#x3D; this.playlist.songs;
+      this.songCount &#x3D; mockData.songs.length;
+      this.duration &#x3D; this.calculateTotalDuration(mockData.songs);
+      this.createdDate &#x3D; mockData.createdDate;
+    }
+  }
+
+  private extractColorsFromImage(img: HTMLImageElement) {
+    try {
+      const canvas &#x3D; document.createElement(&quot;canvas&quot;);
+      const ctx &#x3D; canvas.getContext(&quot;2d&quot;);
+
+      if (!ctx) return;
+
+      canvas.width &#x3D; img.width;
+      canvas.height &#x3D; img.height;
+
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+
+      const imageData &#x3D; ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data &#x3D; imageData.data;
+
+      const colorMap &#x3D; new Map&lt;string, number&gt;();
+      const sampleRate &#x3D; 10; // Muestrear cada 10 píxeles para mejor rendimiento
+
+      for (let i &#x3D; 0; i &lt; data.length; i +&#x3D; 4 * sampleRate) {
+        const r &#x3D; data[i];
+        const g &#x3D; data[i + 1];
+        const b &#x3D; data[i + 2];
+        const alpha &#x3D; data[i + 3];
+
+        if (alpha &gt; 128) {
+          // Solo píxeles no transparentes
+          const colorKey &#x3D; &#x60;${Math.floor(r / 10) * 10},${Math.floor(g / 10) * 10},${Math.floor(b / 10) * 10}&#x60;;
+          colorMap.set(colorKey, (colorMap.get(colorKey) || 0) + 1);
+        }
+      }
+
+      const sortedColors &#x3D; Array.from(colorMap.entries())
+        .sort((a, b) &#x3D;&gt; b[1] - a[1])
+        .slice(0, 3)
+        .map(([color]) &#x3D;&gt; {
+          const [r, g, b] &#x3D; color.split(&quot;,&quot;).map(Number);
+          return { r, g, b };
+        });
+
+      if (sortedColors.length &gt; 0) {
+        const dominantColor &#x3D; sortedColors[0];
+        this.generateGradient(dominantColor);
+      } else {
+        this.applyFallbackGradient();
+      }
+    } catch (error) {
+      console.error(&quot;Error al extraer colores de la imagen:&quot;, error);
+      this.applyFallbackGradient();
+    }
+  }
+
+  private generateGradient(color: { r: number; g: number; b: number }) {
+    const baseColor &#x3D; &#x60;rgb(${color.r}, ${color.g}, ${color.b})&#x60;;
+
+    // Crear variaciones del color base
+    const darkerColor &#x3D; &#x60;rgb(${Math.max(0, color.r - 40)}, ${Math.max(0, color.g - 40)}, ${Math.max(0, color.b - 40)})&#x60;;
+    const lighterColor &#x3D; &#x60;rgb(${Math.min(255, color.r + 30)}, ${Math.min(255, color.g + 30)}, ${Math.min(255, color.b + 30)})&#x60;;
+
+    // Determinar si el color es muy oscuro o muy claro para ajustar la dirección
+    const brightness &#x3D; (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
+
+    if (brightness &lt; 100) {
+      // Color oscuro - gradiente hacia más claro
+      this.dynamicGradient &#x3D; &#x60;linear-gradient(135deg, ${baseColor} 0%, ${lighterColor} 100%)&#x60;;
+    } else if (brightness &gt; 200) {
+      // Color claro - gradiente hacia más oscuro
+      this.dynamicGradient &#x3D; &#x60;linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 100%)&#x60;;
+    } else {
+      // Color medio - gradiente en ambas direcciones
+      this.dynamicGradient &#x3D; &#x60;linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 50%, ${lighterColor} 100%)&#x60;;
+    }
+
+    console.log(&quot;Gradiente generado:&quot;, this.dynamicGradient);
+  }
+
+  private applyFallbackGradient() {
+    // Gradientes de fallback basados en el ID de la playlist
+    switch (this.playlistId) {
+      case &quot;1&quot;:
+        this.dynamicGradient &#x3D;
+          &quot;linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)&quot;;
+        break;
+      case &quot;2&quot;:
+        this.dynamicGradient &#x3D;
+          &quot;linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)&quot;;
+        break;
+      case &quot;3&quot;:
+        this.dynamicGradient &#x3D;
+          &quot;linear-gradient(135deg, #EF4444 0%, #F87171 100%)&quot;;
+        break;
+      default:
+        this.dynamicGradient &#x3D;
+          &quot;linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)&quot;;
+    }
+    console.log(&quot;Aplicado gradiente de fallback:&quot;, this.dynamicGradient);
+  }
+
+  // Método de prueba para cambiar imagen y ver el efecto del gradiente
+  testDifferentImage() {
+    const testImages &#x3D; [
+      &quot;https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w&#x3D;400&amp;h&#x3D;400&amp;fit&#x3D;crop&quot;, // Original
+      &quot;https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w&#x3D;400&amp;h&#x3D;400&amp;fit&#x3D;crop&quot;, // Azul/morado
+      &quot;https://images.unsplash.com/photo-1511379938547-c1f69419868d?w&#x3D;400&amp;h&#x3D;400&amp;fit&#x3D;crop&quot;, // Rojizo
+      &quot;https://images.unsplash.com/photo-1446057032654-9d8885db76c6?w&#x3D;400&amp;h&#x3D;400&amp;fit&#x3D;crop&quot;, // Verde
+    ];
+
+    if (!this.playlist) return;
+
+    const currentImage &#x3D; this.playlist.coverImage || &quot;&quot;;
+    const currentIndex &#x3D; testImages.indexOf(currentImage);
+    const nextIndex &#x3D; (currentIndex + 1) % testImages.length;
+
+    console.log(&quot;🎨 Cambiando a imagen:&quot;, testImages[nextIndex]);
+    this.playlist.coverImage &#x3D; testImages[nextIndex];
+    this.playlistCoverImage &#x3D; testImages[nextIndex];
+  }
+
+  // Métodos utilitarios privados
+
+  private formatDuration(seconds: number): string {
+    const hours &#x3D; Math.floor(seconds / 3600);
+    const minutes &#x3D; Math.floor((seconds % 3600) / 60);
+
+    if (hours &gt; 0) {
+      return &#x60;${hours}h ${minutes}m&#x60;;
+    }
+    return &#x60;${minutes}m&#x60;;
+  }
+
+  private formatDate(dateString: string): string {
+    const date &#x3D; new Date(dateString);
+    return date.toLocaleDateString();
+  }
+
+  private parseDurationToSeconds(duration: string): number {
+    const [minutes, seconds] &#x3D; duration.split(&quot;:&quot;).map(Number);
+    return minutes * 60 + seconds;
+  }
+
+  private calculateTotalDurationInSeconds(songs: any[]): number {
+    return songs.reduce((total, song) &#x3D;&gt; {
+      return total + this.parseDurationToSeconds(song.duration);
+    }, 0);
+  }
+
+  private getPlaylistColor(): string {
+    switch (this.playlistId) {
+      case &quot;1&quot;:
+        return &quot;8B5CF6&quot;;
+      case &quot;2&quot;:
+        return &quot;3B82F6&quot;;
+      case &quot;3&quot;:
+        return &quot;EF4444&quot;;
+      default:
+        return &quot;8B5CF6&quot;;
+    }
+  }
+
+  private getPlaylistEmoji(): string {
+    switch (this.playlistId) {
+      case &quot;1&quot;:
+        return &quot;🎵&quot;;
+      case &quot;2&quot;:
+        return &quot;🎯&quot;;
+      case &quot;3&quot;:
+        return &quot;🛣️&quot;;
+      default:
+        return &quot;🎵&quot;;
+    }
+  }
+
+  private getPlaylistById(id: string | null) {
+    // Mock data que coincide con las playlists de la biblioteca
+    const mockPlaylistsData: any &#x3D; {
+      &quot;1&quot;: {
+        name: &quot;Mi Playlist Favorita&quot;,
+        description: &quot;Las mejores canciones para relajarse&quot;,
+        createdDate: &quot;2024-01-15&quot;,
+        coverImage: &quot;https://picsum.photos/300/300?random&#x3D;1&quot;,
+        songs: [
+          {
+            id: &quot;1&quot;,
+            title: &quot;Bohemian Rhapsody&quot;,
+            artist: &quot;Queen&quot;,
+            album: &quot;A Night at the Opera&quot;,
+            duration: &quot;5:55&quot;,
+          },
+          {
+            id: &quot;2&quot;,
+            title: &quot;Stairway to Heaven&quot;,
+            artist: &quot;Led Zeppelin&quot;,
+            album: &quot;Led Zeppelin IV&quot;,
+            duration: &quot;8:02&quot;,
+          },
+          {
+            id: &quot;3&quot;,
+            title: &quot;Hotel California&quot;,
+            artist: &quot;Eagles&quot;,
+            album: &quot;Hotel California&quot;,
+            duration: &quot;6:30&quot;,
+          },
+        ],
+      },
+      &quot;2&quot;: {
+        name: &quot;Música para Trabajar&quot;,
+        description: &quot;Concentración y productividad&quot;,
+        createdDate: &quot;2024-01-10&quot;,
+        coverImage: &quot;https://picsum.photos/300/300?random&#x3D;2&quot;,
+        songs: [
+          {
+            id: &quot;4&quot;,
+            title: &quot;Weightless&quot;,
+            artist: &quot;Marconi Union&quot;,
+            album: &quot;Distance&quot;,
+            duration: &quot;8:10&quot;,
+          },
+          {
+            id: &quot;5&quot;,
+            title: &quot;Clair de Lune&quot;,
+            artist: &quot;Claude Debussy&quot;,
+            album: &quot;Suite Bergamasque&quot;,
+            duration: &quot;4:32&quot;,
+          },
+          {
+            id: &quot;6&quot;,
+            title: &quot;Gymnopédie No. 1&quot;,
+            artist: &quot;Erik Satie&quot;,
+            album: &quot;Trois Gymnopédies&quot;,
+            duration: &quot;3:23&quot;,
+          },
+        ],
+      },
+      &quot;3&quot;: {
+        name: &quot;Road Trip Vibes&quot;,
+        description: &quot;Para esos viajes largos en carretera&quot;,
+        createdDate: &quot;2024-01-05&quot;,
+        coverImage: &quot;https://picsum.photos/300/300?random&#x3D;3&quot;,
+        songs: [
+          {
+            id: &quot;7&quot;,
+            title: &quot;Born to Be Wild&quot;,
+            artist: &quot;Steppenwolf&quot;,
+            album: &quot;Steppenwolf&quot;,
+            duration: &quot;3:30&quot;,
+          },
+          {
+            id: &quot;8&quot;,
+            title: &quot;Take It Easy&quot;,
+            artist: &quot;Eagles&quot;,
+            album: &quot;Eagles&quot;,
+            duration: &quot;3:21&quot;,
+          },
+          {
+            id: &quot;9&quot;,
+            title: &quot;Life is a Highway&quot;,
+            artist: &quot;Tom Cochrane&quot;,
+            album: &quot;Mad Mad World&quot;,
+            duration: &quot;4:24&quot;,
+          },
+        ],
+      },
+    };
+
+    return mockPlaylistsData[id || &quot;1&quot;] || mockPlaylistsData[&quot;1&quot;];
+  }
+
+  private calculateTotalDuration(songs: any[]): string {
+    let totalSeconds &#x3D; 0;
+
+    songs.forEach((song) &#x3D;&gt; {
+      const [minutes, seconds] &#x3D; song.duration.split(&quot;:&quot;).map(Number);
+      totalSeconds +&#x3D; minutes * 60 + seconds;
+    });
+
+    const hours &#x3D; Math.floor(totalSeconds / 3600);
+    const minutes &#x3D; Math.floor((totalSeconds % 3600) / 60);
+
+    if (hours &gt; 0) {
+      return &#x60;${hours}h ${minutes}m&#x60;;
+    }
+    return &#x60;${minutes}m&#x60;;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div
+  class&#x3D;&quot;playlist-container&quot;
+  [ngClass]&#x3D;&quot;{
+       &#x27;playlist-purple&#x27;: playlistId &#x3D;&#x3D;&#x3D; &#x27;1&#x27;,
+       &#x27;playlist-blue&#x27;: playlistId &#x3D;&#x3D;&#x3D; &#x27;2&#x27;, 
+       &#x27;playlist-red&#x27;: playlistId &#x3D;&#x3D;&#x3D; &#x27;3&#x27;
+     }&quot;
+&gt;
+  &lt;div class&#x3D;&quot;playlist-header&quot; [style.background]&#x3D;&quot;dynamicGradient&quot;&gt;
+    &lt;div class&#x3D;&quot;playlist-hero&quot;&gt;
+      &lt;div class&#x3D;&quot;playlist-cover&quot;&gt;
+        &lt;img
+          [src]&#x3D;&quot;currentPlaylistImage&quot;
+          [alt]&#x3D;&quot;playlistName || &#x27;Playlist Cover&#x27;&quot;
+          class&#x3D;&quot;playlist-image&quot;
+          (load)&#x3D;&quot;onImageLoad($event)&quot;
+          (error)&#x3D;&quot;onImageError($event)&quot;
+          crossorigin&#x3D;&quot;anonymous&quot;
+        /&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;playlist-info-text&quot;&gt;
+        &lt;span class&#x3D;&quot;playlist-type&quot;&gt;Lista pública&lt;/span&gt;
+        &lt;h1 class&#x3D;&quot;playlist-title&quot;&gt;
+          {{ playlistName || &#x27;Mi Playlist #&#x27; + playlistId }}
+        &lt;/h1&gt;
+        &lt;p class&#x3D;&quot;playlist-description&quot;&gt;
+          {{ playlistDescription || &#x27;Una colección especial de tus canciones
+          favoritas&#x27; }}
+        &lt;/p&gt;
+        &lt;div class&#x3D;&quot;playlist-meta&quot;&gt;
+          &lt;span class&#x3D;&quot;playlist-owner&quot;&gt;🎵 StreamFlow Music&lt;/span&gt;
+          &lt;span class&#x3D;&quot;meta-separator&quot;&gt;•&lt;/span&gt;
+          &lt;span class&#x3D;&quot;playlist-stats-inline&quot;
+            &gt;{{ songCount }} canciones, {{ duration }}&lt;/span
+          &gt;
+        &lt;/div&gt;
+        &lt;!-- Botón de prueba para cambiar imagen y gradiente --&gt;
+        &lt;button (click)&#x3D;&quot;testDifferentImage()&quot; class&#x3D;&quot;test-gradient-button&quot;&gt;
+          🎨 Probar otra imagen
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;playlist-content&quot;&gt;
+    &lt;!-- Controles de reproducción --&gt;
+    &lt;div class&#x3D;&quot;playlist-controls&quot;&gt;
+      &lt;button class&#x3D;&quot;play-button&quot;&gt;
+        &lt;svg class&#x3D;&quot;play-icon&quot; viewBox&#x3D;&quot;0 0 24 24&quot; fill&#x3D;&quot;currentColor&quot;&gt;
+          &lt;path d&#x3D;&quot;M8 5v14l11-7z&quot; /&gt;
+        &lt;/svg&gt;
+        Reproducir
+      &lt;/button&gt;
+
+      &lt;button class&#x3D;&quot;shuffle-button&quot;&gt;
+        &lt;svg class&#x3D;&quot;shuffle-icon&quot; viewBox&#x3D;&quot;0 0 24 24&quot; fill&#x3D;&quot;currentColor&quot;&gt;
+          &lt;path
+            d&#x3D;&quot;M14.83 13.41L13.42 14.82L16.55 17.95L14.83 19.67L18.18 23.02L21.53 19.67L19.81 17.95L16.68 14.82L15.27 13.41L14.83 13.41Z&quot;
+          /&gt;
+        &lt;/svg&gt;
+        Aleatorio
+      &lt;/button&gt;
+
+      &lt;button class&#x3D;&quot;more-button&quot;&gt;
+        &lt;svg class&#x3D;&quot;more-icon&quot; viewBox&#x3D;&quot;0 0 24 24&quot; fill&#x3D;&quot;currentColor&quot;&gt;
+          &lt;circle cx&#x3D;&quot;12&quot; cy&#x3D;&quot;5&quot; r&#x3D;&quot;2&quot; /&gt;
+          &lt;circle cx&#x3D;&quot;12&quot; cy&#x3D;&quot;12&quot; r&#x3D;&quot;2&quot; /&gt;
+          &lt;circle cx&#x3D;&quot;12&quot; cy&#x3D;&quot;19&quot; r&#x3D;&quot;2&quot; /&gt;
+        &lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Lista de canciones --&gt;
+    &lt;div class&#x3D;&quot;songs-list&quot;&gt;
+      &lt;div class&#x3D;&quot;songs-header&quot;&gt;
+        &lt;div class&#x3D;&quot;song-number&quot;&gt;#&lt;/div&gt;
+        &lt;div class&#x3D;&quot;song-title&quot;&gt;Título&lt;/div&gt;
+        &lt;div class&#x3D;&quot;song-artist&quot;&gt;Artista&lt;/div&gt;
+        &lt;div class&#x3D;&quot;song-album&quot;&gt;Álbum&lt;/div&gt;
+        &lt;div class&#x3D;&quot;song-duration&quot;&gt;Duración&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Ejemplo de canciones - esto será dinámico --&gt;
+      &lt;div class&#x3D;&quot;song-item&quot; *ngFor&#x3D;&quot;let song of songs; let i &#x3D; index&quot;&gt;
+        &lt;div class&#x3D;&quot;song-number&quot;&gt;{{ i + 1 }}&lt;/div&gt;
+        &lt;div class&#x3D;&quot;song-info&quot;&gt;
+          &lt;div class&#x3D;&quot;song-title&quot;&gt;{{ song.title }}&lt;/div&gt;
+          &lt;div class&#x3D;&quot;song-artist-name&quot;&gt;{{ song.artist }}&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;song-artist&quot;&gt;{{ song.artist }}&lt;/div&gt;
+        &lt;div class&#x3D;&quot;song-album&quot;&gt;{{ song.album }}&lt;/div&gt;
+        &lt;div class&#x3D;&quot;song-duration&quot;&gt;{{ song.duration }}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./playlist.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">/* Container principal */
+.playlist-container {
+  padding: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.playlist-container::before {
+  content: &quot;&quot;;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+}
+
+/* Header de la playlist */
+.playlist-header {
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+  background: white;
+  transition: background 0.8s ease-in-out;
+  min-height: 340px;
+  display: flex;
+  align-items: end;
+}
+
+.playlist-header::before {
+  content: &quot;&quot;;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.playlist-hero {
+  display: flex;
+  align-items: end;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.playlist-cover {
+  flex-shrink: 0;
+}
+
+.playlist-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.playlist-info-text {
+  flex: 1;
+  color: rgb(0, 0, 0);
+  padding-bottom: 1rem;
+}
+
+.playlist-type {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.playlist-title {
+  font-size: 4rem;
+  font-weight: 900;
+  color: rgb(0, 0, 0);
+  margin: 0.5rem 0 1rem 0;
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.playlist-description {
+  font-size: 1.125rem;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 0 0 1rem 0;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.playlist-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: 500;
+}
+
+.playlist-owner {
+  font-weight: 600;
+}
+
+.meta-separator {
+  margin: 0 0.25rem;
+}
+
+.playlist-stats-inline {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+/* Controles de reproducción */
+.playlist-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 0 2rem 2rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 1.5rem;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  z-index: 1;
+}
+
+.play-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #000000;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 1.25rem 3rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    0 3px 10px rgba(29, 185, 84, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.play-button::before {
+  content: &quot;&quot;;
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.play-button:hover::before {
+  left: 100%;
+}
+
+.play-button:hover {
+  background: #000000;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.4),
+    0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.play-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.shuffle-button,
+.more-button {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: rgba(0, 0, 0, 0.05);
+  color: #050505;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.shuffle-button:hover,
+.more-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000000;
+  border-color: rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.shuffle-icon,
+.more-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  gap: 1rem;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+/* Lista de canciones */
+.songs-list {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  margin: 0 2rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.songs-header {
+  display: grid;
+  grid-template-columns: 4rem 1fr 1fr 1fr 6rem;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  backdrop-filter: blur(10px);
+}
+
+.song-item {
+  display: grid;
+  grid-template-columns: 4rem 1fr 1fr 1fr 6rem;
+  gap: 1.5rem;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.song-item::before {
+  content: &quot;&quot;;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 0.05),
+    rgba(139, 92, 246, 0.02)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.song-item:hover::before {
+  opacity: 1;
+}
+
+.song-item:hover {
+  background: rgba(59, 130, 246, 0.02);
+  transform: translateX(4px);
+}
+
+.song-item:last-child {
+  border-bottom: none;
+}
+
+.song-number {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #000000;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.song-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.song-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+.song-artist-name {
+  font-size: 0.875rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.song-artist,
+.song-album {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+}
+
+.song-duration {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 0.95rem;
+  color: #64748b;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .playlist-container {
+    padding: 0;
+  }
+
+  .playlist-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .playlist-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .playlist-image {
+    width: 200px;
+    height: 200px;
+  }
+
+  .playlist-title {
+    font-size: 2.5rem;
+  }
+
+  .playlist-controls,
+  .songs-list {
+    margin: 0 1rem 1.5rem;
+  }
+
+  .playlist-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .play-button,
+  .shuffle-button,
+  .more-button {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .songs-header,
+  .song-item {
+    grid-template-columns: 3rem 1fr 4rem;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .song-artist,
+  .song-album {
+    display: none;
+  }
+
+  .songs-header .song-artist,
+  .songs-header .song-album {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .playlist-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .playlist-title {
+    font-size: 2rem;
+  }
+
+  .playlist-hero {
+    gap: 1rem;
+  }
+
+  .playlist-header {
+    padding: 1rem;
+  }
+
+  .songs-header,
+  .song-item {
+    padding: 0.875rem 1rem;
+  }
+}
+
+/* Botón de prueba para cambiar gradiente */
+.test-gradient-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.test-gradient-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div  class="playlist-container"  [ngClass]="{       \'playlist-purple\': playlistId === \'1\',       \'playlist-blue\': playlistId === \'2\',        \'playlist-red\': playlistId === \'3\'     }">  <div class="playlist-header" [style.background]="dynamicGradient">    <div class="playlist-hero">      <div class="playlist-cover">        <img          [src]="currentPlaylistImage"          [alt]="playlistName || \'Playlist Cover\'"          class="playlist-image"          (load)="onImageLoad($event)"          (error)="onImageError($event)"          crossorigin="anonymous"        />      </div>      <div class="playlist-info-text">        <span class="playlist-type">Lista pública</span>        <h1 class="playlist-title">          {{ playlistName || \'Mi Playlist #\' + playlistId }}        </h1>        <p class="playlist-description">          {{ playlistDescription || \'Una colección especial de tus canciones          favoritas\' }}        </p>        <div class="playlist-meta">          <span class="playlist-owner">🎵 StreamFlow Music</span>          <span class="meta-separator">•</span>          <span class="playlist-stats-inline"            >{{ songCount }} canciones, {{ duration }}</span          >        </div>        <!-- Botón de prueba para cambiar imagen y gradiente -->        <button (click)="testDifferentImage()" class="test-gradient-button">          🎨 Probar otra imagen        </button>      </div>    </div>  </div>  <div class="playlist-content">    <!-- Controles de reproducción -->    <div class="playlist-controls">      <button class="play-button">        <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">          <path d="M8 5v14l11-7z" />        </svg>        Reproducir      </button>      <button class="shuffle-button">        <svg class="shuffle-icon" viewBox="0 0 24 24" fill="currentColor">          <path            d="M14.83 13.41L13.42 14.82L16.55 17.95L14.83 19.67L18.18 23.02L21.53 19.67L19.81 17.95L16.68 14.82L15.27 13.41L14.83 13.41Z"          />        </svg>        Aleatorio      </button>      <button class="more-button">        <svg class="more-icon" viewBox="0 0 24 24" fill="currentColor">          <circle cx="12" cy="5" r="2" />          <circle cx="12" cy="12" r="2" />          <circle cx="12" cy="19" r="2" />        </svg>      </button>    </div>    <!-- Lista de canciones -->    <div class="songs-list">      <div class="songs-header">        <div class="song-number">#</div>        <div class="song-title">Título</div>        <div class="song-artist">Artista</div>        <div class="song-album">Álbum</div>        <div class="song-duration">Duración</div>      </div>      <!-- Ejemplo de canciones - esto será dinámico -->      <div class="song-item" *ngFor="let song of songs; let i = index">        <div class="song-number">{{ i + 1 }}</div>        <div class="song-info">          <div class="song-title">{{ song.title }}</div>          <div class="song-artist-name">{{ song.artist }}</div>        </div>        <div class="song-artist">{{ song.artist }}</div>        <div class="song-album">{{ song.album }}</div>        <div class="song-duration">{{ song.duration }}</div>      </div>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'ArtistComponent', 'selector': 'app-artist'},{'name': 'AsideMenu', 'selector': 'app-aside-menu'},{'name': 'Card', 'selector': 'app-card'},{'name': 'CardPlayButton', 'selector': 'app-card-play-button'},{'name': 'ConnectionTestComponent', 'selector': 'app-connection-test'},{'name': 'CurrentSongComponent', 'selector': 'app-current-song'},{'name': 'ExploreComponent', 'selector': 'app-explore'},{'name': 'Greeting', 'selector': 'app-greeting'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LibraryComponent', 'selector': 'app-library'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MusicsTable', 'selector': 'app-musics-table'},{'name': 'MusicsTablePlay', 'selector': 'app-musics-table-play'},{'name': 'Player', 'selector': 'app-player'},{'name': 'PlayerControlButtonBar', 'selector': 'app-player-control-button-bar'},{'name': 'PlayerCurrentSong', 'selector': 'app-player-current-song'},{'name': 'PlayerSoundControl', 'selector': 'app-player-sound-control'},{'name': 'PlayerVolumeControl', 'selector': 'app-player-volume-control'},{'name': 'PlaylistComponent', 'selector': 'app-playlist'},{'name': 'PlayListItemCard', 'selector': 'app-play-list-item-card'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'ResetPasswordComponent', 'selector': 'app-reset-password'},{'name': 'SearchComponent', 'selector': 'app-search'},{'name': 'SideMenuCard', 'selector': 'app-side-menu-card'},{'name': 'SideMenuItem', 'selector': 'app-side-menu-item'},{'name': 'UserPerfilComponent', 'selector': 'app-user-perfil'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'PlaylistComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'PlaylistComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

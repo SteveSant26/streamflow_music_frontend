@@ -1,0 +1,1187 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>b documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">b documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  Player</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/player/player.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+                <code>AfterViewInit</code>
+                <code>OnDestroy</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-player</code></td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="../components/PlayerControlButtonBar.html" target="_self" >PlayerControlButtonBar</a></code>
+                                <code><a href="../components/PlayerCurrentSong.html" target="_self" >PlayerCurrentSong</a></code>
+                                <code><a href="../components/PlayerSoundControl.html" target="_self" >PlayerSoundControl</a></code>
+                                <code><a href="../components/PlayerVolumeControl.html" target="_self" >PlayerVolumeControl</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./player.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#audioRef" >audioRef</a>
+                            </li>
+                            <li>
+                                <a href="#currentMusic" >currentMusic</a>
+                            </li>
+                            <li>
+                                <a href="#isPlaying" >isPlaying</a>
+                            </li>
+                            <li>
+                                <a href="#volume" >volume</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getNextSong" >getNextSong</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onNextSong" >onNextSong</a>
+                            </li>
+                            <li>
+                                <a href="#onPlayPauseClick" >onPlayPauseClick</a>
+                            </li>
+                            <li>
+                                <a href="#onVolumeChange" >onVolumeChange</a>
+                            </li>
+                            <li>
+                                <a href="#pause" >pause</a>
+                            </li>
+                            <li>
+                                <a href="#play" >play</a>
+                            </li>
+                            <li>
+                                <a href="#setVolume" >setVolume</a>
+                            </li>
+                            <li>
+                                <a href="#togglePlayPause" >togglePlayPause</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getNextSong"></a>
+                    <span class="name">
+                        <span ><b>getNextSong</b></span>
+                        <a href="#getNextSong"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getNextSong()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="116"
+                                    class="link-to-prism">src/app/components/player/player.ts:116</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Song | null</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="79"
+                                    class="link-to-prism">src/app/components/player/player.ts:79</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="85"
+                                    class="link-to-prism">src/app/components/player/player.ts:85</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="62"
+                                    class="link-to-prism">src/app/components/player/player.ts:62</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onNextSong"></a>
+                    <span class="name">
+                        <span ><b>onNextSong</b></span>
+                        <a href="#onNextSong"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onNextSong()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="121"
+                                    class="link-to-prism">src/app/components/player/player.ts:121</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onPlayPauseClick"></a>
+                    <span class="name">
+                        <span ><b>onPlayPauseClick</b></span>
+                        <a href="#onPlayPauseClick"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onPlayPauseClick()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="128"
+                                    class="link-to-prism">src/app/components/player/player.ts:128</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onVolumeChange"></a>
+                    <span class="name">
+                        <span ><b>onVolumeChange</b></span>
+                        <a href="#onVolumeChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onVolumeChange(volume: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="132"
+                                    class="link-to-prism">src/app/components/player/player.ts:132</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>volume</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pause"></a>
+                    <span class="name">
+                        <span ><b>pause</b></span>
+                        <a href="#pause"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>pause()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="100"
+                                    class="link-to-prism">src/app/components/player/player.ts:100</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="play"></a>
+                    <span class="name">
+                        <span ><b>play</b></span>
+                        <a href="#play"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>play()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="94"
+                                    class="link-to-prism">src/app/components/player/player.ts:94</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setVolume"></a>
+                    <span class="name">
+                        <span ><b>setVolume</b></span>
+                        <a href="#setVolume"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setVolume(newVolume: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/app/components/player/player.ts:109</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>newVolume</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="togglePlayPause"></a>
+                    <span class="name">
+                        <span ><b>togglePlayPause</b></span>
+                        <a href="#togglePlayPause"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>togglePlayPause()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="104"
+                                    class="link-to-prism">src/app/components/player/player.ts:104</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="audioRef"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>audioRef</b></span>
+                        <a href="#audioRef"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ElementRef&lt;HTMLAudioElement&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;audioElement&#x27;, {static: false})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/components/player/player.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="currentMusic"></a>
+                    <span class="name">
+                        <span ><b>currentMusic</b></span>
+                        <a href="#currentMusic"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/CurrentMusic.html" target="_self" >CurrentMusic</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+    song: null,
+    playlist: null,
+    songs: [],
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/components/player/player.ts:53</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isPlaying"></a>
+                    <span class="name">
+                        <span ><b>isPlaying</b></span>
+                        <a href="#isPlaying"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/components/player/player.ts:59</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="volume"></a>
+                    <span class="name">
+                        <span ><b>volume</b></span>
+                        <a href="#volume"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0.5</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/components/player/player.ts:60</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  AfterViewInit,
+} from &quot;@angular/core&quot;;
+import { PlayerControlButtonBar } from &quot;../player-control-button-bar/player-control-button-bar&quot;;
+import { PlayerCurrentSong } from &quot;../player-current-song/player-current-song&quot;;
+import { PlayerSoundControl } from &quot;../player-sound-control/player-sound-control&quot;;
+import { PlayerVolumeControl } from &quot;../player-volume-control/player-volume-control&quot;;
+
+interface Song {
+  id: number;
+  title: string;
+  artists: string[];
+  album: string;
+  albumId: number;
+  duration: string;
+  image: string;
+}
+
+interface Playlist {
+  id: number;
+  name?: string;
+  description?: string;
+}
+
+interface CurrentMusic {
+  song: Song | null;
+  playlist: Playlist | null;
+  songs: Song[];
+}
+
+@Component({
+  selector: &quot;app-player&quot;,
+  imports: [
+    PlayerControlButtonBar,
+    PlayerCurrentSong,
+    PlayerSoundControl,
+    PlayerVolumeControl,
+  ],
+  templateUrl: &quot;./player.html&quot;,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Player implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(&quot;audioElement&quot;, { static: false })
+  audioRef!: ElementRef&lt;HTMLAudioElement&gt;;
+
+  // Mock state para el reproductor
+  currentMusic: CurrentMusic &#x3D; {
+    song: null,
+    playlist: null,
+    songs: [],
+  };
+
+  isPlaying &#x3D; false;
+  volume &#x3D; 0.5;
+
+  ngOnInit(): void {
+    // Inicializar con una canción mock
+    this.currentMusic &#x3D; {
+      song: {
+        id: 1,
+        title: &quot;Bohemian Rhapsody&quot;,
+        artists: [&quot;Queen&quot;],
+        album: &quot;A Night at the Opera&quot;,
+        albumId: 101,
+        duration: &quot;5:55&quot;,
+        image: &quot;/assets/playlists/playlist1.jpg&quot;,
+      },
+      playlist: { id: 101 },
+      songs: [],
+    };
+  }
+
+  ngAfterViewInit(): void {
+    if (this.audioRef?.nativeElement) {
+      this.audioRef.nativeElement.volume &#x3D; this.volume;
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (
+      this.audioRef?.nativeElement &amp;&amp;
+      typeof this.audioRef.nativeElement.pause &#x3D;&#x3D;&#x3D; &quot;function&quot;
+    ) {
+      this.audioRef.nativeElement.pause();
+    }
+  }
+
+  play(): void {
+    this.audioRef?.nativeElement
+      ?.play?.()
+      .catch((e) &#x3D;&gt; console.log(&quot;Error playing: &quot;, e));
+  }
+
+  pause(): void {
+    this.audioRef?.nativeElement?.pause?.();
+  }
+
+  togglePlayPause(): void {
+    this.isPlaying &#x3D; !this.isPlaying;
+    this.isPlaying ? this.play() : this.pause();
+  }
+
+  setVolume(newVolume: number): void {
+    this.volume &#x3D; newVolume;
+    if (this.audioRef?.nativeElement) {
+      this.audioRef.nativeElement.volume &#x3D; this.volume;
+    }
+  }
+
+  getNextSong(): Song | null {
+    // Mock: devolver la misma canción para el prototipo
+    return this.currentMusic.song;
+  }
+
+  onNextSong(): void {
+    const nextSong &#x3D; this.getNextSong();
+    if (nextSong) {
+      this.currentMusic &#x3D; { ...this.currentMusic, song: nextSong };
+    }
+  }
+
+  onPlayPauseClick(): void {
+    this.togglePlayPause();
+  }
+
+  onVolumeChange(volume: number): void {
+    this.setVolume(volume);
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;flex flex-row justify-between items-center w-full px-1 z-50 gap-2 sm:gap-0&quot;&gt;
+  &lt;!-- Song info - fixed width on mobile and desktop --&gt;
+  &lt;div class&#x3D;&quot; sm:w-[200px] order-1 sm:order-1&quot;&gt;
+    &lt;app-player-current-song [song]&#x3D;&quot;currentMusic.song&quot;&gt;
+    &lt;/app-player-current-song&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Controls - center on mobile and desktop --&gt;
+  &lt;div
+    class&#x3D;&quot;grid place-content-center gap-1 sm:gap-4 flex-1 order-2 sm:order-2&quot;
+  &gt;
+    &lt;div class&#x3D;&quot;flex justify-center flex-col items-center&quot;&gt;
+      &lt;app-player-control-button-bar
+        [isPlaying]&#x3D;&quot;isPlaying&quot;
+        (playPauseClick)&#x3D;&quot;onPlayPauseClick()&quot;
+      &gt;
+      &lt;/app-player-control-button-bar&gt;
+
+      &lt;app-player-sound-control [audioElement]&#x3D;&quot;audioRef&quot;&gt;
+      &lt;/app-player-sound-control&gt;
+
+      &lt;audio
+        #audioElement
+        (ended)&#x3D;&quot;onNextSong()&quot;
+        [src]&#x3D;&quot;currentMusic.song ? &#x27;/music/&#x27; + currentMusic.playlist?.id + &#x27;/0&#x27; + currentMusic.song.id + &#x27;.mp3&#x27; : &#x27;&#x27;&quot;
+      &gt;&lt;/audio&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Volume - hidden on mobile, visible on sm+ --&gt;
+  &lt;div class&#x3D;&quot;hidden sm:grid place-content-center order-3&quot;&gt;
+    &lt;app-player-volume-control
+      [volume]&#x3D;&quot;volume&quot;
+      (volumeChange)&#x3D;&quot;onVolumeChange($event)&quot;
+    &gt;
+    &lt;/app-player-volume-control&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="flex flex-row justify-between items-center w-full px-1 z-50 gap-2 sm:gap-0">  <!-- Song info - fixed width on mobile and desktop -->  <div class=" sm:w-[200px] order-1 sm:order-1">    <app-player-current-song [song]="currentMusic.song">    </app-player-current-song>  </div>  <!-- Controls - center on mobile and desktop -->  <div    class="grid place-content-center gap-1 sm:gap-4 flex-1 order-2 sm:order-2"  >    <div class="flex justify-center flex-col items-center">      <app-player-control-button-bar        [isPlaying]="isPlaying"        (playPauseClick)="onPlayPauseClick()"      >      </app-player-control-button-bar>      <app-player-sound-control [audioElement]="audioRef">      </app-player-sound-control>      <audio        #audioElement        (ended)="onNextSong()"        [src]="currentMusic.song ? \'/music/\' + currentMusic.playlist?.id + \'/0\' + currentMusic.song.id + \'.mp3\' : \'\'"      ></audio>    </div>  </div>  <!-- Volume - hidden on mobile, visible on sm+ -->  <div class="hidden sm:grid place-content-center order-3">    <app-player-volume-control      [volume]="volume"      (volumeChange)="onVolumeChange($event)"    >    </app-player-volume-control>  </div></div></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'ArtistComponent', 'selector': 'app-artist'},{'name': 'AsideMenu', 'selector': 'app-aside-menu'},{'name': 'Card', 'selector': 'app-card'},{'name': 'CardPlayButton', 'selector': 'app-card-play-button'},{'name': 'ConnectionTestComponent', 'selector': 'app-connection-test'},{'name': 'CurrentSongComponent', 'selector': 'app-current-song'},{'name': 'ExploreComponent', 'selector': 'app-explore'},{'name': 'Greeting', 'selector': 'app-greeting'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LibraryComponent', 'selector': 'app-library'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MusicsTable', 'selector': 'app-musics-table'},{'name': 'MusicsTablePlay', 'selector': 'app-musics-table-play'},{'name': 'Player', 'selector': 'app-player'},{'name': 'PlayerControlButtonBar', 'selector': 'app-player-control-button-bar'},{'name': 'PlayerCurrentSong', 'selector': 'app-player-current-song'},{'name': 'PlayerSoundControl', 'selector': 'app-player-sound-control'},{'name': 'PlayerVolumeControl', 'selector': 'app-player-volume-control'},{'name': 'PlaylistComponent', 'selector': 'app-playlist'},{'name': 'PlayListItemCard', 'selector': 'app-play-list-item-card'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'ResetPasswordComponent', 'selector': 'app-reset-password'},{'name': 'SearchComponent', 'selector': 'app-search'},{'name': 'SideMenuCard', 'selector': 'app-side-menu-card'},{'name': 'SideMenuItem', 'selector': 'app-side-menu-item'},{'name': 'UserPerfilComponent', 'selector': 'app-user-perfil'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'Player'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'Player.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

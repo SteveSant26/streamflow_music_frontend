@@ -4,7 +4,7 @@ import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthService } from '@shared/services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
-import { ROUTES_CONFIG_AUTH } from '@app/config/routes-auth.config';
+import { ROUTES_CONFIG_AUTH } from '@app/config';
 @Component({
   selector: 'app-aside-menu',
   imports: [RouterLink, SideMenuItem, SideMenuCard, MatIconModule],
@@ -20,6 +20,13 @@ export class AsideMenu {
   async logout() {
     await this.authService.signOut();
     window.location.href = '/login';
+  }
+
+  onLogoutKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.logout();
+    }
   }
   // Mock data para las playlists
   playlists = [

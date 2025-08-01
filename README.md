@@ -1,59 +1,138 @@
-# B
+# Streamflow Music Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.3.
+Este proyecto es una aplicación frontend desarrollada en Angular, diseñada bajo principios de Clean Architecture para mantener una estructura escalable, mantenible y desacoplada. Utiliza Angular Material, TailwindCSS, Supabase y SSR (Server Side Rendering) para ofrecer una experiencia moderna y eficiente.
 
-## Development server
+## Tabla de Contenidos
 
-To start a local development server, run:
+- [Características](#características)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Arquitectura](#arquitectura)
+- [Instalación](#instalación)
+- [Comandos Útiles](#comandos-útiles)
+- [Testing](#testing)
+- [Linting y Formato](#linting-y-formato)
+- [Documentación](#documentación)
+- [Recursos adicionales](#recursos-adicionales)
 
-```bash
-ng serve
+---
+
+## Características
+
+- **Angular 20+** con SSR (Angular Universal)
+- **Clean Architecture**: separación clara de capas (domain, infrastructure, presentation, etc.)
+- **Angular Material** y **TailwindCSS** para UI moderna y flexible
+- **Supabase** como backend as a service
+- **Compodoc** para documentación automática
+- **ESLint** y **Prettier** para calidad y formato de código
+- **Husky** y **lint-staged** para hooks de pre-commit
+
+## Estructura del Proyecto
+
+```
+src/app/
+│
+├── components/         # Componentes reutilizables
+├── config/             # Configuración de la app
+├── domain/             # Entidades y lógica de negocio
+├── infrastructure/     # Adaptadores y servicios externos
+├── models/             # Modelos de datos
+├── pages/              # Vistas principales/páginas
+├── presentation/       # Componentes de presentación
+├── routes/             # Definición de rutas
+├── services/           # Servicios de aplicación
+├── shared/             # Utilidades y componentes compartidos
+│
+├── app.config.ts
+├── app.routes.ts
+├── app.ts
+└── ...
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Arquitectura
 
-## Code scaffolding
+La aplicación sigue los principios de **Clean Architecture**, asegurando una separación clara de responsabilidades:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **domain/**: Contiene entidades, lógica de negocio y contratos. No depende de frameworks ni de detalles de infraestructura.
+- **infrastructure/**: Implementa servicios externos, adaptadores y detalles tecnológicos (por ejemplo, integración con Supabase).
+- **presentation/**: Componentes y vistas que gestionan la interacción con el usuario.
+- **shared/**: Componentes, pipes, directivas y utilidades reutilizables en toda la app.
+- **config/**: Archivos de configuración global.
+- **routes/**: Definición y organización de rutas de la aplicación.
+- **services/**: Servicios de aplicación que orquestan la lógica entre capas.
 
-```bash
-ng generate component component-name
-```
+Esta estructura permite escalar el proyecto fácilmente, facilita el testing y promueve el desacoplamiento.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Instalación
 
-```bash
-ng generate --help
-```
+1. Clona el repositorio:
+    ```bash
+    git clone <url-del-repo>
+    cd streamflow_music_frontend
+    ```
 
-## Building
+2. Instala las dependencias:
+    ```bash
+    npm install
+    ```
 
-To build the project run:
+## Comandos Útiles
 
-```bash
-ng build
-```
+- **Desarrollo local:**
+    ```bash
+    npm start
+    # o
+    ng serve
+    ```
+    Accede a [http://localhost:4200](http://localhost:4200)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- **Build producción:**
+    ```bash
+    npm run build
+    ```
 
-## Running unit tests
+- **SSR (Server Side Rendering):**
+    ```bash
+    npm run build
+    npm run serve:ssr:b
+    ```
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- **Linting:**
+    ```bash
+    npm run lint
+    ```
 
-```bash
-ng test
-```
+## Testing
 
-## Running end-to-end tests
+- **Unit tests:**
+    ```bash
+    npm test
+    ```
 
-For end-to-end (e2e) testing, run:
+- **End-to-end (e2e):**
+    > Angular CLI no incluye framework e2e por defecto. Puedes integrar Cypress, Playwright u otro de tu preferencia.
 
-```bash
-ng e2e
-```
+## Linting y Formato
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- **Lint y Prettier:**  
+  El proyecto usa ESLint y Prettier, integrados con Husky y lint-staged para asegurar calidad y formato en cada commit.
 
-## Additional Resources
+## Documentación
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Compodoc:**  
+  Genera documentación automática del código:
+    ```bash
+    npm run compodoc:build-and-serve
+    ```
+  Accede a la documentación en [http://localhost:8080](http://localhost:8080)
+
+## Recursos adicionales
+
+- [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli)
+- [Documentación oficial de Angular](https://angular.dev/)
+- [Compodoc](https://compodoc.app/)
+- [Supabase](https://supabase.com/)
+- [TailwindCSS](https://tailwindcss.com/)
+
+---
+
+> Para más detalles sobre la arquitectura y decisiones técnicas, consulta la [documentación en DeepWiki](https://deepwiki.com/SteveSant26/streamflow_music_frontend/1-overview).

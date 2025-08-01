@@ -1,0 +1,1801 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>b documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">b documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  ArtistComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/artist/artist.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-artist</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./artist.css</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./artist.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#artist" >artist</a>
+                            </li>
+                            <li>
+                                <a href="#artistId" >artistId</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#applyFallbackGradient" >applyFallbackGradient</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#extractColorsFromImage" >extractColorsFromImage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#findDominantColor" >findDominantColor</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#generateGradient" >generateGradient</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#loadGorillazData" >loadGorillazData</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onImageError" >onImageError</a>
+                            </li>
+                            <li>
+                                <a href="#onImageLoad" >onImageLoad</a>
+                            </li>
+                            <li>
+                                <a href="#testDifferentImage" >testDifferentImage</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: ActivatedRoute, cdr: ChangeDetectorRef)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/pages/artist/artist.ts:48</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>cdr</td>
+                                                  
+                                                        <td>
+                                                                    <code>ChangeDetectorRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyFallbackGradient"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>applyFallbackGradient</b></span>
+                        <a href="#applyFallbackGradient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyFallbackGradient()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="165"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:165</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="extractColorsFromImage"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>extractColorsFromImage</b></span>
+                        <a href="#extractColorsFromImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>extractColorsFromImage(img: HTMLImageElement)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="99"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:99</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>img</td>
+                                            <td>
+                                                        <code>HTMLImageElement</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="findDominantColor"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>findDominantColor</b></span>
+                        <a href="#findDominantColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>findDominantColor(colors: literal type[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="173"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:173</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>colors</td>
+                                            <td>
+                                                        <code>literal type[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generateGradient"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>generateGradient</b></span>
+                        <a href="#generateGradient"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>generateGradient(color: literal type)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="202"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:202</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>color</td>
+                                            <td>
+                                                        <code>literal type</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadGorillazData"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>loadGorillazData</b></span>
+                        <a href="#loadGorillazData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadGorillazData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="227"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:227</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="55"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:55</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onImageError"></a>
+                    <span class="name">
+                        <span ><b>onImageError</b></span>
+                        <a href="#onImageError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onImageError(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="79"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:79</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onImageLoad"></a>
+                    <span class="name">
+                        <span ><b>onImageLoad</b></span>
+                        <a href="#onImageLoad"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onImageLoad(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="62"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:62</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="testDifferentImage"></a>
+                    <span class="name">
+                        <span ><b>testDifferentImage</b></span>
+                        <a href="#testDifferentImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>testDifferentImage()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="84"
+                                    class="link-to-prism">src/app/pages/artist/artist.ts:84</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="artist"></a>
+                    <span class="name">
+                        <span ><b>artist</b></span>
+                        <a href="#artist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Artist | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/pages/artist/artist.ts:48</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="artistId"></a>
+                    <span class="name">
+                        <span ><b>artistId</b></span>
+                        <a href="#artistId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/pages/artist/artist.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, ChangeDetectorRef } from &quot;@angular/core&quot;;
+import { CommonModule } from &quot;@angular/common&quot;;
+import { ActivatedRoute } from &quot;@angular/router&quot;;
+
+interface Song {
+  title: string;
+  album: string;
+  duration: string;
+}
+
+interface Album {
+  title: string;
+  year: string;
+  tracks: number;
+  cover: string;
+}
+
+interface Award {
+  name: string;
+  year: string;
+  category: string;
+}
+
+interface Artist {
+  id: number;
+  name: string;
+  genre: string;
+  image: string;
+  gradient: string;
+  monthlyListeners: string;
+  followers: string;
+  activeYears: string;
+  biography: string;
+  popularSongs: Song[];
+  albums: Album[];
+  awards: Award[];
+}
+
+@Component({
+  selector: &quot;app-artist&quot;,
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: &quot;./artist.html&quot;,
+  styleUrls: [&quot;./artist.css&quot;],
+})
+export class ArtistComponent implements OnInit {
+  artistId: string | null &#x3D; null;
+  artist: Artist | null &#x3D; null;
+
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
+
+  ngOnInit() {
+    this.artistId &#x3D; this.route.snapshot.paramMap.get(&quot;id&quot;);
+    if (this.artistId &#x3D;&#x3D;&#x3D; &quot;1&quot;) {
+      this.loadGorillazData();
+    }
+  }
+
+  onImageLoad(event: Event) {
+    const img &#x3D; event.target as HTMLImageElement;
+    console.log(
+      &quot;Imagen cargada:&quot;,
+      img.src,
+      &quot;Dimensiones:&quot;,
+      img.width,
+      &quot;x&quot;,
+      img.height,
+    );
+
+    // Pequeño delay para asegurar que la imagen está completamente cargada
+    setTimeout(() &#x3D;&gt; {
+      this.extractColorsFromImage(img);
+    }, 100);
+  }
+
+  onImageError(event: Event) {
+    console.error(&quot;Error al cargar la imagen:&quot;, event);
+    this.applyFallbackGradient();
+  }
+
+  testDifferentImage() {
+    const testImages &#x3D; [
+      &quot;https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w&#x3D;400&amp;h&#x3D;400&amp;fit&#x3D;crop&quot;, // Original
+      &quot;https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w&#x3D;400&amp;h&#x3D;400&amp;fit&#x3D;crop&quot;, // Azul/morado
+      &quot;https://images.unsplash.com/photo-1511379938547-c1f69419868d?w&#x3D;400&amp;h&#x3D;400&amp;fit&#x3D;crop&quot;, // Rojizo
+      &quot;https://images.unsplash.com/photo-1446057032654-9d8885db76c6?w&#x3D;400&amp;h&#x3D;400&amp;fit&#x3D;crop&quot;, // Verde
+    ];
+
+    const currentIndex &#x3D; testImages.indexOf(this.artist!.image);
+    const nextIndex &#x3D; (currentIndex + 1) % testImages.length;
+
+    console.log(&quot;🎨 Cambiando a imagen:&quot;, testImages[nextIndex]);
+    this.artist!.image &#x3D; testImages[nextIndex];
+  }
+
+  private extractColorsFromImage(img: HTMLImageElement) {
+    try {
+      console.log(&quot;Iniciando extracción de colores...&quot;);
+
+      const canvas &#x3D; document.createElement(&quot;canvas&quot;);
+      const ctx &#x3D; canvas.getContext(&quot;2d&quot;);
+
+      if (!ctx) {
+        console.error(&quot;No se pudo obtener contexto 2D del canvas&quot;);
+        return;
+      }
+
+      // Reducir el tamaño para análisis más rápido
+      const analysisSize &#x3D; 200;
+      canvas.width &#x3D; analysisSize;
+      canvas.height &#x3D; analysisSize;
+
+      // Configurar CORS para imágenes externas
+      img.crossOrigin &#x3D; &quot;anonymous&quot;;
+
+      ctx.drawImage(img, 0, 0, analysisSize, analysisSize);
+
+      // Extraer colores de diferentes puntos de la imagen
+      const colors &#x3D; [];
+      const samples &#x3D; 50; // Más muestras para mejor análisis
+
+      for (let i &#x3D; 0; i &lt; samples; i++) {
+        for (let j &#x3D; 0; j &lt; samples; j++) {
+          const x &#x3D; Math.floor((analysisSize / samples) * i);
+          const y &#x3D; Math.floor((analysisSize / samples) * j);
+
+          const imageData &#x3D; ctx.getImageData(x, y, 1, 1);
+          const [r, g, b, a] &#x3D; imageData.data;
+
+          // Solo considerar píxeles no transparentes y con suficiente saturación
+          if (a &gt; 200 &amp;&amp; r + g + b &gt; 60 &amp;&amp; r + g + b &lt; 700) {
+            colors.push({ r, g, b });
+          }
+        }
+      }
+
+      console.log(&quot;Colores extraídos:&quot;, colors.length);
+
+      if (colors.length &gt; 0) {
+        const dominantColor &#x3D; this.findDominantColor(colors);
+        console.log(&quot;Color dominante:&quot;, dominantColor);
+
+        const gradient &#x3D; this.generateGradient(dominantColor);
+        console.log(&quot;Gradiente generado:&quot;, gradient);
+
+        if (this.artist) {
+          this.artist.gradient &#x3D; gradient;
+          console.log(&quot;Gradiente aplicado al artista&quot;);
+          // Forzar detección de cambios
+          this.cdr.detectChanges();
+        }
+      } else {
+        console.warn(&quot;No se encontraron colores válidos en la imagen&quot;);
+        this.applyFallbackGradient();
+      }
+    } catch (error) {
+      console.error(&quot;Error al extraer colores de la imagen:&quot;, error);
+      this.applyFallbackGradient();
+    }
+  }
+
+  private applyFallbackGradient() {
+    if (this.artist) {
+      this.artist.gradient &#x3D;
+        &quot;linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%)&quot;;
+      console.log(&quot;Aplicado gradiente de fallback&quot;);
+    }
+  }
+
+  private findDominantColor(
+    colors: { r: number; g: number; b: number }[],
+  ) {
+    // Agrupar colores similares y encontrar el más común
+    const colorGroups: any &#x3D; {};
+
+    colors.forEach((color) &#x3D;&gt; {
+      // Reducir la precisión del color para agrupar similares
+      const key &#x3D; &#x60;${Math.floor(color.r / 20) * 20}-${Math.floor(color.g / 20) * 20}-${Math.floor(color.b / 20) * 20}&#x60;;
+      if (!colorGroups[key]) {
+        colorGroups[key] &#x3D; { ...color, count: 0 };
+      }
+      colorGroups[key].count++;
+    });
+
+    // Encontrar el grupo con más colores
+    let dominantColor &#x3D; colors[0];
+    let maxCount &#x3D; 0;
+
+    Object.values(colorGroups).forEach((group: any) &#x3D;&gt; {
+      if (group.count &gt; maxCount) {
+        maxCount &#x3D; group.count;
+        dominantColor &#x3D; group;
+      }
+    });
+
+    return dominantColor;
+  }
+
+  private generateGradient(color: { r: number; g: number; b: number }) {
+    // Crear variaciones del color dominante
+    const baseColor &#x3D; &#x60;rgb(${color.r}, ${color.g}, ${color.b})&#x60;;
+
+    // Color más oscuro para el gradiente
+    const darkerColor &#x3D; &#x60;rgb(${Math.max(0, color.r - 60)}, ${Math.max(0, color.g - 60)}, ${Math.max(0, color.b - 60)})&#x60;;
+
+    // Color más claro para el gradiente
+    const lighterColor &#x3D; &#x60;rgb(${Math.min(255, color.r + 40)}, ${Math.min(255, color.g + 40)}, ${Math.min(255, color.b + 40)})&#x60;;
+
+    // Determinar si el color es muy oscuro o muy claro para ajustar la dirección
+    const brightness &#x3D; (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
+
+    if (brightness &lt; 100) {
+      // Color oscuro - gradiente hacia más claro
+      return &#x60;linear-gradient(135deg, ${baseColor} 0%, ${lighterColor} 100%)&#x60;;
+    } else if (brightness &gt; 200) {
+      // Color claro - gradiente hacia más oscuro
+      return &#x60;linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 100%)&#x60;;
+    } else {
+      // Color medio - gradiente en ambas direcciones
+      return &#x60;linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 50%, ${lighterColor} 100%)&#x60;;
+    }
+  }
+
+  private loadGorillazData() {
+    this.artist &#x3D; {
+      id: 1,
+      name: &quot;Gorillaz&quot;,
+      genre: &quot;Alternative Rock, Electronic, Hip Hop&quot;,
+      image: &quot;/assets/gorillaz2.jpg&quot;, // Imagen de prueba
+      gradient: &quot;linear-gradient(135deg, #667eea 0%, #764ba2 100%)&quot;, // Gradiente inicial que será reemplazado
+      monthlyListeners: &quot;45.2M&quot;,
+      followers: &quot;12.8M&quot;,
+      activeYears: &quot;1998 - presente&quot;,
+      biography: &#x60;Gorillaz es una banda virtual británica creada en 1998 por Damon Albarn y Jamie Hewlett. La banda está compuesta por cuatro miembros ficticios animados: 2-D (vocalista, teclados), Murdoc Niccals (bajo), Noodle (guitarra, teclados, voz ocasional) y Russel Hobbs (batería). Gorillaz ha sido aclamado como uno de los proyectos musicales más innovadores y exitosos del siglo XXI, combinando elementos de rock alternativo, hip hop, electrónica y pop.
+
+El concepto único de la banda como un grupo completamente virtual, con personajes animados que tienen sus propias personalidades y trasfondos elaborados, fue revolucionario en la industria musical. A lo largo de su carrera, Gorillaz ha colaborado con una amplia gama de artistas, desde De La Soul y Del the Funky Homosapien hasta Elton John y Beck, creando un sonido ecléctico que trasciende géneros musicales.
+
+La banda ha lanzado múltiples álbumes exitosos, incluyendo su álbum debut homónimo (2001), &quot;Demon Days&quot; (2005), &quot;Plastic Beach&quot; (2010), &quot;Humanz&quot; (2017), &quot;The Now Now&quot; (2018), &quot;Song Machine&quot; (2020) y &quot;Cracker Island&quot; (2023). Sus videos musicales y presentaciones en vivo utilizan tecnología de vanguardia para dar vida a los personajes animados, creando experiencias visuales únicas.&#x60;,
+      popularSongs: [
+        { title: &quot;Feel Good Inc.&quot;, album: &quot;Demon Days&quot;, duration: &quot;3:41&quot; },
+        { title: &quot;Clint Eastwood&quot;, album: &quot;Gorillaz&quot;, duration: &quot;5:41&quot; },
+        {
+          title: &quot;On Melancholy Hill&quot;,
+          album: &quot;Plastic Beach&quot;,
+          duration: &quot;3:53&quot;,
+        },
+        { title: &quot;Saturnz Barz&quot;, album: &quot;Humanz&quot;, duration: &quot;3:58&quot; },
+        { title: &quot;Humility&quot;, album: &quot;The Now Now&quot;, duration: &quot;3:01&quot; },
+        { title: &quot;Dirty Harry&quot;, album: &quot;Demon Days&quot;, duration: &quot;3:43&quot; },
+        { title: &quot;Stylo&quot;, album: &quot;Plastic Beach&quot;, duration: &quot;4:30&quot; },
+        { title: &quot;Tranz&quot;, album: &quot;The Now Now&quot;, duration: &quot;2:42&quot; },
+        { title: &quot;Cracker Island&quot;, album: &quot;Cracker Island&quot;, duration: &quot;3:42&quot; },
+        { title: &quot;19-2000&quot;, album: &quot;Gorillaz&quot;, duration: &quot;3:27&quot; },
+      ],
+      albums: [
+        {
+          title: &quot;Gorillaz&quot;,
+          year: &quot;2001&quot;,
+          tracks: 15,
+          cover: &quot;/assets/playlists/playlist1.jpg&quot;,
+        },
+        {
+          title: &quot;Demon Days&quot;,
+          year: &quot;2005&quot;,
+          tracks: 15,
+          cover: &quot;/assets/playlists/playlist2.webp&quot;,
+        },
+        {
+          title: &quot;Plastic Beach&quot;,
+          year: &quot;2010&quot;,
+          tracks: 16,
+          cover: &quot;/assets/playlists/playlist3.jpg&quot;,
+        },
+        {
+          title: &quot;Humanz&quot;,
+          year: &quot;2017&quot;,
+          tracks: 20,
+          cover: &quot;/assets/playlists/playlist4.jpg&quot;,
+        },
+        {
+          title: &quot;The Now Now&quot;,
+          year: &quot;2018&quot;,
+          tracks: 11,
+          cover: &quot;/assets/playlists/playlist1.jpg&quot;,
+        },
+        {
+          title: &quot;Song Machine, Season One&quot;,
+          year: &quot;2020&quot;,
+          tracks: 17,
+          cover: &quot;/assets/playlists/playlist2.webp&quot;,
+        },
+        {
+          title: &quot;Cracker Island&quot;,
+          year: &quot;2023&quot;,
+          tracks: 10,
+          cover: &quot;/assets/playlists/playlist3.jpg&quot;,
+        },
+      ],
+      awards: [
+        {
+          name: &quot;Grammy Award&quot;,
+          year: &quot;2006&quot;,
+          category: &quot;Best Pop Collaboration with Vocals - Feel Good Inc.&quot;,
+        },
+        { name: &quot;BRIT Award&quot;, year: &quot;2006&quot;, category: &quot;Best British Group&quot; },
+        {
+          name: &quot;MTV Video Music Award&quot;,
+          year: &quot;2005&quot;,
+          category: &quot;Best Group Video - Feel Good Inc.&quot;,
+        },
+        {
+          name: &quot;Q Award&quot;,
+          year: &quot;2005&quot;,
+          category: &quot;Best Video - Feel Good Inc.&quot;,
+        },
+        {
+          name: &quot;Ivor Novello Award&quot;,
+          year: &quot;2002&quot;,
+          category: &quot;Best Contemporary Song - Clint Eastwood&quot;,
+        },
+        { name: &quot;NME Award&quot;, year: &quot;2006&quot;, category: &quot;Best Band&quot; },
+      ],
+    };
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;artist-container&quot;&gt;
+  &lt;div class&#x3D;&quot;artist-header&quot; *ngIf&#x3D;&quot;artist&quot;&gt;
+    &lt;!-- Artist Hero Section --&gt;
+    &lt;div class&#x3D;&quot;artist-hero&quot; [style.background]&#x3D;&quot;artist.gradient&quot;&gt;
+      &lt;div class&#x3D;&quot;hero-content&quot;&gt;
+        &lt;img
+          [src]&#x3D;&quot;artist.image&quot;
+          [alt]&#x3D;&quot;artist.name&quot;
+          class&#x3D;&quot;artist-image&quot;
+          (load)&#x3D;&quot;onImageLoad($event)&quot;
+          (error)&#x3D;&quot;onImageError($event)&quot;
+          crossorigin&#x3D;&quot;anonymous&quot;
+        /&gt;
+        &lt;div class&#x3D;&quot;artist-info&quot;&gt;
+          &lt;h1 class&#x3D;&quot;artist-name&quot;&gt;{{ artist.name }}&lt;/h1&gt;
+          &lt;p class&#x3D;&quot;artist-genre&quot;&gt;{{ artist.genre }}&lt;/p&gt;
+          &lt;div class&#x3D;&quot;artist-stats&quot;&gt;
+            &lt;span&gt;{{ artist.monthlyListeners }} oyentes mensuales&lt;/span&gt;
+            &lt;span&gt;{{ artist.followers }} seguidores&lt;/span&gt;
+            &lt;span&gt;Activo desde {{ artist.activeYears }}&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;!-- Botón de prueba para cambiar imagen --&gt;
+          &lt;button (click)&#x3D;&quot;testDifferentImage()&quot; class&#x3D;&quot;test-button&quot;&gt;
+            🎨 Probar otra imagen
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Artist Bio --&gt;
+    &lt;div class&#x3D;&quot;artist-bio&quot;&gt;
+      &lt;h2&gt;Biografía&lt;/h2&gt;
+      &lt;p&gt;{{ artist.biography }}&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;artist-content&quot; *ngIf&#x3D;&quot;artist&quot;&gt;
+    &lt;!-- Popular Songs --&gt;
+    &lt;section class&#x3D;&quot;popular-songs&quot;&gt;
+      &lt;h2&gt;Canciones populares&lt;/h2&gt;
+      &lt;div class&#x3D;&quot;songs-container&quot;&gt;
+        &lt;div
+          *ngFor&#x3D;&quot;let song of artist.popularSongs; let i &#x3D; index&quot;
+          class&#x3D;&quot;song-item&quot;
+        &gt;
+          &lt;span class&#x3D;&quot;song-number&quot;&gt;{{ i + 1 }}&lt;/span&gt;
+          &lt;div class&#x3D;&quot;song-details&quot;&gt;
+            &lt;h3&gt;{{ song.title }}&lt;/h3&gt;
+            &lt;p&gt;{{ song.album }}&lt;/p&gt;
+          &lt;/div&gt;
+          &lt;div class&#x3D;&quot;song-duration&quot;&gt;{{ song.duration }}&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- Albums --&gt;
+    &lt;section class&#x3D;&quot;albums&quot;&gt;
+      &lt;h2&gt;Álbumes&lt;/h2&gt;
+      &lt;div class&#x3D;&quot;albums-grid&quot;&gt;
+        &lt;div *ngFor&#x3D;&quot;let album of artist.albums&quot; class&#x3D;&quot;album-card&quot;&gt;
+          &lt;img [src]&#x3D;&quot;album.cover&quot; [alt]&#x3D;&quot;album.title&quot; class&#x3D;&quot;album-cover&quot; /&gt;
+          &lt;h3&gt;{{ album.title }}&lt;/h3&gt;
+          &lt;p class&#x3D;&quot;album-year&quot;&gt;{{ album.year }}&lt;/p&gt;
+          &lt;p class&#x3D;&quot;album-tracks&quot;&gt;{{ album.tracks }} canciones&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- Awards &amp; Recognition --&gt;
+    &lt;section class&#x3D;&quot;awards&quot; *ngIf&#x3D;&quot;artist.awards.length &gt; 0&quot;&gt;
+      &lt;h2&gt;Premios y reconocimientos&lt;/h2&gt;
+      &lt;div class&#x3D;&quot;awards-container&quot;&gt;
+        &lt;div class&#x3D;&quot;awards-grid&quot;&gt;
+          &lt;div *ngFor&#x3D;&quot;let award of artist.awards&quot; class&#x3D;&quot;award-item&quot;&gt;
+            &lt;div class&#x3D;&quot;award-icon&quot;&gt;&lt;/div&gt;
+            &lt;div class&#x3D;&quot;award-details&quot;&gt;
+              &lt;h4&gt;{{ award.name }}&lt;/h4&gt;
+              &lt;p&gt;{{ award.year }} - {{ award.category }}&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Default view for other artists --&gt;
+  &lt;div *ngIf&#x3D;&quot;!artist&quot; class&#x3D;&quot;default-view&quot;&gt;
+    &lt;h1&gt;Artista {{ artistId }}&lt;/h1&gt;
+    &lt;p&gt;Información del artista próximamente&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./artist.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">/* Container principal */
+.artist-container {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  min-height: 100vh;
+}
+
+/* Header del artista */
+.artist-header {
+  margin-bottom: 2rem;
+}
+
+/* Hero section */
+.artist-hero {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  color: white;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  transition: all 1s ease;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.artist-image {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.artist-info {
+  flex: 1;
+}
+
+.artist-name {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+
+.artist-genre {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.artist-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.test-button {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.test-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Biografía */
+.artist-bio {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.artist-bio h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.artist-bio p {
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Contenido del artista */
+.artist-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.artist-content section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+/* Canciones populares */
+.popular-songs {
+  margin-bottom: 2rem;
+}
+
+.songs-container {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.song-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.song-item:hover {
+  background: #f9fafb;
+}
+
+.song-item:last-child {
+  border-bottom: none;
+}
+
+.song-number {
+  color: #6b7280;
+  width: 2rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.song-details {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+.song-details h3 {
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.song-details p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.song-duration {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Álbumes */
+.albums {
+  margin-bottom: 2rem;
+}
+
+.albums-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.album-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.album-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.album-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.album-card h3 {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #1f2937;
+}
+
+.album-year {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.album-tracks {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Premios */
+.awards {
+  margin-bottom: 2rem;
+}
+
+.awards-container {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+}
+
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.award-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+.award-icon {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #eab308;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.award-details h4 {
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.award-details p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Vista por defecto */
+.default-view {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.default-view h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.default-view p {
+  color: #6b7280;
+  font-size: 1.125rem;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .hero-content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .artist-name {
+    font-size: 3.5rem;
+  }
+
+  .albums-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .artist-container {
+    padding: 1rem;
+  }
+
+  .artist-hero {
+    padding: 1.5rem;
+  }
+
+  .artist-image {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .artist-name {
+    font-size: 2rem;
+  }
+
+  .artist-genre {
+    font-size: 1rem;
+  }
+
+  .artist-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .albums-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .awards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="artist-container">  <div class="artist-header" *ngIf="artist">    <!-- Artist Hero Section -->    <div class="artist-hero" [style.background]="artist.gradient">      <div class="hero-content">        <img          [src]="artist.image"          [alt]="artist.name"          class="artist-image"          (load)="onImageLoad($event)"          (error)="onImageError($event)"          crossorigin="anonymous"        />        <div class="artist-info">          <h1 class="artist-name">{{ artist.name }}</h1>          <p class="artist-genre">{{ artist.genre }}</p>          <div class="artist-stats">            <span>{{ artist.monthlyListeners }} oyentes mensuales</span>            <span>{{ artist.followers }} seguidores</span>            <span>Activo desde {{ artist.activeYears }}</span>          </div>          <!-- Botón de prueba para cambiar imagen -->          <button (click)="testDifferentImage()" class="test-button">            🎨 Probar otra imagen          </button>        </div>      </div>    </div>    <!-- Artist Bio -->    <div class="artist-bio">      <h2>Biografía</h2>      <p>{{ artist.biography }}</p>    </div>  </div>  <div class="artist-content" *ngIf="artist">    <!-- Popular Songs -->    <section class="popular-songs">      <h2>Canciones populares</h2>      <div class="songs-container">        <div          *ngFor="let song of artist.popularSongs; let i = index"          class="song-item"        >          <span class="song-number">{{ i + 1 }}</span>          <div class="song-details">            <h3>{{ song.title }}</h3>            <p>{{ song.album }}</p>          </div>          <div class="song-duration">{{ song.duration }}</div>        </div>      </div>    </section>    <!-- Albums -->    <section class="albums">      <h2>Álbumes</h2>      <div class="albums-grid">        <div *ngFor="let album of artist.albums" class="album-card">          <img [src]="album.cover" [alt]="album.title" class="album-cover" />          <h3>{{ album.title }}</h3>          <p class="album-year">{{ album.year }}</p>          <p class="album-tracks">{{ album.tracks }} canciones</p>        </div>      </div>    </section>    <!-- Awards & Recognition -->    <section class="awards" *ngIf="artist.awards.length > 0">      <h2>Premios y reconocimientos</h2>      <div class="awards-container">        <div class="awards-grid">          <div *ngFor="let award of artist.awards" class="award-item">            <div class="award-icon"></div>            <div class="award-details">              <h4>{{ award.name }}</h4>              <p>{{ award.year }} - {{ award.category }}</p>            </div>          </div>        </div>      </div>    </section>  </div>  <!-- Default view for other artists -->  <div *ngIf="!artist" class="default-view">    <h1>Artista {{ artistId }}</h1>    <p>Información del artista próximamente</p>  </div></div></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'ArtistComponent', 'selector': 'app-artist'},{'name': 'AsideMenu', 'selector': 'app-aside-menu'},{'name': 'Card', 'selector': 'app-card'},{'name': 'CardPlayButton', 'selector': 'app-card-play-button'},{'name': 'ConnectionTestComponent', 'selector': 'app-connection-test'},{'name': 'CurrentSongComponent', 'selector': 'app-current-song'},{'name': 'ExploreComponent', 'selector': 'app-explore'},{'name': 'Greeting', 'selector': 'app-greeting'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LibraryComponent', 'selector': 'app-library'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MusicsTable', 'selector': 'app-musics-table'},{'name': 'MusicsTablePlay', 'selector': 'app-musics-table-play'},{'name': 'Player', 'selector': 'app-player'},{'name': 'PlayerControlButtonBar', 'selector': 'app-player-control-button-bar'},{'name': 'PlayerCurrentSong', 'selector': 'app-player-current-song'},{'name': 'PlayerSoundControl', 'selector': 'app-player-sound-control'},{'name': 'PlayerVolumeControl', 'selector': 'app-player-volume-control'},{'name': 'PlaylistComponent', 'selector': 'app-playlist'},{'name': 'PlayListItemCard', 'selector': 'app-play-list-item-card'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'ResetPasswordComponent', 'selector': 'app-reset-password'},{'name': 'SearchComponent', 'selector': 'app-search'},{'name': 'SideMenuCard', 'selector': 'app-side-menu-card'},{'name': 'SideMenuItem', 'selector': 'app-side-menu-item'},{'name': 'UserPerfilComponent', 'selector': 'app-user-perfil'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ArtistComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ArtistComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
