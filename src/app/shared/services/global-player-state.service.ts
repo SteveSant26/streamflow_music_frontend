@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { PlayerUseCase } from '../../domain/use-cases/player.use-case';
 import { MusicLibraryService } from './music-library.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
@@ -13,7 +14,8 @@ export class GlobalPlayerStateService {
 
   constructor(
     private readonly playerUseCase: PlayerUseCase,
-    private readonly musicLibraryService: MusicLibraryService
+    private readonly musicLibraryService: MusicLibraryService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {}
 
   /**
