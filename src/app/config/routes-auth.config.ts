@@ -6,14 +6,14 @@ export const ROUTES_CONFIG_AUTH = {
   },
   LOGIN: {
     path: 'login',
-    link: 'auth/login',
+    link: '/auth/login',
   },
   REGISTER: {
     path: 'register',
-    link: 'auth/register',
+    link: '/auth/register',
   },
   RESET_PASSWORD: {
     path: 'reset-password',
-    link: 'auth/reset-password',
+    link: '/auth/reset-password',
   },
 };
