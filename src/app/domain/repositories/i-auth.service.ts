@@ -1,4 +1,4 @@
-import { AuthSession } from '../repositories/i-auth.repository';
+import { AuthSession } from './i-auth.repository';
 
 export abstract class IAuthService {
   abstract initializeSession(): Promise<void>;
