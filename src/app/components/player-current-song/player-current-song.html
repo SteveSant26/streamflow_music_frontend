@@ -7,7 +7,7 @@
 >
   <picture class="w-10 h-10 sm:w-14 sm:h-14 flex-shrink-0">
     <img
-      [src]="song.image"
+      [src]="song.albumCover || '/assets/gorillaz2.jpg'"
       [alt]="song.title"
       class="w-full h-full object-cover rounded"
     />
@@ -21,7 +21,7 @@
     <span
       class="text-gray-800 text-xs truncate group-hover:text-gray-600 transition-colors"
     >
-      {{ song.artists.join(', ') }}
+      {{ song.artist }}
     </span>
   </div>
 </button>
