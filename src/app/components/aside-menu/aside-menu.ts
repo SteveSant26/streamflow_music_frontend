@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStatusUseCase } from '@app/domain/usecases/auth-status.usecase';
@@ -14,13 +14,22 @@ import { ROUTES_CONFIG_AUTH } from '@app/config';
 export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   private readonly authStatusUseCase = inject(AuthStatusUseCase);
+  private readonly router = inject(Router);
   
   isAuthenticated = this.authStatusUseCase.isAuthenticated;
   user = this.authStatusUseCase.user;
 
   async logout() {
-    await this.authStatusUseCase.logout();
-    window.location.href = '/login';
+    try {
+      console.log('🚪 Iniciando logout...');
+      await this.authStatusUseCase.logout();
+      console.log('✅ Logout exitoso, redirigiendo...');
+      await this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('❌ Error en logout:', error);
+      // Aunque falle, redirigimos al login
+      await this.router.navigate(['/login']);
+    }
   }
 
   onLogoutKeyDown(event: KeyboardEvent) {

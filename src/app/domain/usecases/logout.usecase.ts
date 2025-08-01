@@ -10,16 +10,22 @@ export class LogoutUseCase {
   ) {}
 
   async execute(): Promise<void> {
+    console.log('🔄 LogoutUseCase: Iniciando proceso de logout');
+    
     try {
-      // Ejecutar logout en el repositorio
+      // Primero limpiamos el estado local para prevenir peticiones con token inválido
+      console.log('🧹 LogoutUseCase: Limpiando estado local');
+      this.authStateService.clearSession();
+      
+      // Luego ejecutamos logout en el repositorio
+      console.log('🌐 LogoutUseCase: Ejecutando logout remoto');
       await this.authRepository.logout();
-
-      // Limpiar el estado de autenticación
-      this.authStateService.clearSession();
+      
+      console.log('✅ LogoutUseCase: Logout completado exitosamente');
     } catch (error) {
-      // Aunque falle el logout remoto, limpiamos el estado local
-      this.authStateService.clearSession();
-      throw error;
+      console.error('❌ LogoutUseCase: Error en logout remoto:', error);
+      // El estado local ya está limpio, así que el logout local funcionó
+      console.log('✅ LogoutUseCase: Estado local limpiado correctamente');
     }
   }
 }

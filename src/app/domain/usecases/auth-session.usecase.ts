@@ -10,12 +10,24 @@ export class AuthSessionUseCase {
   ) {}
 
   async initSession() {
+    console.log('🔄 AuthSessionUseCase: Inicializando sesión');
+    
     try {
       const session = await this.authRepository.getCurrentSession();
-      this.authStateService.updateSession(session);
-      console.log('Session initialized:', session);
+      
+      if (session?.token && session?.user) {
+        console.log('✅ AuthSessionUseCase: Sesión válida encontrada:', {
+          userEmail: session.user.email,
+          isAuthenticated: session.isAuthenticated,
+          hasToken: !!session.token
+        });
+        this.authStateService.updateSession(session);
+      } else {
+        console.log('❌ AuthSessionUseCase: No hay sesión válida');
+        this.authStateService.clearSession();
+      }
     } catch (error) {
-      console.error('Error initializing session:', error);
+      console.error('❌ AuthSessionUseCase: Error obteniendo sesión:', error);
       this.authStateService.clearSession();
     }
   }

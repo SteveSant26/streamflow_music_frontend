@@ -33,11 +33,22 @@ export class App implements OnInit {
   }
 
   ngOnInit() {
-    this.authSessionUseCase.initSession();
+    // Initialize auth session first
+    this.initializeAuth();
     
     // Initialize global player state when app starts
     this.globalPlayerState.initializePlayer().catch(error => {
       console.error('Failed to initialize global player state:', error);
     });
+  }
+
+  private async initializeAuth() {
+    try {
+      console.log('🔐 App: Inicializando sesión de autenticación');
+      await this.authSessionUseCase.initSession();
+      console.log('✅ App: Sesión de autenticación inicializada');
+    } catch (error) {
+      console.error('❌ App: Error inicializando sesión:', error);
+    }
   }
 }

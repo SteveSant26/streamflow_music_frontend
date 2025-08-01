@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from '@app/shared/services/auth.service';
+import { AuthStateService } from '../services/auth-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthUseCase {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authStateService: AuthStateService) {}
 
   isAuthenticated(): boolean {
-    return this.authService.isAuthenticated();
+    return this.authStateService.isAuthenticated();
   }
 }
