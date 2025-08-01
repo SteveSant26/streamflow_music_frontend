@@ -54,15 +54,10 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
     
     console.log('PlayerSoundControl: Seek to', seekPercentage + '%');
     
-    // Force state synchronization after seek
+    // CRITICAL: Force global sync after seek
     setTimeout(() => {
-      const currentState = this.globalPlayerState.getPlayerState();
-      if (currentState) {
-        this.currentTime = currentState.currentTime;
-        this.duration = currentState.duration;
-        this.cdr.detectChanges();
-      }
-    }, 50);
+      this.globalPlayerState.forceSyncAllComponents();
+    }, 100);
   }
 
   ngOnInit(): void {

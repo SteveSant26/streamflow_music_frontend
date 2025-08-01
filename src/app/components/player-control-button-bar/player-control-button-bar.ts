@@ -64,6 +64,11 @@ export class PlayerControlButtonBar implements OnInit, OnDestroy {
     }
     
     console.log('PlayerControlButtonBar: Play/Pause clicked, new state:', this.isPlaying);
+    
+    // CRITICAL: Force global sync after ANY play/pause action
+    setTimeout(() => {
+      this.globalPlayerState.forceSyncAllComponents();
+    }, 100);
   }
 
   onPreviousClick(): void {

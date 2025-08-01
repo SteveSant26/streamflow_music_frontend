@@ -173,6 +173,11 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         });
         console.log("Reproduciendo");
       }
+      
+      // CRITICAL: Force global sync after ANY play/pause action
+      setTimeout(() => {
+        this.globalPlayerState.forceSyncAllComponents();
+      }, 100);
     }
   }
 
@@ -231,13 +236,10 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     playerUseCase.seekToPercentage(newProgress);
     console.log("Nuevo progreso:", newProgress + "%");
     
-    // Force state synchronization after seek
+    // CRITICAL: Force global sync after seek
     setTimeout(() => {
-      const currentState = this.globalPlayerState.getPlayerState();
-      if (currentState) {
-        this.updateCurrentSongView(currentState);
-      }
-    }, 50);
+      this.globalPlayerState.forceSyncAllComponents();
+    }, 100);
   }
 
   onVolumeChange(event: Event) {

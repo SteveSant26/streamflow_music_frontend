@@ -14,8 +14,11 @@ export class PlayerUseCase {
   private currentSongIndex = 0;
   private readonly songEndSubject = new Subject<void>();
   private readonly errorSubject = new Subject<string>();
+  private readonly instanceId = Math.random().toString(36).substring(2, 11);
 
-  constructor() {}
+  constructor() {
+    console.log(`PlayerUseCase instance created with ID: ${this.instanceId}`);
+  }
 
   private getInitialPlayerState(): PlayerState {
     return {
@@ -96,7 +99,16 @@ export class PlayerUseCase {
     const currentState = this.playerStateSubject.value;
     const newState = { ...currentState, ...updates };
     this.playerStateSubject.next(newState);
-    console.log('Player state updated:', newState);
+    console.log(`[${this.instanceId}] Player state updated:`, newState);
+  }
+
+  /**
+   * Public method to force state synchronization across all components
+   */
+  public forceStateSync(): void {
+    const currentState = this.playerStateSubject.value;
+    this.playerStateSubject.next({ ...currentState });
+    console.log(`[${this.instanceId}] Forced state sync:`, currentState);
   }
 
   private handleSongEnd(): void {
@@ -146,7 +158,7 @@ export class PlayerUseCase {
     
     // Force immediate state update for pause action
     this.updatePlayerState({ isPlaying: false });
-    console.log('Pause called - forcing isPlaying: false');
+    console.log(`[${this.instanceId}] Pause called - forcing isPlaying: false`);
   }
 
   pauseMusic(): void {
@@ -159,7 +171,7 @@ export class PlayerUseCase {
     
     // Force immediate state update for play action
     this.updatePlayerState({ isPlaying: true });
-    console.log('Play called - forcing isPlaying: true');
+    console.log(`[${this.instanceId}] Play called - forcing isPlaying: true`);
   }
 
   async resumeMusic(): Promise<void> {

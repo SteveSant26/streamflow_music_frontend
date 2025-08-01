@@ -118,6 +118,14 @@ export class GlobalPlayerStateService {
   }
 
   /**
+   * Force all components to sync with current state
+   */
+  forceSyncAllComponents(): void {
+    console.log('Forcing sync of all components');
+    this.playerUseCase.forceStateSync();
+  }
+
+  /**
    * Get the PlayerUseCase instance for direct control
    */
   getPlayerUseCase(): PlayerUseCase {
