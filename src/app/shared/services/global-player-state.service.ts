@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { PlayerUseCase } from '../../domain/use-cases/player.use-case';
 import { MusicLibraryService } from './music-library.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
