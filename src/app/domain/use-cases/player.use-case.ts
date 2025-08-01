@@ -42,6 +42,13 @@ export class PlayerUseCase {
     if (!this.audio) return;
 
     // Set up event listeners for real-time updates
+    this.audio.addEventListener('loadedmetadata', () => {
+      if (this.audio) {
+        const duration = this.audio.duration || 0;
+        this.updatePlayerState({ duration });
+      }
+    });
+
     this.audio.addEventListener('timeupdate', () => {
       if (this.audio) {
         const currentTime = this.audio.currentTime;
@@ -114,9 +121,20 @@ export class PlayerUseCase {
   async playSong(song: Song): Promise<void> {
     if (!this.audio) throw new Error('Audio element not set');
     
-    const audioUrl = song.id === 'TheNightWeMet' 
-      ? `/assets/music/${song.id}.mp3`
-      : `/assets/music/${song.id}.wav`;
+    // Map song IDs to their correct file formats
+    let audioUrl: string;
+    switch (song.id) {
+      case '1':
+      case '2':
+      case 'TheNightWeMet':
+        audioUrl = `/assets/music/${song.id}.mp3`;
+        break;
+      case '3':
+        audioUrl = `/assets/music/${song.id}.wav`;
+        break;
+      default:
+        audioUrl = `/assets/music/${song.id}.mp3`; // Default to mp3
+    }
     
     this.audio.src = audioUrl;
     this.updatePlayerState({ 

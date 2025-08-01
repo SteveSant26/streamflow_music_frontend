@@ -15,34 +15,34 @@ export class MusicLibraryService {
   }
 
   private initializeSampleData(): void {
-    // Sample songs - using available audio files
+    // Sample songs - using available audio files (duration will be loaded dynamically)
     const sampleSongs: Song[] = [
       {
         id: '1',
         title: 'Demo Track 1',
         artist: 'Test Artist',
-        duration: 30, // 30 seconds
+        duration: 0, // Will be loaded dynamically from audio file
         albumCover: '/assets/gorillaz2.jpg'
       },
       {
         id: '2',
         title: 'Demo Track 2',
         artist: 'Test Artist',
-        duration: 25, // 25 seconds
+        duration: 0, // Will be loaded dynamically from audio file
         albumCover: '/assets/gorillaz2.jpg'
       },
       {
-        id: '3', 
+        id: '3',
         title: 'Demo Track 3',
         artist: 'Test Artist',
-        duration: 20, // 20 seconds
+        duration: 0, // Will be loaded dynamically from audio file
         albumCover: '/assets/gorillazzzzz.jpg'
       },
       {
         id: 'TheNightWeMet',
         title: 'The Night We Met',
         artist: 'Gorillaz',
-        duration: 210, // 3.5 minutes
+        duration: 0, // Will be loaded dynamically from audio file
         albumCover: '/assets/gorillaz2.jpg'
       }
     ];
