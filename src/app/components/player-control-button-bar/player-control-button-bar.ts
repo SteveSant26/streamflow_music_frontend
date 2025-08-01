@@ -2,11 +2,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
-  Output,
-  EventEmitter,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  inject,
 } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
+import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
+import { PlayerState } from '../../domain/entities/player-state.entity';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: "app-player-control-button-bar",
