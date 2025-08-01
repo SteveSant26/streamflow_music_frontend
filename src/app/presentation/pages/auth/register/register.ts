@@ -101,4 +101,8 @@ export class RegisterComponent {
   registerWithDiscord() {
     this.socialLoginUseCase.execute('discord');
   }
+
+  registerWithAzure() {
+    this.socialLoginUseCase.execute('azure');
+  }
 }

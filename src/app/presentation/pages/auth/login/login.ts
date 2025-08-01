@@ -91,4 +91,8 @@ export class LoginComponent {
   loginWithDiscord() {
     this.socialLoginUseCase.execute('discord');
   }
+
+  loginWithAzure() {
+    this.socialLoginUseCase.execute('azure');
+  }
 }
