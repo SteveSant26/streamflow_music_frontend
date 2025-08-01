@@ -46,19 +46,25 @@ export class PlayerUseCase {
 
   // Audio Element Setup
   setAudioElement(audioElement: HTMLAudioElement): void {
-    // CRITICAL: If we already have a working audio element with current song loaded, DON'T replace it
+    // ULTRA CRITICAL: Never replace a working audio element during playback
     if (this.audio && !this.audio.error && this.audio.src && 
-        this.audio.duration > 0 && this.audio.currentTime >= 0) {
-      console.log(`[${this.instanceId}] PROTECTING existing audio element - refusing replacement to prevent state loss`);
+        this.audio.readyState >= 1 && this.audio.currentTime >= 0) {
+      console.log(`[${this.instanceId}] 🛡️ ULTRA PROTECTION: Refusing to replace working audio element`);
+      console.log(`[${this.instanceId}] Current audio state:`, {
+        src: this.audio.src.substring(this.audio.src.lastIndexOf('/') + 1),
+        currentTime: this.audio.currentTime,
+        duration: this.audio.duration,
+        readyState: this.audio.readyState,
+        paused: this.audio.paused
+      });
       
-      // Just ensure volume and event listeners are synced
+      // Just sync volume and event listeners without disrupting playback
       const currentState = this.playerStateSubject.value;
       this.audio.volume = currentState.volume;
-      this.setupEventListeners(); // Ensure event listeners are current
+      this.setupEventListeners();
       return;
     }
     
-    // Only replace if we truly need to (no audio element or broken one)
     console.log(`[${this.instanceId}] Setting new audio element`);
     this.audio = audioElement;
     
@@ -73,7 +79,6 @@ export class PlayerUseCase {
       
       // If we had a current time, try to restore it
       if (currentState.currentTime > 0) {
-        // Wait for metadata to load before setting currentTime
         const restoreTime = () => {
           if (this.audio && currentState.currentTime > 0) {
             this.audio.currentTime = currentState.currentTime;
@@ -86,7 +91,6 @@ export class PlayerUseCase {
     }
     
     this.setupEventListeners();
-    
     console.log(`[${this.instanceId}] Audio element set with volume: ${currentState.volume}`);
   }
 
@@ -229,24 +233,116 @@ export class PlayerUseCase {
   }
 
   /**
-   * Preserve current audio state (time, playing status) before navigation
+   * Preserve current audio state (time, playing status) before navigation - ULTRA CRITICAL
    */
   public preserveCurrentState(): void {
-    if (!this.audio) return;
+    if (!this.audio) {
+      console.log(`[${this.instanceId}] No audio element to preserve state from`);
+      return;
+    }
     
     const currentTime = this.audio.currentTime;
     const duration = this.audio.duration || 0;
     const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
     const isPlaying = !this.audio.paused;
+    const volume = this.audio.volume;
+    const src = this.audio.src;
     
-    console.log(`[${this.instanceId}] Preserving state - time: ${currentTime}, playing: ${isPlaying}, duration: ${duration}`);
+    console.log(`[${this.instanceId}] 🔄 PRESERVING ULTRA CRITICAL STATE:`, {
+      currentTime,
+      duration,
+      isPlaying,
+      volume,
+      src: src.substring(src.lastIndexOf('/') + 1),
+      readyState: this.audio.readyState
+    });
     
+    // Update the state in PlayerUseCase
     this.updatePlayerState({
       currentTime,
       duration,
       progress,
-      isPlaying
+      isPlaying,
+      volume
     });
+    
+    // Save to localStorage as emergency backup
+    try {
+      const preservedData = {
+        currentTime,
+        duration,
+        isPlaying,
+        volume,
+        src,
+        timestamp: Date.now(),
+        currentSong: this.playerStateSubject.value.currentSong
+      };
+      localStorage.setItem('streamflow-music-emergency-state', JSON.stringify(preservedData));
+      console.log(`[${this.instanceId}] Emergency state saved to localStorage`);
+    } catch (error) {
+      console.error('Failed to save emergency state to localStorage:', error);
+    }
+    
+    // Force immediate state sync to all components
+    this.forceStateSync();
+  }
+
+  /**
+   * Emergency recovery from localStorage when all else fails
+   */
+  public emergencyStateRecovery(): void {
+    try {
+      const emergencyState = localStorage.getItem('streamflow-music-emergency-state');
+      if (!emergencyState) {
+        console.log(`[${this.instanceId}] No emergency state available`);
+        return;
+      }
+
+      const parsedState = JSON.parse(emergencyState);
+      const timeDiff = Date.now() - parsedState.timestamp;
+      
+      // Only use emergency state if it's recent (less than 5 minutes old)
+      if (timeDiff > 300000) {
+        console.log(`[${this.instanceId}] Emergency state too old, ignoring`);
+        return;
+      }
+
+      console.log(`[${this.instanceId}] 🚨 EMERGENCY RECOVERY:`, parsedState);
+
+      if (this.audio && parsedState.src) {
+        this.audio.src = parsedState.src;
+        this.audio.volume = parsedState.volume;
+        
+        const handleLoadedMetadata = () => {
+          if (this.audio && parsedState.currentTime > 0) {
+            this.audio.currentTime = parsedState.currentTime;
+            
+            if (parsedState.isPlaying) {
+              this.audio.play().catch(error => {
+                console.error('Error resuming after emergency recovery:', error);
+              });
+            }
+          }
+          this.audio?.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        };
+
+        this.audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+        this.audio.load();
+        
+        // Update PlayerState with recovered song
+        if (parsedState.currentSong) {
+          this.updatePlayerState({
+            currentSong: parsedState.currentSong,
+            currentTime: parsedState.currentTime,
+            duration: parsedState.duration,
+            isPlaying: parsedState.isPlaying,
+            volume: parsedState.volume
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Emergency state recovery failed:', error);
+    }
   }
 
   private handleSongEnd(): void {

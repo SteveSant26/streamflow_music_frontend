@@ -128,7 +128,7 @@ export class GlobalPlayerStateService {
       console.log('🛡️ PROTECTING existing audio element - REFUSING replacement');
       
       // Just sync the PlayerUseCase without changing the audio element
-      this.playerUseCase.syncWithExistingAudio(this.audioElement);
+      this.playerUseCase.setAudioElement(this.audioElement);
       return;
     }
     
@@ -196,27 +196,47 @@ export class GlobalPlayerStateService {
   }
 
   /**
-   * Force initialization check and setup
+   * Force initialization check and setup with emergency recovery
    */
   ensureInitialized(): void {
     if (!this.isInitialized) {
+      console.log('🔴 Player not initialized, initializing...');
       this.initializePlayer();
+      
+      // Try emergency recovery after initialization
+      setTimeout(() => {
+        this.playerUseCase.emergencyStateRecovery();
+      }, 500);
     } else if (this.audioElement?.error) {
       // If audio element has an error, reinitialize
-      console.log('Audio element has error, reinitializing...');
+      console.log('🚨 Audio element has error, reinitializing...');
       this.isInitialized = false;
       this.audioElement = null;
       this.initializePlayer();
+      
+      // Try emergency recovery after reinitialization
+      setTimeout(() => {
+        this.playerUseCase.emergencyStateRecovery();
+      }, 500);
+    } else if (!this.audioElement) {
+      // If we lost the audio element somehow
+      console.log('🚨 Audio element lost, reinitializing...');
+      this.isInitialized = false;
+      this.initializePlayer();
+      
+      setTimeout(() => {
+        this.playerUseCase.emergencyStateRecovery();
+      }, 500);
     }
   }
 
   /**
-   * CRITICAL: Call this before any navigation to preserve audio state
+   * ULTRA CRITICAL: Call this before any navigation to preserve audio state
    */
   preserveStateForNavigation(): void {
-    console.log('Preserving state for navigation...');
+    console.log('🔴 ULTRA CRITICAL: Preserving state for navigation...');
     
-    // Force preserve current state in PlayerUseCase
+    // Force preserve current state in PlayerUseCase with emergency backup
     this.playerUseCase.preserveCurrentState();
     
     // Keep a backup of critical audio element properties
@@ -224,12 +244,24 @@ export class GlobalPlayerStateService {
       this.lastKnownCurrentTime = this.audioElement.currentTime;
       this.lastKnownIsPlaying = !this.audioElement.paused;
       
-      console.log('Navigation state preserved:', {
+      // Update our preserved state
+      this.preservedState = {
+        currentTime: this.audioElement.currentTime,
+        isPlaying: !this.audioElement.paused,
+        volume: this.audioElement.volume,
+        src: this.audioElement.src
+      };
+      
+      console.log('🔄 Navigation state preserved:', {
         currentTime: this.lastKnownCurrentTime,
         isPlaying: this.lastKnownIsPlaying,
-        src: this.audioElement.src
+        src: this.audioElement.src.substring(this.audioElement.src.lastIndexOf('/') + 1),
+        readyState: this.audioElement.readyState
       });
     }
+    
+    // Force immediate sync to ensure all components have the latest state
+    this.forceSyncAllComponents();
   }
 
   private getDefaultPlayerState(): PlayerState {
