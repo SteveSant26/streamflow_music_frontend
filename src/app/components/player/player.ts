@@ -148,6 +148,9 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Preserve current player state before component destruction
+    this.playerUseCase.preserveCurrentState();
+    
     this.destroy$.next();
     this.destroy$.complete();
   }

@@ -21,10 +21,19 @@ export class PlayerUseCase {
   }
 
   private getInitialPlayerState(): PlayerState {
+    // Load volume from localStorage if available
+    let savedVolume = 1;
+    if (typeof localStorage !== 'undefined') {
+      const volumeStr = localStorage.getItem('streamflow-music-volume');
+      if (volumeStr) {
+        savedVolume = Math.max(0, Math.min(1, parseFloat(volumeStr)));
+      }
+    }
+    
     return {
       currentSong: null,
       isPlaying: false,
-      volume: 1,
+      volume: savedVolume,
       currentTime: 0,
       duration: 0,
       progress: 0,
@@ -37,63 +46,116 @@ export class PlayerUseCase {
 
   // Audio Element Setup
   setAudioElement(audioElement: HTMLAudioElement): void {
+    // If we already have a working audio element, DON'T replace it
+    if (this.audio && !this.audio.error && this.audio.src) {
+      console.log(`[${this.instanceId}] Audio element already exists and working, keeping current one`);
+      
+      // Just ensure volume is synced
+      const currentState = this.playerStateSubject.value;
+      this.audio.volume = currentState.volume;
+      return;
+    }
+    
+    console.log(`[${this.instanceId}] Setting new audio element`);
     this.audio = audioElement;
+    
+    // Apply saved volume to audio element
+    const currentState = this.playerStateSubject.value;
+    this.audio.volume = currentState.volume;
+    
+    // Restore any existing source if we have a current song
+    if (currentState.currentSong?.audioUrl) {
+      this.audio.src = currentState.currentSong.audioUrl;
+      console.log(`[${this.instanceId}] Restored audio source: ${currentState.currentSong.audioUrl}`);
+    }
+    
     this.setupEventListeners();
+    
+    console.log(`[${this.instanceId}] Audio element set with volume: ${currentState.volume}`);
   }
 
   private setupEventListeners(): void {
     if (!this.audio) return;
 
-    // Set up event listeners for real-time updates
-    this.audio.addEventListener('loadedmetadata', () => {
-      if (this.audio) {
-        const duration = this.audio.duration || 0;
-        this.updatePlayerState({ duration });
-      }
-    });
+    // Remove existing listeners to prevent duplicates
+    this.audio.removeEventListener('loadedmetadata', this.handleLoadedMetadata);
+    this.audio.removeEventListener('timeupdate', this.handleTimeUpdate);
+    this.audio.removeEventListener('play', this.handlePlay);
+    this.audio.removeEventListener('pause', this.handlePause);
+    this.audio.removeEventListener('ended', this.handleEnded);
+    this.audio.removeEventListener('volumechange', this.handleVolumeChange);
+    this.audio.removeEventListener('error', this.handleAudioError);
 
-    this.audio.addEventListener('timeupdate', () => {
-      if (this.audio) {
-        const currentTime = this.audio.currentTime;
-        const duration = this.audio.duration || 0;
-        const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
-        
+    // Set up event listeners for real-time updates
+    this.audio.addEventListener('loadedmetadata', this.handleLoadedMetadata);
+    this.audio.addEventListener('timeupdate', this.handleTimeUpdate);
+    this.audio.addEventListener('play', this.handlePlay);
+    this.audio.addEventListener('pause', this.handlePause);
+    this.audio.addEventListener('ended', this.handleEnded);
+    this.audio.addEventListener('volumechange', this.handleVolumeChange);
+    this.audio.addEventListener('error', this.handleAudioError);
+    
+    console.log(`[${this.instanceId}] Event listeners set up`);
+  }
+
+  private readonly handleLoadedMetadata = () => {
+    if (this.audio) {
+      const duration = this.audio.duration || 0;
+      this.updatePlayerState({ duration });
+      console.log(`[${this.instanceId}] Metadata loaded, duration: ${duration}`);
+    }
+  };
+
+  private readonly handleTimeUpdate = () => {
+    if (this.audio) {
+      const currentTime = this.audio.currentTime;
+      const duration = this.audio.duration || 0;
+      const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+      
+      // Only update if values actually changed significantly to prevent spam
+      const currentState = this.playerStateSubject.value;
+      if (Math.abs(currentState.currentTime - currentTime) > 1.0 || 
+          Math.abs(currentState.progress - progress) > 0.5) {
         this.updatePlayerState({
           currentTime,
           duration,
           progress
         });
       }
-    });
+    }
+  };
 
-    this.audio.addEventListener('play', () => {
-      this.updatePlayerState({ isPlaying: true });
-    });
+  private readonly handlePlay = () => {
+    this.updatePlayerState({ isPlaying: true });
+    console.log(`[${this.instanceId}] Audio play event triggered`);
+  };
 
-    this.audio.addEventListener('pause', () => {
-      this.updatePlayerState({ isPlaying: false });
-    });
+  private readonly handlePause = () => {
+    this.updatePlayerState({ isPlaying: false });
+    console.log(`[${this.instanceId}] Audio pause event triggered`);
+  };
 
-    this.audio.addEventListener('ended', () => {
-      this.songEndSubject.next();
-      this.handleSongEnd();
-    });
+  private readonly handleEnded = () => {
+    this.songEndSubject.next();
+    this.handleSongEnd();
+    console.log(`[${this.instanceId}] Audio ended event triggered`);
+  };
 
-    this.audio.addEventListener('volumechange', () => {
-      if (this.audio) {
-        this.updatePlayerState({ 
-          volume: this.audio.volume,
-          isMuted: this.audio.muted 
-        });
-      }
-    });
+  private readonly handleVolumeChange = () => {
+    if (this.audio) {
+      this.updatePlayerState({ 
+        volume: this.audio.volume,
+        isMuted: this.audio.muted 
+      });
+      console.log(`[${this.instanceId}] Volume change event: ${this.audio.volume}`);
+    }
+  };
 
-    this.audio.addEventListener('error', (e) => {
-      console.error('Audio error:', e);
-      this.errorSubject.next('Failed to play audio');
-      this.updatePlayerState({ isLoading: false });
-    });
-  }
+  private readonly handleAudioError = (e: Event) => {
+    console.error(`[${this.instanceId}] Audio error:`, e);
+    this.errorSubject.next('Failed to play audio');
+    this.updatePlayerState({ isLoading: false });
+  };
 
   private updatePlayerState(updates: Partial<PlayerState>): void {
     const currentState = this.playerStateSubject.value;
@@ -109,6 +171,27 @@ export class PlayerUseCase {
     const currentState = this.playerStateSubject.value;
     this.playerStateSubject.next({ ...currentState });
     console.log(`[${this.instanceId}] Forced state sync:`, currentState);
+  }
+
+  /**
+   * Preserve current audio state (time, playing status) before navigation
+   */
+  public preserveCurrentState(): void {
+    if (!this.audio) return;
+    
+    const currentTime = this.audio.currentTime;
+    const duration = this.audio.duration || 0;
+    const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+    const isPlaying = !this.audio.paused;
+    
+    console.log(`[${this.instanceId}] Preserving state - time: ${currentTime}, playing: ${isPlaying}`);
+    
+    this.updatePlayerState({
+      currentTime,
+      duration,
+      progress,
+      isPlaying
+    });
   }
 
   private handleSongEnd(): void {
@@ -154,11 +237,11 @@ export class PlayerUseCase {
 
   pause(): void {
     if (!this.audio) return;
+    
+    console.log(`[${this.instanceId}] Pause called - setting audio.pause()`);
     this.audio.pause();
     
-    // Force immediate state update for pause action
-    this.updatePlayerState({ isPlaying: false });
-    console.log(`[${this.instanceId}] Pause called - forcing isPlaying: false`);
+    // DON'T update state here - let the event listener handle it
   }
 
   pauseMusic(): void {
@@ -167,15 +250,52 @@ export class PlayerUseCase {
 
   async play(): Promise<void> {
     if (!this.audio) throw new Error('Audio element not set');
+    
+    console.log(`[${this.instanceId}] Play called - setting audio.play()`);
     await this.audio.play();
     
-    // Force immediate state update for play action
-    this.updatePlayerState({ isPlaying: true });
-    console.log(`[${this.instanceId}] Play called - forcing isPlaying: true`);
+    // DON'T update state here - let the event listener handle it
   }
 
   async resumeMusic(): Promise<void> {
     return this.play();
+  }
+
+  // ===== CENTRALIZED CONTROL METHODS =====
+  // These are the ONLY methods components should call for play/pause
+  
+  /**
+   * CENTRALIZED toggle play/pause - Use this from ALL components
+   */
+  public togglePlayPause(): void {
+    const currentState = this.playerStateSubject.value;
+    console.log(`[${this.instanceId}] togglePlayPause called - current isPlaying: ${currentState.isPlaying}`);
+    
+    if (currentState.isPlaying) {
+      this.pause();
+    } else {
+      this.play().catch(error => {
+        console.error(`[${this.instanceId}] Error in togglePlayPause:`, error);
+      });
+    }
+  }
+
+  /**
+   * CENTRALIZED pause - Use this from ALL components
+   */
+  public pauseFromComponent(): void {
+    console.log(`[${this.instanceId}] pauseFromComponent called`);
+    this.pause();
+  }
+
+  /**
+   * CENTRALIZED play - Use this from ALL components
+   */
+  public playFromComponent(): void {
+    console.log(`[${this.instanceId}] playFromComponent called`);
+    this.play().catch(error => {
+      console.error(`[${this.instanceId}] Error in playFromComponent:`, error);
+    });
   }
 
   stop(): void {
@@ -238,14 +358,16 @@ export class PlayerUseCase {
   setVolume(volume: number): void {
     if (!this.audio) return;
     const clampedVolume = Math.max(0, Math.min(1, volume));
+    
+    console.log(`[${this.instanceId}] Setting volume to ${clampedVolume}`);
     this.audio.volume = clampedVolume;
     
-    // Force immediate state update for volume changes
-    this.updatePlayerState({
-      volume: clampedVolume,
-      isMuted: this.audio.muted
-    });
-    console.log(`Volume set to ${clampedVolume}`);
+    // Save to localStorage
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('streamflow-music-volume', clampedVolume.toString());
+    }
+    
+    // DON'T update state here - let the volumechange event handle it
   }
 
   adjustVolume(volume: number): void {
@@ -254,13 +376,11 @@ export class PlayerUseCase {
 
   toggleMute(): void {
     if (!this.audio) return;
+    
+    console.log(`[${this.instanceId}] Toggling mute`);
     this.audio.muted = !this.audio.muted;
     
-    // Force immediate state update for mute changes
-    this.updatePlayerState({
-      volume: this.audio.volume,
-      isMuted: this.audio.muted
-    });
+    // DON'T update state here - let the volumechange event handle it
   }
 
   // Repeat and Shuffle
@@ -277,21 +397,18 @@ export class PlayerUseCase {
   seekTo(time: number): void {
     if (!this.audio?.duration) return;
     const clampedTime = Math.max(0, Math.min(time, this.audio.duration));
+    
+    console.log(`[${this.instanceId}] Seeking to ${clampedTime}s`);
     this.audio.currentTime = clampedTime;
     
-    // Force immediate state update for seek operations
-    const progress = this.audio.duration > 0 ? (clampedTime / this.audio.duration) * 100 : 0;
-    this.updatePlayerState({
-      currentTime: clampedTime,
-      progress
-    });
+    // DON'T update state here - let the timeupdate event handle it
   }
 
   seekToPercentage(percentage: number): void {
     if (!this.audio?.duration) return;
     const time = (percentage / 100) * this.audio.duration;
     this.seekTo(time);
-    console.log(`Seeking to ${percentage}% (${time}s)`);
+    console.log(`[${this.instanceId}] Seeking to ${percentage}% (${time}s)`);
   }
 
   // State Getters

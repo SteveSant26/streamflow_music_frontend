@@ -61,6 +61,10 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // Preserve current player state before component destruction
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.preserveCurrentState();
+    
     this.destroy$.next();
     this.destroy$.complete();
     
@@ -133,52 +137,14 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   togglePlayPause() {
+    console.log('Current-song: togglePlayPause clicked');
+    
+    // Use ONLY the centralized method
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
-    if (this.currentSong) {
-      if (this.currentSong.isPlaying) {
-        playerUseCase.pause();
-        console.log("Pausado");
-        
-        // Immediately update local state for instant UI feedback
-        this.currentSong = { ...this.currentSong, isPlaying: false };
-        this.cdr.detectChanges();
-      } else {
-        // Make sure the player is properly initialized before resuming
-        this.globalPlayerState.ensureInitialized();
-        
-        // Force a state update to ensure synchronization
-        const currentState = this.globalPlayerState.getPlayerState();
-        this.updateCurrentSongView(currentState);
-        
-        // Immediately update local state for instant UI feedback
-        this.currentSong = { ...this.currentSong, isPlaying: true };
-        this.cdr.detectChanges();
-        
-        playerUseCase.resumeMusic().catch((error: any) => {
-          console.error("Error al reanudar:", error);
-          // Revert state on error
-          if (this.currentSong) {
-            this.currentSong = { ...this.currentSong, isPlaying: false };
-            this.cdr.detectChanges();
-          }
-          
-          // If there's an error, try to reinitialize the player
-          setTimeout(() => {
-            this.globalPlayerState.ensureInitialized();
-            // Try again
-            playerUseCase.resumeMusic().catch((retryError: any) => {
-              console.error("Error al reintentar:", retryError);
-            });
-          }, 100);
-        });
-        console.log("Reproduciendo");
-      }
-      
-      // CRITICAL: Force global sync after ANY play/pause action
-      setTimeout(() => {
-        this.globalPlayerState.forceSyncAllComponents();
-      }, 100);
-    }
+    playerUseCase.togglePlayPause();
+    
+    // Force sync immediately after action
+    this.globalPlayerState.forceSyncAllComponents();
   }
 
   toggleLyricsPanel() {
@@ -220,52 +186,27 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     const width = rect.width;
     const newProgress = (clickX / width) * 100;
 
-    // Immediately update local state for instant visual feedback
-    if (this.currentSong) {
-      const newCurrentTime = (newProgress / 100) * (parseFloat(this.currentSong.duration.toString()) || 0);
-      this.currentSong = { 
-        ...this.currentSong, 
-        progress: newProgress,
-        currentTime: this.formatTime(newCurrentTime)
-      };
-      this.cdr.detectChanges();
-    }
+    console.log("Current-song: Progress click to:", newProgress + "%");
 
-    // Usar el PlayerUseCase para hacer seek
+    // Use PlayerUseCase to handle seeking
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.seekToPercentage(newProgress);
-    console.log("Nuevo progreso:", newProgress + "%");
     
-    // CRITICAL: Force global sync after seek
-    setTimeout(() => {
-      this.globalPlayerState.forceSyncAllComponents();
-    }, 100);
+    // Force sync after seek
+    this.globalPlayerState.forceSyncAllComponents();
   }
 
   onVolumeChange(event: Event) {
     const input = event.target as HTMLInputElement;
     const volume = parseFloat(input.value) / 100;
     
-    // Immediately update local state for instant visual feedback
-    if (this.currentSong) {
-      this.currentSong = { 
-        ...this.currentSong, 
-        volume: volume
-      };
-      this.cdr.detectChanges();
-    }
+    console.log("Current-song: Volume change to:", volume);
     
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.setVolume(volume);
-    console.log("Nuevo volumen:", volume);
     
-    // Force state synchronization after volume change
-    setTimeout(() => {
-      const currentState = this.globalPlayerState.getPlayerState();
-      if (currentState) {
-        this.updateCurrentSongView(currentState);
-      }
-    }, 50);
+    // Force sync after volume change
+    this.globalPlayerState.forceSyncAllComponents();
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {

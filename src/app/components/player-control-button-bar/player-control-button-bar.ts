@@ -43,32 +43,14 @@ export class PlayerControlButtonBar implements OnInit, OnDestroy {
   }
 
   onPlayPauseClick(): void {
+    console.log('PlayerControlButtonBar: onPlayPauseClick called');
+    
+    // Use ONLY the centralized method
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.togglePlayPause();
     
-    if (this.isPlaying) {
-      playerUseCase.pause();
-      // Immediately update local state for instant UI feedback
-      this.isPlaying = false;
-      this.cdr.detectChanges();
-    } else {
-      // Immediately update local state for instant UI feedback
-      this.isPlaying = true;
-      this.cdr.detectChanges();
-      
-      playerUseCase.resumeMusic().catch((error: any) => {
-        console.error('Error resuming music:', error);
-        // Revert state on error
-        this.isPlaying = false;
-        this.cdr.detectChanges();
-      });
-    }
-    
-    console.log('PlayerControlButtonBar: Play/Pause clicked, new state:', this.isPlaying);
-    
-    // CRITICAL: Force global sync after ANY play/pause action
-    setTimeout(() => {
-      this.globalPlayerState.forceSyncAllComponents();
-    }, 100);
+    // Force sync immediately after action
+    this.globalPlayerState.forceSyncAllComponents();
   }
 
   onPreviousClick(): void {

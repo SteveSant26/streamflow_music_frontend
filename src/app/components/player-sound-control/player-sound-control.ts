@@ -44,20 +44,14 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     const seekPercentage = parseFloat(target.value);
     
-    // Immediately update local state for instant visual feedback
-    this.currentTime = (seekPercentage / 100) * this.duration;
-    this.cdr.detectChanges();
+    console.log('PlayerSoundControl: Seek to', seekPercentage + '%');
     
     // Use the PlayerUseCase through GlobalPlayerStateService to handle seeking
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.seekToPercentage(seekPercentage);
     
-    console.log('PlayerSoundControl: Seek to', seekPercentage + '%');
-    
-    // CRITICAL: Force global sync after seek
-    setTimeout(() => {
-      this.globalPlayerState.forceSyncAllComponents();
-    }, 100);
+    // Force sync after seek
+    this.globalPlayerState.forceSyncAllComponents();
   }
 
   ngOnInit(): void {

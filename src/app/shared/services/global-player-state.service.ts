@@ -12,7 +12,6 @@ export class GlobalPlayerStateService {
   private isInitialized = false;
   private audioElement: HTMLAudioElement | null = null;
   private lastKnownState: PlayerState | null = null;
-  private readonly VOLUME_STORAGE_KEY = 'streamflow-music-volume';
 
   constructor(
     private readonly playerUseCase: PlayerUseCase,
@@ -23,8 +22,6 @@ export class GlobalPlayerStateService {
     if (isPlatformBrowser(this.platformId)) {
       this.playerUseCase.getPlayerState().subscribe(state => {
         this.lastKnownState = state;
-        // Save volume to localStorage whenever it changes
-        this.saveVolumeToStorage(state.volume);
       });
     }
   }
@@ -45,22 +42,19 @@ export class GlobalPlayerStateService {
     }
 
     try {
-      // Create audio element if not exists or if current one is broken
+      // Only create audio element if we don't have one or if current one is broken
       if (!this.audioElement || this.audioElement.error) {
         console.log('Creating new audio element');
         this.audioElement = new Audio();
         this.audioElement.preload = 'metadata';
         
-        // Load volume from localStorage
-        const savedVolume = this.loadVolumeFromStorage();
-        this.audioElement.volume = savedVolume;
-        
         this.playerUseCase.setAudioElement(this.audioElement);
         
-        // Set the initial volume in the player use case
-        this.playerUseCase.setVolume(savedVolume);
+        console.log('Audio element created and set to PlayerUseCase');
       } else {
-        console.log('Using existing audio element');
+        console.log('Using existing audio element - calling setAudioElement for sync');
+        // Still call setAudioElement to ensure sync, but it won't replace the element
+        this.playerUseCase.setAudioElement(this.audioElement);
       }
 
       // Load default playlist if no playlist is loaded
@@ -222,42 +216,5 @@ export class GlobalPlayerStateService {
     } catch (error) {
       console.error('Error restoring player state:', error);
     }
-  }
-
-  /**
-   * Save volume to localStorage
-   */
-  private saveVolumeToStorage(volume: number): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-    
-    try {
-      localStorage.setItem(this.VOLUME_STORAGE_KEY, volume.toString());
-    } catch (error) {
-      console.error('Error saving volume to localStorage:', error);
-    }
-  }
-
-  /**
-   * Load volume from localStorage
-   */
-  private loadVolumeFromStorage(): number {
-    if (!isPlatformBrowser(this.platformId)) {
-      return 0.5; // Default volume
-    }
-    
-    try {
-      const savedVolume = localStorage.getItem(this.VOLUME_STORAGE_KEY);
-      if (savedVolume !== null) {
-        const volume = parseFloat(savedVolume);
-        // Ensure volume is between 0 and 1
-        return Math.max(0, Math.min(1, volume));
-      }
-    } catch (error) {
-      console.error('Error loading volume from localStorage:', error);
-    }
-    
-    return 0.5; // Default volume
   }
 }
