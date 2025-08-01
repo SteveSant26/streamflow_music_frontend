@@ -93,6 +93,7 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
+            "codeCoverage": true,
             "assets": [
               {
                 "glob": "**/*",

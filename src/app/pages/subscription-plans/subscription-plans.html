@@ -1,0 +1,133 @@
+<div class="subscription-plans-container">
+  <div class="header">
+    <h1>Elige tu Plan StreamFlow</h1>
+    <p class="subtitle">Disfruta de la mejor música sin límites</p>
+  </div>
+
+  <div class="plans-grid">
+    <div
+      *ngFor="let plan of plans"
+      class="plan-card"
+      [class.popular]="plan.popular"
+    >
+      <!-- Badge de plan popular -->
+      <div class="popular-badge" *ngIf="plan.popular">
+        <span>MÁS POPULAR</span>
+      </div>
+
+      <!-- Header de la tarjeta -->
+      <div class="plan-header">
+        <div class="plan-icon" *ngIf="plan.id === 'free'">
+          <span class="material-icons">free_breakfast</span>
+        </div>
+        <div class="plan-icon" *ngIf="plan.id === 'monthly'">
+          <span class="material-icons">star</span>
+        </div>
+        <div class="plan-icon" *ngIf="plan.id === 'annual'">
+          <span class="material-icons">diamond</span>
+        </div>
+        <h3 class="plan-name">{{ plan.name }}</h3>
+        <div class="price-section">
+          <span class="currency">$</span>
+          <span class="price">{{ plan.price }}</span>
+          <span class="period" *ngIf="plan.price > 0">/{{ plan.period }}</span>
+          <span class="period" *ngIf="plan.price === 0">{{ plan.period }}</span>
+        </div>
+        <div class="monthly-equivalent" *ngIf="plan.id === 'annual'">
+          <small>${{ getMonthlyPrice(plan).toFixed(2) }}/mes</small>
+        </div>
+        <div class="savings-text" *ngIf="plan.id === 'annual'">
+          <small class="savings">{{ getSavingsText(plan) }}</small>
+        </div>
+      </div>
+
+      <!-- Características del plan -->
+      <div class="plan-features">
+        <ul>
+          <li *ngFor="let feature of plan.features">
+            <span class="material-icons check-icon">check_circle</span>
+            {{ feature }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Botón de selección -->
+      <div class="plan-action">
+        <button
+          class="plan-button"
+          [class]="plan.buttonClass"
+          (click)="selectPlan(plan.id)"
+        >
+          {{ plan.buttonText }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Información adicional -->
+  <div class="additional-info">
+    <div class="info-section">
+      <h4>¿Por qué elegir StreamFlow?</h4>
+      <div class="benefits-grid">
+        <div class="benefit">
+          <div class="benefit-icon">
+            <span class="material-icons">library_music</span>
+          </div>
+          <h5>Biblioteca Inmensa</h5>
+          <p>Más de 50 millones de canciones disponibles</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">
+            <span class="material-icons">devices</span>
+          </div>
+          <h5>Multiplataforma</h5>
+          <p>Disponible en web, móvil y escritorio</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">
+            <span class="material-icons">high_quality</span>
+          </div>
+          <h5>Calidad Premium</h5>
+          <p>Audio de alta fidelidad hasta 320kbps</p>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">
+            <span class="material-icons">cloud_download</span>
+          </div>
+          <h5>Offline</h5>
+          <p>Descarga tu música para escuchar sin internet</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-section">
+      <h4>
+        <span class="material-icons faq-title-icon">help_outline</span>
+        Preguntas Frecuentes
+      </h4>
+      <div class="faq-item">
+        <strong>
+          <span class="material-icons faq-icon">cancel</span>
+          ¿Puedo cancelar en cualquier momento?
+        </strong>
+        <p>
+          Sí, puedes cancelar tu suscripción cuando quieras sin penalizaciones.
+        </p>
+      </div>
+      <div class="faq-item">
+        <strong> ¿Hay período de prueba gratuito? </strong>
+        <p>Sí, todos los planes pagados incluyen 7 días de prueba gratuita.</p>
+      </div>
+      <div class="faq-item">
+        <strong>
+          <span class="material-icons faq-icon">payment</span>
+          ¿Qué métodos de pago aceptan?
+        </strong>
+        <p>
+          Aceptamos tarjetas de crédito, débito, PayPal y transferencias
+          bancarias.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

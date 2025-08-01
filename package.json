@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:sonar": "ng test --watch=false --code-coverage",
     "serve:ssr:b": "node dist/b/server/server.mjs",
     "compodoc:build": "compodoc -p tsconfig.doc.json",
     "compodoc:build-and-serve": "compodoc -p tsconfig.doc.json -s",
@@ -32,6 +33,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^20.1.4",
     "@angular/cdk": "20.1.4",
     "@angular/common": "^20.1.0",
     "@angular/compiler": "^20.1.0",
@@ -74,6 +76,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
+    "sonarqube-scanner": "^4.3.0",
     "typescript": "~5.8.2",
     "typescript-eslint": "8.34.1"
   }
