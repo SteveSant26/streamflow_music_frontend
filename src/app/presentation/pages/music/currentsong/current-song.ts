@@ -61,9 +61,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Preserve current player state before component destruction
-    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
-    playerUseCase.preserveCurrentState();
+    // CRITICAL: Preserve state before any component destruction
+    this.globalPlayerState.preserveStateForNavigation();
     
     this.destroy$.next();
     this.destroy$.complete();

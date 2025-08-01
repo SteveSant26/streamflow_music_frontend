@@ -167,6 +167,28 @@ export class GlobalPlayerStateService {
     }
   }
 
+  /**
+   * CRITICAL: Call this before any navigation to preserve audio state
+   */
+  preserveStateForNavigation(): void {
+    console.log('Preserving state for navigation...');
+    
+    // Force preserve current state in PlayerUseCase
+    this.playerUseCase.preserveCurrentState();
+    
+    // Keep a backup of critical audio element properties
+    if (this.audioElement && !this.audioElement.error) {
+      this.lastKnownCurrentTime = this.audioElement.currentTime;
+      this.lastKnownIsPlaying = !this.audioElement.paused;
+      
+      console.log('Navigation state preserved:', {
+        currentTime: this.lastKnownCurrentTime,
+        isPlaying: this.lastKnownIsPlaying,
+        src: this.audioElement.src
+      });
+    }
+  }
+
   private getDefaultPlayerState(): PlayerState {
     return {
       currentSong: null,

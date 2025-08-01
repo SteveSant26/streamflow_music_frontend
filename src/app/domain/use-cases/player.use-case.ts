@@ -190,6 +190,45 @@ export class PlayerUseCase {
   }
 
   /**
+   * CENTRALIZED toggle play/pause - ALL components must use this method
+   */
+  public togglePlayPause(): void {
+    if (!this.audio) {
+      console.error(`[${this.instanceId}] Cannot toggle play/pause: no audio element`);
+      return;
+    }
+
+    const currentState = this.playerStateSubject.value;
+    
+    if (!currentState.currentSong) {
+      console.error(`[${this.instanceId}] Cannot toggle play/pause: no current song`);
+      return;
+    }
+
+    // CRITICAL: First preserve current state to prevent any loss
+    this.preserveCurrentState();
+
+    if (currentState.isPlaying) {
+      // Pause the audio
+      this.audio.pause();
+      console.log(`[${this.instanceId}] CENTRALIZED: Paused audio`);
+    } else {
+      // Play the audio
+      this.audio.play().then(() => {
+        console.log(`[${this.instanceId}] CENTRALIZED: Started audio playback`);
+      }).catch(error => {
+        console.error(`[${this.instanceId}] CENTRALIZED: Error playing audio:`, error);
+        this.errorSubject.next(`Playback failed: ${error.message}`);
+      });
+    }
+
+    // Force immediate state sync after toggle
+    setTimeout(() => {
+      this.forceStateSync();
+    }, 50);
+  }
+
+  /**
    * Preserve current audio state (time, playing status) before navigation
    */
   public preserveCurrentState(): void {
@@ -200,7 +239,7 @@ export class PlayerUseCase {
     const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
     const isPlaying = !this.audio.paused;
     
-    console.log(`[${this.instanceId}] Preserving state - time: ${currentTime}, playing: ${isPlaying}`);
+    console.log(`[${this.instanceId}] Preserving state - time: ${currentTime}, playing: ${isPlaying}, duration: ${duration}`);
     
     this.updatePlayerState({
       currentTime,
@@ -279,22 +318,6 @@ export class PlayerUseCase {
 
   // ===== CENTRALIZED CONTROL METHODS =====
   // These are the ONLY methods components should call for play/pause
-  
-  /**
-   * CENTRALIZED toggle play/pause - Use this from ALL components
-   */
-  public togglePlayPause(): void {
-    const currentState = this.playerStateSubject.value;
-    console.log(`[${this.instanceId}] togglePlayPause called - current isPlaying: ${currentState.isPlaying}`);
-    
-    if (currentState.isPlaying) {
-      this.pause();
-    } else {
-      this.play().catch(error => {
-        console.error(`[${this.instanceId}] Error in togglePlayPause:`, error);
-      });
-    }
-  }
 
   /**
    * CENTRALIZED pause - Use this from ALL components
