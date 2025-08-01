@@ -1,5 +1,5 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
-import { ROUTES_CONFIG_AUTH } from './config/routes-config/routes-auth.config';
+import { ROUTES_CONFIG_AUTH } from './config';
 
 export const serverRoutes: ServerRoute[] = [
   {

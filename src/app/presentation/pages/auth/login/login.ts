@@ -11,7 +11,7 @@ import { LoginUseCase } from '../../../../domain/usecases/login.usecase';
 import { LoginCredentials } from '../../../../domain/repositories/i-auth.repository';
 import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
-import { ROUTES_CONFIG_AUTH } from '@app/config/routes-config/routes-auth.config';
+import { ROUTES_CONFIG_AUTH } from '@app/config';
 import {
   AuthError,
   ValidationError,
