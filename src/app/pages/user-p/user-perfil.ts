@@ -19,19 +19,20 @@ import { User } from "../../models";
 export class UserPerfilComponent implements OnInit {
   profileForm: FormGroup;
   isEditing = false;
-  isLoading = false;
-  errorMessage = "";
-  successMessage = "";
-  currentUser: User | null = null;
-  originalValues: { username: string; email: string; description: string } = {
+  originalValues: { username: string; description: string } = {
     username: "",
-    email: "",
     description: "",
   };
 
   // Profile image properties
   profileImageUrl: string | null = null;
   selectedImageFile: File | null = null;
+
+  // Loading and state properties
+  isLoading = false;
+  errorMessage = '';
+  successMessage = '';
+  currentUser: User | null = null;
 
   constructor(
     readonly fb: FormBuilder,
@@ -46,7 +47,6 @@ export class UserPerfilComponent implements OnInit {
           Validators.maxLength(20),
         ],
       ],
-      email: ["", [Validators.required, Validators.email]],
       description: ["", [Validators.maxLength(500)]],
     });
   }
@@ -261,10 +261,6 @@ export class UserPerfilComponent implements OnInit {
 
   get username() {
     return this.profileForm.get("username");
-  }
-
-  get email() {
-    return this.profileForm.get("email");
   }
 
   get description() {

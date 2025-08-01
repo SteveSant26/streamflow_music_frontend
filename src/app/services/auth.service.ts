@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 import { ApiService } from './api.service';
 import { User, LoginDto, RegisterDto, AuthResponse } from '../models';
 import { API_CONFIG_PROFILE } from '@app/config';
+=======
+import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
+import { Observable, BehaviorSubject, tap } from "rxjs";
+import { ApiService } from "./api.service";
+import { User, LoginDto, RegisterDto, AuthResponse } from "../models";
+>>>>>>> main
 
 @Injectable({
   providedIn: 'root',
@@ -83,6 +91,7 @@ export class AuthService {
    * Obtener perfil del usuario actual
    */
   getCurrentUser(): Observable<User> {
+<<<<<<< HEAD
     return this.apiService
       .get<{ user: User; message: string }>(API_CONFIG_PROFILE.profileMe.get)
       .pipe(
@@ -95,27 +104,24 @@ export class AuthService {
           this.currentUserSubject.next(user);
         }),
       );
+=======
+    return this.apiService.get<User>(`${this.endpoint}/me`).pipe(
+      tap((user) => {
+        this.currentUserSubject.next(user);
+      }),
+    );
+>>>>>>> main
   }
 
   /**
    * Actualizar perfil del usuario
    */
   updateProfile(userData: Partial<User>): Observable<User> {
-    return this.apiService
-      .put<{
-        user: User;
-        message: string;
-      }>(`${this.endpoint}/profile`, userData)
-      .pipe(
-        map((response: { user: User; message: string }) => {
-          // El backend devuelve { user: {...}, message: "..." }
-          // Extraemos solo el objeto user
-          return response.user;
-        }),
-        tap((user) => {
-          this.currentUserSubject.next(user);
-        }),
-      );
+    return this.apiService.put<User>(`${this.endpoint}/profile`, userData).pipe(
+      tap((user) => {
+        this.currentUserSubject.next(user);
+      }),
+    );
   }
 
   /**

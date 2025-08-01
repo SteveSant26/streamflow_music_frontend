@@ -10,6 +10,7 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+package-lock.json
 
 # IDEs and editors
 .idea/
@@ -41,17 +42,29 @@ testem.log
 .DS_Store
 Thumbs.db
 
+
+# SonarQube
+.scannerwork/
+.sonar/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+=======
 # env
-<<<<<<< HEAD
+
 # Ignorar carpeta de environments
 src/environments/
-=======
+
 .env
-# *environment.ts
-# *environment.development.ts
-# /src/environments
-# *environment.ts
-# *environment.development.ts
-# *environment.production.ts
+
+*environment.ts
+*environment.development.ts
+/src/environments
+*environment.ts
+*environment.development.ts
+*environment.production.ts
+
+
 /environments
->>>>>>> main

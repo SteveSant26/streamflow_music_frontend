@@ -11,6 +11,11 @@
         Buscar
       </app-side-menu-item>
 
+      <app-side-menu-item [href]="'/subscription-plans'">
+        <mat-icon>subscriptions</mat-icon>
+        Suscripciones
+      </app-side-menu-item>
+
       @if (user()) {
       <app-side-menu-item [href]="'/profile'">
         <mat-icon>person</mat-icon>
