@@ -14,12 +14,20 @@ export class GlobalPlayerStateService {
   private lastKnownState: PlayerState | null = null;
   private lastKnownCurrentTime = 0;
   private lastKnownIsPlaying = false;
+  private preservedState: {
+    currentTime: number;
+    isPlaying: boolean;
+    volume: number;
+    src: string;
+  } | null = null;
 
   constructor(
     private readonly playerUseCase: PlayerUseCase,
     private readonly musicLibraryService: MusicLibraryService,
     @Inject(PLATFORM_ID) private readonly platformId: Object
   ) {
+    console.log('🔴 GlobalPlayerStateService constructor called');
+    
     // Subscribe to player state changes to keep track of the last known state
     if (isPlatformBrowser(this.platformId)) {
       this.playerUseCase.getPlayerState().subscribe(state => {
@@ -31,13 +39,23 @@ export class GlobalPlayerStateService {
         }
         this.lastKnownIsPlaying = state.isPlaying;
         
-        // Detect if state was reset unexpectedly and restore
-        if (state.currentTime === 0 && state.duration === 0 && 
-            this.lastKnownCurrentTime > 10 && state.currentSong) {
-          console.log('Detected state reset, attempting to restore...');
-          setTimeout(() => this.restorePlayerState(), 100);
+        // CRITICAL: Detect if audio element was lost/recreated and state reset
+        if (this.audioElement && state.currentSong && 
+            state.currentTime === 0 && state.duration === 0 && 
+            this.lastKnownCurrentTime > 5) {
+          console.log('🚨 DETECTED AUDIO ELEMENT RECREATION - RESTORING STATE');
+          setTimeout(() => this.emergencyStateRestore(), 100);
+        }
+        
+        // Detect complete state loss (no current song when we had one)
+        if (!state.currentSong && this.preservedState?.src) {
+          console.log('🚨 DETECTED COMPLETE STATE LOSS - EMERGENCY RESTORE');
+          setTimeout(() => this.emergencyStateRestore(), 100);
         }
       });
+      
+      // Monitor for audio element changes every second
+      setInterval(() => this.monitorAudioElement(), 1000);
     }
   }
 
@@ -93,26 +111,51 @@ export class GlobalPlayerStateService {
   }
 
   /**
-   * Set audio element reference from any component
+   * Set audio element reference from any component - NEVER REPLACE WORKING AUDIO
    */
   setAudioElement(audioElement: HTMLAudioElement): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
     
-    // Only set if we don't have an audio element yet, or if the current one is broken
-    if (!this.audioElement || this.audioElement.error) {
-      console.log('Setting new audio element');
-      this.audioElement = audioElement;
-      this.playerUseCase.setAudioElement(audioElement);
+    console.log('🔴 setAudioElement called');
+    
+    // CRITICAL: If we have a working audio element, NEVER replace it
+    if (this.audioElement && !this.audioElement.error && 
+        this.audioElement.readyState >= 1 && 
+        this.audioElement.src && 
+        this.audioElement.currentTime >= 0) {
+      console.log('🛡️ PROTECTING existing audio element - REFUSING replacement');
       
-      // If we have a last known state, try to restore it
-      if (this.lastKnownState?.currentSong) {
-        console.log('Restoring player state after navigation');
-        this.restorePlayerState();
-      }
-    } else {
-      console.log('Audio element already set and working, ignoring new one');
+      // Just sync the PlayerUseCase without changing the audio element
+      this.playerUseCase.syncWithExistingAudio(this.audioElement);
+      return;
+    }
+    
+    // Preserve state from current audio element before replacing
+    if (this.audioElement && this.audioElement.src) {
+      this.preservedState = {
+        currentTime: this.audioElement.currentTime,
+        isPlaying: !this.audioElement.paused,
+        volume: this.audioElement.volume,
+        src: this.audioElement.src
+      };
+      console.log('🔄 Preserved state before audio element change:', this.preservedState);
+    }
+    
+    console.log('🔄 Setting new audio element');
+    this.audioElement = audioElement;
+    this.playerUseCase.setAudioElement(audioElement);
+    
+    // Restore preserved state if we have it
+    if (this.preservedState) {
+      setTimeout(() => this.restoreFromPreservedState(), 100);
+    }
+    
+    // If we have a last known state, try to restore it
+    if (this.lastKnownState?.currentSong) {
+      console.log('🔄 Restoring player state after audio element change');
+      setTimeout(() => this.restorePlayerState(), 200);
     }
   }
 
@@ -290,5 +333,107 @@ export class GlobalPlayerStateService {
     });
 
     console.log('Audio preservation listeners set up');
+  }
+
+  /**
+   * Monitor audio element for unexpected changes
+   */
+  private monitorAudioElement(): void {
+    if (!this.audioElement || !this.lastKnownState?.currentSong) return;
+
+    // Check if audio element lost its source
+    if (!this.audioElement.src && this.preservedState?.src) {
+      console.log('🚨 Audio element lost source - restoring');
+      this.emergencyStateRestore();
+    }
+
+    // Check if currentTime was reset unexpectedly
+    if (this.audioElement.currentTime === 0 && this.lastKnownCurrentTime > 5) {
+      console.log('🚨 CurrentTime was reset - restoring');
+      this.emergencyStateRestore();
+    }
+  }
+
+  /**
+   * Emergency state restoration when audio element is corrupted
+   */
+  private emergencyStateRestore(): void {
+    console.log('🚨 EMERGENCY STATE RESTORE INITIATED');
+    
+    if (!this.preservedState && !this.lastKnownState) {
+      console.log('No preserved state available for emergency restore');
+      return;
+    }
+
+    try {
+      // Use preserved state if available, otherwise use last known state
+      const stateToRestore = this.preservedState || {
+        currentTime: this.lastKnownCurrentTime,
+        isPlaying: this.lastKnownIsPlaying,
+        volume: this.lastKnownState?.volume || 1,
+        src: this.lastKnownState?.currentSong?.audioUrl || ''
+      };
+
+      if (this.audioElement && stateToRestore.src) {
+        console.log('🔄 Emergency restoring:', stateToRestore);
+        
+        this.audioElement.src = stateToRestore.src;
+        this.audioElement.volume = stateToRestore.volume;
+        
+        const handleLoadedMetadata = () => {
+          if (this.audioElement && stateToRestore) {
+            this.audioElement.currentTime = stateToRestore.currentTime;
+            
+            if (stateToRestore.isPlaying) {
+              this.audioElement.play().catch(error => {
+                console.error('Error resuming music after emergency restore:', error);
+              });
+            }
+          }
+          this.audioElement?.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        };
+
+        this.audioElement.addEventListener('loadedmetadata', handleLoadedMetadata);
+        this.audioElement.load();
+        
+        // Force state sync
+        this.playerUseCase.forceStateSync();
+      }
+    } catch (error) {
+      console.error('Emergency state restore failed:', error);
+    }
+  }
+
+  /**
+   * Restore from preserved state after audio element change
+   */
+  private restoreFromPreservedState(): void {
+    if (!this.preservedState || !this.audioElement) return;
+
+    console.log('🔄 Restoring from preserved state:', this.preservedState);
+    
+    try {
+      this.audioElement.src = this.preservedState.src;
+      this.audioElement.volume = this.preservedState.volume;
+      
+      const handleLoadedMetadata = () => {
+        if (this.audioElement && this.preservedState) {
+          this.audioElement.currentTime = this.preservedState.currentTime;
+          
+          if (this.preservedState.isPlaying) {
+            this.audioElement.play().catch(error => {
+              console.error('Error resuming music from preserved state:', error);
+            });
+          }
+        }
+        this.audioElement?.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      };
+
+      this.audioElement.addEventListener('loadedmetadata', handleLoadedMetadata);
+      this.audioElement.load();
+      
+    } catch (error) {
+      console.error('Error restoring from preserved state:', error);
+    }
   }
 }
