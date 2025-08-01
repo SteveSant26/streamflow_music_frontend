@@ -326,11 +326,11 @@ export class SubscriptionPlansComponent implements OnInit {
   ) {}
 
   // Computed properties
-  readonly plans = this.paymentStateService.plans;
-  readonly loading = this.paymentStateService.loading;
-  readonly error = this.paymentStateService.error;
-  readonly currentSubscription = this.paymentStateService.subscription;
-  readonly hasActiveSubscription = this.paymentStateService.hasActiveSubscription;
+  readonly plans = computed(() => this.paymentStateService.plans());
+  readonly loading = computed(() => this.paymentStateService.loading());
+  readonly error = computed(() => this.paymentStateService.error());
+  readonly currentSubscription = computed(() => this.paymentStateService.subscription());
+  readonly hasActiveSubscription = computed(() => this.paymentStateService.hasActiveSubscription());
 
   readonly filteredPlans = computed(() => {
     const allPlans = this.plans();

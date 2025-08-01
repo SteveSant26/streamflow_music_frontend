@@ -194,7 +194,7 @@ export class StripeService {
       unknown: 'Unknown'
     };
 
-    return brandMap[brand] || brandMap.unknown;
+    return brandMap[brand] || brandMap['unknown'];
   }
 
   formatAmount(amount: number, currency: string): string {
