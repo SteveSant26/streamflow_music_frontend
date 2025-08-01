@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IAuthRepository } from "../repositories/i-auth.repository";
-import { AuthStateService } from "../services/auth-state.service";
+import { AuthStateService } from "@app/domain/services/auth-state.service";
 
 @Injectable({ providedIn: "root" })
 export class LogoutUseCase {

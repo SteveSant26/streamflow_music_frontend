@@ -22,7 +22,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     // Solo agregar token en el navegador (no durante SSR)
     if (isPlatformBrowser(this.platformId)) {
-      const token = this.authStateService.token();
+      const token: string | null = this.authStateService.token();
 
       if (token) {
         console.log(
