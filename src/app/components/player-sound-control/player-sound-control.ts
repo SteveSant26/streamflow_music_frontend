@@ -2,8 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  ElementRef, OnInit,
+  ElementRef, 
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  inject
 } from "@angular/core";
+import { PlayerUseCase } from '../../domain/use-cases/player.use-case';
+import { PlayerState } from '../../domain/entities/player-state.entity';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: "app-player-sound-control",
@@ -11,11 +18,16 @@ import {
   templateUrl: "./player-sound-control.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerSoundControl implements OnInit {
+export class PlayerSoundControl implements OnInit, OnDestroy {
   @Input() audioElement: ElementRef<HTMLAudioElement> | null = null;
+
+  private readonly playerUseCase = inject(PlayerUseCase);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroy$ = new Subject<void>();
 
   currentTime = 0;
   duration = 0;
+  playerState: PlayerState | null = null;
 
   get progressPercentage(): number {
     if (this.duration === 0) return 0;
@@ -30,24 +42,26 @@ export class PlayerSoundControl implements OnInit {
 
   onSeek(event: Event): void {
     const target = event.target as HTMLInputElement;
-    const seekTime = parseFloat(target.value);
-    this.currentTime = seekTime;
-
-    if (this.audioElement) {
-      this.audioElement.nativeElement.currentTime = seekTime;
-    }
+    const seekPercentage = parseFloat(target.value);
+    
+    // Use the PlayerUseCase to handle seeking
+    this.playerUseCase.seekToPercentage(seekPercentage);
   }
 
-  // Mock methods para el prototipo
   ngOnInit(): void {
-    // Simular duración de 3:45
-    this.duration = 225; // 3:45 en segundos
+    // Subscribe to player state updates from Clean Architecture
+    this.playerUseCase.getPlayerState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(state => {
+        this.playerState = state;
+        this.currentTime = state.currentTime;
+        this.duration = state.duration;
+        this.cdr.detectChanges(); // Force change detection for OnPush
+      });
+  }
 
-    // Simular progreso
-    setInterval(() => {
-      if (this.currentTime < this.duration) {
-        this.currentTime += 1;
-      }
-    }, 1000);
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
