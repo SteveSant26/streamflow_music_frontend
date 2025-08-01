@@ -1,77 +1,76 @@
-import { Routes } from "@angular/router";
+import { Routes } from '@angular/router';
+import { authGuard } from './shared/guards/auth.guard';
+import { ROUTES_CONFIG_AUTH } from './config/routes-auth.config';
+import { AUTH_ROUTES } from './routes/app.routes.auth';
 
 export const routes: Routes = [
   {
-    path: "",
-    redirectTo: "/home",
-    pathMatch: "full",
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () =>
+      import('./pages/home/home').then((m) => m.HomeComponent),
   },
   {
-    path: "login",
-    loadComponent: () =>
-      import("./pages/login/login").then((m) => m.LoginComponent),
+    path: ROUTES_CONFIG_AUTH.BASE_URL.path,
+    children: AUTH_ROUTES,
   },
   {
-    path: "register",
+    path: 'home',
     loadComponent: () =>
-      import("./pages/register/register").then((m) => m.RegisterComponent),
+      import('./pages/home/home').then((m) => m.HomeComponent),
   },
   {
-    path: "home",
+    path: 'search',
     loadComponent: () =>
-      import("./pages/home/home").then((m) => m.HomeComponent),
+      import('./pages/search/search').then((m) => m.SearchComponent),
   },
   {
-    path: "search",
+    path: 'currentSong',
     loadComponent: () =>
-      import("./pages/search/search").then((m) => m.SearchComponent),
-  },
-  {
-    path: "currentSong",
-    loadComponent: () =>
-      import("./pages/currentsong/current-song").then(
+      import('./pages/currentsong/current-song').then(
         (m) => m.CurrentSongComponent,
       ),
   },
   {
-    path: "explore",
+    path: 'explore',
     loadComponent: () =>
-      import("./pages/explore/explore").then((m) => m.ExploreComponent),
+      import('./pages/explore/explore').then((m) => m.ExploreComponent),
   },
   {
-    path: "playlist/:id",
+    path: 'playlist/:id',
     loadComponent: () =>
-      import("./pages/playlist/playlist").then((m) => m.PlaylistComponent),
+      import('./pages/playlist/playlist').then((m) => m.PlaylistComponent),
   },
   {
-    path: "library",
+    path: 'library',
     loadComponent: () =>
-      import("./pages/library/library").then((m) => m.LibraryComponent),
+      import('./pages/library/library').then((m) => m.LibraryComponent),
   },
   {
-    path: "artist/:id",
+    path: 'artist/:id',
     loadComponent: () =>
-      import("./pages/artist/artist").then((m) => m.ArtistComponent),
+      import('./pages/artist/artist').then((m) => m.ArtistComponent),
   },
   {
-    path: "profile",
+    path: 'profile',
     loadComponent: () =>
-      import("./pages/user-p/user-perfil").then((m) => m.UserPerfilComponent),
+      import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
   },
   {
-    path: "library",
+    path: 'library',
     loadComponent: () =>
-      import("./pages/library/library").then((m) => m.LibraryComponent),
+      import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
+    canActivate: [authGuard],
   },
   {
-    path: "test-connection",
+    path: 'test-connection',
     loadComponent: () =>
-      import("./components/connection-test/connection-test.component").then(
+      import('./components/connection-test/connection-test.component').then(
         (m) => m.ConnectionTestComponent,
       ),
   },
   {
-    path: "**",
-    redirectTo: "/home",
+    path: '**',
+    redirectTo: '/home',
   },
 ];

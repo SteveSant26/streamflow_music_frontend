@@ -171,7 +171,7 @@ export class ArtistComponent implements OnInit {
   }
 
   private findDominantColor(
-    colors: Array<{ r: number; g: number; b: number }>,
+    colors: { r: number; g: number; b: number }[],
   ) {
     // Agrupar colores similares y encontrar el más común
     const colorGroups: any = {};

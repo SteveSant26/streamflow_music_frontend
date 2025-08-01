@@ -1,3 +1,4 @@
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,15 +6,16 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: "app-player-control-button-bar",
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: "./player-control-button-bar.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerControlButtonBar {
-  @Input() isPlaying: boolean = false;
+  @Input() isPlaying = false;
   @Output() playPauseClick = new EventEmitter<void>();
 
   onPlayPauseClick(): void {

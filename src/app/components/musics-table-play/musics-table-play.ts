@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 interface Song {
@@ -25,13 +26,13 @@ interface CurrentMusic {
 
 @Component({
   selector: "app-musics-table-play",
-  imports: [],
+imports: [MatIconModule],
   templateUrl: "./musics-table-play.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MusicsTablePlay {
   @Input() song!: Song;
-  @Input() isCurrentSong: boolean = false;
+  @Input() isCurrentSong = false;
 
   // Mock state para el reproductor
   currentMusic: CurrentMusic = {
@@ -39,7 +40,7 @@ export class MusicsTablePlay {
     playlist: null,
     songs: [],
   };
-  isPlaying: boolean = false;
+  isPlaying = false;
 
   isNewSongOfAnotherPlaylist(song: Song): boolean {
     return this.currentMusic.playlist?.id !== song.albumId;

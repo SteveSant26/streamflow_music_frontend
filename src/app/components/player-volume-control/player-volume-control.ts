@@ -5,15 +5,16 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: "app-player-volume-control",
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: "./player-volume-control.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerVolumeControl {
-  @Input() volume: number = 0.5;
+  @Input() volume = 0.5;
   @Output() volumeChange = new EventEmitter<number>();
 
   // Hacer Math disponible en el template
