@@ -155,6 +155,9 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
+    // CRITICAL: Preserve state before navigation
+    this.globalPlayerState.preserveStateForNavigation();
+    
     this.router.navigate(["/home"]);
   }
 
