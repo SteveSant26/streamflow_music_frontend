@@ -26,7 +26,7 @@ export const appConfig: ApplicationConfig = {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true,
-    }
+    },
     ...authProviders,
     ...playerProviders,
   ],
