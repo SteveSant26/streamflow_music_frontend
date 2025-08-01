@@ -143,6 +143,10 @@ export class PlayerUseCase {
   pause(): void {
     if (!this.audio) return;
     this.audio.pause();
+    
+    // Force immediate state update for pause action
+    this.updatePlayerState({ isPlaying: false });
+    console.log('Pause called - forcing isPlaying: false');
   }
 
   pauseMusic(): void {
@@ -152,6 +156,10 @@ export class PlayerUseCase {
   async play(): Promise<void> {
     if (!this.audio) throw new Error('Audio element not set');
     await this.audio.play();
+    
+    // Force immediate state update for play action
+    this.updatePlayerState({ isPlaying: true });
+    console.log('Play called - forcing isPlaying: true');
   }
 
   async resumeMusic(): Promise<void> {
