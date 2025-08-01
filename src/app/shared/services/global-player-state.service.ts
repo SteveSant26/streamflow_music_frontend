@@ -12,6 +12,8 @@ export class GlobalPlayerStateService {
   private isInitialized = false;
   private audioElement: HTMLAudioElement | null = null;
   private lastKnownState: PlayerState | null = null;
+  private lastKnownCurrentTime = 0;
+  private lastKnownIsPlaying = false;
 
   constructor(
     private readonly playerUseCase: PlayerUseCase,
@@ -22,6 +24,19 @@ export class GlobalPlayerStateService {
     if (isPlatformBrowser(this.platformId)) {
       this.playerUseCase.getPlayerState().subscribe(state => {
         this.lastKnownState = state;
+        
+        // Track important state values
+        if (state.currentTime > 0) {
+          this.lastKnownCurrentTime = state.currentTime;
+        }
+        this.lastKnownIsPlaying = state.isPlaying;
+        
+        // Detect if state was reset unexpectedly and restore
+        if (state.currentTime === 0 && state.duration === 0 && 
+            this.lastKnownCurrentTime > 10 && state.currentSong) {
+          console.log('Detected state reset, attempting to restore...');
+          setTimeout(() => this.restorePlayerState(), 100);
+        }
       });
     }
   }
