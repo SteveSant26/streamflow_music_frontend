@@ -31,6 +31,6 @@ export class App implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.refreshSession();
+    this.authService.init();
   }
 }
