@@ -21,6 +21,13 @@ export class AsideMenu {
     await this.authService.signOut();
     window.location.href = '/login';
   }
+
+  onLogoutKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.logout();
+    }
+  }
   // Mock data para las playlists
   playlists = [
     { id: 1, name: 'Liked Songs', cover: '/assets/playlists/playlist1.jpg' },

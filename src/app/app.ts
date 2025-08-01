@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { AuthSessionUseCase } from '@app/domain/usecases/auth-session.usecase';
 import { AsideMenu } from './components/aside-menu/aside-menu';
-import { Player } from './components/player/player';
+import { PlayerComponent } from './components/player/player.component';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, AsideMenu, Player, CommonModule],
+  imports: [RouterOutlet, AsideMenu, PlayerComponent, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
