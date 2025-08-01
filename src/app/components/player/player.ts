@@ -76,8 +76,11 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Ensure global player state is initialized
+    this.globalPlayerState.ensureInitialized();
+
     // Subscribe to player state from Clean Architecture
-    this.playerUseCase.getPlayerState()
+    this.globalPlayerState.getPlayerState$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(state => {
         this.playerState = state;
@@ -128,11 +131,8 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadDefaultPlaylist(): void {
-    const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
-    if (defaultPlaylist && defaultPlaylist.songs.length > 0) {
-      this.playerUseCase.loadPlaylist(defaultPlaylist);
-      // Don't auto-play, wait for user interaction
-    }
+    // The global player state service handles default playlist loading
+    this.globalPlayerState.ensureInitialized();
   }
 
   ngAfterViewInit(): void {
@@ -154,13 +154,8 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
   togglePlayPause(): void {
     if (!this.playerState?.currentSong) {
-      // Load first song if none is loaded
-      const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
-      if (defaultPlaylist && defaultPlaylist.songs.length > 0) {
-        this.playerUseCase.playSong(defaultPlaylist.songs[0]).catch(error => {
-          console.error('Failed to load song:', error);
-        });
-      }
+      // Ensure player is initialized and load default playlist
+      this.globalPlayerState.ensureInitialized();
       return;
     }
 
