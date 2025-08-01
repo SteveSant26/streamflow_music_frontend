@@ -8,7 +8,7 @@ import {
   ChangeDetectorRef,
   inject
 } from "@angular/core";
-import { PlayerUseCase } from '../../domain/use-cases/player.use-case';
+import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -21,7 +21,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class PlayerSoundControl implements OnInit, OnDestroy {
   @Input() audioElement: ElementRef<HTMLAudioElement> | null = null;
 
-  private readonly playerUseCase = inject(PlayerUseCase);
+  private readonly globalPlayerState = inject(GlobalPlayerStateService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
 
@@ -44,15 +44,16 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     const seekPercentage = parseFloat(target.value);
     
-    // Use the PlayerUseCase to handle seeking
-    this.playerUseCase.seekToPercentage(seekPercentage);
+    // Use the PlayerUseCase through GlobalPlayerStateService to handle seeking
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.seekToPercentage(seekPercentage);
   }
 
   ngOnInit(): void {
-    // Subscribe to player state updates from Clean Architecture
-    this.playerUseCase.getPlayerState()
+    // Subscribe to global player state
+    this.globalPlayerState.getPlayerState$()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(state => {
+      .subscribe((state: PlayerState) => {
         this.playerState = state;
         this.currentTime = state.currentTime;
         this.duration = state.duration;
