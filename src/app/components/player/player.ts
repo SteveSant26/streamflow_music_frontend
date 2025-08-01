@@ -14,7 +14,7 @@ import { PlayerSoundControl } from "../player-sound-control/player-sound-control
 import { PlayerVolumeControl } from "../player-volume-control/player-volume-control";
 import { PlayerUseCase } from '../../domain/use-cases/player.use-case';
 import { PlayerState } from '../../domain/entities/player-state.entity';
-import { MusicLibraryService } from '../../shared/services/music-library.service';
+import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { Subject, takeUntil } from 'rxjs';
 
 interface Song {
@@ -71,7 +71,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private readonly playerUseCase: PlayerUseCase,
-    private readonly musicLibraryService: MusicLibraryService,
+    private readonly globalPlayerState: GlobalPlayerStateService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
