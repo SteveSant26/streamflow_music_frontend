@@ -1,9 +1,20 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { RouterTestingModule } from "@angular/router/testing";
+import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { provideRouter } from "@angular/router";
 import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
+
+// Mock para IAuthRepository
+export const mockAuthRepository = {
+  login: () => of({}),
+  register: () => of({}),
+  logout: () => of({}),
+  getCurrentUser: () => of(null),
+  refreshSession: () => of({}),
+  isAuthenticated: () => false
+};
 
 /**
  * Common test setup configuration for Angular components
@@ -42,12 +53,13 @@ export function setupTestEnvironment(config: TestSetupConfig = {}) {
   return TestBed.configureTestingModule({
     imports: [
       NoopAnimationsModule,
-      HttpClientTestingModule,
-      RouterTestingModule,
       ...imports,
     ],
     providers: [
       { provide: ActivatedRoute, useValue: mockActivatedRoute },
+      provideHttpClient(),
+      provideHttpClientTesting(),
+      provideRouter([]),
       ...providers,
     ],
   });

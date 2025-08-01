@@ -1,14 +1,17 @@
 import { TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
 import { provideRouter } from "@angular/router";
 import { App } from "./app";
-import { setupTestEnvironment } from "./shared/utils/test-helpers";
+import { setupTestEnvironment, mockAuthRepository } from "./shared/utils/test-helpers";
+import { IAuthRepository } from "./domain/repositories/i-auth.repository";
 
 describe("App", () => {
   beforeEach(async () => {
     await setupTestEnvironment({
       imports: [App],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        { provide: IAuthRepository, useValue: mockAuthRepository }
+      ],
     }).compileComponents();
   });
 

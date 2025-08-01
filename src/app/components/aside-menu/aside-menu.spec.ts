@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
-import { SideMenuItem } from "./side-menu-item";
+import { AsideMenu } from "./aside-menu";
+import { AuthService } from "../../services/auth.service";
 
-describe("SideMenuItem", () => {
-  let component: SideMenuItem;
-  let fixture: ComponentFixture<SideMenuItem>;
+describe("AsideMenu", () => {
+  let component: AsideMenu;
+  let fixture: ComponentFixture<AsideMenu>;
 
   const mockActivatedRoute = {
     params: of({}),
@@ -17,20 +18,23 @@ describe("SideMenuItem", () => {
     }
   };
 
+  const mockAuthService = {
+    isAuthenticated: () => false,
+    getCurrentUserValue: () => null,
+    logout: () => of({})
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SideMenuItem],
+      imports: [AsideMenu],
       providers: [
-        { provide: ActivatedRoute, useValue: mockActivatedRoute }
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: AuthService, useValue: mockAuthService }
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SideMenuItem);
+    fixture = TestBed.createComponent(AsideMenu);
     component = fixture.componentInstance;
-    
-    // Set required input using signal API
-    fixture.componentRef.setInput('href', '/test');
-    
     fixture.detectChanges();
   });
 

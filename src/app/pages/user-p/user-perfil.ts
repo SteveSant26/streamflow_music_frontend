@@ -28,6 +28,12 @@ export class UserPerfilComponent implements OnInit {
   profileImageUrl: string | null = null;
   selectedImageFile: File | null = null;
 
+  // Loading and state properties
+  isLoading = false;
+  errorMessage = '';
+  successMessage = '';
+  currentUser: User | null = null;
+
   constructor(
     readonly fb: FormBuilder,
     private readonly authService: AuthService

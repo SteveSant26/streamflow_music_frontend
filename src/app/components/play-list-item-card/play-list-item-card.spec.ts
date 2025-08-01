@@ -1,10 +1,21 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-
+import { ActivatedRoute } from "@angular/router";
+import { of } from "rxjs";
 import { PlayListItemCard } from "./play-list-item-card";
 
 describe("PlayListItemCard", () => {
   let component: PlayListItemCard;
   let fixture: ComponentFixture<PlayListItemCard>;
+
+  const mockActivatedRoute = {
+    params: of({}),
+    queryParams: of({}),
+    snapshot: {
+      params: {},
+      queryParams: {},
+      url: []
+    }
+  };
 
   const mockPlaylist = {
     id: 1,
@@ -17,6 +28,9 @@ describe("PlayListItemCard", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PlayListItemCard],
+      providers: [
+        { provide: ActivatedRoute, useValue: mockActivatedRoute }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PlayListItemCard);
