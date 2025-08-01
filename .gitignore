@@ -40,3 +40,12 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# SonarQube
+.scannerwork/
+.sonar/
+
+# Environment variables
+.env
+.env.local
+.env.*.local

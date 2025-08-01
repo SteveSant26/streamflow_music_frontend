@@ -76,7 +76,9 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+            "polyfills": ["src/setup-test.ts"],
             "tsConfig": "tsconfig.spec.json",
+            "codeCoverage": true,
             "assets": [
               {
                 "glob": "**/*",
