@@ -6,15 +6,14 @@ import {
   HttpEvent,
   HttpErrorResponse,
 } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
+import { Observable, throwError, from } from "rxjs";
 import { catchError, switchMap } from "rxjs/operators";
-import { from } from "rxjs";
 import { IAuthRepository } from "@app/domain/repositories/i-auth.repository";
 import { isPlatformBrowser } from "@angular/common";
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  private platformId = inject(PLATFORM_ID);
+  private readonly platformId = inject(PLATFORM_ID);
 
   constructor(private readonly authRepository: IAuthRepository) {}
 
