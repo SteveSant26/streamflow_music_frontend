@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, throwError, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { IPaymentRepository } from '@app/domain/repositories/i-payment.repository';
 
 declare global {
@@ -38,7 +38,7 @@ export class StripeService {
   private stripe: StripeInstance | null = null;
   private elements: StripeElements | null = null;
   private cardElement: StripeCardElement | null = null;
-  private isLoaded = new BehaviorSubject<boolean>(false);
+  private readonly isLoaded = new BehaviorSubject<boolean>(false);
   
   readonly isLoaded$ = this.isLoaded.asObservable();
 
@@ -56,7 +56,7 @@ export class StripeService {
       }
 
       // Obtener la clave pública de Stripe
-      const publicKey = await this.paymentRepository.getStripePublicKey().toPromise();
+      const publicKey = await firstValueFrom(this.paymentRepository.getStripePublicKey());
       
       // Inicializar Stripe
       this.stripe = window.Stripe(publicKey);

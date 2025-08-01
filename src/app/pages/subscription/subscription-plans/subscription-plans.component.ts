@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { GetSubscriptionPlansUseCase } from '@app/domain/usecases/get-subscription-plans.usecase';
 import { GetUserSubscriptionUseCase } from '@app/domain/usecases/get-user-subscription.usecase';
 import { CreateCheckoutSessionUseCase } from '@app/domain/usecases/create-checkout-session.usecase';
@@ -379,7 +380,7 @@ export class SubscriptionPlansComponent implements OnInit {
         allowPromotionCodes: true
       };
 
-      const result = await this.createCheckoutSessionUseCase.execute(checkoutData).toPromise();
+      const result = await firstValueFrom(this.createCheckoutSessionUseCase.execute(checkoutData));
       
       if (result?.url) {
         window.location.href = result.url;
