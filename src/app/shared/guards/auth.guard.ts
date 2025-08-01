@@ -1,15 +1,20 @@
 
+
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthUseCase } from '@app/domain/use-cases/auth.use-case';
 
+
 // Guard para proteger rutas privadas (solo usuarios autenticados)
+export const authGuard: CanActivateFn = () => {
   const authUseCase = inject(AuthUseCase);
   const router = inject(Router);
   return authUseCase.isAuthenticated() ? true : router.createUrlTree(['/login']);
 };
 
-// Guard para rutas públicas (login/register): si ya está autenticado, redirige a home
+
+// Guard para rutas públicas (login/register): si ya está autenticado, redirige a home o a la página anterior
+export const publicGuard: CanActivateFn = () => {
   const authUseCase = inject(AuthUseCase);
   const router = inject(Router);
 
