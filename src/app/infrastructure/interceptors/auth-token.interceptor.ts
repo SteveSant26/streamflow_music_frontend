@@ -14,8 +14,6 @@ export class AuthTokenInterceptor implements HttpInterceptor {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly authStateService = inject(AuthStateService);
 
-  constructor() {}
-
   intercept(
     request: HttpRequest<unknown>,  
     next: HttpHandler,

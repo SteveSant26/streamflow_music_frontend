@@ -22,4 +22,5 @@ export class AuthStatusUseCase {
   async logout(): Promise<void> {
     await this.logoutUseCase.execute();
   }
+
 }
