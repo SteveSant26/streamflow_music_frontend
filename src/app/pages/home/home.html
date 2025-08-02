@@ -4,13 +4,13 @@
     <div class="mb-6">
       <app-greeting></app-greeting>
       <p class="text-gray-700 mt-3 text-sm sm:text-base">
-        Descubre tu próxima canción favorita
+        {{ 'HOME.DISCOVER' | translate }}
       </p>
       <div class="mt-4">
         <button
           class="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 hover:shadow-lg hover:scale-105 transition-all"
         >
-          Reproducir todo
+          {{ 'HOME.PLAY_ALL' | translate }}
         </button>
       </div>
     </div>
@@ -21,8 +21,8 @@
     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8"
   >
     <app-card
-      title="Expande tus oidos mundialmente:D "
-      body="Explora las últimas tendencias musicales y encuentra tus nuevos artistas favoritos."
+      [title]="'HOME.CARD1_TITLE' | translate"
+      [body]="'HOME.CARD1_BODY' | translate"
       href="/discover"
       [playlistId]="1"
       [showPlayButton]="true"
@@ -30,8 +30,8 @@
     </app-card>
 
     <app-card
-      title="Visita a tus Playlists favoritas"
-      body="Crea y gestiona tus listas de reproducción personalizadas para cada momento."
+      [title]="'HOME.CARD2_TITLE' | translate"
+      [body]="'HOME.CARD2_BODY' | translate"
       href="/playlists"
       [playlistId]="2"
       [showPlayButton]="true"
@@ -39,8 +39,8 @@
     </app-card>
 
     <app-card
-      title="Artistas Favoritos"
-      body="Sigue a tus artistas preferidos y mantente al día con sus últimos lanzamientos."
+      [title]="'HOME.CARD3_TITLE' | translate"
+      [body]="'HOME.CARD3_BODY' | translate"
       href="/artists"
       [playlistId]="3"
       [showPlayButton]="true"
@@ -52,10 +52,10 @@
   <div class="mb-8">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
-        Mixes para ti
+        {{ 'HOME.MIXES' | translate }}
       </h2>
       <button class="text-black hover:text-gray-700 text-sm font-medium">
-        Ver todo
+        {{ 'HOME.SEE_ALL' | translate }}
       </button>
     </div>
     <div
@@ -74,7 +74,7 @@
     >
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
-          Trending Now
+          {{ 'HOME.TRENDING' | translate }}
         </h2>
         <div class="flex gap-2">
           <button class="text-black hover:text-gray-700 transition-colors">

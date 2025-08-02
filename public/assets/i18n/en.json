@@ -47,5 +47,18 @@
     "EXPLORE": "Explore",
     "PLANS": "Plans",
     "LIBRARY": "Library"
+  },
+  "HOME": {
+    "DISCOVER": "Discover your next favorite song",
+    "PLAY_ALL": "Play all",
+    "CARD1_TITLE": "Expand your ears worldwide :D ",
+    "CARD1_BODY": "Explore the latest music trends and find your new favorite artists.",
+    "CARD2_TITLE": "Visit your favorite Playlists",
+    "CARD2_BODY": "Create and manage your custom playlists for every moment.",
+    "CARD3_TITLE": "Favorite Artists",
+    "CARD3_BODY": "Follow your favorite artists and stay up to date with their latest releases.",
+    "MIXES": "Mixes for you",
+    "SEE_ALL": "See all",
+    "TRENDING": "Trending Now"
   }
 }
