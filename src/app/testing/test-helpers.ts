@@ -1,8 +1,7 @@
 // test-helpers.ts - Utilidades comunes para testing
 
-import { ComponentFixture } from "@angular/core/testing";
-import { DebugElement } from "@angular/core";
-import { By } from "@angular/platform-browser";
+import { ComponentFixture } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 /**
  * Obtiene un elemento del DOM por selector CSS
@@ -34,7 +33,7 @@ export function getElementText<T>(
   selector: string,
 ): string {
   const element = getElement(fixture, selector);
-  return element ? element.textContent?.trim() || "" : "";
+  return element ? element.textContent?.trim() || '' : '';
 }
 
 /**
@@ -62,7 +61,7 @@ export function setInputValue<T>(
   const input = getElement(fixture, selector) as HTMLInputElement;
   if (input) {
     input.value = value;
-    input.dispatchEvent(new Event("input"));
+    input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
   }
 }
@@ -91,9 +90,9 @@ export function isVisible<T>(
 
   const style = window.getComputedStyle(element);
   return (
-    style.display !== "none" &&
-    style.visibility !== "hidden" &&
-    style.opacity !== "0"
+    style.display !== 'none' &&
+    style.visibility !== 'hidden' &&
+    style.opacity !== '0'
   );
 }
 
@@ -108,7 +107,7 @@ export async function waitForAsync(): Promise<void> {
  * Mock básico para localStorage
  */
 export function createLocalStorageMock(): Storage {
-  let store: { [key: string]: string } = {};
+  let store: Record<string, string> = {};
 
   return {
     getItem: (key: string) => store[key] || null,
@@ -131,12 +130,12 @@ export function createLocalStorageMock(): Storage {
  */
 export function createMockUser(overrides: Partial<any> = {}): any {
   return {
-    id: "1",
-    username: "testuser",
-    email: "test@example.com",
-    profileImage: "",
-    createdAt: "2023-01-01T00:00:00Z",
-    updatedAt: "2023-01-01T00:00:00Z",
+    id: '1',
+    username: 'testuser',
+    email: 'test@example.com',
+    profileImage: '',
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
     ...overrides,
   };
 }
@@ -146,15 +145,15 @@ export function createMockUser(overrides: Partial<any> = {}): any {
  */
 export function createMockSong(overrides: Partial<any> = {}): any {
   return {
-    id: "1",
-    title: "Test Song",
-    artistId: "1",
+    id: '1',
+    title: 'Test Song',
+    artistId: '1',
     duration: 180,
-    fileUrl: "https://example.com/song.mp3",
+    fileUrl: 'https://example.com/song.mp3',
     plays: 100,
     likes: 10,
-    createdAt: "2023-01-01T00:00:00Z",
-    updatedAt: "2023-01-01T00:00:00Z",
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
     ...overrides,
   };
 }
@@ -164,14 +163,14 @@ export function createMockSong(overrides: Partial<any> = {}): any {
  */
 export function createMockPlaylist(overrides: Partial<any> = {}): any {
   return {
-    id: "1",
-    name: "Test Playlist",
-    description: "A test playlist",
-    coverImage: "https://example.com/cover.jpg",
+    id: '1',
+    name: 'Test Playlist',
+    description: 'A test playlist',
+    coverImage: 'https://example.com/cover.jpg',
     isPublic: true,
     songsCount: 5,
-    createdAt: "2023-01-01T00:00:00Z",
-    updatedAt: "2023-01-01T00:00:00Z",
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-01-01T00:00:00Z',
     ...overrides,
   };
 }
