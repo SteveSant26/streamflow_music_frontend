@@ -42,13 +42,21 @@ export class App implements OnInit {
   }
 
   ngOnInit() {
-    // Initialize auth session first
+    // Initialize language service first
+    this.initializeLanguage();
+
+    // Initialize auth session
     this.initializeAuth();
 
     // Initialize global player state when app starts
     this.globalPlayerState.initializePlayer().catch((error) => {
       console.error('Failed to initialize global player state:', error);
     });
+  }
+
+  private initializeLanguage() {
+    // Language service automatically initializes on construction
+    console.log('🌐 App: Language service initialized with:', this.languageService.getCurrentLanguage());
   }
 
   private async initializeAuth() {
