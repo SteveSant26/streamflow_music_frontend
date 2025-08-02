@@ -1,5 +1,7 @@
-import { Injectable, signal } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { ChangeLanguageUseCase } from '../usecases/change-language.usecase';
+import { GetCurrentLanguageUseCase } from '../usecases/get-current-language.usecase';
+import { GetAvailableLanguagesUseCase } from '../usecases/get-available-languages.usecase';
 
 export type Language = 'en' | 'es';
 
@@ -7,35 +9,44 @@ export type Language = 'en' | 'es';
   providedIn: 'root'
 })
 export class LanguageService {
-  private readonly currentLanguage = signal<Language>('en');
+  private readonly changeLanguageUseCase = inject(ChangeLanguageUseCase);
+  private readonly getCurrentLanguageUseCase = inject(GetCurrentLanguageUseCase);
+  private readonly getAvailableLanguagesUseCase = inject(GetAvailableLanguagesUseCase);
 
-  constructor(private readonly translate: TranslateService) {
-    this.initializeLanguage();
+  // Signal para reactivity
+  private readonly currentLanguageSignal = signal<Language>('en');
+
+  constructor() {
+    // Initialize the signal with current language
+    const currentLang = this.getCurrentLanguage() as Language;
+    this.currentLanguageSignal.set(currentLang);
   }
 
-  private initializeLanguage(): void {
-    const savedLang = localStorage.getItem('app-language') as Language;
-    const defaultLang: Language = savedLang || 'en';
-    
-    this.translate.setDefaultLang(defaultLang);
-    this.translate.use(defaultLang);
-    this.currentLanguage.set(defaultLang);
-  }
-
-  getCurrentLanguage() {
-    return this.currentLanguage();
+  getCurrentLanguage(): string {
+    return this.getCurrentLanguageUseCase.execute();
   }
 
   changeLanguage(language: Language): void {
-    this.translate.use(language);
-    this.currentLanguage.set(language);
-    localStorage.setItem('app-language', language);
+    try {
+      this.changeLanguageUseCase.execute(language);
+      this.currentLanguageSignal.set(language);
+    } catch (error) {
+      console.error('Error changing language:', error);
+      throw error;
+    }
   }
 
   getAvailableLanguages(): { code: Language; name: string }[] {
-    return [
-      { code: 'en', name: 'English' },
-      { code: 'es', name: 'Español' }
-    ];
+    const languages = this.getAvailableLanguagesUseCase.execute();
+    
+    return languages.map(lang => ({
+      code: lang as Language,
+      name: lang === 'en' ? 'English' : 'Español'
+    }));
+  }
+
+  // Getter for reactive signal
+  get currentLanguage() {
+    return this.currentLanguageSignal.asReadonly();
   }
 }

@@ -10,6 +10,7 @@ import { authProviders } from './infrastructure/providers/auth.providers';
 import { playerProviders } from './infrastructure/providers/player.providers';
 import { paymentProviders } from './infrastructure/providers/payment.providers';
 import { translateProviders } from './infrastructure/providers/translate.providers';
+import { languageProviders } from './infrastructure/providers/language.providers';
 import { AuthTokenInterceptor } from './infrastructure/interceptors/auth-token.interceptor';
 import { HttpErrorInterceptor } from './infrastructure/interceptors/http-error.interceptor';
 
@@ -33,5 +34,6 @@ export const appConfig: ApplicationConfig = {
     ...playerProviders,
     ...paymentProviders,
     ...translateProviders,
+    ...languageProviders,
   ],
 };
