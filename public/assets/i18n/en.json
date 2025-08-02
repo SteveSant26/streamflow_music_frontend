@@ -1,0 +1,19 @@
+{
+  "LOGIN": {
+    "TITLE": "Log In",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Your email here",
+    "PASSWORD": "Password",
+    "REMEMBER": "Remember me",
+    "FORGOT": "Forgot your password?",
+    "LOADING": "Logging in...",
+    "BUTTON": "Log In",
+    "NO_ACCOUNT": "Don't have an account?",
+    "REGISTER_LINK": "Register here",
+    "GOOGLE": "Log in with Google",
+    "GITHUB": "Log in with GitHub",
+    "TWITTER": "Log in with Twitter|X",
+    "DISCORD": "Log in with Discord",
+    "RIGHTS": "All rights reserved."
+  }
+}

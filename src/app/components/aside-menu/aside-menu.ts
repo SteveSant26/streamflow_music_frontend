@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStatusUseCase } from '@app/domain/usecases/auth-status.usecase';
-=======
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { SideMenuItem } from '../side-menu-item/side-menu-item';
-import { SideMenuCard } from '../side-menu-card/side-menu-card';
-import { AuthService } from '../../services/auth.service';
->>>>>>> main
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 @Component({
@@ -21,7 +13,6 @@ import { ROUTES_CONFIG_AUTH } from '@app/config';
 })
 export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
-<<<<<<< HEAD
   private readonly authStatusUseCase = inject(AuthStatusUseCase);
   private readonly router = inject(Router);
   
@@ -39,23 +30,6 @@ export class AsideMenu {
       // Aunque falle, redirigimos al login
       await this.router.navigate(['/login']);
     }
-=======
-  private readonly authService = inject(AuthService);
-  isAuthenticated = this.authService.isAuthenticated();
-  user = () => this.authService.getCurrentUserValue();
-
-  async logout() {
-    this.authService.logout().subscribe({
-      next: () => {
-        window.location.href = '/login';
-      },
-      error: (error) => {
-        console.error('Error during logout:', error);
-        // Limpiar datos locales incluso si hay error en el servidor
-        window.location.href = '/login';
-      }
-    });
->>>>>>> main
   }
 
   onLogoutKeyDown(event: KeyboardEvent) {

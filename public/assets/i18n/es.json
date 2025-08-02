@@ -1,0 +1,19 @@
+{
+  "LOGIN": {
+    "TITLE": "Iniciar Sesión",
+    "EMAIL": "Correo Electrónico",
+    "EMAIL_PLACEHOLDER": "Aquí tu email",
+    "PASSWORD": "Contraseña",
+    "REMEMBER": "Recordarme",
+    "FORGOT": "¿Olvidaste tu contraseña?",
+    "LOADING": "Iniciando sesión...",
+    "BUTTON": "Iniciar Sesión",
+    "NO_ACCOUNT": "¿No tienes una cuenta?",
+    "REGISTER_LINK": "Regístrate aquí",
+    "GOOGLE": "Iniciar sesión con Google",
+    "GITHUB": "Iniciar sesión con GitHub",
+    "TWITTER": "Iniciar sesión con Twitter|X",
+    "DISCORD": "Iniciar sesión con Discord",
+    "RIGHTS": "Todos los derechos reservados."
+  }
+}
