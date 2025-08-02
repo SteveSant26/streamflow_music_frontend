@@ -4,6 +4,7 @@ import { AuthSessionUseCase } from '@app/domain/usecases/auth-session.usecase';
 import { AsideMenu } from './components/aside-menu/aside-menu';
 import { Player } from './components/player/player';
 import { CommonModule } from '@angular/common';
+import { GlobalPlayerStateService } from './shared/services/global-player-state.service';
 import { filter } from 'rxjs';
 
 @Component({
@@ -17,7 +18,8 @@ export class App implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly authSessionUseCase: AuthSessionUseCase
+    private readonly authSessionUseCase: AuthSessionUseCase,
+    private readonly globalPlayerState: GlobalPlayerStateService
   ) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -32,5 +34,10 @@ export class App implements OnInit {
 
   ngOnInit() {
     this.authSessionUseCase.initSession();
+    
+    // Initialize global player state when app starts
+    this.globalPlayerState.initializePlayer().catch(error => {
+      console.error('Failed to initialize global player state:', error);
+    });
   }
 }

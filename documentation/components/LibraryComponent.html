@@ -1,0 +1,2504 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>b documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">b documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  LibraryComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/library/library.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-library</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>FormsModule</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./library.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./library.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#activeTab" >activeTab</a>
+                            </li>
+                            <li>
+                                <a href="#imagePreviewUrl" >imagePreviewUrl</a>
+                            </li>
+                            <li>
+                                <a href="#mockAlbums" >mockAlbums</a>
+                            </li>
+                            <li>
+                                <a href="#mockArtists" >mockArtists</a>
+                            </li>
+                            <li>
+                                <a href="#mockPlaylists" >mockPlaylists</a>
+                            </li>
+                            <li>
+                                <a href="#newPlaylist" >newPlaylist</a>
+                            </li>
+                            <li>
+                                <a href="#selectedImageFile" >selectedImageFile</a>
+                            </li>
+                            <li>
+                                <a href="#showCreateModal" >showCreateModal</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#closeModal" >closeModal</a>
+                            </li>
+                            <li>
+                                <a href="#createPlaylist" >createPlaylist</a>
+                            </li>
+                            <li>
+                                <a href="#exploreMusic" >exploreMusic</a>
+                            </li>
+                            <li>
+                                <a href="#onImageSelected" >onImageSelected</a>
+                            </li>
+                            <li>
+                                <a href="#onKeyDown" >onKeyDown</a>
+                            </li>
+                            <li>
+                                <a href="#onModalBackdropClick" >onModalBackdropClick</a>
+                            </li>
+                            <li>
+                                <a href="#playAlbum" >playAlbum</a>
+                            </li>
+                            <li>
+                                <a href="#playPlaylist" >playPlaylist</a>
+                            </li>
+                            <li>
+                                <a href="#removeImage" >removeImage</a>
+                            </li>
+                            <li>
+                                <a href="#resetForm" >resetForm</a>
+                            </li>
+                            <li>
+                                <a href="#savePlaylist" >savePlaylist</a>
+                            </li>
+                            <li>
+                                <a href="#setActiveTab" >setActiveTab</a>
+                            </li>
+                            <li>
+                                <a href="#startPlayingPlaylist" >startPlayingPlaylist</a>
+                            </li>
+                            <li>
+                                <a href="#toggleFollowArtist" >toggleFollowArtist</a>
+                            </li>
+                            <li>
+                                <a href="#triggerImageUpload" >triggerImageUpload</a>
+                            </li>
+                            <li>
+                                <a href="#viewArtist" >viewArtist</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#isEmpty" >isEmpty</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(router: Router)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/pages/library/library.ts:55</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeModal"></a>
+                    <span class="name">
+                        <span ><b>closeModal</b></span>
+                        <a href="#closeModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>closeModal()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="228"
+                                    class="link-to-prism">src/app/pages/library/library.ts:228</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createPlaylist"></a>
+                    <span class="name">
+                        <span ><b>createPlaylist</b></span>
+                        <a href="#createPlaylist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>createPlaylist()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="224"
+                                    class="link-to-prism">src/app/pages/library/library.ts:224</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="exploreMusic"></a>
+                    <span class="name">
+                        <span ><b>exploreMusic</b></span>
+                        <a href="#exploreMusic"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>exploreMusic()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="352"
+                                    class="link-to-prism">src/app/pages/library/library.ts:352</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onImageSelected"></a>
+                    <span class="name">
+                        <span ><b>onImageSelected</b></span>
+                        <a href="#onImageSelected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onImageSelected(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="243"
+                                    class="link-to-prism">src/app/pages/library/library.ts:243</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onKeyDown"></a>
+                    <span class="name">
+                        <span ><b>onKeyDown</b></span>
+                        <a href="#onKeyDown"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onKeyDown(event: KeyboardEvent, action: () => void)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="357"
+                                    class="link-to-prism">src/app/pages/library/library.ts:357</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>KeyboardEvent</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>action</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onModalBackdropClick"></a>
+                    <span class="name">
+                        <span ><b>onModalBackdropClick</b></span>
+                        <a href="#onModalBackdropClick"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onModalBackdropClick(event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="317"
+                                    class="link-to-prism">src/app/pages/library/library.ts:317</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="playAlbum"></a>
+                    <span class="name">
+                        <span ><b>playAlbum</b></span>
+                        <a href="#playAlbum"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>playAlbum(album: <a href="../interfaces/Album.html" target="_self">Album</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="335"
+                                    class="link-to-prism">src/app/pages/library/library.ts:335</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>album</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Album.html" target="_self" >Album</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="playPlaylist"></a>
+                    <span class="name">
+                        <span ><b>playPlaylist</b></span>
+                        <a href="#playPlaylist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>playPlaylist(playlist: <a href="../interfaces/Playlist.html" target="_self">Playlist</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="323"
+                                    class="link-to-prism">src/app/pages/library/library.ts:323</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>playlist</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Playlist.html" target="_self" >Playlist</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeImage"></a>
+                    <span class="name">
+                        <span ><b>removeImage</b></span>
+                        <a href="#removeImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeImage()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="278"
+                                    class="link-to-prism">src/app/pages/library/library.ts:278</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetForm"></a>
+                    <span class="name">
+                        <span ><b>resetForm</b></span>
+                        <a href="#resetForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resetForm()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="233"
+                                    class="link-to-prism">src/app/pages/library/library.ts:233</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="savePlaylist"></a>
+                    <span class="name">
+                        <span ><b>savePlaylist</b></span>
+                        <a href="#savePlaylist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>savePlaylist()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="294"
+                                    class="link-to-prism">src/app/pages/library/library.ts:294</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setActiveTab"></a>
+                    <span class="name">
+                        <span ><b>setActiveTab</b></span>
+                        <a href="#setActiveTab"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setActiveTab(tab: "playlists" | "artists" | "albums")</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="220"
+                                    class="link-to-prism">src/app/pages/library/library.ts:220</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>tab</td>
+                                            <td>
+                                                        <code>&quot;playlists&quot; | &quot;artists&quot; | &quot;albums&quot;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="startPlayingPlaylist"></a>
+                    <span class="name">
+                        <span ><b>startPlayingPlaylist</b></span>
+                        <a href="#startPlayingPlaylist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>startPlayingPlaylist(playlist: <a href="../interfaces/Playlist.html" target="_self">Playlist</a>, event: Event)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="328"
+                                    class="link-to-prism">src/app/pages/library/library.ts:328</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>playlist</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Playlist.html" target="_self" >Playlist</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                        <code>Event</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleFollowArtist"></a>
+                    <span class="name">
+                        <span ><b>toggleFollowArtist</b></span>
+                        <a href="#toggleFollowArtist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toggleFollowArtist(artist: <a href="../interfaces/Artist.html" target="_self">Artist</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="344"
+                                    class="link-to-prism">src/app/pages/library/library.ts:344</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>artist</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Artist.html" target="_self" >Artist</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="triggerImageUpload"></a>
+                    <span class="name">
+                        <span ><b>triggerImageUpload</b></span>
+                        <a href="#triggerImageUpload"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>triggerImageUpload()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="289"
+                                    class="link-to-prism">src/app/pages/library/library.ts:289</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="viewArtist"></a>
+                    <span class="name">
+                        <span ><b>viewArtist</b></span>
+                        <a href="#viewArtist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>viewArtist(artist: <a href="../interfaces/Artist.html" target="_self">Artist</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="339"
+                                    class="link-to-prism">src/app/pages/library/library.ts:339</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>artist</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Artist.html" target="_self" >Artist</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="activeTab"></a>
+                    <span class="name">
+                        <span ><b>activeTab</b></span>
+                        <a href="#activeTab"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>&quot;playlists&quot; | &quot;artists&quot; | &quot;albums&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&quot;playlists&quot;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/pages/library/library.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="imagePreviewUrl"></a>
+                    <span class="name">
+                        <span ><b>imagePreviewUrl</b></span>
+                        <a href="#imagePreviewUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/pages/library/library.ts:48</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mockAlbums"></a>
+                    <span class="name">
+                        <span ><b>mockAlbums</b></span>
+                        <a href="#mockAlbums"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Album[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+    {
+      id: &quot;1&quot;,
+      title: &quot;AM&quot;,
+      artist: &quot;Arctic Monkeys&quot;,
+      year: 2013,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;21&quot;,
+      songCount: 12,
+    },
+    {
+      id: &quot;2&quot;,
+      title: &quot;When We All Fall Asleep&quot;,
+      artist: &quot;Billie Eilish&quot;,
+      year: 2019,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;22&quot;,
+      songCount: 14,
+    },
+    {
+      id: &quot;3&quot;,
+      title: &quot;After Hours&quot;,
+      artist: &quot;The Weeknd&quot;,
+      year: 2020,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;23&quot;,
+      songCount: 14,
+    },
+    {
+      id: &quot;4&quot;,
+      title: &quot;Currents&quot;,
+      artist: &quot;Tame Impala&quot;,
+      year: 2015,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;24&quot;,
+      songCount: 13,
+    },
+    {
+      id: &quot;5&quot;,
+      title: &quot;Future Nostalgia&quot;,
+      artist: &quot;Dua Lipa&quot;,
+      year: 2020,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;25&quot;,
+      songCount: 11,
+    },
+    {
+      id: &quot;6&quot;,
+      title: &quot;Tranquility Base Hotel&quot;,
+      artist: &quot;Arctic Monkeys&quot;,
+      year: 2018,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;26&quot;,
+      songCount: 11,
+    },
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="156" class="link-to-prism">src/app/pages/library/library.ts:156</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mockArtists"></a>
+                    <span class="name">
+                        <span ><b>mockArtists</b></span>
+                        <a href="#mockArtists"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Artist[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+    {
+      id: &quot;1&quot;,
+      name: &quot;Arctic Monkeys&quot;,
+      genre: &quot;Indie Rock&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;11&quot;,
+      followers: &quot;2.4M&quot;,
+      isFollowing: true,
+    },
+    {
+      id: &quot;2&quot;,
+      name: &quot;Billie Eilish&quot;,
+      genre: &quot;Pop Alternativo&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;12&quot;,
+      followers: &quot;8.1M&quot;,
+      isFollowing: true,
+    },
+    {
+      id: &quot;3&quot;,
+      name: &quot;The Weeknd&quot;,
+      genre: &quot;R&amp;B&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;13&quot;,
+      followers: &quot;6.7M&quot;,
+      isFollowing: false,
+    },
+    {
+      id: &quot;4&quot;,
+      name: &quot;Tame Impala&quot;,
+      genre: &quot;Psychedelic Pop&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;14&quot;,
+      followers: &quot;1.8M&quot;,
+      isFollowing: true,
+    },
+    {
+      id: &quot;5&quot;,
+      name: &quot;Dua Lipa&quot;,
+      genre: &quot;Pop&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;15&quot;,
+      followers: &quot;5.2M&quot;,
+      isFollowing: false,
+    },
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="112" class="link-to-prism">src/app/pages/library/library.ts:112</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mockPlaylists"></a>
+                    <span class="name">
+                        <span ><b>mockPlaylists</b></span>
+                        <a href="#mockPlaylists"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Playlist[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+    {
+      id: &quot;1&quot;,
+      name: &quot;Mi Playlist Favorita&quot;,
+      description: &quot;Las mejores canciones para relajarse&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;1&quot;,
+      songCount: 25,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;2&quot;,
+      name: &quot;Música para Trabajar&quot;,
+      description: &quot;Concentración y productividad&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;2&quot;,
+      songCount: 42,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;3&quot;,
+      name: &quot;Road Trip Vibes&quot;,
+      description: &quot;Para esos viajes largos en carretera&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;3&quot;,
+      songCount: 18,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;4&quot;,
+      name: &quot;Chill Evening&quot;,
+      description: &quot;Perfecta para las noches tranquilas&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;4&quot;,
+      songCount: 31,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;5&quot;,
+      name: &quot;Workout Energy&quot;,
+      description: &quot;Música enérgica para el gimnasio&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;5&quot;,
+      songCount: 20,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;6&quot;,
+      name: &quot;Sunday Morning&quot;,
+      description: &quot;Despertar con buena música&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;6&quot;,
+      songCount: 15,
+      createdAt: new Date(),
+    },
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/pages/library/library.ts:60</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="newPlaylist"></a>
+                    <span class="name">
+                        <span ><b>newPlaylist</b></span>
+                        <a href="#newPlaylist"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+    name: &quot;&quot;,
+    description: &quot;&quot;,
+    isPrivate: false,
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/pages/library/library.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedImageFile"></a>
+                    <span class="name">
+                        <span ><b>selectedImageFile</b></span>
+                        <a href="#selectedImageFile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>File | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/pages/library/library.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showCreateModal"></a>
+                    <span class="name">
+                        <span ><b>showCreateModal</b></span>
+                        <a href="#showCreateModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/pages/library/library.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isEmpty"></a>
+                        <span class="name"><b>isEmpty</b><a href="#isEmpty"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>isEmpty()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="207" class="link-to-prism">src/app/pages/library/library.ts:207</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &quot;@angular/core&quot;;
+import { CommonModule } from &quot;@angular/common&quot;;
+import { FormsModule } from &quot;@angular/forms&quot;;
+import { Router } from &quot;@angular/router&quot;;
+
+interface Playlist {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  songCount: number;
+  createdAt: Date;
+}
+
+interface Artist {
+  id: string;
+  name: string;
+  genre: string;
+  image: string;
+  followers: string;
+  isFollowing: boolean;
+}
+
+interface Album {
+  id: string;
+  title: string;
+  artist: string;
+  year: number;
+  image: string;
+  songCount: number;
+}
+
+@Component({
+  selector: &quot;app-library&quot;,
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: &quot;./library.html&quot;,
+  styleUrl: &quot;./library.css&quot;,
+})
+export class LibraryComponent {
+  activeTab: &quot;playlists&quot; | &quot;artists&quot; | &quot;albums&quot; &#x3D; &quot;playlists&quot;;
+
+  // Modal state
+  showCreateModal &#x3D; false;
+
+  // Image upload state
+  selectedImageFile: File | null &#x3D; null;
+  imagePreviewUrl: string | null &#x3D; null;
+
+  // Form data for new playlist
+  newPlaylist &#x3D; {
+    name: &quot;&quot;,
+    description: &quot;&quot;,
+    isPrivate: false,
+  };
+
+  constructor(private readonly router: Router) {}
+
+  // Mock data para playlists
+  mockPlaylists: Playlist[] &#x3D; [
+    {
+      id: &quot;1&quot;,
+      name: &quot;Mi Playlist Favorita&quot;,
+      description: &quot;Las mejores canciones para relajarse&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;1&quot;,
+      songCount: 25,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;2&quot;,
+      name: &quot;Música para Trabajar&quot;,
+      description: &quot;Concentración y productividad&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;2&quot;,
+      songCount: 42,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;3&quot;,
+      name: &quot;Road Trip Vibes&quot;,
+      description: &quot;Para esos viajes largos en carretera&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;3&quot;,
+      songCount: 18,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;4&quot;,
+      name: &quot;Chill Evening&quot;,
+      description: &quot;Perfecta para las noches tranquilas&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;4&quot;,
+      songCount: 31,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;5&quot;,
+      name: &quot;Workout Energy&quot;,
+      description: &quot;Música enérgica para el gimnasio&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;5&quot;,
+      songCount: 20,
+      createdAt: new Date(),
+    },
+    {
+      id: &quot;6&quot;,
+      name: &quot;Sunday Morning&quot;,
+      description: &quot;Despertar con buena música&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;6&quot;,
+      songCount: 15,
+      createdAt: new Date(),
+    },
+  ];
+
+  // Mock data para artistas
+  mockArtists: Artist[] &#x3D; [
+    {
+      id: &quot;1&quot;,
+      name: &quot;Arctic Monkeys&quot;,
+      genre: &quot;Indie Rock&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;11&quot;,
+      followers: &quot;2.4M&quot;,
+      isFollowing: true,
+    },
+    {
+      id: &quot;2&quot;,
+      name: &quot;Billie Eilish&quot;,
+      genre: &quot;Pop Alternativo&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;12&quot;,
+      followers: &quot;8.1M&quot;,
+      isFollowing: true,
+    },
+    {
+      id: &quot;3&quot;,
+      name: &quot;The Weeknd&quot;,
+      genre: &quot;R&amp;B&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;13&quot;,
+      followers: &quot;6.7M&quot;,
+      isFollowing: false,
+    },
+    {
+      id: &quot;4&quot;,
+      name: &quot;Tame Impala&quot;,
+      genre: &quot;Psychedelic Pop&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;14&quot;,
+      followers: &quot;1.8M&quot;,
+      isFollowing: true,
+    },
+    {
+      id: &quot;5&quot;,
+      name: &quot;Dua Lipa&quot;,
+      genre: &quot;Pop&quot;,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;15&quot;,
+      followers: &quot;5.2M&quot;,
+      isFollowing: false,
+    },
+  ];
+
+  // Mock data para álbumes
+  mockAlbums: Album[] &#x3D; [
+    {
+      id: &quot;1&quot;,
+      title: &quot;AM&quot;,
+      artist: &quot;Arctic Monkeys&quot;,
+      year: 2013,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;21&quot;,
+      songCount: 12,
+    },
+    {
+      id: &quot;2&quot;,
+      title: &quot;When We All Fall Asleep&quot;,
+      artist: &quot;Billie Eilish&quot;,
+      year: 2019,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;22&quot;,
+      songCount: 14,
+    },
+    {
+      id: &quot;3&quot;,
+      title: &quot;After Hours&quot;,
+      artist: &quot;The Weeknd&quot;,
+      year: 2020,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;23&quot;,
+      songCount: 14,
+    },
+    {
+      id: &quot;4&quot;,
+      title: &quot;Currents&quot;,
+      artist: &quot;Tame Impala&quot;,
+      year: 2015,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;24&quot;,
+      songCount: 13,
+    },
+    {
+      id: &quot;5&quot;,
+      title: &quot;Future Nostalgia&quot;,
+      artist: &quot;Dua Lipa&quot;,
+      year: 2020,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;25&quot;,
+      songCount: 11,
+    },
+    {
+      id: &quot;6&quot;,
+      title: &quot;Tranquility Base Hotel&quot;,
+      artist: &quot;Arctic Monkeys&quot;,
+      year: 2018,
+      image: &quot;https://picsum.photos/400/400?random&#x3D;26&quot;,
+      songCount: 11,
+    },
+  ];
+
+  get isEmpty(): boolean {
+    switch (this.activeTab) {
+      case &quot;playlists&quot;:
+        return this.mockPlaylists.length &#x3D;&#x3D;&#x3D; 0;
+      case &quot;artists&quot;:
+        return this.mockArtists.length &#x3D;&#x3D;&#x3D; 0;
+      case &quot;albums&quot;:
+        return this.mockAlbums.length &#x3D;&#x3D;&#x3D; 0;
+      default:
+        return true;
+    }
+  }
+
+  setActiveTab(tab: &quot;playlists&quot; | &quot;artists&quot; | &quot;albums&quot;): void {
+    this.activeTab &#x3D; tab;
+  }
+
+  createPlaylist(): void {
+    this.showCreateModal &#x3D; true;
+  }
+
+  closeModal(): void {
+    this.showCreateModal &#x3D; false;
+    this.resetForm();
+  }
+
+  resetForm(): void {
+    this.newPlaylist &#x3D; {
+      name: &quot;&quot;,
+      description: &quot;&quot;,
+      isPrivate: false,
+    };
+    this.selectedImageFile &#x3D; null;
+    this.imagePreviewUrl &#x3D; null;
+  }
+
+  onImageSelected(event: Event): void {
+    const target &#x3D; event.target as HTMLInputElement;
+    const file &#x3D; target.files?.[0];
+
+    if (file) {
+      // Validate file type
+      const allowedTypes &#x3D; [
+        &quot;image/jpeg&quot;,
+        &quot;image/png&quot;,
+        &quot;image/gif&quot;,
+        &quot;image/webp&quot;,
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        alert(&quot;Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)&quot;);
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      const maxSize &#x3D; 5 * 1024 * 1024; // 5MB
+      if (file.size &gt; maxSize) {
+        alert(&quot;La imagen es demasiado grande. El tamaño máximo es 5MB&quot;);
+        return;
+      }
+
+      this.selectedImageFile &#x3D; file;
+
+      // Create preview URL
+      const reader &#x3D; new FileReader();
+      reader.onload &#x3D; (e) &#x3D;&gt; {
+        this.imagePreviewUrl &#x3D; e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeImage(): void {
+    this.selectedImageFile &#x3D; null;
+    this.imagePreviewUrl &#x3D; null;
+
+    // Clear the input
+    const input &#x3D; document.getElementById(&quot;imageInput&quot;) as HTMLInputElement;
+    if (input) {
+      input.value &#x3D; &quot;&quot;;
+    }
+  }
+
+  triggerImageUpload(): void {
+    const input &#x3D; document.getElementById(&quot;imageInput&quot;) as HTMLInputElement;
+    input?.click();
+  }
+
+  savePlaylist(): void {
+    if (!this.newPlaylist.name.trim()) {
+      return;
+    }
+
+    // Use the selected image or a default placeholder
+    const playlistImage &#x3D;
+      this.imagePreviewUrl ||
+      &quot;https://picsum.photos/400/400?random&#x3D;&quot; + Date.now();
+
+    const newPlaylist: Playlist &#x3D; {
+      id: Date.now().toString(),
+      name: this.newPlaylist.name.trim(),
+      description: this.newPlaylist.description.trim(),
+      image: playlistImage,
+      songCount: 0,
+      createdAt: new Date(),
+    };
+
+    this.mockPlaylists.unshift(newPlaylist);
+    this.closeModal();
+  }
+
+  onModalBackdropClick(event: Event): void {
+    if (event.target &#x3D;&#x3D;&#x3D; event.currentTarget) {
+      this.closeModal();
+    }
+  }
+
+  playPlaylist(playlist: Playlist): void {
+    // Navegar a la vista individual de la playlist
+    this.router.navigate([&quot;/playlist&quot;, playlist.id]);
+  }
+
+  startPlayingPlaylist(playlist: Playlist, event: Event): void {
+    // Prevenir que se navegue cuando se hace click en el botón de play
+    event.stopPropagation();
+    // Aquí iría la lógica para empezar a reproducir la playlist
+    console.log(&quot;Reproduciendo playlist:&quot;, playlist.name);
+  }
+
+  playAlbum(album: Album): void {
+    console.log(&quot;Reproducir álbum:&quot;, album.title);
+  }
+
+  viewArtist(artist: Artist): void {
+    // Navegar a la vista individual del artista
+    this.router.navigate([&quot;/artist&quot;, artist.id]);
+  }
+
+  toggleFollowArtist(artist: Artist): void {
+    artist.isFollowing &#x3D; !artist.isFollowing;
+    console.log(
+      artist.isFollowing ? &quot;Siguiendo&quot; : &quot;Dejando de seguir&quot;,
+      artist.name,
+    );
+  }
+
+  exploreMusic(): void {
+    console.log(&quot;Explorar música&quot;);
+  }
+
+  // Métodos para manejo de eventos de teclado
+  onKeyDown(event: KeyboardEvent, action: () &#x3D;&gt; void): void {
+    if (event.key &#x3D;&#x3D;&#x3D; &quot;Enter&quot; || event.key &#x3D;&#x3D;&#x3D; &quot; &quot;) {
+      event.preventDefault();
+      action();
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;library-container&quot;&gt;
+  &lt;div class&#x3D;&quot;library-header&quot;&gt;
+    &lt;h1 class&#x3D;&quot;page-title&quot;&gt;Tu Biblioteca&lt;/h1&gt;
+    &lt;div class&#x3D;&quot;header-actions&quot;&gt;
+      &lt;button class&#x3D;&quot;add-playlist-btn&quot; (click)&#x3D;&quot;createPlaylist()&quot;&gt;
+        &lt;svg
+          class&#x3D;&quot;w-5 h-5&quot;
+          fill&#x3D;&quot;none&quot;
+          stroke&#x3D;&quot;currentColor&quot;
+          viewBox&#x3D;&quot;0 0 24 24&quot;
+        &gt;
+          &lt;path
+            stroke-linecap&#x3D;&quot;round&quot;
+            stroke-linejoin&#x3D;&quot;round&quot;
+            stroke-width&#x3D;&quot;2&quot;
+            d&#x3D;&quot;M12 4v16m8-8H4&quot;
+          /&gt;
+        &lt;/svg&gt;
+        Crear Playlist
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;tabs-container&quot;&gt;
+    &lt;div class&#x3D;&quot;tabs&quot;&gt;
+      &lt;button
+        class&#x3D;&quot;tab-button&quot;
+        [class.active]&#x3D;&quot;activeTab &#x3D;&#x3D;&#x3D; &#x27;playlists&#x27;&quot;
+        (click)&#x3D;&quot;setActiveTab(&#x27;playlists&#x27;)&quot;
+      &gt;
+        Playlists
+      &lt;/button&gt;
+      &lt;button
+        class&#x3D;&quot;tab-button&quot;
+        [class.active]&#x3D;&quot;activeTab &#x3D;&#x3D;&#x3D; &#x27;artists&#x27;&quot;
+        (click)&#x3D;&quot;setActiveTab(&#x27;artists&#x27;)&quot;
+      &gt;
+        Artistas
+      &lt;/button&gt;
+      &lt;button
+        class&#x3D;&quot;tab-button&quot;
+        [class.active]&#x3D;&quot;activeTab &#x3D;&#x3D;&#x3D; &#x27;albums&#x27;&quot;
+        (click)&#x3D;&quot;setActiveTab(&#x27;albums&#x27;)&quot;
+      &gt;
+        Álbumes
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;content&quot; [ngSwitch]&#x3D;&quot;activeTab&quot;&gt;
+    &lt;!-- Tab Playlists --&gt;
+    &lt;div *ngSwitchCase&#x3D;&quot;&#x27;playlists&#x27;&quot; class&#x3D;&quot;playlists-grid&quot;&gt;
+      &lt;div
+        class&#x3D;&quot;playlist-card&quot;
+        *ngFor&#x3D;&quot;let playlist of mockPlaylists&quot;
+        (click)&#x3D;&quot;playPlaylist(playlist)&quot;
+        (keydown.enter)&#x3D;&quot;playPlaylist(playlist)&quot;
+        (keydown.space)&#x3D;&quot;playPlaylist(playlist)&quot;
+        tabindex&#x3D;&quot;0&quot;
+        role&#x3D;&quot;button&quot;
+        [attr.aria-label]&#x3D;&quot;&#x27;Ver playlist &#x27; + playlist.name&quot;
+      &gt;
+        &lt;div class&#x3D;&quot;playlist-image-container&quot;&gt;
+          &lt;img
+            [src]&#x3D;&quot;playlist.image&quot;
+            [alt]&#x3D;&quot;playlist.name&quot;
+            class&#x3D;&quot;playlist-image&quot;
+          /&gt;
+          &lt;div class&#x3D;&quot;play-overlay&quot;&gt;
+            &lt;button
+              class&#x3D;&quot;play-button&quot;
+              (click)&#x3D;&quot;startPlayingPlaylist(playlist, $event)&quot;
+              (keydown.enter)&#x3D;&quot;startPlayingPlaylist(playlist, $event)&quot;
+              (keydown.space)&#x3D;&quot;startPlayingPlaylist(playlist, $event)&quot;
+              [attr.aria-label]&#x3D;&quot;&#x27;Reproducir playlist &#x27; + playlist.name&quot;
+            &gt;
+              &lt;svg class&#x3D;&quot;w-8 h-8&quot; fill&#x3D;&quot;currentColor&quot; viewBox&#x3D;&quot;0 0 24 24&quot;&gt;
+                &lt;path d&#x3D;&quot;M8 5v14l11-7z&quot; /&gt;
+              &lt;/svg&gt;
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;playlist-info&quot;&gt;
+          &lt;h3 class&#x3D;&quot;playlist-name&quot;&gt;{{ playlist.name }}&lt;/h3&gt;
+          &lt;p class&#x3D;&quot;playlist-description&quot;&gt;{{ playlist.description }}&lt;/p&gt;
+          &lt;span class&#x3D;&quot;playlist-count&quot;&gt;{{ playlist.songCount }} canciones&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab Artistas --&gt;
+    &lt;div *ngSwitchCase&#x3D;&quot;&#x27;artists&#x27;&quot; class&#x3D;&quot;artists-grid&quot;&gt;
+      &lt;button
+        class&#x3D;&quot;create-artist-button&quot;
+        class&#x3D;&quot;artist-card&quot;
+        *ngFor&#x3D;&quot;let artist of mockArtists&quot;
+        (click)&#x3D;&quot;viewArtist(artist)&quot;
+        (keydown.enter)&#x3D;&quot;viewArtist(artist)&quot;
+        (keydown.space)&#x3D;&quot;viewArtist(artist)&quot;
+        tabindex&#x3D;&quot;0&quot;
+        [attr.aria-label]&#x3D;&quot;&#x27;Ver artista &#x27; + artist.name&quot;
+      &gt;
+        &lt;div class&#x3D;&quot;artist-image-container&quot;&gt;
+          &lt;img [src]&#x3D;&quot;artist.image&quot; [alt]&#x3D;&quot;artist.name&quot; class&#x3D;&quot;artist-image&quot; /&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;artist-info&quot;&gt;
+          &lt;h3 class&#x3D;&quot;artist-name&quot;&gt;{{ artist.name }}&lt;/h3&gt;
+          &lt;p class&#x3D;&quot;artist-genre&quot;&gt;{{ artist.genre }}&lt;/p&gt;
+          &lt;span class&#x3D;&quot;artist-followers&quot;
+            &gt;{{ artist.followers }} seguidores&lt;/span
+          &gt;
+        &lt;/div&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tab Álbumes --&gt;
+    &lt;div *ngSwitchCase&#x3D;&quot;&#x27;albums&#x27;&quot; class&#x3D;&quot;albums-grid&quot;&gt;
+      &lt;div
+        class&#x3D;&quot;album-card&quot;
+        *ngFor&#x3D;&quot;let album of mockAlbums&quot;
+        (click)&#x3D;&quot;playAlbum(album)&quot;
+        (keydown.enter)&#x3D;&quot;playAlbum(album)&quot;
+        (keydown.space)&#x3D;&quot;playAlbum(album)&quot;
+        tabindex&#x3D;&quot;0&quot;
+        role&#x3D;&quot;button&quot;
+        [attr.aria-label]&#x3D;&quot;&#x27;Reproducir álbum &#x27; + album.title&quot;
+      &gt;
+        &lt;div class&#x3D;&quot;album-image-container&quot;&gt;
+          &lt;img [src]&#x3D;&quot;album.image&quot; [alt]&#x3D;&quot;album.title&quot; class&#x3D;&quot;album-image&quot; /&gt;
+          &lt;div class&#x3D;&quot;album-overlay&quot;&gt;
+            &lt;button
+              class&#x3D;&quot;play-button&quot;
+              (click)&#x3D;&quot;playAlbum(album); $event.stopPropagation()&quot;
+              (keydown.enter)&#x3D;&quot;playAlbum(album); $event.stopPropagation()&quot;
+              (keydown.space)&#x3D;&quot;playAlbum(album); $event.stopPropagation()&quot;
+              [attr.aria-label]&#x3D;&quot;&#x27;Reproducir álbum &#x27; + album.title&quot;
+            &gt;
+              &lt;svg class&#x3D;&quot;w-6 h-6&quot; fill&#x3D;&quot;currentColor&quot; viewBox&#x3D;&quot;0 0 24 24&quot;&gt;
+                &lt;path d&#x3D;&quot;M8 5v14l11-7z&quot; /&gt;
+              &lt;/svg&gt;
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;album-info&quot;&gt;
+          &lt;h3 class&#x3D;&quot;album-title&quot;&gt;{{ album.title }}&lt;/h3&gt;
+          &lt;p class&#x3D;&quot;album-artist&quot;&gt;{{ album.artist }}&lt;/p&gt;
+          &lt;span class&#x3D;&quot;album-year&quot;&gt;{{ album.year }}&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Estado vacío --&gt;
+  &lt;div *ngIf&#x3D;&quot;isEmpty&quot; class&#x3D;&quot;empty-state&quot;&gt;
+    &lt;div class&#x3D;&quot;empty-icon&quot;&gt;
+      &lt;svg
+        class&#x3D;&quot;w-16 h-16 text-gray-400&quot;
+        fill&#x3D;&quot;none&quot;
+        stroke&#x3D;&quot;currentColor&quot;
+        viewBox&#x3D;&quot;0 0 24 24&quot;
+      &gt;
+        &lt;path
+          stroke-linecap&#x3D;&quot;round&quot;
+          stroke-linejoin&#x3D;&quot;round&quot;
+          stroke-width&#x3D;&quot;1&quot;
+          d&#x3D;&quot;M9 19V6l12-3v13M9 19c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm12-3c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2z&quot;
+        /&gt;
+      &lt;/svg&gt;
+    &lt;/div&gt;
+    &lt;h3 class&#x3D;&quot;empty-title&quot;&gt;Tu biblioteca está vacía&lt;/h3&gt;
+    &lt;p class&#x3D;&quot;empty-description&quot;&gt;
+      Comienza creando tu primera playlist o siguiendo algunos artistas.
+    &lt;/p&gt;
+    &lt;button class&#x3D;&quot;cta-button&quot; (click)&#x3D;&quot;exploreMusic()&quot;&gt;Explorar música&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal para crear playlist --&gt;
+@if (showCreateModal) {
+&lt;div class&#x3D;&quot;modal-backdrop&quot; (click)&#x3D;&quot;onModalBackdropClick($event)&quot;&gt;
+  &lt;div class&#x3D;&quot;modal-content&quot; (click)&#x3D;&quot;$event.stopPropagation()&quot;&gt;
+    &lt;div class&#x3D;&quot;modal-header&quot;&gt;
+      &lt;h2&gt;Crear nueva playlist&lt;/h2&gt;
+      &lt;button
+        class&#x3D;&quot;close-button&quot;
+        (click)&#x3D;&quot;closeModal()&quot;
+        aria-label&#x3D;&quot;Cerrar modal&quot;
+      &gt;
+        &lt;svg
+          width&#x3D;&quot;24&quot;
+          height&#x3D;&quot;24&quot;
+          viewBox&#x3D;&quot;0 0 24 24&quot;
+          fill&#x3D;&quot;none&quot;
+          stroke&#x3D;&quot;currentColor&quot;
+          stroke-width&#x3D;&quot;2&quot;
+        &gt;
+          &lt;line x1&#x3D;&quot;18&quot; y1&#x3D;&quot;6&quot; x2&#x3D;&quot;6&quot; y2&#x3D;&quot;18&quot;&gt;&lt;/line&gt;
+          &lt;line x1&#x3D;&quot;6&quot; y1&#x3D;&quot;6&quot; x2&#x3D;&quot;18&quot; y2&#x3D;&quot;18&quot;&gt;&lt;/line&gt;
+        &lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;form (ngSubmit)&#x3D;&quot;savePlaylist()&quot; class&#x3D;&quot;playlist-form&quot;&gt;
+      &lt;div class&#x3D;&quot;form-group&quot;&gt;
+        &lt;label for&#x3D;&quot;playlistName&quot;&gt;Nombre de la playlist*&lt;/label&gt;
+        &lt;input
+          type&#x3D;&quot;text&quot;
+          id&#x3D;&quot;playlistName&quot;
+          [(ngModel)]&#x3D;&quot;newPlaylist.name&quot;
+          name&#x3D;&quot;playlistName&quot;
+          placeholder&#x3D;&quot;Mi playlist #1&quot;
+          maxlength&#x3D;&quot;100&quot;
+          required
+          autocomplete&#x3D;&quot;off&quot;
+        /&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-group&quot;&gt;
+        &lt;label for&#x3D;&quot;playlistDescription&quot;&gt;Descripción&lt;/label&gt;
+        &lt;textarea
+          id&#x3D;&quot;playlistDescription&quot;
+          [(ngModel)]&#x3D;&quot;newPlaylist.description&quot;
+          name&#x3D;&quot;playlistDescription&quot;
+          placeholder&#x3D;&quot;Añade una descripción opcional&quot;
+          rows&#x3D;&quot;3&quot;
+          maxlength&#x3D;&quot;300&quot;
+        &gt;&lt;/textarea&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-group&quot;&gt;
+        &lt;label&gt;Imagen de la playlist&lt;/label&gt;
+        &lt;div class&#x3D;&quot;image-upload-section&quot;&gt;
+          &lt;!-- Hidden file input --&gt;
+          &lt;input
+            type&#x3D;&quot;file&quot;
+            id&#x3D;&quot;imageInput&quot;
+            accept&#x3D;&quot;image/*&quot;
+            (change)&#x3D;&quot;onImageSelected($event)&quot;
+            style&#x3D;&quot;display: none&quot;
+          /&gt;
+
+          &lt;!-- Image preview or placeholder --&gt;
+          &lt;div class&#x3D;&quot;image-preview-container&quot;&gt;
+            @if (imagePreviewUrl) {
+            &lt;div class&#x3D;&quot;image-preview&quot;&gt;
+              &lt;img [src]&#x3D;&quot;imagePreviewUrl&quot; alt&#x3D;&quot;Vista previa&quot; /&gt;
+              &lt;button
+                type&#x3D;&quot;button&quot;
+                class&#x3D;&quot;remove-image-btn&quot;
+                (click)&#x3D;&quot;removeImage()&quot;
+                aria-label&#x3D;&quot;Eliminar imagen&quot;
+              &gt;
+                &lt;svg
+                  width&#x3D;&quot;16&quot;
+                  height&#x3D;&quot;16&quot;
+                  viewBox&#x3D;&quot;0 0 24 24&quot;
+                  fill&#x3D;&quot;none&quot;
+                  stroke&#x3D;&quot;currentColor&quot;
+                  stroke-width&#x3D;&quot;2&quot;
+                &gt;
+                  &lt;line x1&#x3D;&quot;18&quot; y1&#x3D;&quot;6&quot; x2&#x3D;&quot;6&quot; y2&#x3D;&quot;18&quot;&gt;&lt;/line&gt;
+                  &lt;line x1&#x3D;&quot;6&quot; y1&#x3D;&quot;6&quot; x2&#x3D;&quot;18&quot; y2&#x3D;&quot;18&quot;&gt;&lt;/line&gt;
+                &lt;/svg&gt;
+              &lt;/button&gt;
+            &lt;/div&gt;
+            } @else {
+            &lt;div class&#x3D;&quot;image-placeholder&quot; (click)&#x3D;&quot;triggerImageUpload()&quot;&gt;
+              &lt;svg
+                width&#x3D;&quot;48&quot;
+                height&#x3D;&quot;48&quot;
+                viewBox&#x3D;&quot;0 0 24 24&quot;
+                fill&#x3D;&quot;none&quot;
+                stroke&#x3D;&quot;currentColor&quot;
+                stroke-width&#x3D;&quot;1.5&quot;
+              &gt;
+                &lt;rect x&#x3D;&quot;3&quot; y&#x3D;&quot;3&quot; width&#x3D;&quot;18&quot; height&#x3D;&quot;18&quot; rx&#x3D;&quot;2&quot; ry&#x3D;&quot;2&quot; /&gt;
+                &lt;circle cx&#x3D;&quot;9&quot; cy&#x3D;&quot;9&quot; r&#x3D;&quot;2&quot; /&gt;
+                &lt;path d&#x3D;&quot;m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21&quot; /&gt;
+              &lt;/svg&gt;
+              &lt;span&gt;Haz clic para agregar una imagen&lt;/span&gt;
+            &lt;/div&gt;
+            }
+          &lt;/div&gt;
+
+          &lt;!-- Upload button --&gt;
+          @if (!imagePreviewUrl) {
+          &lt;button
+            type&#x3D;&quot;button&quot;
+            class&#x3D;&quot;upload-btn&quot;
+            (click)&#x3D;&quot;triggerImageUpload()&quot;
+          &gt;
+            &lt;svg
+              width&#x3D;&quot;20&quot;
+              height&#x3D;&quot;20&quot;
+              viewBox&#x3D;&quot;0 0 24 24&quot;
+              fill&#x3D;&quot;none&quot;
+              stroke&#x3D;&quot;currentColor&quot;
+              stroke-width&#x3D;&quot;2&quot;
+            &gt;
+              &lt;path d&#x3D;&quot;M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4&quot; /&gt;
+              &lt;polyline points&#x3D;&quot;7,10 12,15 17,10&quot; /&gt;
+              &lt;line x1&#x3D;&quot;12&quot; y1&#x3D;&quot;15&quot; x2&#x3D;&quot;12&quot; y2&#x3D;&quot;3&quot; /&gt;
+            &lt;/svg&gt;
+            Subir imagen
+          &lt;/button&gt;
+          }
+
+          &lt;p class&#x3D;&quot;upload-hint&quot;&gt;
+            Formatos soportados: JPEG, PNG, GIF, WebP. Máximo 5MB.
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;form-group checkbox-group&quot;&gt;
+        &lt;label class&#x3D;&quot;checkbox-container&quot;&gt;
+          &lt;input
+            type&#x3D;&quot;checkbox&quot;
+            [(ngModel)]&#x3D;&quot;newPlaylist.isPrivate&quot;
+            name&#x3D;&quot;isPrivate&quot;
+          /&gt;
+          &lt;span class&#x3D;&quot;checkmark&quot;&gt;&lt;/span&gt;
+          Hacer esta playlist privada
+        &lt;/label&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;modal-actions&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;cancel-button&quot; (click)&#x3D;&quot;closeModal()&quot;&gt;
+          Cancelar
+        &lt;/button&gt;
+        &lt;button
+          type&#x3D;&quot;submit&quot;
+          class&#x3D;&quot;create-button&quot;
+          [disabled]&#x3D;&quot;!newPlaylist.name.trim()&quot;
+        &gt;
+          Crear
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+}
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="library-container">  <div class="library-header">    <h1 class="page-title">Tu Biblioteca</h1>    <div class="header-actions">      <button class="add-playlist-btn" (click)="createPlaylist()">        <svg          class="w-5 h-5"          fill="none"          stroke="currentColor"          viewBox="0 0 24 24"        >          <path            stroke-linecap="round"            stroke-linejoin="round"            stroke-width="2"            d="M12 4v16m8-8H4"          />        </svg>        Crear Playlist      </button>    </div>  </div>  <div class="tabs-container">    <div class="tabs">      <button        class="tab-button"        [class.active]="activeTab === \'playlists\'"        (click)="setActiveTab(\'playlists\')"      >        Playlists      </button>      <button        class="tab-button"        [class.active]="activeTab === \'artists\'"        (click)="setActiveTab(\'artists\')"      >        Artistas      </button>      <button        class="tab-button"        [class.active]="activeTab === \'albums\'"        (click)="setActiveTab(\'albums\')"      >        Álbumes      </button>    </div>  </div>  <div class="content" [ngSwitch]="activeTab">    <!-- Tab Playlists -->    <div *ngSwitchCase="\'playlists\'" class="playlists-grid">      <div        class="playlist-card"        *ngFor="let playlist of mockPlaylists"        (click)="playPlaylist(playlist)"        (keydown.enter)="playPlaylist(playlist)"        (keydown.space)="playPlaylist(playlist)"        tabindex="0"        role="button"        [attr.aria-label]="\'Ver playlist \' + playlist.name"      >        <div class="playlist-image-container">          <img            [src]="playlist.image"            [alt]="playlist.name"            class="playlist-image"          />          <div class="play-overlay">            <button              class="play-button"              (click)="startPlayingPlaylist(playlist, $event)"              (keydown.enter)="startPlayingPlaylist(playlist, $event)"              (keydown.space)="startPlayingPlaylist(playlist, $event)"              [attr.aria-label]="\'Reproducir playlist \' + playlist.name"            >              <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">                <path d="M8 5v14l11-7z" />              </svg>            </button>          </div>        </div>        <div class="playlist-info">          <h3 class="playlist-name">{{ playlist.name }}</h3>          <p class="playlist-description">{{ playlist.description }}</p>          <span class="playlist-count">{{ playlist.songCount }} canciones</span>        </div>      </div>    </div>    <!-- Tab Artistas -->    <div *ngSwitchCase="\'artists\'" class="artists-grid">      <button        class="create-artist-button"        class="artist-card"        *ngFor="let artist of mockArtists"        (click)="viewArtist(artist)"        (keydown.enter)="viewArtist(artist)"        (keydown.space)="viewArtist(artist)"        tabindex="0"        [attr.aria-label]="\'Ver artista \' + artist.name"      >        <div class="artist-image-container">          <img [src]="artist.image" [alt]="artist.name" class="artist-image" />        </div>        <div class="artist-info">          <h3 class="artist-name">{{ artist.name }}</h3>          <p class="artist-genre">{{ artist.genre }}</p>          <span class="artist-followers"            >{{ artist.followers }} seguidores</span          >        </div>      </button>    </div>    <!-- Tab Álbumes -->    <div *ngSwitchCase="\'albums\'" class="albums-grid">      <div        class="album-card"        *ngFor="let album of mockAlbums"        (click)="playAlbum(album)"        (keydown.enter)="playAlbum(album)"        (keydown.space)="playAlbum(album)"        tabindex="0"        role="button"        [attr.aria-label]="\'Reproducir álbum \' + album.title"      >        <div class="album-image-container">          <img [src]="album.image" [alt]="album.title" class="album-image" />          <div class="album-overlay">            <button              class="play-button"              (click)="playAlbum(album); $event.stopPropagation()"              (keydown.enter)="playAlbum(album); $event.stopPropagation()"              (keydown.space)="playAlbum(album); $event.stopPropagation()"              [attr.aria-label]="\'Reproducir álbum \' + album.title"            >              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">                <path d="M8 5v14l11-7z" />              </svg>            </button>          </div>        </div>        <div class="album-info">          <h3 class="album-title">{{ album.title }}</h3>          <p class="album-artist">{{ album.artist }}</p>          <span class="album-year">{{ album.year }}</span>        </div>      </div>    </div>  </div>  <!-- Estado vacío -->  <div *ngIf="isEmpty" class="empty-state">    <div class="empty-icon">      <svg        class="w-16 h-16 text-gray-400"        fill="none"        stroke="currentColor"        viewBox="0 0 24 24"      >        <path          stroke-linecap="round"          stroke-linejoin="round"          stroke-width="1"          d="M9 19V6l12-3v13M9 19c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm12-3c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2z"        />      </svg>    </div>    <h3 class="empty-title">Tu biblioteca está vacía</h3>    <p class="empty-description">      Comienza creando tu primera playlist o siguiendo algunos artistas.    </p>    <button class="cta-button" (click)="exploreMusic()">Explorar música</button>  </div></div><!-- Modal para crear playlist -->@if (showCreateModal) {<div class="modal-backdrop" (click)="onModalBackdropClick($event)">  <div class="modal-content" (click)="$event.stopPropagation()">    <div class="modal-header">      <h2>Crear nueva playlist</h2>      <button        class="close-button"        (click)="closeModal()"        aria-label="Cerrar modal"      >        <svg          width="24"          height="24"          viewBox="0 0 24 24"          fill="none"          stroke="currentColor"          stroke-width="2"        >          <line x1="18" y1="6" x2="6" y2="18"></line>          <line x1="6" y1="6" x2="18" y2="18"></line>        </svg>      </button>    </div>    <form (ngSubmit)="savePlaylist()" class="playlist-form">      <div class="form-group">        <label for="playlistName">Nombre de la playlist*</label>        <input          type="text"          id="playlistName"          [(ngModel)]="newPlaylist.name"          name="playlistName"          placeholder="Mi playlist #1"          maxlength="100"          required          autocomplete="off"        />      </div>      <div class="form-group">        <label for="playlistDescription">Descripción</label>        <textarea          id="playlistDescription"          [(ngModel)]="newPlaylist.description"          name="playlistDescription"          placeholder="Añade una descripción opcional"          rows="3"          maxlength="300"        ></textarea>      </div>      <div class="form-group">        <label>Imagen de la playlist</label>        <div class="image-upload-section">          <!-- Hidden file input -->          <input            type="file"            id="imageInput"            accept="image/*"            (change)="onImageSelected($event)"            style="display: none"          />          <!-- Image preview or placeholder -->          <div class="image-preview-container">            @if (imagePreviewUrl) {            <div class="image-preview">              <img [src]="imagePreviewUrl" alt="Vista previa" />              <button                type="button"                class="remove-image-btn"                (click)="removeImage()"                aria-label="Eliminar imagen"              >                <svg                  width="16"                  height="16"                  viewBox="0 0 24 24"                  fill="none"                  stroke="currentColor"                  stroke-width="2"                >                  <line x1="18" y1="6" x2="6" y2="18"></line>                  <line x1="6" y1="6" x2="18" y2="18"></line>                </svg>              </button>            </div>            } @else {            <div class="image-placeholder" (click)="triggerImageUpload()">              <svg                width="48"                height="48"                viewBox="0 0 24 24"                fill="none"                stroke="currentColor"                stroke-width="1.5"              >                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />                <circle cx="9" cy="9" r="2" />                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />              </svg>              <span>Haz clic para agregar una imagen</span>            </div>            }          </div>          <!-- Upload button -->          @if (!imagePreviewUrl) {          <button            type="button"            class="upload-btn"            (click)="triggerImageUpload()"          >            <svg              width="20"              height="20"              viewBox="0 0 24 24"              fill="none"              stroke="currentColor"              stroke-width="2"            >              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />              <polyline points="7,10 12,15 17,10" />              <line x1="12" y1="15" x2="12" y2="3" />            </svg>            Subir imagen          </button>          }          <p class="upload-hint">            Formatos soportados: JPEG, PNG, GIF, WebP. Máximo 5MB.          </p>        </div>      </div>      <div class="form-group checkbox-group">        <label class="checkbox-container">          <input            type="checkbox"            [(ngModel)]="newPlaylist.isPrivate"            name="isPrivate"          />          <span class="checkmark"></span>          Hacer esta playlist privada        </label>      </div>      <div class="modal-actions">        <button type="button" class="cancel-button" (click)="closeModal()">          Cancelar        </button>        <button          type="submit"          class="create-button"          [disabled]="!newPlaylist.name.trim()"        >          Crear        </button>      </div>    </form>  </div></div>}</div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'ArtistComponent', 'selector': 'app-artist'},{'name': 'AsideMenu', 'selector': 'app-aside-menu'},{'name': 'Card', 'selector': 'app-card'},{'name': 'CardPlayButton', 'selector': 'app-card-play-button'},{'name': 'ConnectionTestComponent', 'selector': 'app-connection-test'},{'name': 'CurrentSongComponent', 'selector': 'app-current-song'},{'name': 'ExploreComponent', 'selector': 'app-explore'},{'name': 'Greeting', 'selector': 'app-greeting'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'LibraryComponent', 'selector': 'app-library'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MusicsTable', 'selector': 'app-musics-table'},{'name': 'MusicsTablePlay', 'selector': 'app-musics-table-play'},{'name': 'Player', 'selector': 'app-player'},{'name': 'PlayerControlButtonBar', 'selector': 'app-player-control-button-bar'},{'name': 'PlayerCurrentSong', 'selector': 'app-player-current-song'},{'name': 'PlayerSoundControl', 'selector': 'app-player-sound-control'},{'name': 'PlayerVolumeControl', 'selector': 'app-player-volume-control'},{'name': 'PlaylistComponent', 'selector': 'app-playlist'},{'name': 'PlayListItemCard', 'selector': 'app-play-list-item-card'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'ResetPasswordComponent', 'selector': 'app-reset-password'},{'name': 'SearchComponent', 'selector': 'app-search'},{'name': 'SideMenuCard', 'selector': 'app-side-menu-card'},{'name': 'SideMenuItem', 'selector': 'app-side-menu-item'},{'name': 'UserPerfilComponent', 'selector': 'app-user-perfil'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'LibraryComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'LibraryComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

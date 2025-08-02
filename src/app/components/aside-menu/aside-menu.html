@@ -22,7 +22,7 @@
         Mi Perfil
       </app-side-menu-item>
 
-      <app-side-menu-item  [href]="'#'" (click)="logout()">
+      <app-side-menu-item  [href]="'#'" (click)="logout()" (keydown)="onLogoutKeyDown($event)">
         <mat-icon>logout</mat-icon>
         Cerrar Sesión
       </app-side-menu-item>

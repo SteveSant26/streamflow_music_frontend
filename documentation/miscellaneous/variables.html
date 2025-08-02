@@ -1,0 +1,1076 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>b documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">b documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content miscellaneous-variables">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Variables</li>
+</ol>
+
+<section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <ul class="index-list">
+                        <li>
+                            <a href="#angularApp" title="src/server.ts" ><b>angularApp</b>&nbsp;&nbsp;&nbsp;(src/.../server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#app" title="src/server.ts" ><b>app</b>&nbsp;&nbsp;&nbsp;(src/.../server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#appConfig" title="src/app/app.config.ts" ><b>appConfig</b>&nbsp;&nbsp;&nbsp;(src/.../app.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#AUTH_REPOSITORY_TOKEN" title="src/app/infrastructure/tokens/auth.tokens.ts" ><b>AUTH_REPOSITORY_TOKEN</b>&nbsp;&nbsp;&nbsp;(src/.../auth.tokens.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#AUTH_SERVICE_TOKEN" title="src/app/infrastructure/tokens/auth.tokens.ts" ><b>AUTH_SERVICE_TOKEN</b>&nbsp;&nbsp;&nbsp;(src/.../auth.tokens.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authGuard" title="src/app/shared/guards/auth.guard.ts" ><b>authGuard</b>&nbsp;&nbsp;&nbsp;(src/.../auth.guard.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authGuardRedirect" title="src/app/shared/guards/auth.guard.ts" ><b>authGuardRedirect</b>&nbsp;&nbsp;&nbsp;(src/.../auth.guard.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authGuardRedirectIfAuthenticated" title="src/app/shared/guards/auth.guard.ts" ><b>authGuardRedirectIfAuthenticated</b>&nbsp;&nbsp;&nbsp;(src/.../auth.guard.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authGuardRedirectIfNotAuthenticated" title="src/app/shared/guards/auth.guard.ts" ><b>authGuardRedirectIfNotAuthenticated</b>&nbsp;&nbsp;&nbsp;(src/.../auth.guard.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authInterceptor" title="src/app/shared/utils/auth-interceptor.ts" ><b>authInterceptor</b>&nbsp;&nbsp;&nbsp;(src/.../auth-interceptor.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authProviders" title="src/app/infrastructure/providers/auth.providers.ts" ><b>authProviders</b>&nbsp;&nbsp;&nbsp;(src/.../auth.providers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#authProviders" title="src/app/shared/providers/auth.providers.ts" ><b>authProviders</b>&nbsp;&nbsp;&nbsp;(src/.../auth.providers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#bootstrap" title="src/main.server.ts" ><b>bootstrap</b>&nbsp;&nbsp;&nbsp;(src/.../main.server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#browserDistFolder" title="src/server.ts" ><b>browserDistFolder</b>&nbsp;&nbsp;&nbsp;(src/.../server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#config" title="src/app/app.config.server.ts" ><b>config</b>&nbsp;&nbsp;&nbsp;(src/.../app.config.server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#environment" title="src/environments/environment.development.ts" ><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.development.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#environment" title="src/environments/environment.prod.ts" ><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.prod.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#environment" title="src/environments/environment.ts" ><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#reqHandler" title="src/server.ts" ><b>reqHandler</b>&nbsp;&nbsp;&nbsp;(src/.../server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#ROUTES_CONFIG_AUTH" title="src/app/config/routes-auth.config.ts" ><b>ROUTES_CONFIG_AUTH</b>&nbsp;&nbsp;&nbsp;(src/.../routes-auth.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#serverConfig" title="src/app/app.config.server.ts" ><b>serverConfig</b>&nbsp;&nbsp;&nbsp;(src/.../app.config.server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#serverRoutes" title="src/app/app.routes.server.ts" ><b>serverRoutes</b>&nbsp;&nbsp;&nbsp;(src/.../app.routes.server.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#toUser" title="src/app/shared/utils/user.map.ts" ><b>toUser</b>&nbsp;&nbsp;&nbsp;(src/.../user.map.ts)</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <h3>src/server.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="angularApp"></a>
+                    <span class="name">
+                        <span ><b>angularApp</b></span>
+                        <a href="#angularApp"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new AngularNodeAppEngine()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="app"></a>
+                    <span class="name">
+                        <span ><b>app</b></span>
+                        <a href="#app"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>express()</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="browserDistFolder"></a>
+                    <span class="name">
+                        <span ><b>browserDistFolder</b></span>
+                        <a href="#browserDistFolder"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>join(import.meta.dirname, &#x27;../browser&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reqHandler"></a>
+                    <span class="name">
+                        <span ><b>reqHandler</b></span>
+                        <a href="#reqHandler"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createNodeRequestHandler(app)</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app.config.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appConfig"></a>
+                    <span class="name">
+                        <span ><b>appConfig</b></span>
+                        <a href="#appConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../components/App.html" target="_self" >ApplicationConfig</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideClientHydration(),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    ...authProviders,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthTokenInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
+  ],
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/infrastructure/tokens/auth.tokens.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="AUTH_REPOSITORY_TOKEN"></a>
+                    <span class="name">
+                        <span ><b>AUTH_REPOSITORY_TOKEN</b></span>
+                        <a href="#AUTH_REPOSITORY_TOKEN"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;IAuthRepository&gt;(&#x27;AuthRepository&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="AUTH_SERVICE_TOKEN"></a>
+                    <span class="name">
+                        <span ><b>AUTH_SERVICE_TOKEN</b></span>
+                        <a href="#AUTH_SERVICE_TOKEN"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;IAuthService&gt;(&#x27;AuthService&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/shared/guards/auth.guard.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authGuard"></a>
+                    <span class="name">
+                        <span ><b>authGuard</b></span>
+                        <a href="#authGuard"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>CanActivateFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {
+  const authService &#x3D; inject(AuthService);
+  const router &#x3D; inject(Router);
+
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+
+  // Si no está autenticado, redirigir a la página de login
+  return router.createUrlTree([&#x27;/login&#x27;]);
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authGuardRedirect"></a>
+                    <span class="name">
+                        <span ><b>authGuardRedirect</b></span>
+                        <a href="#authGuardRedirect"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>CanActivateFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {
+  const authService &#x3D; inject(AuthService);
+  const router &#x3D; inject(Router);
+
+  if (authService.isAuthenticated()) {
+    return router.createUrlTree([&#x27;/home&#x27;]);
+  }
+
+  // Si no está autenticado, redirigir a la página de login
+  return router.createUrlTree([&#x27;/login&#x27;]);
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authGuardRedirectIfAuthenticated"></a>
+                    <span class="name">
+                        <span ><b>authGuardRedirectIfAuthenticated</b></span>
+                        <a href="#authGuardRedirectIfAuthenticated"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>CanActivateFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {
+  const authService &#x3D; inject(AuthService);
+  const router &#x3D; inject(Router);
+
+  if (authService.isAuthenticated()) {
+    return router.createUrlTree([&#x27;/home&#x27;]);
+  }
+
+  // Si no está autenticado, redirigir a la página de login
+  return true;
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authGuardRedirectIfNotAuthenticated"></a>
+                    <span class="name">
+                        <span ><b>authGuardRedirectIfNotAuthenticated</b></span>
+                        <a href="#authGuardRedirectIfNotAuthenticated"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>CanActivateFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {
+  const authService &#x3D; inject(AuthService);
+  const router &#x3D; inject(Router);
+
+  if (!authService.isAuthenticated()) {
+    return router.createUrlTree([&#x27;/login&#x27;]);
+  }
+
+  return true;
+  // Si no está autenticado, redirigir a la página de login
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/shared/utils/auth-interceptor.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authInterceptor"></a>
+                    <span class="name">
+                        <span ><b>authInterceptor</b></span>
+                        <a href="#authInterceptor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HttpInterceptorFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(req, next) &#x3D;&gt; {
+  const authService &#x3D; inject(AuthService);
+  const token &#x3D; authService.session()?.access_token;
+
+  if (token) {
+    const cloned &#x3D; req.clone({
+      headers: req.headers.set(&quot;Authorization&quot;, &#x60;Bearer ${token}&#x60;),
+    });
+    return next(cloned);
+  }
+
+  return next(req);
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/infrastructure/providers/auth.providers.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authProviders"></a>
+                    <span class="name">
+                        <span ><b>authProviders</b></span>
+                        <a href="#authProviders"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Provider[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    provide: AUTH_REPOSITORY_TOKEN,
+    useClass: SupabaseAuthRepository
+  },
+  {
+    provide: IAuthRepository,
+    useClass: SupabaseAuthRepository
+  },
+  AuthStateService
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/shared/providers/auth.providers.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authProviders"></a>
+                    <span class="name">
+                        <span ><b>authProviders</b></span>
+                        <a href="#authProviders"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Provider[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  SupabaseService,
+  AuthService,
+  {
+    provide: AuthRepository,
+    useClass: AuthRepositoryImpl,
+  },
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/main.server.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="bootstrap"></a>
+                    <span class="name">
+                        <span ><b>bootstrap</b></span>
+                        <a href="#bootstrap"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; bootstrapApplication(App, config)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app.config.server.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="config"></a>
+                    <span class="name">
+                        <span ><b>config</b></span>
+                        <a href="#config"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>mergeApplicationConfig(appConfig, serverConfig)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serverConfig"></a>
+                    <span class="name">
+                        <span ><b>serverConfig</b></span>
+                        <a href="#serverConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../components/App.html" target="_self" >ApplicationConfig</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  providers: [provideServerRendering(withRoutes(serverRoutes))],
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/environments/environment.development.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="environment"></a>
+                    <span class="name">
+                        <span ><b>environment</b></span>
+                        <a href="#environment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  apiUrl: &quot;http://127.0.0.1:8000/&quot;,
+  API_URL: &quot;http://127.0.0.1:8000/&quot;,
+  STORAGE_TOKEN_KEY: &quot;app.token&quot;,
+
+  SUPABASE: {
+    SUPABASE_PROJECT_ID: &quot;ebipcvxpxrqdihhhhfyf&quot;,
+    SUPABASE_URL: &quot;https://ebipcvxpxrqdihhhhfyf.supabase.co&quot;,
+
+    SUPABASE_ANON_KEY:
+      &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViaXBjdnhweHJxZGloaGhoZnlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMDg1OTcsImV4cCI6MjA2ODg4NDU5N30.gTfW1dGTp_SUqMePKK2pV77PQwpe4Yv2lxmRj1ZdH6w&quot;,
+    SUPABASE_SERVICE_KEY:
+      &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViaXBjdnhweHJxZGloaGhoZnlmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzMwODU5NywiZXhwIjoyMDY4ODg0NTk3fQ.RW0stsub_zDz69bMYnTcy8pdTBNbBOZE29kRx6VQHDw&quot;,
+
+    SUPABASE_JWT_SECRET:
+      &quot;nvUoDANFsKWi4AfmbYsnog57b3qYAbbVy4vxl0v3YxeiTumVrg7+D5sVo8kbLWRJHrkBbNuiILScSihf0i21hw&#x3D;&#x3D;&quot;,
+
+    SUPABASE_JWT_ALGORITHM: &quot;HS256&quot;,
+  },
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/environments/environment.prod.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="environment"></a>
+                    <span class="name">
+                        <span ><b>environment</b></span>
+                        <a href="#environment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  production: true,
+  apiUrl: &quot;https://tu-backend-produccion.com/api&quot;, // URL de producción de tu backend
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/environments/environment.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="environment"></a>
+                    <span class="name">
+                        <span ><b>environment</b></span>
+                        <a href="#environment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  apiUrl: &quot;http://127.0.0.1:8000/api&quot;,
+  API_URL: &quot;http://127.0.0.1:8000/&quot;,
+  STORAGE_TOKEN_KEY: &quot;app.token&quot;,
+
+  SUPABASE: {
+    SUPABASE_PROJECT_ID: &quot;ebipcvxpxrqdihhhhfyf&quot;,
+    SUPABASE_URL: &quot;https://ebipcvxpxrqdihhhhfyf.supabase.co&quot;,
+
+    SUPABASE_ANON_KEY:
+      &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViaXBjdnhweHJxZGloaGhoZnlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMDg1OTcsImV4cCI6MjA2ODg4NDU5N30.gTfW1dGTp_SUqMePKK2pV77PQwpe4Yv2lxmRj1ZdH6w&quot;,
+    SUPABASE_SERVICE_KEY:
+      &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImViaXBjdnhweHJxZGloaGhoZnlmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzMwODU5NywiZXhwIjoyMDY4ODg0NTk3fQ.RW0stsub_zDz69bMYnTcy8pdTBNbBOZE29kRx6VQHDw&quot;,
+
+    SUPABASE_JWT_SECRET:
+      &quot;nvUoDANFsKWi4AfmbYsnog57b3qYAbbVy4vxl0v3YxeiTumVrg7+D5sVo8kbLWRJHrkBbNuiILScSihf0i21hw&#x3D;&#x3D;&quot;,
+
+    SUPABASE_JWT_ALGORITHM: &quot;HS256&quot;,
+  },
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/config/routes-auth.config.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ROUTES_CONFIG_AUTH"></a>
+                    <span class="name">
+                        <span ><b>ROUTES_CONFIG_AUTH</b></span>
+                        <a href="#ROUTES_CONFIG_AUTH"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  BASE_URL: {
+    path: &#x27;auth&#x27;,
+    link: &#x27;auth&#x27;,
+  },
+  LOGIN: {
+    path: &#x27;login&#x27;,
+    link: &#x27;/auth/login&#x27;,
+  },
+  REGISTER: {
+    path: &#x27;register&#x27;,
+    link: &#x27;/auth/register&#x27;,
+  },
+  RESET_PASSWORD: {
+    path: &#x27;reset-password&#x27;,
+    link: &#x27;/auth/reset-password&#x27;,
+  },
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app.routes.server.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serverRoutes"></a>
+                    <span class="name">
+                        <span ><b>serverRoutes</b></span>
+                        <a href="#serverRoutes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ServerRoute[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  {
+    path: &#x27;**&#x27;,
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: &#x27;artist/:id&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;playlist/:id&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;home&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;search&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;library&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;explore&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;currentSong&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;profile&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x60;${ROUTES_CONFIG_AUTH.BASE_URL.path}/${ROUTES_CONFIG_AUTH.LOGIN.path}&#x60;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x60;${ROUTES_CONFIG_AUTH.BASE_URL.path}/${ROUTES_CONFIG_AUTH.REGISTER.path}&#x60;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x60;${ROUTES_CONFIG_AUTH.BASE_URL.path}/${ROUTES_CONFIG_AUTH.RESET_PASSWORD.path}&#x60;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;explore&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;library&#x27;,
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: &#x27;currentSong&#x27;,
+    renderMode: RenderMode.Client,
+  },
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/shared/utils/user.map.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toUser"></a>
+                    <span class="name">
+                        <span ><b>toUser</b></span>
+                        <a href="#toUser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(dto: UserDTO): User &#x3D;&gt; ({
+  id: dto.id,
+  email: dto.email,
+  name: dto.name,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+})</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-variables';
+            var COMPODOC_CURRENT_PAGE_URL = 'variables.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

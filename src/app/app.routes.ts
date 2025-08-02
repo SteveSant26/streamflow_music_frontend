@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './shared/guards/auth.guard';
-import { ROUTES_CONFIG_AUTH } from './config/routes-auth.config';
+import { ROUTES_CONFIG_AUTH } from './config/routes-config/routes-auth.config';
 import { AUTH_ROUTES } from './routes/app.routes.auth';
 
 export const routes: Routes = [
@@ -27,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'currentSong',
     loadComponent: () =>
-      import('./pages/currentsong/current-song').then(
+      import('./presentation/pages/music/currentsong/current-song').then(
         (m) => m.CurrentSongComponent,
       ),
   },
