@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './user-perfil.html',
   styleUrls: ['./user-perfil.css'],
 })
-export class UserPerfilComponent {
+export class UserPerfilComponent implements OnInit {
   readonly fb: FormBuilder = inject(FormBuilder);
   private readonly getUserProfileUseCase: GetUserProfileUseCase = inject(
     GetUserProfileUseCase,
@@ -42,8 +42,14 @@ export class UserPerfilComponent {
     email: ['', [Validators.required, Validators.email]],
   });
 
-  // Comentado temporalmente hasta que el backend esté listo
-  /*
+  ngOnInit(): void {
+    this.loadUserData();
+  }
+
+  loadUserData(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    this.successMessage.set('');
     console.log('🔍 Cargando datos del usuario desde backend...');
 
     // Usar el caso de uso para obtener el perfil
@@ -71,7 +77,7 @@ export class UserPerfilComponent {
         this.isLoading.set(false);
       },
     });
-    */
+  }
 
   enableEdit(): void {
     this.isEditing.set(true);
@@ -94,35 +100,10 @@ export class UserPerfilComponent {
       this.errorMessage.set('');
       this.successMessage.set('');
 
-      const formData = this.profileForm.value;
-      console.log('🔄 Guardando perfil (mock):', formData);
-
-      // Simular guardado con datos mock
-      setTimeout(() => {
-        const updatedUser: GetUserProfileDto = {
-          id: '1',
-          email: formData.email || '',
-          profile_picture: this.currentUser()?.profile_picture || null,
-        };
-
-        console.log('✅ Perfil actualizado exitosamente (mock):', updatedUser);
-
-        // Actualizar datos locales
-        this.currentUser.set(updatedUser);
-        this.isEditing.set(false);
-        this.isLoading.set(false);
-
-        // Mostrar mensaje de éxito
-        this.successMessage.set('Perfil actualizado exitosamente');
-
-        // Limpiar mensaje después de 3 segundos
-        setTimeout(() => {
-          this.successMessage.set('');
-        }, 3000);
-      }, 1500);
-
       // Comentado temporalmente hasta que el backend esté listo
-      /*
+
+      const formData = this.profileForm.value;
+
       // Usar caso de uso para actualizar perfil
       this.updateUserProfileUseCase
         .execute({ email: formData.email as string })
@@ -151,7 +132,6 @@ export class UserPerfilComponent {
             this.isLoading.set(false);
           },
         });
-      */
     } else {
       console.log('❌ Formulario inválido');
       this.markFormGroupTouched();
