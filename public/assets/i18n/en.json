@@ -15,5 +15,30 @@
     "TWITTER": "Log in with Twitter|X",
     "DISCORD": "Log in with Discord",
     "RIGHTS": "All rights reserved."
+  },
+  "REGISTER": {
+    "TITLE": "Create Account",
+    "NAME": "Full Name",
+    "NAME_PLACEHOLDER": "Your full name",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Your email here",
+    "PASSWORD": "Password",
+    "ACCEPT": "I accept the",
+    "TERMS": "terms and conditions",
+    "LOADING": "Creating account...",
+    "BUTTON": "Create Account",
+    "HAVE_ACCOUNT": "Already have an account?",
+    "LOGIN_LINK": "Log in here",
+    "GOOGLE": "Sign up with Google",
+    "GITHUB": "Sign up with GitHub",
+    "TWITTER": "Sign up with Twitter|X",
+    "DISCORD": "Sign up with Discord"
+  },
+  "RESET": {
+    "TITLE": "Reset Password",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Your email here",
+    "LOADING": "Sending...",
+    "BUTTON": "Send recovery email"
   }
 }
