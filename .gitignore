@@ -10,6 +10,7 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+package-lock.json
 
 # IDEs and editors
 .idea/
@@ -39,4 +40,16 @@ testem.log
 
 # System files
 .DS_Store
+
 Thumbs.db
+
+# SonarQube
+.scannerwork/
+.sonar/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+
