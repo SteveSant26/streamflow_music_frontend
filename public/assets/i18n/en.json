@@ -40,5 +40,12 @@
     "EMAIL_PLACEHOLDER": "Your email here",
     "LOADING": "Sending...",
     "BUTTON": "Send recovery email"
+  },
+  "NAV": {
+    "HOME": "Home",
+    "SEARCH": "Search",
+    "EXPLORE": "Explore",
+    "PLANS": "Plans",
+    "LIBRARY": "Library"
   }
 }
