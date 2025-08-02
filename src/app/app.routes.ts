@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { ROUTES_CONFIG_AUTH } from './config/routes-config/routes-auth.config';
 import { AUTH_ROUTES } from './routes/app.routes.auth';
 import { SUSBSRIPTION_ROUTES } from './routes/app.routes.subscription';
+import { authGuard } from './shared/guards';
 
 export const routes: Routes = [
   {
@@ -55,7 +56,7 @@ export const routes: Routes = [
     path: 'profile',
     loadComponent: () =>
       import('./presentation/pages/users/user-p/user-perfil').then((m) => m.UserPerfilComponent),
-    // canActivate: [authGuard], // Temporalmente deshabilitado para testing
+    canActivate: [authGuard], 
   },
   {
     path: 'subscription-plans',
