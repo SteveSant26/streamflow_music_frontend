@@ -15,5 +15,30 @@
     "TWITTER": "Iniciar sesión con Twitter|X",
     "DISCORD": "Iniciar sesión con Discord",
     "RIGHTS": "Todos los derechos reservados."
+  },
+  "REGISTER": {
+    "TITLE": "Crear Cuenta",
+    "NAME": "Nombre Completo",
+    "NAME_PLACEHOLDER": "Tu nombre completo",
+    "EMAIL": "Correo Electrónico",
+    "EMAIL_PLACEHOLDER": "Tu email aquí",
+    "PASSWORD": "Contraseña",
+    "ACCEPT": "Acepto los",
+    "TERMS": "términos y condiciones",
+    "LOADING": "Creando cuenta...",
+    "BUTTON": "Crear Cuenta",
+    "HAVE_ACCOUNT": "¿Ya tienes una cuenta?",
+    "LOGIN_LINK": "Inicia sesión aquí",
+    "GOOGLE": "Registrarse con Google",
+    "GITHUB": "Registrarse con GitHub",
+    "TWITTER": "Registrarse con Twitter|X",
+    "DISCORD": "Registrarse con Discord"
+  },
+  "RESET": {
+    "TITLE": "Restablecer Contraseña",
+    "EMAIL": "Correo Electrónico",
+    "EMAIL_PLACEHOLDER": "Tu email aquí",
+    "LOADING": "Enviando...",
+    "BUTTON": "Enviar correo de recuperación"
   }
 }
