@@ -66,5 +66,17 @@
     "LANGUAGE": "Language",
     "SPANISH": "Spanish",
     "ENGLISH": "English"
+  },
+  "PROFILE": {
+    "TITLE": "My Profile",
+    "SUBTITLE": "Customize your information and keep your profile updated",
+    "USER_DESCRIPTION": "Music lover",
+    "EDIT_BUTTON": "Edit Profile",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "EMAIL_REQUIRED": "Email is required",
+    "EMAIL_INVALID": "Please enter a valid email",
+    "SAVE_BUTTON": "Save Changes",
+    "CANCEL_BUTTON": "Cancel"
   }
 }
