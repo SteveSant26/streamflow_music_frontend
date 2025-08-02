@@ -74,13 +74,7 @@ export const routes: Routes = [
     path: 'subscription',
     children: SUSBSRIPTION_ROUTES,
   },
-  {
-    path: 'test-connection',
-    loadComponent: () =>
-      import('./components/connection-test/connection-test.component').then(
-        (m) => m.ConnectionTestComponent,
-      ),
-  },
+
   {
     path: '**',
     redirectTo: '/home',
