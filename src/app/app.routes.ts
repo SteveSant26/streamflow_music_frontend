@@ -52,6 +52,13 @@ export const routes: Routes = [
       import('./pages/artist/artist').then((m) => m.ArtistComponent),
   },
   {
+    path: 'song/:id',
+    loadComponent: () =>
+      import('./pages/song-description/song-description').then(
+        (m) => m.SongDescriptionComponent,
+      ),
+  },
+  {
     path: 'profile',
     loadComponent: () =>
       import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
@@ -59,7 +66,9 @@ export const routes: Routes = [
   {
     path: 'subscription-plans',
     loadComponent: () =>
-      import('./pages/subscription-plans/subscription-plans').then((m) => m.SubscriptionPlansComponent),
+      import('./pages/subscription-plans/subscription-plans').then(
+        (m) => m.SubscriptionPlansComponent,
+      ),
   },
   {
     path: 'library',
