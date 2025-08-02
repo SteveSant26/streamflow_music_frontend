@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './user-perfil.html',
   styleUrls: ['./user-perfil.css'],
 })
-export class UserPerfilComponent implements OnInit {
+export class UserPerfilComponent {
   readonly fb: FormBuilder = inject(FormBuilder);
   private readonly getUserProfileUseCase: GetUserProfileUseCase = inject(
     GetUserProfileUseCase,
@@ -42,39 +42,8 @@ export class UserPerfilComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
   });
 
-  ngOnInit(): void {
-    this.loadUserData();
-  }
-
-  loadUserData(): void {
-    this.isLoading.set(true);
-    this.errorMessage.set('');
-
-    console.log('🔍 Iniciando carga de datos del usuario...');
-
-    // TODO: Remover estos datos de prueba cuando conectes con el backend real
-    // Datos de prueba temporales
-    const mockUserProfile: GetUserProfileDto = {
-      id: '1',
-      email: 'usuario@ejemplo.com',
-      profile_picture: null
-    };
-
-    setTimeout(() => {
-      console.log('✅ Datos del usuario cargados (mock):', mockUserProfile);
-
-      this.currentUser.set(mockUserProfile);
-
-      // Actualizar formulario
-      this.profileForm.patchValue({
-        email: mockUserProfile.email,
-      });
-
-      this.isLoading.set(false);
-    }, 1000);
-
-    // Comentado temporalmente hasta que el backend esté listo
-    /*
+  // Comentado temporalmente hasta que el backend esté listo
+  /*
     console.log('🔍 Cargando datos del usuario desde backend...');
 
     // Usar el caso de uso para obtener el perfil
@@ -103,7 +72,6 @@ export class UserPerfilComponent implements OnInit {
       },
     });
     */
-  }
 
   enableEdit(): void {
     this.isEditing.set(true);
@@ -134,7 +102,7 @@ export class UserPerfilComponent implements OnInit {
         const updatedUser: GetUserProfileDto = {
           id: '1',
           email: formData.email || '',
-          profile_picture: this.currentUser()?.profile_picture || null
+          profile_picture: this.currentUser()?.profile_picture || null,
         };
 
         console.log('✅ Perfil actualizado exitosamente (mock):', updatedUser);
