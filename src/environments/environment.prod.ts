@@ -12,4 +12,3 @@ export const environment = {
     SUPABASE_JWT_ALGORITHM: 'HS256',
   },
 };
-
