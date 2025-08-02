@@ -18,11 +18,12 @@ import {
   LoginError,
   NetworkError,
 } from '@app/domain/errors/auth.errors';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, MatIcon],
+  imports: [CommonModule, RouterModule, FormsModule, MatIcon, TranslateModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

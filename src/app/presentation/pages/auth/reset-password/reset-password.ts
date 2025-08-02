@@ -9,11 +9,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ResetPasswordUseCase } from '../../../../domain/usecases/reset-password.usecase';
 import { AuthError, ValidationError, NetworkError } from '@app/domain/errors/auth.errors';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './reset-password.html',
   styleUrls: ['./reset-password.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

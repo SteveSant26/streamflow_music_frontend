@@ -18,11 +18,12 @@ import {
   RegisterError,
   NetworkError,
 } from '@app/domain/errors/auth.errors';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, MatIcon],
+  imports: [CommonModule, RouterModule, FormsModule, MatIcon, TranslateModule],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
