@@ -25,15 +25,6 @@ export class AuthStatusUseCase {
 
   get token(): string | null {
     const token = this.authStateService.token();
-    console.log("🔑 AuthStatusUseCase - Obteniendo token:", {
-      hasToken: !!token,
-      tokenLength: token?.length || 0,
-      tokenPreview: token ? token.substring(0, 30) + "..." : "null",
-      authState: {
-        isAuthenticated: this.authStateService.isAuthenticated(),
-        hasUser: !!this.authStateService.user(),
-      }
-    });
     return token;
   }
 }

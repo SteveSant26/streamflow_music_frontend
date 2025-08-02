@@ -6,9 +6,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../../../../services/auth.service";
 import { AuthStatusUseCase } from "@app/domain/usecases/auth-status.usecase";
-import { User } from "../../models";
+import { User } from "../../../../models";
 
 @Component({
   selector: "app-user-perfil",

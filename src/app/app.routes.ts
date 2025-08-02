@@ -55,7 +55,7 @@ export const routes: Routes = [
   {
     path: 'profile',
     loadComponent: () =>
-      import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
+      import('./presentation/pages/users/user-p/user-perfil').then((m) => m.UserPerfilComponent),
     canActivate: [authGuard],
   },
   {
@@ -68,7 +68,7 @@ export const routes: Routes = [
   {
     path: 'library',
     loadComponent: () =>
-      import('./pages/user-p/user-perfil').then((m) => m.UserPerfilComponent),
+      import('./presentation/pages/users/user-p/user-perfil').then((m) => m.UserPerfilComponent),
   },
   {
     path: 'subscription',
