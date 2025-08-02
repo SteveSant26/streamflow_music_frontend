@@ -12,10 +12,12 @@ import { CommonModule } from '@angular/common';
 import { GlobalPlayerStateService } from './shared/services/global-player-state.service';
 import { filter } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from './domain/services/language.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, AsideMenu, Player, CommonModule, MatIcon],
+  imports: [RouterOutlet, RouterLink, AsideMenu, Player, CommonModule, MatIcon, TranslateModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -26,6 +28,7 @@ export class App implements OnInit {
     private readonly router: Router,
     private readonly authSessionUseCase: AuthSessionUseCase,
     private readonly globalPlayerState: GlobalPlayerStateService,
+    private readonly languageService: LanguageService,
   ) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))

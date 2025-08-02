@@ -60,5 +60,16 @@
     "MIXES": "Mixes para ti",
     "SEE_ALL": "Ver todo",
     "TRENDING": "Tendencias"
+  },
+  "SIDEBAR": {
+    "HOME": "Inicio",
+    "SEARCH": "Buscar",
+    "SUBSCRIPTIONS": "Suscripciones",
+    "PROFILE": "Mi Perfil",
+    "LOGOUT": "Cerrar Sesión",
+    "LOGIN": "Iniciar Sesión",
+    "REGISTER": "Registrarse",
+    "LIBRARY": "Tu Biblioteca",
+    "LANGUAGE": "Idioma"
   }
 }

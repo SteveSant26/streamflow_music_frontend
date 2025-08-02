@@ -5,9 +5,12 @@ import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStatusUseCase } from '@app/domain/usecases/auth-status.usecase';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from '@app/domain/services/language.service';
+
 @Component({
   selector: 'app-aside-menu',
-  imports: [RouterLink, SideMenuItem, SideMenuCard, MatIconModule],
+  imports: [RouterLink, SideMenuItem, SideMenuCard, MatIconModule, TranslateModule],
   templateUrl: './aside-menu.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -15,9 +18,23 @@ export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   private readonly authStatusUseCase = inject(AuthStatusUseCase);
   private readonly router = inject(Router);
+  private readonly languageService = inject(LanguageService);
   
   isAuthenticated = this.authStatusUseCase.isAuthenticated;
   user = this.authStatusUseCase.user;
+
+  // Language methods
+  getCurrentLanguage() {
+    return this.languageService.getCurrentLanguage();
+  }
+
+  getAvailableLanguages() {
+    return this.languageService.getAvailableLanguages();
+  }
+
+  changeLanguage(language: 'en' | 'es') {
+    this.languageService.changeLanguage(language);
+  }
 
   async logout() {
     try {
