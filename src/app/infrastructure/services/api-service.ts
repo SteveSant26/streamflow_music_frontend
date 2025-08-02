@@ -11,7 +11,7 @@ export class ApiService {
   }
 
   getWithSignal<T>(url: string) {
-    return httpResource(() => environment.API_URL + url);
+    return httpResource<T>(() => environment.API_URL + url);
   }
 
   post<T>(url: string, body: unknown) {

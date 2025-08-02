@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   FormBuilder,
@@ -6,50 +6,46 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { AuthService } from "../../../../services/auth.service";
+import { GetUserProfileUseCase } from "@app/domain/usecases/get-user-profile.usecase";
+import { UpdateUserProfileUseCase } from "@app/domain/usecases/update-user-profile.usecase";
+import { UploadProfilePictureUseCase } from "@app/domain/usecases/upload-profile-picture.usecase";
+import { GetUserProfileDto } from "@app/domain/dtos/user-profile.dto";
 import { AuthStatusUseCase } from "@app/domain/usecases/auth-status.usecase";
-import { User } from "../../../../models";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: "app-user-perfil",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: "./user-perfil.html",
   styleUrls: ["./user-perfil.css"],
 })
 export class UserPerfilComponent implements OnInit {
   profileForm: FormGroup;
-  isEditing = false;
-  originalValues: { username: string; description: string } = {
-    username: "",
-    description: "",
-  };
-
-  // Profile image properties
-  profileImageUrl: string | null = null;
-  selectedImageFile: File | null = null;
+  isEditing = signal(false);
+  
+  // Profile data
+  currentUser = signal<GetUserProfileDto | null>(null);
+  profileImageUrl = signal<string | null>(null);
+  selectedImageFile = signal<File | null>(null);
 
   // Loading and state properties
-  isLoading = false;
-  errorMessage = '';
-  successMessage = '';
-  currentUser: User | null = null;
+  isLoading = signal(false);
+  errorMessage = signal<string>('');
+  successMessage = signal<string>('');
 
   constructor(
     readonly fb: FormBuilder,
-    private readonly authService: AuthService,
+    private readonly getUserProfileUseCase: GetUserProfileUseCase,
+    private readonly updateUserProfileUseCase: UpdateUserProfileUseCase,
+    private readonly uploadProfilePictureUseCase: UploadProfilePictureUseCase,
     private readonly authStatusUseCase: AuthStatusUseCase
   ) {
     this.profileForm = this.fb.group({
-      username: [
+      email: [
         "",
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(20),
-        ],
+        [Validators.required, Validators.email],
       ],
-      description: ["", [Validators.maxLength(500)]],
     });
   }
 
@@ -58,158 +54,119 @@ export class UserPerfilComponent implements OnInit {
   }
 
   loadUserData(): void {
-    this.isLoading = true;
-    this.errorMessage = "";
+    this.isLoading.set(true);
+    this.errorMessage.set("");
 
     console.log("🔍 Iniciando carga de datos del usuario...");
 
-    // Verificar si hay usuario autenticado usando AuthStatusUseCase
-    const currentUserValue = this.authService.getCurrentUserValue();
+    // Verificar autenticación
     const isAuth = this.authStatusUseCase.isAuthenticated;
     const token = this.authStatusUseCase.token;
 
     console.log("🔐 Estado de autenticación:", {
-      currentUserValue,
       isAuthenticated: isAuth,
       hasToken: !!token,
-      token: token ? token.substring(0, 20) + "..." : null,
     });
 
     if (!token) {
-      console.log("🚫 No hay token disponible, redirigiendo a login...");
-      this.errorMessage = "No estás autenticado. Por favor, inicia sesión.";
-      this.isLoading = false;
+      console.log("🚫 No hay token disponible");
+      this.errorMessage.set("No estás autenticado. Por favor, inicia sesión.");
+      this.isLoading.set(false);
       return;
     }
 
     console.log("🔍 Cargando datos del usuario desde backend...");
 
-    // Cargar datos del perfil desde el backend
-    this.authService.getCurrentUser().subscribe({
-      next: (user: User) => {
-        console.log("✅ Datos del usuario cargados:", user);
-        console.log("📋 Propiedades del usuario:", {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          profileImage: user.profileImage,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-          hasEmail: !!user.email,
-          emailType: typeof user.email,
+    // Usar el caso de uso para obtener el perfil
+    this.getUserProfileUseCase.execute().subscribe({
+      next: (userProfile: GetUserProfileDto) => {
+        console.log("✅ Datos del usuario cargados:", userProfile);
+        
+        this.currentUser.set(userProfile);
+        
+        // Actualizar formulario
+        this.profileForm.patchValue({
+          email: userProfile.email,
         });
 
-        this.currentUser = user;
-
-        // Validar que los datos del usuario estén completos
-        if (!user?.email) {
-          console.error("❌ Datos del usuario incompletos:", user);
-          console.error("❌ user existe:", !!user);
-          console.error("❌ user.email existe:", !!user.email);
-          console.error("❌ user.email valor:", user.email);
-          this.errorMessage = "Error: Datos del usuario incompletos";
-          this.isLoading = false;
-          return;
-        }
-
-        const userData = {
-          username: user.username || user.email.split("@")[0],
-          email: user.email,
-          description: user.profileImage || "", // Usando profileImage como descripción temporal
-        };
-
-        this.originalValues = { ...userData };
-        this.profileForm.patchValue(userData);
-
         // Cargar imagen de perfil si existe
-        if (user.profileImage) {
-          this.profileImageUrl = user.profileImage;
+        if (userProfile.profile_picture) {
+          this.profileImageUrl.set(userProfile.profile_picture);
         }
 
-        this.isLoading = false;
+        this.isLoading.set(false);
       },
       error: (error: any) => {
         console.error("❌ Error al cargar perfil:", error);
-        this.errorMessage = "Error al cargar los datos del perfil";
-        this.isLoading = false;
+        this.errorMessage.set("Error al cargar los datos del perfil");
+        this.isLoading.set(false);
       },
     });
   }
 
   enableEdit(): void {
-    this.isEditing = true;
+    this.isEditing.set(true);
   }
 
   cancelEdit(): void {
-    this.isEditing = false;
-    this.profileForm.patchValue(this.originalValues);
+    this.isEditing.set(false);
+    // Restaurar valores originales
+    const user = this.currentUser();
+    if (user) {
+      this.profileForm.patchValue({
+        email: user.email,
+      });
+    }
   }
 
   saveProfile(): void {
     if (this.profileForm.valid) {
-      this.isLoading = true;
-      this.errorMessage = "";
-      this.successMessage = "";
-
-      this.isLoading = true;
-      this.errorMessage = "";
-      this.successMessage = "";
+      this.isLoading.set(true);
+      this.errorMessage.set("");
+      this.successMessage.set("");
 
       const formData = this.profileForm.value;
-
       console.log("🔄 Guardando perfil en backend:", formData);
 
-      // Actualizar perfil usando el AuthService
-      this.authService
-        .updateProfile({
-          username: formData.username,
-          email: formData.email,
-          // description no está en el modelo User por ahora
-        })
-        .subscribe({
-          next: (updatedUser: User) => {
-            console.log("✅ Perfil actualizado exitosamente:", updatedUser);
+      // Usar caso de uso para actualizar perfil
+      this.updateUserProfileUseCase.execute({
+        email: formData.email,
+      }).subscribe({
+        next: (updatedUser) => {
+          console.log("✅ Perfil actualizado exitosamente:", updatedUser);
 
-            // Actualizar datos locales
-            this.currentUser = updatedUser;
-            this.originalValues = { ...formData };
-            this.isEditing = false;
-            this.isLoading = false;
+          // Actualizar datos locales
+          this.currentUser.set(updatedUser);
+          this.isEditing.set(false);
+          this.isLoading.set(false);
 
-            // Mostrar mensaje de éxito
-            this.successMessage = "Perfil actualizado exitosamente";
+          // Mostrar mensaje de éxito
+          this.successMessage.set("Perfil actualizado exitosamente");
 
-            // Limpiar mensaje después de 3 segundos
-            setTimeout(() => {
-              this.successMessage = "";
-            }, 3000);
-          },
-          error: (error: any) => {
-            console.error("❌ Error al actualizar perfil:", error);
-            this.errorMessage =
-              error.error?.message || "Error al actualizar el perfil";
-            this.isLoading = false;
-          },
-        });
+          // Limpiar mensaje después de 3 segundos
+          setTimeout(() => {
+            this.successMessage.set("");
+          }, 3000);
+        },
+        error: (error: any) => {
+          console.error("❌ Error al actualizar perfil:", error);
+          this.errorMessage.set(
+            error.message || "Error al actualizar el perfil"
+          );
+          this.isLoading.set(false);
+        },
+      });
     } else {
       console.log("❌ Formulario inválido");
       this.markFormGroupTouched();
     }
   }
 
-
-  // Mantener solo una implementación de markFormGroupTouched
-
   private markFormGroupTouched(): void {
     Object.keys(this.profileForm.controls).forEach((key) => {
       const control = this.profileForm.get(key);
       control?.markAsTouched();
     });
-  }
-
-  private showSuccessMessage(): void {
-    // Implementar notificación de éxito
-    console.log("Perfil actualizado exitosamente");
   }
 
   // Profile image methods
@@ -225,39 +182,49 @@ export class UserPerfilComponent implements OnInit {
     const file = target.files?.[0];
 
     if (file) {
-      // Validate file type
-      const allowedTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-      ];
-      if (!allowedTypes.includes(file.type)) {
-        alert("Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)");
-        return;
+      try {
+        // Usar caso de uso para validar el archivo
+        this.uploadProfilePictureUseCase.execute(file).subscribe({
+          next: (response) => {
+            console.log("✅ Imagen subida exitosamente:", response);
+            this.profileImageUrl.set(response.profile_picture);
+            this.successMessage.set("Imagen de perfil actualizada");
+            
+            // Actualizar el usuario actual
+            const currentUser = this.currentUser();
+            if (currentUser) {
+              this.currentUser.set({
+                ...currentUser,
+                profile_picture: response.profile_picture
+              });
+            }
+
+            setTimeout(() => this.successMessage.set(""), 3000);
+          },
+          error: (error) => {
+            console.error("❌ Error al subir imagen:", error);
+            this.errorMessage.set(error.message || "Error al subir la imagen");
+          }
+        });
+
+        // Crear preview inmediato
+        this.selectedImageFile.set(file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.profileImageUrl.set(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+
+      } catch (error: any) {
+        console.error("❌ Error de validación:", error);
+        this.errorMessage.set(error.message);
       }
-
-      // Validate file size (max 5MB)
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (file.size > maxSize) {
-        alert("La imagen es demasiado grande. El tamaño máximo es 5MB");
-        return;
-      }
-
-      this.selectedImageFile = file;
-
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.profileImageUrl = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
     }
   }
 
   removeProfileImage(): void {
-    this.selectedImageFile = null;
-    this.profileImageUrl = null;
+    this.selectedImageFile.set(null);
+    this.profileImageUrl.set(null);
 
     // Clear the input
     const input = document.getElementById(
@@ -268,11 +235,7 @@ export class UserPerfilComponent implements OnInit {
     }
   }
 
-  get username() {
-    return this.profileForm.get("username");
-  }
-
-  get description() {
-    return this.profileForm.get("description");
+  get email() {
+    return this.profileForm.get("email");
   }
 }
