@@ -63,7 +63,7 @@
   left: 50%;
   transform: translateX(-50%);
   background: black;
-  color: #f6f6f6;
+  color: #fefdfd;
   padding: 0.5rem 1.5rem;
   border-radius: 2rem;
   font-size: 0.8rem;
@@ -170,17 +170,19 @@
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
+  color: rgb(255, 255, 255);
+  background-color: black;
 }
 
 .btn-outline {
-  background: transparent;
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: black;
+  color: rgb(255, 255, 255);
+  border: 2px solid rgba(0, 0, 0, 0.3);
 }
 
 .btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.5);
 }
 
 .btn-primary {
@@ -195,7 +197,7 @@
 }
 
 .btn-success {
-  background: linear-gradient(45deg, #fcfcfc, #000000);
+  background: black;
   color: white;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
@@ -228,7 +230,7 @@
 .benefit {
   text-align: center;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(6, 6, 6, 0.1);
   border-radius: 0.75rem;
   backdrop-filter: blur(5px);
   color: #000000;

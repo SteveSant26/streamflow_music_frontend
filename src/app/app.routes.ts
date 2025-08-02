@@ -53,6 +53,13 @@ export const routes: Routes = [
       import('./pages/artist/artist').then((m) => m.ArtistComponent),
   },
   {
+    path: 'song/:id',
+    loadComponent: () =>
+      import('./pages/song-description/song-description').then(
+        (m) => m.SongDescriptionComponent,
+      ),
+  },
+  {
     path: 'profile',
     loadComponent: () =>
       import('./presentation/pages/users/user-p/user-perfil').then((m) => m.UserPerfilComponent),
