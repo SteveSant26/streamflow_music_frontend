@@ -7,7 +7,7 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RegisterUseCase } from '@app/domain/usecases/register.usecase';
+import { RegisterSessionUseCase } from '@app/domain/usecases/register-session.usecase';
 import { RegisterCredentials } from '@app/domain/repositories/i-auth.repository';
 import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
@@ -18,11 +18,12 @@ import {
   RegisterError,
   NetworkError,
 } from '@app/domain/errors/auth.errors';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, MatIcon],
+  imports: [CommonModule, RouterModule, FormsModule, MatIcon, TranslateModule],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +32,7 @@ export class RegisterComponent {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
 
   private readonly socialLoginUseCase = inject(SocialLoginUseCase);
-  private readonly registerUseCase = inject(RegisterUseCase);
+  private readonly registerSessionUseCase = inject(RegisterSessionUseCase);
   private readonly router = inject(Router);
 
   credentials: RegisterCredentials = {
@@ -52,8 +53,9 @@ export class RegisterComponent {
     this.success.set(null);
 
     try {
-      const result = await this.registerUseCase.execute(this.credentials);
+      const result = await this.registerSessionUseCase.execute(this.credentials);
       console.log('Register successful:', result);
+      
       this.success.set('¡Registro exitoso! Bienvenido a StreamFlow Music.');
 
       // Redirigir después de mostrar el mensaje de éxito

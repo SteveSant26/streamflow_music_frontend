@@ -4,11 +4,13 @@ import { Card } from "../../components/card/card";
 import { Greeting } from "../../components/greeting/greeting";
 import { MusicsTable } from "../../components/musics-table/musics-table";
 import { PlayListItemCard } from "../../components/play-list-item-card/play-list-item-card";
+import { MatIcon } from "@angular/material/icon";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: "app-home",
   standalone: true,
-  imports: [CommonModule, Card, Greeting, MusicsTable, PlayListItemCard],
+  imports: [CommonModule, Card, Greeting, MusicsTable, PlayListItemCard, MatIcon, TranslateModule],
   templateUrl: "./home.html",
   styleUrl: "./home.css",
 })

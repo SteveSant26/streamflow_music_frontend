@@ -4,15 +4,20 @@ import {
   RegisterCredentials,
   AuthResult,
 } from "../repositories/i-auth.repository";
+import { AuthStateService } from "@app/domain/services/auth-state-service";
 import { ValidationError } from "../errors/auth.errors";
 
 @Injectable({
   providedIn: "root",
 })
-export class RegisterUseCase {
-  constructor(private readonly authRepository: IAuthRepository) {}
+export class RegisterSessionUseCase {
+  constructor(
+    private readonly authRepository: IAuthRepository,
+    private readonly authStateService: AuthStateService
+  ) {}
 
   async execute(credentials: RegisterCredentials): Promise<AuthResult> {
+    // Validaciones
     if (!credentials.email || !credentials.password || !credentials.name) {
       throw new ValidationError("Name, email and password are required");
     }
@@ -29,7 +34,17 @@ export class RegisterUseCase {
       throw new ValidationError("Name must be at least 2 characters long");
     }
 
-    return await this.authRepository.register(credentials);
+    // Ejecutar registro
+    const result = await this.authRepository.register(credentials);
+
+    // Actualizar el estado de autenticación
+    this.authStateService.updateSession({
+      user: result.user,
+      isAuthenticated: true,
+      token: result.token
+    });
+
+    return result;
   }
 
   private isValidEmail(email: string): boolean {

@@ -1,0 +1,82 @@
+{
+  "LOGIN": {
+    "TITLE": "Sign In",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "PASSWORD": "Password",
+    "REMEMBER": "Remember me",
+    "FORGOT": "Forgot your password?",
+    "LOADING": "Signing in...",
+    "BUTTON": "Sign In",
+    "NO_ACCOUNT": "Don't have an account?",
+    "REGISTER_LINK": "Sign up here",
+    "GOOGLE": "Sign in with Google",
+    "GITHUB": "Sign in with GitHub",
+    "TWITTER": "Sign in with Twitter",
+    "DISCORD": "Sign in with Discord",
+    "RIGHTS": "All rights reserved."
+  },
+  "REGISTER": {
+    "TITLE": "Create Account",
+    "NAME": "Full Name",
+    "NAME_PLACEHOLDER": "Enter your full name",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "PASSWORD": "Password",
+    "ACCEPT": "I accept the",
+    "TERMS": "Terms and Conditions",
+    "LOADING": "Creating account...",
+    "BUTTON": "Create Account",
+    "HAVE_ACCOUNT": "Already have an account?",
+    "LOGIN_LINK": "Sign in here",
+    "GOOGLE": "Sign up with Google",
+    "GITHUB": "Sign up with GitHub",
+    "TWITTER": "Sign up with Twitter",
+    "DISCORD": "Sign up with Discord"
+  },
+  "RESET": {
+    "TITLE": "Reset Password",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "LOADING": "Sending...",
+    "BUTTON": "Send Reset Link"
+  },
+  "HOME": {
+    "DISCOVER": "Discover",
+    "PLAY_ALL": "Play All",
+    "CARD1_TITLE": "New Releases",
+    "CARD1_BODY": "Check out the latest music releases",
+    "CARD2_TITLE": "Top Charts",
+    "CARD2_BODY": "Most popular songs right now",
+    "CARD3_TITLE": "Genres",
+    "CARD3_BODY": "Explore music by genre",
+    "MIXES": "Your Mixes",
+    "SEE_ALL": "See All",
+    "TRENDING": "Trending Now"
+  },
+  "SIDEBAR": {
+    "HOME": "Home",
+    "SEARCH": "Search",
+    "LIBRARY": "Your Library",
+    "PLAYLISTS": "Playlists",
+    "LIKED_SONGS": "Liked Songs",
+    "RECENTLY_PLAYED": "Recently Played",
+    "CREATE_PLAYLIST": "Create Playlist",
+    "PODCAST": "Podcasts",
+    "LANGUAGE": "Language",
+    "SPANISH": "Spanish",
+    "ENGLISH": "English"
+  },
+  "PROFILE": {
+    "TITLE": "My Profile",
+    "SUBTITLE": "Customize your information and keep your profile updated",
+    "USER_DESCRIPTION": "Music lover",
+    "EDIT_BUTTON": "Edit Profile",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "EMAIL_REQUIRED": "Email is required",
+    "EMAIL_INVALID": "Please enter a valid email",
+    "SAVE_BUTTON": "Save Changes",
+    "CANCEL_BUTTON": "Cancel"
+  }
+}

@@ -1,14 +1,15 @@
-import { Injectable, Inject, PLATFORM_ID } from "@angular/core";
-import { isPlatformBrowser } from "@angular/common";
-import { Observable, BehaviorSubject, tap } from "rxjs";
-import { ApiService } from "./api.service";
-import { User, LoginDto, RegisterDto, AuthResponse } from "../models";
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Observable, BehaviorSubject, tap, map } from 'rxjs';
+import { ApiService } from './api.service';
+import { User, LoginDto, RegisterDto, AuthResponse } from '../models';
+import { API_CONFIG_PROFILE } from '@app/config';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
-  private endpoint = "/auth";
+  private endpoint = '/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
 
@@ -67,7 +68,7 @@ export class AuthService {
   refreshToken(): Observable<AuthResponse> {
     let refreshToken = null;
     if (isPlatformBrowser(this.platformId)) {
-      refreshToken = localStorage.getItem("refreshToken");
+      refreshToken = localStorage.getItem('refreshToken');
     }
     return this.apiService
       .post<AuthResponse>(`${this.endpoint}/refresh`, { refreshToken })
@@ -82,11 +83,18 @@ export class AuthService {
    * Obtener perfil del usuario actual
    */
   getCurrentUser(): Observable<User> {
-    return this.apiService.get<User>(`${this.endpoint}/me`).pipe(
-      tap((user) => {
-        this.currentUserSubject.next(user);
-      }),
-    );
+    return this.apiService
+      .get<{ user: User; message: string }>(API_CONFIG_PROFILE.profileMe.get)
+      .pipe(
+        map((response: { user: User; message: string }) => {
+          // El backend devuelve { user: {...}, message: "..." }
+          // Extraemos solo el objeto user
+          return response.user;
+        }),
+        tap((user) => {
+          this.currentUserSubject.next(user);
+        }),
+      );
   }
 
   /**
@@ -186,11 +194,11 @@ export class AuthService {
 
   private setAuthData(authResponse: AuthResponse): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem("authToken", authResponse.token);
+      localStorage.setItem('authToken', authResponse.token);
       if (authResponse.refreshToken) {
-        localStorage.setItem("refreshToken", authResponse.refreshToken);
+        localStorage.setItem('refreshToken', authResponse.refreshToken);
       }
-      localStorage.setItem("user", JSON.stringify(authResponse.user));
+      localStorage.setItem('user', JSON.stringify(authResponse.user));
     }
 
     this.currentUserSubject.next(authResponse.user);
@@ -199,9 +207,9 @@ export class AuthService {
 
   private clearAuthData(): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("user");
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
     }
 
     this.currentUserSubject.next(null);
@@ -213,8 +221,8 @@ export class AuthService {
       return; // No hacer nada en el servidor
     }
 
-    const token = localStorage.getItem("authToken");
-    const userStr = localStorage.getItem("user");
+    const token = localStorage.getItem('authToken');
+    const userStr = localStorage.getItem('user');
 
     if (token && userStr) {
       try {
@@ -222,7 +230,7 @@ export class AuthService {
         this.currentUserSubject.next(user);
         this.isLoggedInSubject.next(true);
       } catch (error) {
-        console.error("Error parsing user data:", error);
+        console.error('Error parsing user data:', error);
         this.clearAuthData();
       }
     }
@@ -251,7 +259,7 @@ export class AuthService {
     if (!isPlatformBrowser(this.platformId)) {
       return null;
     }
-    return localStorage.getItem("authToken");
+    return localStorage.getItem('authToken');
   }
 
   /**
@@ -262,11 +270,11 @@ export class AuthService {
     if (!token) return true;
 
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
+      const payload = JSON.parse(atob(token.split('.')[1]));
       const exp = payload.exp * 1000; // Convertir a milisegundos
       return Date.now() > exp;
     } catch (error) {
-      console.error("Error checking token expiration:", error);
+      console.error('Error checking token expiration:', error);
       return true;
     }
   }

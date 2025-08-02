@@ -1,26 +1,32 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withViewTransitions,
+} from '@angular/router';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
-  withInterceptors,
+  withFetch,
+  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { authInterceptor } from './shared/utils/auth-interceptor';
 import { authProviders } from './infrastructure/providers/auth.providers';
 import { playerProviders } from './infrastructure/providers/player.providers';
-import { HttpErrorInterceptor } from '@app/infrastructure/interceptors/http-error.interceptor';
-import { AuthTokenInterceptor } from '@app/infrastructure/interceptors/auth-token.interceptor';
+import { paymentProviders } from './infrastructure/providers/payment.providers';
+import { translateProviders } from './infrastructure/providers/translate.providers';
+import { languageProviders } from './infrastructure/providers/language.providers';
+import { userProfileProviders } from './infrastructure/providers/user-profile.providers';
+import { AuthTokenInterceptor } from './infrastructure/interceptors/auth-token.interceptor';
+import { HttpErrorInterceptor } from './infrastructure/interceptors/http-error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
     provideClientHydration(),
-    provideHttpClient(withInterceptors([authInterceptor])),
-    ...authProviders,
-    ...playerProviders,
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptor,
@@ -31,5 +37,11 @@ export const appConfig: ApplicationConfig = {
       useClass: HttpErrorInterceptor,
       multi: true,
     },
+    ...authProviders,
+    ...playerProviders,
+    ...paymentProviders,
+    ...translateProviders,
+    ...languageProviders,
+    ...userProfileProviders,
   ],
 };

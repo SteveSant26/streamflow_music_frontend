@@ -7,7 +7,7 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LoginUseCase } from '../../../../domain/usecases/login.usecase';
+import { LoginSessionUseCase } from '../../../../domain/usecases/login-session.usecase';
 import { LoginCredentials } from '../../../../domain/repositories/i-auth.repository';
 import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
@@ -18,11 +18,12 @@ import {
   LoginError,
   NetworkError,
 } from '@app/domain/errors/auth.errors';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, MatIcon],
+  imports: [CommonModule, RouterModule, FormsModule, MatIcon, TranslateModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +32,7 @@ export class LoginComponent {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
 
   private readonly socialLoginUseCase = inject(SocialLoginUseCase);
-  private readonly loginUseCase = inject(LoginUseCase);
+  private readonly loginSessionUseCase = inject(LoginSessionUseCase);
   private readonly router = inject(Router);
 
   credentials: LoginCredentials = {
@@ -49,8 +50,9 @@ export class LoginComponent {
     this.error.set(null);
 
     try {
-      const result = await this.loginUseCase.execute(this.credentials);
+      const result = await this.loginSessionUseCase.execute(this.credentials);
       console.log('Login successful:', result);
+      
       this.router.navigate(['/home']);
     } catch (error) {
       this.handleError(error);

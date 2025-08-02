@@ -4,15 +4,20 @@ import {
   LoginCredentials,
   AuthResult,
 } from "../repositories/i-auth.repository";
+import { AuthStateService } from "@app/domain/services/auth-state-service";
 import { ValidationError } from "../errors/auth.errors";
 
 @Injectable({
   providedIn: "root",
 })
-export class LoginUseCase {
-  constructor(private readonly authRepository: IAuthRepository) {}
+export class LoginSessionUseCase {
+  constructor(
+    private readonly authRepository: IAuthRepository,
+    private readonly authStateService: AuthStateService
+  ) {}
 
   async execute(credentials: LoginCredentials): Promise<AuthResult> {
+    // Validaciones
     if (!credentials.email || !credentials.password) {
       throw new ValidationError("Email and password are required");
     }
@@ -25,7 +30,17 @@ export class LoginUseCase {
       throw new ValidationError("Password must be at least 6 characters long");
     }
 
-    return await this.authRepository.login(credentials);
+    // Ejecutar login
+    const result = await this.authRepository.login(credentials);
+
+    // Actualizar el estado de autenticación
+    this.authStateService.updateSession({
+      user: result.user,
+      isAuthenticated: true,
+      token: result.token
+    });
+
+    return result;
   }
 
   private isValidEmail(email: string): boolean {

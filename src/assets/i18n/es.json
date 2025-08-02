@@ -1,0 +1,82 @@
+{
+  "LOGIN": {
+    "TITLE": "Iniciar Sesión",
+    "EMAIL": "Correo Electrónico",
+    "EMAIL_PLACEHOLDER": "Ingresa tu correo electrónico",
+    "PASSWORD": "Contraseña",
+    "REMEMBER": "Recordarme",
+    "FORGOT": "¿Olvidaste tu contraseña?",
+    "LOADING": "Iniciando sesión...",
+    "BUTTON": "Iniciar Sesión",
+    "NO_ACCOUNT": "¿No tienes una cuenta?",
+    "REGISTER_LINK": "Regístrate aquí",
+    "GOOGLE": "Iniciar sesión con Google",
+    "GITHUB": "Iniciar sesión con GitHub",
+    "TWITTER": "Iniciar sesión con Twitter",
+    "DISCORD": "Iniciar sesión con Discord",
+    "RIGHTS": "Todos los derechos reservados."
+  },
+  "REGISTER": {
+    "TITLE": "Crear Cuenta",
+    "NAME": "Nombre Completo",
+    "NAME_PLACEHOLDER": "Ingresa tu nombre completo",
+    "EMAIL": "Correo Electrónico",
+    "EMAIL_PLACEHOLDER": "Ingresa tu correo electrónico",
+    "PASSWORD": "Contraseña",
+    "ACCEPT": "Acepto los",
+    "TERMS": "Términos y Condiciones",
+    "LOADING": "Creando cuenta...",
+    "BUTTON": "Crear Cuenta",
+    "HAVE_ACCOUNT": "¿Ya tienes una cuenta?",
+    "LOGIN_LINK": "Inicia sesión aquí",
+    "GOOGLE": "Registrarse con Google",
+    "GITHUB": "Registrarse con GitHub",
+    "TWITTER": "Registrarse con Twitter",
+    "DISCORD": "Registrarse con Discord"
+  },
+  "RESET": {
+    "TITLE": "Restablecer Contraseña",
+    "EMAIL": "Correo Electrónico",
+    "EMAIL_PLACEHOLDER": "Ingresa tu correo electrónico",
+    "LOADING": "Enviando...",
+    "BUTTON": "Enviar Enlace de Restablecimiento"
+  },
+  "HOME": {
+    "DISCOVER": "Descubrir",
+    "PLAY_ALL": "Reproducir Todo",
+    "CARD1_TITLE": "Nuevos Lanzamientos",
+    "CARD1_BODY": "Descubre los últimos lanzamientos musicales",
+    "CARD2_TITLE": "Top Charts",
+    "CARD2_BODY": "Las canciones más populares ahora",
+    "CARD3_TITLE": "Géneros",
+    "CARD3_BODY": "Explora música por género",
+    "MIXES": "Tus Mezclas",
+    "SEE_ALL": "Ver Todo",
+    "TRENDING": "Tendencias Ahora"
+  },
+  "SIDEBAR": {
+    "HOME": "Inicio",
+    "SEARCH": "Buscar",
+    "LIBRARY": "Tu Biblioteca",
+    "PLAYLISTS": "Listas de Reproducción",
+    "LIKED_SONGS": "Canciones que te Gustan",
+    "RECENTLY_PLAYED": "Reproducido Recientemente",
+    "CREATE_PLAYLIST": "Crear Lista de Reproducción",
+    "PODCAST": "Podcasts",
+    "LANGUAGE": "Idioma",
+    "SPANISH": "Español",
+    "ENGLISH": "Inglés"
+  },
+  "PROFILE": {
+    "TITLE": "Mi Perfil",
+    "SUBTITLE": "Personaliza tu información y mantén tu perfil actualizado",
+    "USER_DESCRIPTION": "Amante de la música",
+    "EDIT_BUTTON": "Editar Perfil",
+    "EMAIL_LABEL": "Correo Electrónico",
+    "EMAIL_PLACEHOLDER": "Ingresa tu correo electrónico",
+    "EMAIL_REQUIRED": "El correo electrónico es requerido",
+    "EMAIL_INVALID": "Por favor ingresa un correo electrónico válido",
+    "SAVE_BUTTON": "Guardar Cambios",
+    "CANCEL_BUTTON": "Cancelar"
+  }
+}

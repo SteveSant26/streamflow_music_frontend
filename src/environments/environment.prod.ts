@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://tu-backend-produccion.com/api',
-  API_URL: 'https://tu-backend-produccion.com/',
+  apiUrl: 'https://tu-backend-produccion.com',
+  API_URL: 'https://tu-backend-produccion.com',
   STORAGE_TOKEN_KEY: 'app.token',
   SUPABASE: {
     SUPABASE_PROJECT_ID: 'ebipcvxpxrqdihhhhfyf',

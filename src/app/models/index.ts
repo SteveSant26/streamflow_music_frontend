@@ -2,11 +2,8 @@
 
 export interface User {
   id: string;
-  username: string;
   email: string;
-  profileImage?: string;
-  createdAt: string;
-  updatedAt: string;
+  profile_picture?: string | null;
 }
 
 export interface Artist {
