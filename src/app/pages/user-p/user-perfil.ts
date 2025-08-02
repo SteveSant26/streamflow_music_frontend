@@ -7,6 +7,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
+import { AuthStatusUseCase } from "@app/domain/usecases/auth-status.usecase";
 import { User } from "../../models";
 
 @Component({
@@ -36,7 +37,8 @@ export class UserPerfilComponent implements OnInit {
 
   constructor(
     readonly fb: FormBuilder,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly authStatusUseCase: AuthStatusUseCase
   ) {
     this.profileForm = this.fb.group({
       username: [
@@ -61,10 +63,10 @@ export class UserPerfilComponent implements OnInit {
 
     console.log("🔍 Iniciando carga de datos del usuario...");
 
-    // Verificar si hay usuario autenticado
+    // Verificar si hay usuario autenticado usando AuthStatusUseCase
     const currentUserValue = this.authService.getCurrentUserValue();
-    const isAuth = this.authService.isAuthenticated();
-    const token = this.authService.getAuthToken();
+    const isAuth = this.authStatusUseCase.isAuthenticated;
+    const token = this.authStatusUseCase.token;
 
     console.log("🔐 Estado de autenticación:", {
       currentUserValue,
@@ -72,6 +74,13 @@ export class UserPerfilComponent implements OnInit {
       hasToken: !!token,
       token: token ? token.substring(0, 20) + "..." : null,
     });
+
+    if (!token) {
+      console.log("🚫 No hay token disponible, redirigiendo a login...");
+      this.errorMessage = "No estás autenticado. Por favor, inicia sesión.";
+      this.isLoading = false;
+      return;
+    }
 
     console.log("🔍 Cargando datos del usuario desde backend...");
 
