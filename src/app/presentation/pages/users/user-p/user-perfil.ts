@@ -24,6 +24,16 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./user-perfil.css'],
 })
 export class UserPerfilComponent implements OnInit {
+  showImageModal = false;
+  openImageModal(): void {
+    if (this.profileImageUrl()) {
+      this.showImageModal = true;
+    }
+  }
+
+  closeImageModal(): void {
+    this.showImageModal = false;
+  }
   readonly fb: FormBuilder = inject(FormBuilder);
   private readonly getUserProfileUseCase: GetUserProfileUseCase = inject(
     GetUserProfileUseCase,
@@ -143,26 +153,6 @@ export class UserPerfilComponent implements OnInit {
     }
   }
 
-  removeProfileImage(): void {
-    this.profileImageUrl.set(null);
-
-    // Actualizar el usuario actual para quitar la imagen
-    const currentUser = this.currentUser();
-    if (currentUser) {
-      this.currentUser.set({
-        ...currentUser,
-        profile_picture: null,
-      });
-    }
-
-    // Limpiar el input
-    const input = document.getElementById(
-      'profileImageInput',
-    ) as HTMLInputElement;
-    if (input) {
-      input.value = '';
-    }
-  }
 
   get email() {
     return this.profileForm.get('email');
