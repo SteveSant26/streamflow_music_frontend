@@ -7,7 +7,8 @@ import {
   SongSearchDto, 
   ProcessYoutubeDto, 
   PaginationParams, 
-  SongSearchParams 
+  SongSearchParams,
+  PaginatedResponse 
 } from '../../domain/dtos/song.dto';
 
 @Injectable({
@@ -20,12 +21,12 @@ export class SongService {
   /**
    * Obtener las canciones más populares
    */
-  getMostPopular(params?: PaginationParams): Observable<SongSearchDto[]> {
+  getMostPopular(params?: PaginationParams): Observable<PaginatedResponse<SongSearchDto>> {
     const queryParams: Record<string, string> = {};
     if (params?.page) queryParams['page'] = params.page.toString();
     if (params?.page_size) queryParams['page_size'] = params.page_size.toString();
     
-    return this.apiGetUseCase.execute<SongSearchDto[]>(
+    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
       API_CONFIG_SONGS.songs.mostPopular,
       queryParams
     );
@@ -45,12 +46,12 @@ export class SongService {
   /**
    * Obtener canciones aleatorias
    */
-  getRandomSongs(params?: PaginationParams): Observable<SongSearchDto[]> {
+  getRandomSongs(params?: PaginationParams): Observable<PaginatedResponse<SongSearchDto>> {
     const queryParams: Record<string, string> = {};
     if (params?.page) queryParams['page'] = params.page.toString();
     if (params?.page_size) queryParams['page_size'] = params.page_size.toString();
     
-    return this.apiGetUseCase.execute<SongSearchDto[]>(
+    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
       API_CONFIG_SONGS.songs.random,
       queryParams
     );
@@ -59,7 +60,7 @@ export class SongService {
   /**
    * Buscar canciones
    */
-  searchSongs(searchParams: SongSearchParams): Observable<SongSearchDto[]> {
+  searchSongs(searchParams: SongSearchParams): Observable<PaginatedResponse<SongSearchDto>> {
     const queryParams: Record<string, string> = {
       q: searchParams.q
     };
@@ -71,7 +72,7 @@ export class SongService {
       queryParams['limit'] = searchParams.limit.toString();
     }
     
-    return this.apiGetUseCase.execute<SongSearchDto[]>(
+    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
       API_CONFIG_SONGS.songs.search,
       queryParams
     );

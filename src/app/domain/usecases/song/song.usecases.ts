@@ -4,9 +4,9 @@ import { SongService } from '../../../infrastructure/services/song.service';
 import { PlaylistService } from '../../../infrastructure/services/playlist.service';
 import { Song } from '../../entities/song.entity';
 import { SongSearchParams, PaginationParams } from '../../dtos/song.dto';
-import {
+import { 
   mapSongDtoToEntity,
-  mapSongSearchDtoToEntity,
+  mapPaginatedSongSearchResponse 
 } from '../../mappers/song.mapper';
 
 @Injectable({ providedIn: 'root' })
@@ -36,7 +36,7 @@ export class GetMostPopularSongsUseCase {
   execute(params?: PaginationParams): Observable<Song[]> {
     return this.songService
       .getMostPopular(params)
-      .pipe(map((songs) => songs.map(mapSongSearchDtoToEntity)));
+      .pipe(map((response) => mapPaginatedSongSearchResponse(response)));
   }
 }
 
@@ -58,7 +58,7 @@ export class GetRandomSongsUseCase {
   execute(params?: PaginationParams): Observable<Song[]> {
     return this.songService
       .getRandomSongs(params)
-      .pipe(map((songs) => songs.map(mapSongSearchDtoToEntity)));
+      .pipe(map((response) => mapPaginatedSongSearchResponse(response)));
   }
 }
 
@@ -69,7 +69,7 @@ export class SearchSongsUseCase {
   execute(searchParams: SongSearchParams): Observable<Song[]> {
     return this.songService
       .searchSongs(searchParams)
-      .pipe(map((songs) => songs.map(mapSongSearchDtoToEntity)));
+      .pipe(map((response) => mapPaginatedSongSearchResponse(response)));
   }
 }
 

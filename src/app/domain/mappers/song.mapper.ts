@@ -1,5 +1,5 @@
 import { Song } from '../entities/song.entity';
-import { SongDto, SongSearchDto } from '../dtos/song.dto';
+import { SongDto, SongSearchDto, PaginatedResponse } from '../dtos/song.dto';
 
 // Mappers de DTO a Entity
 export function mapSongDtoToEntity(dto: SongDto): Song {
@@ -46,4 +46,9 @@ export function mapSongSearchDtoToEntity(dto: SongSearchDto): Song {
     createdAt: new Date(),
     publishedAt: new Date()
   };
+}
+
+// Mapper para respuestas paginadas
+export function mapPaginatedSongSearchResponse(response: PaginatedResponse<SongSearchDto>): Song[] {
+  return response.results.map(mapSongSearchDtoToEntity);
 }
