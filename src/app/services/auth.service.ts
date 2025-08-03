@@ -150,7 +150,9 @@ export class AuthService {
    */
   uploadProfileImage(file: File): Observable<User> {
     return this.apiService
-      .upload<User>(`${this.endpoint}/profile-image`, file)
+      .upload<User>(`${this.endpoint}/profile-image`, [
+        { key: 'profile_picture', value: file },
+      ])
       .pipe(
         tap((user) => {
           this.currentUserSubject.next(user);

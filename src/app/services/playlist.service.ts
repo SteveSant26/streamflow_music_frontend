@@ -120,7 +120,7 @@ export class PlaylistService {
   uploadPlaylistCover(playlistId: string, file: File): Observable<Playlist> {
     return this.apiService.upload<Playlist>(
       `${this.endpoint}/${playlistId}/cover`,
-      file,
+      [{ key: 'profile_picture', value: file }],
     );
   }
 
