@@ -13,7 +13,7 @@
 
   <!-- Link principal de la playlist -->
   <a
-    [routerLink]="ROUTES_CONFIG_MUSIC.PLAYLIST.getLinkWithId(playlist.id)"
+    [routerLink]="ROUTES_CONFIG_MUSIC.PLAYLIST.getLinkWithId(playlist.id.toString())"
     class="playlist-item transition-all duration-300 flex relative p-3 sm:p-4 overflow-hidden gap-3 pb-4 sm:pb-6 rounded-2xl w-full sm:w-44 flex-col hover-bg-elevated"
   >
     <!-- Imagen de la playlist -->

@@ -31,6 +31,8 @@ export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   protected readonly ROUTES_CONFIG_MUSIC = ROUTES_CONFIG_MUSIC;
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
+  protected readonly ROUTES_CONFIG_SUBSCRIPTION = ROUTES_CONFIG_SUBSCRIPTION;
+  protected readonly ROUTES_CONFIG_USER = ROUTES_CONFIG_USER;
   private readonly authStateService = inject(AuthStateService);
   private readonly logoutUseCase = inject(LogoutUseCase);
   private readonly router = inject(Router);
