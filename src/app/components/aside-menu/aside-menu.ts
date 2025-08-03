@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '@app/domain/services/language.service';
-import { ThemeToggleComponent } from '@app/shared/components/theme-toggle/theme-toggle.component';
+import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-aside-menu',

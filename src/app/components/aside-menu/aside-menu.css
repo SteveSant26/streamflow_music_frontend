@@ -1,0 +1,55 @@
+.language-selector {
+  margin: 16px 0;
+}
+
+.language-selector h4 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mdc-theme-on-surface);
+}
+
+.language-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.language-button {
+  padding: 6px 12px;
+  border: 1px solid var(--mdc-theme-outline);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--mdc-theme-on-surface);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.language-button:hover {
+  background-color: var(--mdc-theme-surface-variant);
+}
+
+.language-button.active {
+  background-color: var(--mdc-theme-primary);
+  color: var(--mdc-theme-on-primary);
+  border-color: var(--mdc-theme-primary);
+}
+
+.language-button.inactive {
+  opacity: 0.7;
+}
+
+.theme-selector {
+  margin: 16px 0;
+  padding: 8px 0;
+  border-top: 1px solid var(--mdc-theme-outline-variant);
+}
+
+.theme-selector h4 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mdc-theme-on-surface);
+  text-align: center;
+}
