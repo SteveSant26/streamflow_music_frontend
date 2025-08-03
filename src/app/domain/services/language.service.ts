@@ -33,8 +33,16 @@ export class LanguageService {
 
   changeLanguage(language: Language): void {
     try {
-      this.changeLanguageUseCase.execute(language);
-      this.currentLanguageSignal.set(language);
+      this.changeLanguageUseCase.execute(language).subscribe({
+        next: () => {
+          this.currentLanguageSignal.set(language);
+          console.log('✅ Language changed to:', language);
+        },
+        error: (error) => {
+          console.error('Error changing language:', error);
+          throw error;
+        }
+      });
     } catch (error) {
       console.error('Error changing language:', error);
       throw error;

@@ -69,11 +69,12 @@ export class App implements OnInit {
   }
 
   private initializeLanguage() {
-    // Language service automatically initializes on construction
-    console.log(
-      '🌐 App: Language service initialized with:',
-      this.languageService.getCurrentLanguage(),
-    );
+    // Initialize language service and set default language
+    this.languageService.getCurrentLanguage().subscribe(currentLang => {
+      console.log('🌐 App: Language service initialized with:', currentLang);
+      // Force a manual translation update to ensure UI reflects the language
+      this.languageService.changeLanguage(currentLang as 'en' | 'es');
+    });
   }
 
   private async initializeAuth() {

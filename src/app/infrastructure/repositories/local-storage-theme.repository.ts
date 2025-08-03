@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable, of, fromEvent } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ThemeEntity, ThemeType } from '../../domain/entities/theme.entity';
@@ -9,8 +10,17 @@ import { ThemeRepository } from '../../domain/repositories/theme.repository';
 })
 export class LocalStorageThemeRepository implements ThemeRepository {
   private readonly THEME_KEY = 'streamflow_theme';
-  private readonly themeSubject = new BehaviorSubject<ThemeEntity>(this.getInitialTheme());
-  private readonly systemThemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  private readonly themeSubject: BehaviorSubject<ThemeEntity>;
+  private readonly systemThemeMediaQuery: MediaQueryList | null;
+
+  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {
+    this.systemThemeMediaQuery = isPlatformBrowser(this.platformId) 
+      ? window.matchMedia('(prefers-color-scheme: dark)')
+      : null;
+    
+    // Initialize theme subject after systemThemeMediaQuery is set
+    this.themeSubject = new BehaviorSubject<ThemeEntity>(this.getInitialTheme());
+  }
 
   getCurrentTheme(): Observable<ThemeEntity> {
     return this.themeSubject.asObservable();
@@ -24,6 +34,10 @@ export class LocalStorageThemeRepository implements ThemeRepository {
   }
 
   getStoredTheme(): ThemeEntity | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null; // No localStorage access during SSR
+    }
+    
     try {
       const stored = localStorage.getItem(this.THEME_KEY);
       if (stored) {
@@ -41,6 +55,10 @@ export class LocalStorageThemeRepository implements ThemeRepository {
   }
 
   saveTheme(theme: ThemeEntity): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return; // No localStorage access during SSR
+    }
+    
     try {
       localStorage.setItem(
         this.THEME_KEY,
@@ -56,11 +74,20 @@ export class LocalStorageThemeRepository implements ThemeRepository {
   }
 
   getSystemTheme(): ThemeEntity {
+    if (!this.systemThemeMediaQuery) {
+      // Fallback to light theme if not in browser
+      return new ThemeEntity(ThemeType.SYSTEM, false, ThemeType.SYSTEM);
+    }
     const prefersDark = this.systemThemeMediaQuery.matches;
     return new ThemeEntity(ThemeType.SYSTEM, prefersDark, ThemeType.SYSTEM);
   }
 
   watchSystemThemeChanges(): Observable<ThemeEntity> {
+    if (!this.systemThemeMediaQuery) {
+      // Return a static observable if not in browser
+      return of(new ThemeEntity(ThemeType.SYSTEM, false, ThemeType.SYSTEM));
+    }
+    
     return fromEvent<MediaQueryListEvent>(this.systemThemeMediaQuery, 'change').pipe(
       startWith(this.systemThemeMediaQuery),
       map(() => this.getSystemTheme())
@@ -68,6 +95,10 @@ export class LocalStorageThemeRepository implements ThemeRepository {
   }
 
   clearStoredTheme(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return; // No localStorage access during SSR
+    }
+    
     try {
       localStorage.removeItem(this.THEME_KEY);
     } catch (error) {
@@ -96,6 +127,10 @@ export class LocalStorageThemeRepository implements ThemeRepository {
   }
 
   private applyThemeToDOM(theme: ThemeEntity): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return; // Skip DOM manipulation during SSR
+    }
+    
     const body = document.body;
     const html = document.documentElement;
 

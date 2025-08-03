@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export type Language = 'en' | 'es';
 
@@ -8,10 +9,22 @@ export type Language = 'en' | 'es';
   providedIn: 'root'
 })
 export class GetCurrentLanguageUseCase {
-  constructor(private readonly translateService: TranslateService) {}
+  constructor(
+    private readonly translateService: TranslateService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
+  ) {}
 
   execute(): Observable<string> {
-    const currentLang = localStorage.getItem('streamflow_language') || 'en';
+    let currentLang = 'en'; // Default language
+    
+    // Only access localStorage in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      currentLang = localStorage.getItem('streamflow_language') || 'en';
+    }
+    
+    // Asegurar que el TranslateService use el idioma correcto
+    this.translateService.use(currentLang).subscribe();
+    
     return of(currentLang);
   }
 }
@@ -32,13 +45,19 @@ export class GetAvailableLanguagesUseCase {
   providedIn: 'root'
 })
 export class ChangeLanguageUseCase {
-  constructor(private readonly translateService: TranslateService) {}
+  constructor(
+    private readonly translateService: TranslateService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
+  ) {}
 
   execute(language: Language): Observable<void> {
     return new Observable(observer => {
       this.translateService.use(language).subscribe({
         next: () => {
-          localStorage.setItem('streamflow_language', language);
+          // Only access localStorage in browser environment
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('streamflow_language', language);
+          }
           observer.next();
           observer.complete();
         },

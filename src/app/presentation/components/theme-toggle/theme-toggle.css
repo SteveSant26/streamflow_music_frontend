@@ -50,7 +50,7 @@ mat-icon {
   border: 1px solid var(--border-base);
   border-radius: 12px;
   box-shadow: var(--shadow-elevated);
-  z-index: 1000;
+  z-index: 9999;
   min-width: 160px;
   opacity: 0;
   transform: translateY(-10px) scale(0.95);
