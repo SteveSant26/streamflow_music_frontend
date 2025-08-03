@@ -507,3 +507,6 @@ select:focus {
   transition-timing-function: cubic-bezier(0.3, 0, 0, 1);
   transition-duration: 300ms;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
