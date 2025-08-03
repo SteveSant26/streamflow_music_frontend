@@ -50,17 +50,15 @@
     </div>
 
     <!-- Language Selector -->
-    <div class="mt-6 p-3 bg-gray-50 rounded-lg">
-      <h4 class="text-sm font-medium text-gray-700 mb-2">{{ 'SIDEBAR.LANGUAGE' | translate }}</h4>
-      <div class="flex gap-2">
+    <div class="language-selector">
+      <h4>{{ 'SIDEBAR.LANGUAGE' | translate }}</h4>
+      <div class="language-buttons">
         @for (lang of getAvailableLanguages(); track lang.code) {
           <button 
             (click)="changeLanguage(lang.code)"
-            class="px-3 py-1 text-xs rounded-full transition-colors"
-            [class.bg-black]="getCurrentLanguage() === lang.code"
-            [class.text-white]="getCurrentLanguage() === lang.code"
-            [class.bg-gray-200]="getCurrentLanguage() !== lang.code"
-            [class.text-gray-700]="getCurrentLanguage() !== lang.code"
+            class="language-button"
+            [class.active]="getCurrentLanguage() === lang.code"
+            [class.inactive]="getCurrentLanguage() !== lang.code"
           >
             {{ lang.name }}
           </button>
@@ -68,7 +66,7 @@
       </div>
     </div>
 
-    <div class="space-y-2 text-black-300">
+    <div class="space-y-2">
       @for (playlist of playlists; track playlist.id) {
       <app-side-menu-card [playlist]="playlist" />
       }

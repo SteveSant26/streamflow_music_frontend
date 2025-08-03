@@ -1,8 +1,211 @@
 .home-container {
   padding: 1.5rem;
+  transition: all 0.3s ease;
 }
 
 .hero-section {
   text-align: center;
   margin-bottom: 3rem;
+  transition: color 0.3s ease;
+}
+
+/* Hero section text styles */
+.hero-section {
+  color: #111827;
+}
+
+.hero-description {
+  color: #374151;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode hero styles */
+:host-context(body.dark) .hero-section {
+  color: #f8fafc !important;
+}
+
+:host-context(body.dark) .hero-description {
+  color: #cbd5e1 !important;
+}
+
+@media (min-width: 640px) {
+  .hero-description {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-section {
+    text-align: left;
+  }
+}
+
+/* Play All Button Styles */
+.play-all-button {
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transform: translateZ(0);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+}
+
+.play-all-button:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Light mode styles */
+.play-all-button {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.play-all-button:hover {
+  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.play-all-button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode styles */
+:host-context(body.dark) .play-all-button {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  color: #1e293b !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+}
+
+:host-context(body.dark) .play-all-button:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+  transform: translateY(-2px) scale(1.02);
+}
+
+:host-context(body.dark) .play-all-button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Focus states */
+.play-all-button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+:host-context(body.dark) .play-all-button:focus-visible {
+  outline: 2px solid #60a5fa;
+}
+
+/* Trending Section Styles */
+.trending-section {
+  margin-bottom: 8rem;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+  .trending-section {
+    margin-bottom: 6rem;
+  }
+}
+
+.trending-container {
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 1px solid transparent;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .trending-container {
+    padding: 1.5rem;
+  }
+}
+
+/* Light mode trending styles */
+.trending-container {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgb(229, 231, 235);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Dark mode trending styles - fondo más oscuro */
+:host-context(body.dark) .trending-container {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.6) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+}
+
+.trending-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.trending-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .trending-title {
+    font-size: 1.875rem;
+  }
+}
+
+/* Light mode title */
+.trending-title {
+  color: rgb(17, 24, 39);
+}
+
+/* Dark mode title */
+:host-context(body.dark) .trending-title {
+  color: rgb(248, 250, 252) !important;
+}
+
+.trending-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.trending-control-button {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+}
+
+/* Light mode control buttons */
+.trending-control-button {
+  color: rgb(0, 0, 0);
+}
+
+.trending-control-button:hover {
+  color: rgb(55, 65, 81);
+}
+
+/* Dark mode control buttons */
+:host-context(body.dark) .trending-control-button {
+  color: rgb(203, 213, 225) !important;
+}
+
+:host-context(body.dark) .trending-control-button:hover {
+  color: rgb(248, 250, 252) !important;
 }
