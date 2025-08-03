@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Song {
   id: number;
@@ -43,9 +49,11 @@ interface SimilarSong {
     MatChipsModule,
     MatDividerModule,
     MatProgressBarModule,
+    TranslateModule,
   ],
   templateUrl: './song-description.html',
   styleUrls: ['./song-description.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SongDescriptionComponent implements OnInit {
   song: Song | null = null;

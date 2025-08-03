@@ -1,8 +1,8 @@
-import { TestBed } from "@angular/core/testing";
+import { TestBed } from '@angular/core/testing';
 
-import { AuthRepositoryImpl } from "../auth-repository-impl";
+import { AuthRepositoryImpl } from '../auth-repository-impl';
 
-describe("AuthRepositoryImpl", () => {
+describe('AuthRepositoryImpl', () => {
   let service: AuthRepositoryImpl;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe("AuthRepositoryImpl", () => {
     service = TestBed.inject(AuthRepositoryImpl);
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 });

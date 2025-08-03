@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayerVolumeControl } from "./player-volume-control";
+import { PlayerVolumeControl } from './player-volume-control';
 
-describe("PlayerVolumeControl", () => {
+describe('PlayerVolumeControl', () => {
   let component: PlayerVolumeControl;
   let fixture: ComponentFixture<PlayerVolumeControl>;
 
@@ -16,7 +16,7 @@ describe("PlayerVolumeControl", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

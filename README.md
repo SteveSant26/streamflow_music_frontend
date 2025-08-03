@@ -65,51 +65,57 @@ Esta estructura permite escalar el proyecto fácilmente, facilita el testing y p
 ## Instalación
 
 1. Clona el repositorio:
-    ```bash
-    git clone <url-del-repo>
-    cd streamflow_music_frontend
-    ```
+
+   ```bash
+   git clone <url-del-repo>
+   cd streamflow_music_frontend
+   ```
 
 2. Instala las dependencias:
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 ## Comandos Útiles
 
 - **Desarrollo local:**
-    ```bash
-    npm start
-    # o
-    ng serve
-    ```
-    Accede a [http://localhost:4200](http://localhost:4200)
+
+  ```bash
+  npm start
+  # o
+  ng serve
+  ```
+
+  Accede a [http://localhost:4200](http://localhost:4200)
 
 - **Build producción:**
-    ```bash
-    npm run build
-    ```
+
+  ```bash
+  npm run build
+  ```
 
 - **SSR (Server Side Rendering):**
-    ```bash
-    npm run build
-    npm run serve:ssr:b
-    ```
+
+  ```bash
+  npm run build
+  npm run serve:ssr:b
+  ```
 
 - **Linting:**
-    ```bash
-    npm run lint
-    ```
+  ```bash
+  npm run lint
+  ```
 
 ## Testing
 
 - **Unit tests:**
-    ```bash
-    npm test
-    ```
+
+  ```bash
+  npm test
+  ```
 
 - **End-to-end (e2e):**
-    > Angular CLI no incluye framework e2e por defecto. Puedes integrar Cypress, Playwright u otro de tu preferencia.
+  > Angular CLI no incluye framework e2e por defecto. Puedes integrar Cypress, Playwright u otro de tu preferencia.
 
 ## Linting y Formato
 
@@ -120,9 +126,9 @@ Esta estructura permite escalar el proyecto fácilmente, facilita el testing y p
 
 - **Compodoc:**  
   Genera documentación automática del código:
-    ```bash
-    npm run compodoc:build-and-serve
-    ```
+  ```bash
+  npm run compodoc:build-and-serve
+  ```
   Accede a la documentación en [http://localhost:8080](http://localhost:8080)
 
 ## Recursos adicionales

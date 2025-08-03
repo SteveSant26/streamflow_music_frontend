@@ -1,19 +1,19 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MusicsTablePlay } from "./musics-table-play";
+import { MusicsTablePlay } from './musics-table-play';
 
-describe("MusicsTablePlay", () => {
+describe('MusicsTablePlay', () => {
   let component: MusicsTablePlay;
   let fixture: ComponentFixture<MusicsTablePlay>;
 
   const mockSong = {
     id: 1,
-    title: "Test Song",
-    artists: ["Test Artist"],
-    album: "Test Album",
+    title: 'Test Song',
+    artists: ['Test Artist'],
+    album: 'Test Album',
     albumId: 1,
-    duration: "3:45",
-    image: "test-image.jpg",
+    duration: '3:45',
+    image: 'test-image.jpg',
   };
 
   beforeEach(async () => {
@@ -31,7 +31,7 @@ describe("MusicsTablePlay", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

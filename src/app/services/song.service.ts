@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { ApiService } from "./api.service";
-import { Song, SearchFilters, PaginatedResponse } from "../models";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
+import { Song, SearchFilters, PaginatedResponse } from '../models';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class SongService {
-  private endpoint = "/songs";
+  private endpoint = '/songs';
 
   constructor(private apiService: ApiService) {}
 

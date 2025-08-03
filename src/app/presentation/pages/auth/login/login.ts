@@ -52,7 +52,7 @@ export class LoginComponent {
     try {
       const result = await this.loginSessionUseCase.execute(this.credentials);
       console.log('Login successful:', result);
-      
+
       this.router.navigate(['/home']);
     } catch (error) {
       this.handleError(error);

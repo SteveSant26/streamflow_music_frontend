@@ -8,7 +8,11 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ResetPasswordUseCase } from '../../../../domain/usecases/reset-password.usecase';
-import { AuthError, ValidationError, NetworkError } from '@app/domain/errors/auth.errors';
+import {
+  AuthError,
+  ValidationError,
+  NetworkError,
+} from '@app/domain/errors/auth.errors';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -32,7 +36,7 @@ export class ResetPasswordComponent {
     this.isLoading.set(true);
     this.error.set(null);
     this.success.set(null);
-    
+
     try {
       await this.resetPasswordUseCase.execute(this.email);
       this.success.set(
@@ -49,7 +53,9 @@ export class ResetPasswordComponent {
     if (error instanceof ValidationError) {
       this.error.set(error.message);
     } else if (error instanceof NetworkError) {
-      this.error.set('Error de conexión. Verifica tu internet e intenta de nuevo.');
+      this.error.set(
+        'Error de conexión. Verifica tu internet e intenta de nuevo.',
+      );
     } else if (error instanceof AuthError) {
       this.error.set(error.message);
     } else {

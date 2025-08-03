@@ -7,6 +7,7 @@ import {
 import { MusicsTablePlay } from '../musics-table-play/musics-table-play';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Song {
   id: number;
@@ -20,7 +21,7 @@ interface Song {
 
 @Component({
   selector: 'app-musics-table',
-  imports: [MusicsTablePlay, MatIcon],
+  imports: [MusicsTablePlay, MatIcon, TranslateModule],
   templateUrl: './musics-table.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,18 +1,8 @@
 <div class="home-container">
   <!-- Hero Section -->
-  <div class="hero-section text-gray-900 mb-8 text-center lg:text-left">
+  <div class="hero-section mb-8 text-center lg:text-left">
     <div class="mb-6">
       <app-greeting></app-greeting>
-      <p class="text-gray-700 mt-3 text-sm sm:text-base">
-        {{ 'HOME.DISCOVER' | translate }}
-      </p>
-      <div class="mt-4">
-        <button
-          class="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 hover:shadow-lg hover:scale-105 transition-all"
-        >
-          {{ 'HOME.PLAY_ALL' | translate }}
-        </button>
-      </div>
     </div>
   </div>
 
@@ -51,36 +41,36 @@
   <!-- Playlists Recomendadas -->
   <div class="mb-8">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
-        {{ 'HOME.MIXES' | translate }}
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">
+        {{ "HOME.MIXES" | translate }}
       </h2>
       <button class="text-black hover:text-gray-700 text-sm font-medium">
-        {{ 'HOME.SEE_ALL' | translate }}
+        {{ "HOME.SEE_ALL" | translate }}
       </button>
     </div>
     <div
       class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6"
     >
       @for (playlist of featuredPlaylists; track playlist.id) {
-      <app-play-list-item-card [playlist]="playlist"></app-play-list-item-card>
+        <app-play-list-item-card
+          [playlist]="playlist"
+        ></app-play-list-item-card>
       }
     </div>
   </div>
 
   <!-- Trending Now -->
-  <div class="mb-32 lg:mb-24">
-    <div
-      class="bg-white/60 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm"
-    >
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">
-          {{ 'HOME.TRENDING' | translate }}
+  <div class="trending-section">
+    <div class="trending-container">
+      <div class="trending-header">
+        <h2 class="trending-title">
+          {{ "HOME.TRENDING" | translate }}
         </h2>
-        <div class="flex gap-2">
-          <button class="text-black hover:text-gray-700 transition-colors">
+        <div class="trending-controls">
+          <button class="trending-control-button">
             <mat-icon>menu</mat-icon>
           </button>
-          <button class="text-black hover:text-gray-700 transition-colors">
+          <button class="trending-control-button">
             <mat-icon>equalizer</mat-icon>
           </button>
         </div>

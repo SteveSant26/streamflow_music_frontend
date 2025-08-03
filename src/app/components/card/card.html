@@ -4,16 +4,16 @@
       class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-0"
     >
       <div class="flex-1">
-        <h2>{{ title }}</h2>
-        <p class="mt-2">{{ body }}</p>
+        <h2 class="text-base font-bold">{{ title }}</h2>
+        <p class="mt-2 text-subdued">{{ body }}</p>
       </div>
       @if (showPlayButton) {
-      <div class="flex justify-end sm:ml-4">
-        <app-card-play-button
-          [id]="playlistId"
-          size="small"
-        ></app-card-play-button>
-      </div>
+        <div class="flex justify-end sm:ml-4">
+          <app-card-play-button
+            [id]="playlistId"
+            size="small"
+          ></app-card-play-button>
+        </div>
       }
     </div>
   </a>

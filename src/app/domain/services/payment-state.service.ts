@@ -1,5 +1,10 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { Subscription, SubscriptionPlan, PaymentMethod, Invoice } from '../entities/payment.entity';
+import {
+  Subscription,
+  SubscriptionPlan,
+  PaymentMethod,
+  Invoice,
+} from '../entities/payment.entity';
 
 export interface PaymentState {
   subscription: Subscription | null;
@@ -18,7 +23,7 @@ export class PaymentStateService {
     paymentMethods: [],
     invoices: [],
     loading: false,
-    error: null
+    error: null,
   });
 
   readonly state = this._state.asReadonly();
@@ -34,25 +39,30 @@ export class PaymentStateService {
   // Computed derived values
   readonly hasActiveSubscription = computed(() => {
     const subscription = this.subscription();
-    return subscription?.status === 'active' || subscription?.status === 'trialing';
+    return (
+      subscription?.status === 'active' || subscription?.status === 'trialing'
+    );
   });
 
   readonly currentPlan = computed(() => {
     const subscription = this.subscription();
     const plans = this.plans();
     if (!subscription) return null;
-    return plans.find(plan => plan.id === subscription.planId) || null;
+    return plans.find((plan) => plan.id === subscription.planId) || null;
   });
 
   readonly defaultPaymentMethod = computed(() => {
     const methods = this.paymentMethods();
-    return methods.find(method => method.isDefault) || null;
+    return methods.find((method) => method.isDefault) || null;
   });
 
   readonly isOnTrial = computed(() => {
     const subscription = this.subscription();
     if (!subscription || !subscription.trialEnd) return false;
-    return new Date() < new Date(subscription.trialEnd) && subscription.status === 'trialing';
+    return (
+      new Date() < new Date(subscription.trialEnd) &&
+      subscription.status === 'trialing'
+    );
   });
 
   readonly subscriptionStatus = computed(() => {
@@ -68,61 +78,63 @@ export class PaymentStateService {
 
   readonly upcomingInvoice = computed(() => {
     const invoices = this.invoices();
-    return invoices.find(invoice => invoice.status === 'open') || null;
+    return invoices.find((invoice) => invoice.status === 'open') || null;
   });
 
   // State updaters
   setLoading(loading: boolean): void {
-    this._state.update(state => ({ ...state, loading }));
+    this._state.update((state) => ({ ...state, loading }));
   }
 
   setError(error: string | null): void {
-    this._state.update(state => ({ ...state, error }));
+    this._state.update((state) => ({ ...state, error }));
   }
 
   setSubscription(subscription: Subscription | null): void {
-    this._state.update(state => ({ ...state, subscription }));
+    this._state.update((state) => ({ ...state, subscription }));
   }
 
   setPlans(plans: SubscriptionPlan[]): void {
-    this._state.update(state => ({ ...state, plans }));
+    this._state.update((state) => ({ ...state, plans }));
   }
 
   setPaymentMethods(paymentMethods: PaymentMethod[]): void {
-    this._state.update(state => ({ ...state, paymentMethods }));
+    this._state.update((state) => ({ ...state, paymentMethods }));
   }
 
   setInvoices(invoices: Invoice[]): void {
-    this._state.update(state => ({ ...state, invoices }));
+    this._state.update((state) => ({ ...state, invoices }));
   }
 
   updatePaymentMethod(updatedMethod: PaymentMethod): void {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
-      paymentMethods: state.paymentMethods.map(method =>
-        method.id === updatedMethod.id ? updatedMethod : method
-      )
+      paymentMethods: state.paymentMethods.map((method) =>
+        method.id === updatedMethod.id ? updatedMethod : method,
+      ),
     }));
   }
 
   addPaymentMethod(newMethod: PaymentMethod): void {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
-      paymentMethods: [...state.paymentMethods, newMethod]
+      paymentMethods: [...state.paymentMethods, newMethod],
     }));
   }
 
   removePaymentMethod(methodId: string): void {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
-      paymentMethods: state.paymentMethods.filter(method => method.id !== methodId)
+      paymentMethods: state.paymentMethods.filter(
+        (method) => method.id !== methodId,
+      ),
     }));
   }
 
   addInvoice(invoice: Invoice): void {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
-      invoices: [invoice, ...state.invoices]
+      invoices: [invoice, ...state.invoices],
     }));
   }
 
@@ -133,7 +145,7 @@ export class PaymentStateService {
       paymentMethods: [],
       invoices: [],
       loading: false,
-      error: null
+      error: null,
     });
   }
 
@@ -141,20 +153,20 @@ export class PaymentStateService {
   canUpgrade(targetPlanId: string): boolean {
     const currentPlan = this.currentPlan();
     const plans = this.plans();
-    const targetPlan = plans.find(plan => plan.id === targetPlanId);
-    
+    const targetPlan = plans.find((plan) => plan.id === targetPlanId);
+
     if (!currentPlan || !targetPlan) return true;
-    
+
     return targetPlan.price > currentPlan.price;
   }
 
   canDowngrade(targetPlanId: string): boolean {
     const currentPlan = this.currentPlan();
     const plans = this.plans();
-    const targetPlan = plans.find(plan => plan.id === targetPlanId);
-    
+    const targetPlan = plans.find((plan) => plan.id === targetPlanId);
+
     if (!currentPlan || !targetPlan) return true;
-    
+
     return targetPlan.price < currentPlan.price;
   }
 

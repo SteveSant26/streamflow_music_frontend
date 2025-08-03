@@ -2,13 +2,13 @@
 <div class="block sm:hidden space-y-3">
   @for (song of songs; track song.id; let i = $index) {
     <div
-      class="bg-white/5 rounded-lg p-3 hover:bg-white/10 transition duration-300 group"
+      class="bg-elevated rounded-lg p-3 hover-bg-elevated-hover transition duration-300 group"
     >
       <div class="flex items-center gap-3">
         <!-- Play button / Number -->
         <div class="relative w-8 flex justify-center">
           <span
-            class="opacity-100 transition-all group-hover:opacity-0 text-zinc-400 text-sm"
+            class="opacity-100 transition-all group-hover:opacity-0 text-subdued text-sm"
           >
             {{ i + 1 }}
           </span>
@@ -36,20 +36,20 @@
             <h3
               [class]="
                 'text-sm font-normal truncate cursor-pointer hover:underline ' +
-                (isCurrentSong(song) ? 'text-green-400' : 'text-white')
+                (isCurrentSong(song) ? 'text-accent' : 'text-base')
               "
               (click)="goToSongDescription(song.id)"
             >
               {{ song.title }}
             </h3>
-            <span class="text-gray-400 text-xs truncate">{{
+            <span class="text-subdued text-xs truncate">{{
               song.artists.join(", ")
             }}</span>
           </div>
         </div>
 
         <!-- Duration -->
-        <span class="text-black-400 text-xs">{{ song.duration }}</span>
+        <span class="text-subdued text-xs">{{ song.duration }}</span>
       </div>
     </div>
   }
@@ -57,13 +57,15 @@
 
 <!-- Desktop view - Table layout -->
 <table
-  class="hidden sm:table table-auto text-left min-w-full divide-y divide-gray-500/20"
+  class="hidden sm:table table-auto text-left min-w-full divide-y divide-border"
 >
   <thead>
-    <tr class="text-zinc-400 text-sm">
+    <tr class="text-subdued text-sm">
       <th class="px-4 py-2 font-bold">#</th>
-      <th class="px-4 py-2 font-bold">Título</th>
-      <th class="px-4 py-2 font-bold hidden md:table-cell">Álbum</th>
+      <th class="px-4 py-2 font-bold">{{ "TABLE.TITLE" | translate }}</th>
+      <th class="px-4 py-2 font-bold hidden md:table-cell">
+        {{ "TABLE.ALBUM" | translate }}
+      </th>
       <th class="px-4 py-2 font-bold">
         <mat-icon>schedule</mat-icon>
       </th>
@@ -74,7 +76,7 @@
     <tr class="h-4"></tr>
     @for (song of songs; track song.id; let i = $index) {
       <tr
-        class="text-black-300 border-spacing-0 text-sm font-bold hover:bg-white/10 overflow-hidden transition duration-300 group"
+        class="text-base border-spacing-0 font-bold hover-bg-elevated-hover overflow-hidden transition duration-300 group"
       >
         <td class="relative px-4 py-2 rounded-tl-lg rounded-bl-lg w-5">
           <span
@@ -104,13 +106,13 @@
             <h3
               [class]="
                 'text-base font-normal cursor-pointer hover:underline ' +
-                (isCurrentSong(song) ? 'text-black-400' : 'text-black')
+                (isCurrentSong(song) ? 'text-accent' : 'text-base')
               "
               (click)="goToSongDescription(song.id)"
             >
               {{ song.title }}
             </h3>
-            <span class="text-black-400">{{ song.artists.join(", ") }}</span>
+            <span class="text-subdued">{{ song.artists.join(", ") }}</span>
           </div>
         </td>
         <td class="px-4 py-2 hidden md:table-cell">{{ song.album }}</td>

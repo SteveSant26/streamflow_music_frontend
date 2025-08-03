@@ -6,12 +6,16 @@ import { GetAvailableLanguagesUseCase } from '../usecases/get-available-language
 export type Language = 'en' | 'es';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LanguageService {
   private readonly changeLanguageUseCase = inject(ChangeLanguageUseCase);
-  private readonly getCurrentLanguageUseCase = inject(GetCurrentLanguageUseCase);
-  private readonly getAvailableLanguagesUseCase = inject(GetAvailableLanguagesUseCase);
+  private readonly getCurrentLanguageUseCase = inject(
+    GetCurrentLanguageUseCase,
+  );
+  private readonly getAvailableLanguagesUseCase = inject(
+    GetAvailableLanguagesUseCase,
+  );
 
   // Signal para reactivity
   private readonly currentLanguageSignal = signal<Language>('en');
@@ -38,10 +42,10 @@ export class LanguageService {
 
   getAvailableLanguages(): { code: Language; name: string }[] {
     const languages = this.getAvailableLanguagesUseCase.execute();
-    
-    return languages.map(lang => ({
+
+    return languages.map((lang) => ({
       code: lang as Language,
-      name: lang === 'en' ? 'English' : 'Español'
+      name: lang === 'en' ? 'English' : 'Español',
     }));
   }
 

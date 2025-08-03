@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MusicsTable } from "./musics-table";
+import { MusicsTable } from './musics-table';
 
-describe("MusicsTable", () => {
+describe('MusicsTable', () => {
   let component: MusicsTable;
   let fixture: ComponentFixture<MusicsTable>;
 
@@ -16,7 +16,7 @@ describe("MusicsTable", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

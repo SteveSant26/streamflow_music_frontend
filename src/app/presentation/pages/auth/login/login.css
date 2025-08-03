@@ -3,19 +3,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f9fafb;
+  background-color: var(--theme-bg, #f9fafb);
   width: 100%;
   padding: 3rem 1rem;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark mode container */
+:host-context(body.dark) .login-container {
+  background-color: #232323 !important;
 }
 
 .login-header {
   max-width: 28rem;
   width: 100%;
-  background-color: white;
+  background-color: var(--theme-card-bg, white);
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
   border-radius: 0.5rem;
   animation: slideUp 0.3s ease-out;
+  border: 1px solid var(--theme-border, transparent);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode header */
+:host-context(body.dark) .login-header {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Dark mode text */
+:host-context(body.dark) .login-header h1 {
+  color: #f9fafb !important;
+}
+
+:host-context(body.dark) .login-header label {
+  color: #d1d5db !important;
+}
+
+:host-context(body.dark) .login-header p {
+  color: #9ca3af !important;
 }
 
 .login-form {
@@ -30,10 +58,25 @@
   display: block;
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  color: #111827;
+  border: 1px solid var(--theme-border, #d1d5db);
+  color: var(--theme-text, #111827);
+  background-color: var(--theme-card-bg, white);
   font-size: 0.875rem;
   line-height: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+/* Dark mode inputs */
+:host-context(body.dark) .login-form input[type="email"],
+:host-context(body.dark) .login-form input[type="password"] {
+  background-color: #4b5563 !important;
+  color: #f9fafb !important;
+  border-color: #6b7280 !important;
+}
+
+:host-context(body.dark) .login-form input[type="email"]::placeholder,
+:host-context(body.dark) .login-form input[type="password"]::placeholder {
+  color: #9ca3af !important;
 }
 
 .login-form input[type="email"]:focus,
@@ -41,6 +84,85 @@
   outline: none;
   border-color: #000000;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Dark mode focus */
+:host-context(body.dark) .login-form input[type="email"]:focus,
+:host-context(body.dark) .login-form input[type="password"]:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Social buttons */
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--theme-border, #d1d5db);
+  border-radius: 0.5rem;
+  background-color: var(--theme-card-bg, white);
+  color: var(--theme-text, #374151);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.social-btn:hover {
+  background-color: var(--theme-hover, #f3f4f6);
+  border-color: #9ca3af;
+}
+
+/* Dark mode social buttons */
+:host-context(body.dark) .social-btn {
+  background-color: #4b5563 !important;
+  color: #f9fafb !important;
+  border-color: #6b7280 !important;
+}
+
+:host-context(body.dark) .social-btn:hover {
+  background-color: #6b7280 !important;
+  border-color: #9ca3af !important;
+}
+
+/* Dark mode checkbox */
+:host-context(body.dark) input[type="checkbox"] {
+  background-color: #4b5563 !important;
+  border-color: #6b7280 !important;
+}
+
+/* Dark mode links */
+:host-context(body.dark) a {
+  color: #60a5fa !important;
+}
+
+:host-context(body.dark) a:hover {
+  color: #93c5fd !important;
+}
+
+/* Dark mode error message */
+:host-context(body.dark) .error-message {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+/* Dark mode footer */
+:host-context(body.dark) .login-footer p {
+  color: #6b7280 !important;
+}
+
+/* Dark mode buttons */
+:host-context(body.dark) button[type="submit"] {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+:host-context(body.dark) button[type="submit"]:hover:not(:disabled) {
+  background-color: #374151 !important;
 }
 
 /* Animaciones */

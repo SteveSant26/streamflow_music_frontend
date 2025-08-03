@@ -1,33 +1,33 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   IAuthRepository,
   LoginCredentials,
   AuthResult,
-} from "../repositories/i-auth.repository";
-import { AuthStateService } from "@app/domain/services/auth-state-service";
-import { ValidationError } from "../errors/auth.errors";
+} from '../repositories/i-auth.repository';
+import { AuthStateService } from '@app/domain/services/auth-state-service';
+import { ValidationError } from '../errors/auth.errors';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class LoginSessionUseCase {
   constructor(
     private readonly authRepository: IAuthRepository,
-    private readonly authStateService: AuthStateService
+    private readonly authStateService: AuthStateService,
   ) {}
 
   async execute(credentials: LoginCredentials): Promise<AuthResult> {
     // Validaciones
     if (!credentials.email || !credentials.password) {
-      throw new ValidationError("Email and password are required");
+      throw new ValidationError('Email and password are required');
     }
 
     if (!this.isValidEmail(credentials.email)) {
-      throw new ValidationError("Invalid email format");
+      throw new ValidationError('Invalid email format');
     }
 
     if (credentials.password.length < 6) {
-      throw new ValidationError("Password must be at least 6 characters long");
+      throw new ValidationError('Password must be at least 6 characters long');
     }
 
     // Ejecutar login
@@ -37,7 +37,7 @@ export class LoginSessionUseCase {
     this.authStateService.updateSession({
       user: result.user,
       isAuthenticated: true,
-      token: result.token
+      token: result.token,
     });
 
     return result;

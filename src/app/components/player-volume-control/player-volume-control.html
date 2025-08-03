@@ -1,11 +1,11 @@
 <div class="flex items-center gap-2">
   <!-- Volume Icon -->
   @if (volume === 0) {
-    <mat-icon class="w-5 h-5 text-black">volume_off</mat-icon>
+    <mat-icon class="w-5 h-5 text-base">volume_off</mat-icon>
   } @else if (volume < 0.5) {
-    <mat-icon class="w-5 h-5 text-black">volume_down</mat-icon>
+    <mat-icon class="w-5 h-5 text-base">volume_down</mat-icon>
   } @else {
-    <mat-icon class="w-5 h-5 text-black">volume_up</mat-icon>
+    <mat-icon class="w-5 h-5 text-base">volume_up</mat-icon>
   }
 
   <!-- Volume Slider -->
@@ -16,9 +16,9 @@
     step="0.01"
     [value]="volume"
     (input)="onVolumeChange($event)"
-    class="w-24 h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer volume-slider"
+    class="w-24 h-2 bg-border rounded-lg appearance-none cursor-pointer volume-slider"
   />
 
   <!-- Volume Percentage -->
-  <span class="text-black text-xs w-8"> {{ roundedVolumePercentage }}% </span>
+  <span class="text-subdued text-xs w-8"> {{ roundedVolumePercentage }}% </span>
 </div>

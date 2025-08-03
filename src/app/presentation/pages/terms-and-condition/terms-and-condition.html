@@ -1,0 +1,241 @@
+<div
+  class="p-6 max-w-screen-xl mx-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400"
+>
+  <!-- Hero Section -->
+  <div class="text-center mb-12 lg:text-left">
+    <div class="mb-6">
+      <h1
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 flex items-center justify-center lg:justify-start bg-gradient-to-br from-black to-gray-800 bg-clip-text text-transparent"
+      >
+        Términos y Condiciones
+      </h1>
+      <p class="text-gray-700 mt-3 text-sm sm:text-base">
+        Lee nuestros términos de servicio y condiciones de uso de StreamFlow
+        Music
+      </p>
+      <div class="mt-4">
+        <span
+          class="bg-black text-white px-4 py-2 rounded-full text-sm font-medium flex items-center justify-center w-fit mx-auto lg:mx-0"
+        >
+          <span
+            class="material-icons mr-2 text-sm font-normal font-material-icons leading-none tracking-normal transform-none inline-block whitespace-nowrap overflow-visible"
+            >schedule</span
+          >
+          Última actualización: {{ lastUpdated }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div
+    class="bg-white/60 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm mb-8"
+  >
+    <div class="prose prose-gray max-w-none text-gray-700">
+      <!-- Dynamic Sections -->
+      <section
+        *ngFor="let section of sections; trackBy: trackBySection; let i = index"
+        class="mb-8 animate-fadeInUp opacity-0 fill-mode-both"
+        [style.animation-delay]="(i + 1) * 0.1 + 's'"
+      >
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-6 flex items-center border-b-2 border-gray-200 pb-3"
+        >
+          {{ section.title }}
+        </h2>
+
+        <div
+          class="border-l-4 p-4 rounded-r-lg mb-4"
+          [ngClass]="getBgColorClasses(section.color)"
+        >
+          <p class="text-gray-700 leading-relaxed">
+            {{ section.content }}
+          </p>
+        </div>
+
+        <!-- Service Plans Grid (only for service section) -->
+        <div
+          *ngIf="section.id === 'service'"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-gray-900 mb-2 flex items-center">
+              Plan Gratuito
+            </h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li class="flex items-center">Acceso limitado con publicidad</li>
+              <li class="flex items-center">Calidad de audio estándar</li>
+              <li class="flex items-center">Sin descargas offline</li>
+            </ul>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-gray-900 mb-2 flex items-center">
+              Planes Premium
+            </h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li class="flex items-center">Sin publicidad</li>
+              <li class="flex items-center">Calidad de audio superior</li>
+              <li class="flex items-center">Descargas offline ilimitadas</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Highlights -->
+        <ul
+          *ngIf="section.highlights"
+          class="list-none text-gray-700 space-y-2 ml-4"
+        >
+          <li
+            *ngFor="let highlight of section.highlights"
+            class="flex items-start"
+          >
+            {{ highlight }}
+          </li>
+        </ul>
+
+        <!-- Warnings -->
+        <div
+          *ngIf="section.warning"
+          class="bg-red-50 border border-red-200 rounded-lg p-4 mt-4"
+        >
+          <h3 class="font-semibold text-red-800 mb-3 flex items-center">
+            <span *ngIf="section.id === 'accounts'"
+              >Responsabilidades del Usuario:</span
+            >
+            <span *ngIf="section.id === 'usage'">Está prohibido:</span>
+          </h3>
+          <ul class="text-red-700 space-y-2">
+            <li
+              *ngFor="let warning of section.warning"
+              class="flex items-start"
+            >
+              {{ section.id === "accounts" ? "info" : "close" }}
+              {{ warning }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Contact Info (only for contact section) -->
+        <div *ngIf="section.id === 'contact'" class="bg-gray-50 rounded-lg p-6">
+          <p class="text-gray-700 mb-4">
+            Si tiene preguntas sobre estos Términos y Condiciones, puede
+            contactarnos:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex items-center space-x-3">
+              <span class="text-gray-700">support&#64;streamflow.com</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-gray-700">+1 (555) 123-4567</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-gray-700">123 Music Street, Audio City</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-gray-700">Lun-Vie 9:00-18:00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy Button (only for privacy section) -->
+        <div *ngIf="section.id === 'privacy'" class="mt-4">
+          <button
+            class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors duration-300 ease-cubic-bezier(0.175, 0.885, 0.32, 1.275) active:scale-95 flex items-center"
+          >
+            Ver Política de Privacidad
+          </button>
+        </div>
+      </section>
+
+      <!-- Additional Info Section -->
+      <section
+        class="mb-8 animate-fadeInUp opacity-0 fill-mode-both"
+        style="animation-delay: 0.9s"
+      >
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-6 flex items-center border-b-2 border-gray-200 pb-3"
+        >
+          ¿Por qué elegir StreamFlow?
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-gray-50 p-4 rounded-lg text-center">
+            <div class="mb-3"></div>
+            <h5 class="font-semibold text-gray-900 mb-2">Biblioteca Inmensa</h5>
+            <p class="text-sm text-gray-600">Más de 50 millones de canciones</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg text-center">
+            <div class="mb-3"></div>
+            <h5 class="font-semibold text-gray-900 mb-2">Multiplataforma</h5>
+            <p class="text-sm text-gray-600">Web, móvil y escritorio</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg text-center">
+            <div class="mb-3"></div>
+            <h5 class="font-semibold text-gray-900 mb-2">Calidad Premium</h5>
+            <p class="text-sm text-gray-600">Audio hasta 320kbps</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg text-center">
+            <div class="mb-3"></div>
+            <h5 class="font-semibold text-gray-900 mb-2">Offline</h5>
+            <p class="text-sm text-gray-600">Descarga sin internet</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section
+        class="mb-8 animate-fadeInUp opacity-0 fill-mode-both"
+        style="animation-delay: 1s"
+      >
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-6 flex items-center justify-center border-b-2 border-gray-200 pb-3"
+        >
+          Preguntas Frecuentes
+        </h2>
+        <div class="space-y-4">
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-semibold text-gray-900 mb-2 flex items-center">
+              ¿Puedo cancelar en cualquier momento?
+            </h3>
+            <p class="text-gray-700">
+              Sí, puedes cancelar tu suscripción cuando quieras sin
+              penalizaciones.
+            </p>
+          </div>
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-semibold text-gray-900 mb-2 flex items-center">
+              ¿Hay período de prueba gratuito?
+            </h3>
+            <p class="text-gray-700">
+              Sí, todos los planes pagados incluyen 7 días de prueba gratuita.
+            </p>
+          </div>
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 class="font-semibold text-gray-900 mb-2 flex items-center">
+              ¿Qué métodos de pago aceptan?
+            </h3>
+            <p class="text-gray-700">
+              Aceptamos tarjetas de crédito, débito, PayPal y transferencias
+              bancarias.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+    <button
+      (click)="acceptTerms()"
+      class="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 hover:shadow-lg hover:scale-105 transition-all duration-300 ease-cubic-bezier(0.175, 0.885, 0.32, 1.275) active:scale-95 flex items-center"
+    >
+      Acepto los Términos
+    </button>
+    <button
+      (click)="goBack()"
+      class="border border-gray-300 text-gray-700 px-8 py-3 rounded-full font-medium hover:bg-gray-50 hover:shadow-lg transition-all duration-300 ease-cubic-bezier(0.175, 0.885, 0.32, 1.275) active:scale-95 flex items-center"
+    >
+      Volver
+    </button>
+  </div>
+</div>

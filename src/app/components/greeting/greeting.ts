@@ -1,14 +1,16 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: "app-greeting",
-  imports: [],
-  templateUrl: "./greeting.html",
-  styleUrl: "./greeting.css",
+  selector: 'app-greeting',
+  imports: [TranslateModule],
+  templateUrl: './greeting.html',
+  styleUrl: './greeting.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Greeting implements OnInit {
-  greeting = "";
+  greetingKey = '';
+  greetingParams = { name: 'Justin' };
 
   ngOnInit(): void {
     this.setGreeting();
@@ -19,11 +21,11 @@ export class Greeting implements OnInit {
     const currentHour = currentTime.getHours();
 
     if (currentHour < 12) {
-      this.greeting = "Buenos días, Justin";
+      this.greetingKey = 'GREETING.GOOD_MORNING';
     } else if (currentHour < 18) {
-      this.greeting = "Buenas tardes, Justin";
+      this.greetingKey = 'GREETING.GOOD_AFTERNOON';
     } else {
-      this.greeting = "Buenas noches, Justin";
+      this.greetingKey = 'GREETING.GOOD_EVENING';
     }
   }
 }

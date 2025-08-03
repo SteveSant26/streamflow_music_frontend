@@ -6,10 +6,11 @@ import {
   input,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-side-menu-item',
-  imports: [RouterLink],
+  imports: [RouterLink, TranslateModule],
   templateUrl: './side-menu-item.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

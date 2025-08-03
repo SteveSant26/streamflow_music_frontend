@@ -1,6 +1,6 @@
 <div class="flex items-center gap-2 w-full max-w-md">
   <!-- Current Time -->
-  <span class="text-black text-xs"> {{ formatTime(currentTime) }} </span>
+  <span class="text-subdued text-xs"> {{ formatTime(currentTime) }} </span>
 
   <!-- Progress Bar -->
   <div class="flex-1">
@@ -10,10 +10,10 @@
       [max]="duration"
       [value]="currentTime"
       (input)="onSeek($event)"
-      class="w-full h-1 bg-gray-300 rounded-lg appearance-none cursor-pointer progress-slider"
+      class="w-full h-1 bg-border rounded-lg appearance-none cursor-pointer progress-slider"
     />
   </div>
 
   <!-- Total Duration -->
-  <span class="text-black text-xs"> {{ formatTime(duration) }} </span>
+  <span class="text-subdued text-xs"> {{ formatTime(duration) }} </span>
 </div>

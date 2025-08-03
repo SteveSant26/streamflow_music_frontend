@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { provideHttpClient } from "@angular/common/http";
-import { provideHttpClientTesting } from "@angular/common/http/testing";
-import { provideRouter } from "@angular/router";
-import { ActivatedRoute } from "@angular/router";
-import { of } from "rxjs";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 // Mock para IAuthRepository
 export const mockAuthRepository = {
@@ -13,7 +13,7 @@ export const mockAuthRepository = {
   logout: () => of({}),
   getCurrentUser: () => of(null),
   refreshSession: () => of({}),
-  isAuthenticated: () => false
+  isAuthenticated: () => false,
 };
 
 /**
@@ -51,10 +51,7 @@ export function setupTestEnvironment(config: TestSetupConfig = {}) {
   };
 
   return TestBed.configureTestingModule({
-    imports: [
-      NoopAnimationsModule,
-      ...imports,
-    ],
+    imports: [NoopAnimationsModule, ...imports],
     providers: [
       { provide: ActivatedRoute, useValue: mockActivatedRoute },
       provideHttpClient(),
@@ -106,7 +103,7 @@ export function getTextContent(
   selector: string,
 ): string {
   const element = getElement(fixture, selector);
-  return element?.textContent?.trim() || "";
+  return element?.textContent?.trim() || '';
 }
 
 /**
@@ -121,6 +118,6 @@ export function clickElement(element: HTMLElement): void {
  */
 export function setInputValue(input: HTMLInputElement, value: string): void {
   input.value = value;
-  input.dispatchEvent(new Event("input", { bubbles: true }));
-  input.dispatchEvent(new Event("change", { bubbles: true }));
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.dispatchEvent(new Event('change', { bubbles: true }));
 }

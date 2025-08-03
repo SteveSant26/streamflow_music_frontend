@@ -1,23 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  Router,
-  RouterOutlet,
-  RouterLink,
-  NavigationEnd,
-} from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { AuthSessionUseCase } from '@app/domain/usecases/auth-session.usecase';
 import { AsideMenu } from './components/aside-menu/aside-menu';
 import { Player } from './components/player/player';
 import { CommonModule } from '@angular/common';
 import { GlobalPlayerStateService } from './shared/services/global-player-state.service';
 import { filter } from 'rxjs';
-import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from './domain/services/language.service';
+import { ThemeToggleComponent } from './theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, AsideMenu, Player, CommonModule, MatIcon, TranslateModule],
+  imports: [
+    RouterOutlet,
+    AsideMenu,
+    Player,
+    CommonModule,
+    TranslateModule,
+    ThemeToggleComponent,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -56,7 +58,10 @@ export class App implements OnInit {
 
   private initializeLanguage() {
     // Language service automatically initializes on construction
-    console.log('🌐 App: Language service initialized with:', this.languageService.getCurrentLanguage());
+    console.log(
+      '🌐 App: Language service initialized with:',
+      this.languageService.getCurrentLanguage(),
+    );
   }
 
   private async initializeAuth() {

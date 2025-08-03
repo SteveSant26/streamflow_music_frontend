@@ -7,15 +7,16 @@ import {
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
-} from "@angular/core";
-import { PlayerControlButtonBar } from "../player-control-button-bar/player-control-button-bar";
-import { PlayerCurrentSong } from "../player-current-song/player-current-song";
-import { PlayerSoundControl } from "../player-sound-control/player-sound-control";
-import { PlayerVolumeControl } from "../player-volume-control/player-volume-control";
+} from '@angular/core';
+import { PlayerControlButtonBar } from '../player-control-button-bar/player-control-button-bar';
+import { PlayerCurrentSong } from '../player-current-song/player-current-song';
+import { PlayerSoundControl } from '../player-sound-control/player-sound-control';
+import { PlayerVolumeControl } from '../player-volume-control/player-volume-control';
 import { PlayerUseCase } from '../../domain/usecases/player.use-case';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Song {
   id: number;
@@ -40,18 +41,19 @@ interface CurrentMusic {
 }
 
 @Component({
-  selector: "app-player",
+  selector: 'app-player',
   imports: [
     PlayerControlButtonBar,
     PlayerCurrentSong,
     PlayerSoundControl,
     PlayerVolumeControl,
+    TranslateModule,
   ],
-  templateUrl: "./player.html",
+  templateUrl: './player.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Player implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild("audioElement", { static: false })
+  @ViewChild('audioElement', { static: false })
   audioRef!: ElementRef<HTMLAudioElement>;
 
   // State from Clean Architecture
@@ -72,7 +74,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly playerUseCase: PlayerUseCase,
     private readonly globalPlayerState: GlobalPlayerStateService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -80,23 +82,26 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
     this.globalPlayerState.ensureInitialized();
 
     // Subscribe to player state from Clean Architecture
-    this.globalPlayerState.getPlayerState$()
+    this.globalPlayerState
+      .getPlayerState$()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(state => {
+      .subscribe((state) => {
         this.playerState = state;
         this.updateLegacyState(state);
         this.cdr.detectChanges(); // Force change detection for OnPush
       });
 
-    this.playerUseCase.onSongEnd()
+    this.playerUseCase
+      .onSongEnd()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         // Song ended - handled by use case
       });
 
-    this.playerUseCase.onError()
+    this.playerUseCase
+      .onError()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(error => {
+      .subscribe((error) => {
         console.error('Player error:', error);
         if (error.includes('not allowed')) {
           this.showInteractionMessage = true;
@@ -110,7 +115,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   private updateLegacyState(state: PlayerState): void {
     this.isPlaying = state.isPlaying;
     this.volume = state.volume;
-    
+
     if (state.currentSong) {
       // Map Clean Architecture Song to legacy Song format
       this.currentMusic.song = {
@@ -120,7 +125,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
         album: 'Unknown Album',
         albumId: 1,
         duration: this.formatTime(state.currentSong.duration),
-        image: state.currentSong.albumCover || '/assets/gorillaz2.jpg'
+        image: state.currentSong.albumCover || '/assets/gorillaz2.jpg',
       };
 
       // Don't manually set the audio source - let the repository handle it
@@ -138,10 +143,10 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     if (this.audioRef?.nativeElement) {
       const audioElement = this.audioRef.nativeElement;
-      
+
       // Connect the template audio element to Clean Architecture
       this.playerUseCase.setAudioElement(audioElement);
-      
+
       // Set initial volume
       audioElement.volume = this.volume;
     }
@@ -150,7 +155,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     // CRITICAL: Preserve state before any component destruction
     this.globalPlayerState.preserveStateForNavigation();
-    
+
     this.destroy$.next();
     this.destroy$.complete();
   }

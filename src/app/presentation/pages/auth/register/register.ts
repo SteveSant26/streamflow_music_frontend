@@ -53,9 +53,11 @@ export class RegisterComponent {
     this.success.set(null);
 
     try {
-      const result = await this.registerSessionUseCase.execute(this.credentials);
+      const result = await this.registerSessionUseCase.execute(
+        this.credentials,
+      );
       console.log('Register successful:', result);
-      
+
       this.success.set('¡Registro exitoso! Bienvenido a StreamFlow Music.');
 
       // Redirigir después de mostrar el mensaje de éxito

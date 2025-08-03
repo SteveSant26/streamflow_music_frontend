@@ -2,7 +2,7 @@
   <!-- Previous Button -->
   <button
     (click)="onPreviousClick()"
-    class="text-black hover:text-gray-700 transition-colors"
+    class="text-base hover-text-accent transition-colors"
   >
     <mat-icon>skip_previous</mat-icon>
   </button>
@@ -10,7 +10,7 @@
   <!-- Play/Pause Button -->
   <button
     (click)="onPlayPauseClick()"
-    class="bg-black text-white rounded-full p-2 hover:scale-105 hover:bg-gray-800 transition-all shadow-lg"
+    class="bg-accent text-white rounded-full p-2 hover:scale-105 hover:brightness-110 transition-all shadow-lg"
   >
     @if (isPlaying) {
       <mat-icon>pause</mat-icon>
@@ -22,7 +22,7 @@
   <!-- Next Button -->
   <button
     (click)="onNextClick()"
-    class="text-black hover:text-gray-700 transition-colors"
+    class="text-base hover-text-accent transition-colors"
   >
     <mat-icon>skip_next</mat-icon>
   </button>

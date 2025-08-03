@@ -8,27 +8,31 @@ import { SubscriptionPlan } from '../entities/payment.entity';
 export class GetSubscriptionPlansUseCase {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
-    private readonly paymentStateService: PaymentStateService
+    private readonly paymentStateService: PaymentStateService,
   ) {}
 
   execute(): Observable<SubscriptionPlan[]> {
-    console.log('🎯 GetSubscriptionPlansUseCase: Obteniendo planes de suscripción');
-    
+    console.log(
+      '🎯 GetSubscriptionPlansUseCase: Obteniendo planes de suscripción',
+    );
+
     this.paymentStateService.setLoading(true);
     this.paymentStateService.setError(null);
 
     return this.paymentRepository.getSubscriptionPlans().pipe(
-      tap(plans => {
+      tap((plans) => {
         console.log('✅ GetSubscriptionPlansUseCase: Planes obtenidos:', plans);
         this.paymentStateService.setPlans(plans);
         this.paymentStateService.setLoading(false);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('❌ GetSubscriptionPlansUseCase: Error:', error);
-        this.paymentStateService.setError('Error al cargar planes de suscripción');
+        this.paymentStateService.setError(
+          'Error al cargar planes de suscripción',
+        );
         this.paymentStateService.setLoading(false);
         return of([]);
-      })
+      }),
     );
   }
 }

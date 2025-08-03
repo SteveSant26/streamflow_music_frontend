@@ -4,7 +4,7 @@ import { Playlist } from '../../domain/entities/playlist.entity';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MusicLibraryService {
   private songsSubject = new BehaviorSubject<Song[]>([]);
@@ -23,7 +23,7 @@ export class MusicLibraryService {
         artist: 'Test Artist',
         duration: 0, // Will be loaded dynamically from audio file
         albumCover: '/assets/gorillaz2.jpg',
-        audioUrl: '/assets/music/1.mp3'
+        audioUrl: '/assets/music/1.mp3',
       },
       {
         id: '2',
@@ -31,7 +31,7 @@ export class MusicLibraryService {
         artist: 'Test Artist',
         duration: 0, // Will be loaded dynamically from audio file
         albumCover: '/assets/gorillaz2.jpg',
-        audioUrl: '/assets/music/2.mp3'
+        audioUrl: '/assets/music/2.mp3',
       },
       {
         id: 'TheNightWeMet',
@@ -39,14 +39,14 @@ export class MusicLibraryService {
         artist: 'Gorillaz',
         duration: 0, // Will be loaded dynamically from audio file
         albumCover: '/assets/gorillaz2.jpg',
-        audioUrl: '/assets/music/TheNightWeMet.mp3'
-      }
+        audioUrl: '/assets/music/TheNightWeMet.mp3',
+      },
     ];
 
     const samplePlaylist: Playlist = {
       id: 'default-playlist',
       name: 'Demo Playlist',
-      songs: sampleSongs
+      songs: sampleSongs,
     };
 
     this.songsSubject.next(sampleSongs);
@@ -62,20 +62,22 @@ export class MusicLibraryService {
   }
 
   getSongById(id: string): Song | undefined {
-    return this.songsSubject.value.find(song => song.id === id);
+    return this.songsSubject.value.find((song) => song.id === id);
   }
 
   getDefaultPlaylist(): Playlist | undefined {
-    return this.playlistsSubject.value.find(playlist => playlist.id === 'default-playlist');
+    return this.playlistsSubject.value.find(
+      (playlist) => playlist.id === 'default-playlist',
+    );
   }
 
   addSong(song: Song): void {
     const currentSongs = this.songsSubject.value;
     this.songsSubject.next([...currentSongs, song]);
-    
+
     // Add to default playlist
     const playlists = this.playlistsSubject.value;
-    const defaultPlaylist = playlists.find(p => p.id === 'default-playlist');
+    const defaultPlaylist = playlists.find((p) => p.id === 'default-playlist');
     if (defaultPlaylist) {
       defaultPlaylist.songs.push(song);
       this.playlistsSubject.next([...playlists]);
@@ -83,13 +85,15 @@ export class MusicLibraryService {
   }
 
   removeSong(songId: string): void {
-    const currentSongs = this.songsSubject.value.filter(song => song.id !== songId);
+    const currentSongs = this.songsSubject.value.filter(
+      (song) => song.id !== songId,
+    );
     this.songsSubject.next(currentSongs);
-    
+
     // Remove from all playlists
-    const playlists = this.playlistsSubject.value.map(playlist => ({
+    const playlists = this.playlistsSubject.value.map((playlist) => ({
       ...playlist,
-      songs: playlist.songs.filter(song => song.id !== songId)
+      songs: playlist.songs.filter((song) => song.id !== songId),
     }));
     this.playlistsSubject.next(playlists);
   }

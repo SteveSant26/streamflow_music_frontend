@@ -5,11 +5,13 @@ import { PlayerState } from '../entities/player-state.entity';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlayerUseCase {
   private audio: HTMLAudioElement | null = null;
-  private readonly playerStateSubject = new BehaviorSubject<PlayerState>(this.getInitialPlayerState());
+  private readonly playerStateSubject = new BehaviorSubject<PlayerState>(
+    this.getInitialPlayerState(),
+  );
   private currentPlaylist: Playlist | null = null;
   private currentSongIndex = 0;
   private readonly songEndSubject = new Subject<void>();
@@ -29,7 +31,7 @@ export class PlayerUseCase {
         savedVolume = Math.max(0, Math.min(1, parseFloat(volumeStr)));
       }
     }
-    
+
     return {
       currentSong: null,
       isPlaying: false,
@@ -40,58 +42,71 @@ export class PlayerUseCase {
       isLoading: false,
       isMuted: false,
       repeatMode: 'none',
-      isShuffleEnabled: false
+      isShuffleEnabled: false,
     };
   }
 
   // Audio Element Setup
   setAudioElement(audioElement: HTMLAudioElement): void {
     // ULTRA CRITICAL: Never replace a working audio element during playback
-    if (this.audio && !this.audio.error && this.audio.src && 
-        this.audio.readyState >= 1 && this.audio.currentTime >= 0) {
-      console.log(`[${this.instanceId}] 🛡️ ULTRA PROTECTION: Refusing to replace working audio element`);
+    if (
+      this.audio &&
+      !this.audio.error &&
+      this.audio.src &&
+      this.audio.readyState >= 1 &&
+      this.audio.currentTime >= 0
+    ) {
+      console.log(
+        `[${this.instanceId}] 🛡️ ULTRA PROTECTION: Refusing to replace working audio element`,
+      );
       console.log(`[${this.instanceId}] Current audio state:`, {
         src: this.audio.src.substring(this.audio.src.lastIndexOf('/') + 1),
         currentTime: this.audio.currentTime,
         duration: this.audio.duration,
         readyState: this.audio.readyState,
-        paused: this.audio.paused
+        paused: this.audio.paused,
       });
-      
+
       // Just sync volume and event listeners without disrupting playback
       const currentState = this.playerStateSubject.value;
       this.audio.volume = currentState.volume;
       this.setupEventListeners();
       return;
     }
-    
+
     console.log(`[${this.instanceId}] Setting new audio element`);
     this.audio = audioElement;
-    
+
     // Apply saved volume to audio element
     const currentState = this.playerStateSubject.value;
     this.audio.volume = currentState.volume;
-    
+
     // Restore any existing source if we have a current song
     if (currentState.currentSong?.audioUrl) {
       this.audio.src = currentState.currentSong.audioUrl;
-      console.log(`[${this.instanceId}] Restored audio source: ${currentState.currentSong.audioUrl}`);
-      
+      console.log(
+        `[${this.instanceId}] Restored audio source: ${currentState.currentSong.audioUrl}`,
+      );
+
       // If we had a current time, try to restore it
       if (currentState.currentTime > 0) {
         const restoreTime = () => {
           if (this.audio && currentState.currentTime > 0) {
             this.audio.currentTime = currentState.currentTime;
-            console.log(`[${this.instanceId}] Restored currentTime: ${currentState.currentTime}`);
+            console.log(
+              `[${this.instanceId}] Restored currentTime: ${currentState.currentTime}`,
+            );
           }
           this.audio?.removeEventListener('loadedmetadata', restoreTime);
         };
         this.audio.addEventListener('loadedmetadata', restoreTime);
       }
     }
-    
+
     this.setupEventListeners();
-    console.log(`[${this.instanceId}] Audio element set with volume: ${currentState.volume}`);
+    console.log(
+      `[${this.instanceId}] Audio element set with volume: ${currentState.volume}`,
+    );
   }
 
   private setupEventListeners(): void {
@@ -114,7 +129,7 @@ export class PlayerUseCase {
     this.audio.addEventListener('ended', this.handleEnded);
     this.audio.addEventListener('volumechange', this.handleVolumeChange);
     this.audio.addEventListener('error', this.handleAudioError);
-    
+
     console.log(`[${this.instanceId}] Event listeners set up`);
   }
 
@@ -122,7 +137,9 @@ export class PlayerUseCase {
     if (this.audio) {
       const duration = this.audio.duration || 0;
       this.updatePlayerState({ duration });
-      console.log(`[${this.instanceId}] Metadata loaded, duration: ${duration}`);
+      console.log(
+        `[${this.instanceId}] Metadata loaded, duration: ${duration}`,
+      );
     }
   };
 
@@ -131,15 +148,17 @@ export class PlayerUseCase {
       const currentTime = this.audio.currentTime;
       const duration = this.audio.duration || 0;
       const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
-      
+
       // Only update if values actually changed significantly to prevent spam
       const currentState = this.playerStateSubject.value;
-      if (Math.abs(currentState.currentTime - currentTime) > 1.0 || 
-          Math.abs(currentState.progress - progress) > 0.5) {
+      if (
+        Math.abs(currentState.currentTime - currentTime) > 1.0 ||
+        Math.abs(currentState.progress - progress) > 0.5
+      ) {
         this.updatePlayerState({
           currentTime,
           duration,
-          progress
+          progress,
         });
       }
     }
@@ -163,11 +182,13 @@ export class PlayerUseCase {
 
   private readonly handleVolumeChange = () => {
     if (this.audio) {
-      this.updatePlayerState({ 
+      this.updatePlayerState({
         volume: this.audio.volume,
-        isMuted: this.audio.muted 
+        isMuted: this.audio.muted,
       });
-      console.log(`[${this.instanceId}] Volume change event: ${this.audio.volume}`);
+      console.log(
+        `[${this.instanceId}] Volume change event: ${this.audio.volume}`,
+      );
     }
   };
 
@@ -198,14 +219,18 @@ export class PlayerUseCase {
    */
   public togglePlayPause(): void {
     if (!this.audio) {
-      console.error(`[${this.instanceId}] Cannot toggle play/pause: no audio element`);
+      console.error(
+        `[${this.instanceId}] Cannot toggle play/pause: no audio element`,
+      );
       return;
     }
 
     const currentState = this.playerStateSubject.value;
-    
+
     if (!currentState.currentSong) {
-      console.error(`[${this.instanceId}] Cannot toggle play/pause: no current song`);
+      console.error(
+        `[${this.instanceId}] Cannot toggle play/pause: no current song`,
+      );
       return;
     }
 
@@ -218,12 +243,20 @@ export class PlayerUseCase {
       console.log(`[${this.instanceId}] CENTRALIZED: Paused audio`);
     } else {
       // Play the audio
-      this.audio.play().then(() => {
-        console.log(`[${this.instanceId}] CENTRALIZED: Started audio playback`);
-      }).catch(error => {
-        console.error(`[${this.instanceId}] CENTRALIZED: Error playing audio:`, error);
-        this.errorSubject.next(`Playback failed: ${error.message}`);
-      });
+      this.audio
+        .play()
+        .then(() => {
+          console.log(
+            `[${this.instanceId}] CENTRALIZED: Started audio playback`,
+          );
+        })
+        .catch((error) => {
+          console.error(
+            `[${this.instanceId}] CENTRALIZED: Error playing audio:`,
+            error,
+          );
+          this.errorSubject.next(`Playback failed: ${error.message}`);
+        });
     }
 
     // Force immediate state sync after toggle
@@ -237,35 +270,37 @@ export class PlayerUseCase {
    */
   public preserveCurrentState(): void {
     if (!this.audio) {
-      console.log(`[${this.instanceId}] No audio element to preserve state from`);
+      console.log(
+        `[${this.instanceId}] No audio element to preserve state from`,
+      );
       return;
     }
-    
+
     const currentTime = this.audio.currentTime;
     const duration = this.audio.duration || 0;
     const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
     const isPlaying = !this.audio.paused;
     const volume = this.audio.volume;
     const src = this.audio.src;
-    
+
     console.log(`[${this.instanceId}] 🔄 PRESERVING ULTRA CRITICAL STATE:`, {
       currentTime,
       duration,
       isPlaying,
       volume,
       src: src.substring(src.lastIndexOf('/') + 1),
-      readyState: this.audio.readyState
+      readyState: this.audio.readyState,
     });
-    
+
     // Update the state in PlayerUseCase
     this.updatePlayerState({
       currentTime,
       duration,
       progress,
       isPlaying,
-      volume
+      volume,
     });
-    
+
     // Save to localStorage as emergency backup
     try {
       const preservedData = {
@@ -275,14 +310,17 @@ export class PlayerUseCase {
         volume,
         src,
         timestamp: Date.now(),
-        currentSong: this.playerStateSubject.value.currentSong
+        currentSong: this.playerStateSubject.value.currentSong,
       };
-      localStorage.setItem('streamflow-music-emergency-state', JSON.stringify(preservedData));
+      localStorage.setItem(
+        'streamflow-music-emergency-state',
+        JSON.stringify(preservedData),
+      );
       console.log(`[${this.instanceId}] Emergency state saved to localStorage`);
     } catch (error) {
       console.error('Failed to save emergency state to localStorage:', error);
     }
-    
+
     // Force immediate state sync to all components
     this.forceStateSync();
   }
@@ -292,7 +330,9 @@ export class PlayerUseCase {
    */
   public emergencyStateRecovery(): void {
     try {
-      const emergencyState = localStorage.getItem('streamflow-music-emergency-state');
+      const emergencyState = localStorage.getItem(
+        'streamflow-music-emergency-state',
+      );
       if (!emergencyState) {
         console.log(`[${this.instanceId}] No emergency state available`);
         return;
@@ -300,7 +340,7 @@ export class PlayerUseCase {
 
       const parsedState = JSON.parse(emergencyState);
       const timeDiff = Date.now() - parsedState.timestamp;
-      
+
       // Only use emergency state if it's recent (less than 5 minutes old)
       if (timeDiff > 300000) {
         console.log(`[${this.instanceId}] Emergency state too old, ignoring`);
@@ -312,23 +352,29 @@ export class PlayerUseCase {
       if (this.audio && parsedState.src) {
         this.audio.src = parsedState.src;
         this.audio.volume = parsedState.volume;
-        
+
         const handleLoadedMetadata = () => {
           if (this.audio && parsedState.currentTime > 0) {
             this.audio.currentTime = parsedState.currentTime;
-            
+
             if (parsedState.isPlaying) {
-              this.audio.play().catch(error => {
-                console.error('Error resuming after emergency recovery:', error);
+              this.audio.play().catch((error) => {
+                console.error(
+                  'Error resuming after emergency recovery:',
+                  error,
+                );
               });
             }
           }
-          this.audio?.removeEventListener('loadedmetadata', handleLoadedMetadata);
+          this.audio?.removeEventListener(
+            'loadedmetadata',
+            handleLoadedMetadata,
+          );
         };
 
         this.audio.addEventListener('loadedmetadata', handleLoadedMetadata);
         this.audio.load();
-        
+
         // Update PlayerState with recovered song
         if (parsedState.currentSong) {
           this.updatePlayerState({
@@ -336,7 +382,7 @@ export class PlayerUseCase {
             currentTime: parsedState.currentTime,
             duration: parsedState.duration,
             isPlaying: parsedState.isPlaying,
-            volume: parsedState.volume
+            volume: parsedState.volume,
           });
         }
       }
@@ -347,18 +393,25 @@ export class PlayerUseCase {
 
   private handleSongEnd(): void {
     const currentState = this.playerStateSubject.value;
-    
+
     if (currentState.repeatMode === 'one') {
       // Repeat current song
-      this.play().catch(error => console.error('Failed to repeat song:', error));
+      this.play().catch((error) =>
+        console.error('Failed to repeat song:', error),
+      );
     } else if (this.hasNextSong() || currentState.repeatMode === 'all') {
       // Play next song
-      this.playNext().catch(error => console.error('Failed to play next song:', error));
+      this.playNext().catch((error) =>
+        console.error('Failed to play next song:', error),
+      );
     }
   }
 
   private hasNextSong(): boolean {
-    return this.currentPlaylist !== null && this.currentSongIndex < this.currentPlaylist.songs.length - 1;
+    return (
+      this.currentPlaylist !== null &&
+      this.currentSongIndex < this.currentPlaylist.songs.length - 1
+    );
   }
 
   private hasPreviousSong(): boolean {
@@ -368,14 +421,14 @@ export class PlayerUseCase {
   // Audio Control
   async playSong(song: Song): Promise<void> {
     if (!this.audio) throw new Error('Audio element not set');
-    
+
     // Use the dynamic audioUrl from the song entity
     this.audio.src = song.audioUrl;
-    this.updatePlayerState({ 
+    this.updatePlayerState({
       currentSong: song,
-      isLoading: true 
+      isLoading: true,
     });
-    
+
     try {
       await this.audio.play();
       this.updatePlayerState({ isLoading: false });
@@ -388,10 +441,10 @@ export class PlayerUseCase {
 
   pause(): void {
     if (!this.audio) return;
-    
+
     console.log(`[${this.instanceId}] Pause called - setting audio.pause()`);
     this.audio.pause();
-    
+
     // DON'T update state here - let the event listener handle it
   }
 
@@ -401,10 +454,10 @@ export class PlayerUseCase {
 
   async play(): Promise<void> {
     if (!this.audio) throw new Error('Audio element not set');
-    
+
     console.log(`[${this.instanceId}] Play called - setting audio.play()`);
     await this.audio.play();
-    
+
     // DON'T update state here - let the event listener handle it
   }
 
@@ -428,7 +481,7 @@ export class PlayerUseCase {
    */
   public playFromComponent(): void {
     console.log(`[${this.instanceId}] playFromComponent called`);
-    this.play().catch(error => {
+    this.play().catch((error) => {
       console.error(`[${this.instanceId}] Error in playFromComponent:`, error);
     });
   }
@@ -445,7 +498,10 @@ export class PlayerUseCase {
     this.currentSongIndex = 0;
     if (playlist.songs.length > 0) {
       const currentState = this.playerStateSubject.value;
-      this.playerStateSubject.next({ ...currentState, currentSong: playlist.songs[0] });
+      this.playerStateSubject.next({
+        ...currentState,
+        currentSong: playlist.songs[0],
+      });
     }
   }
 
@@ -493,15 +549,15 @@ export class PlayerUseCase {
   setVolume(volume: number): void {
     if (!this.audio) return;
     const clampedVolume = Math.max(0, Math.min(1, volume));
-    
+
     console.log(`[${this.instanceId}] Setting volume to ${clampedVolume}`);
     this.audio.volume = clampedVolume;
-    
+
     // Save to localStorage
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('streamflow-music-volume', clampedVolume.toString());
     }
-    
+
     // DON'T update state here - let the volumechange event handle it
   }
 
@@ -511,10 +567,10 @@ export class PlayerUseCase {
 
   toggleMute(): void {
     if (!this.audio) return;
-    
+
     console.log(`[${this.instanceId}] Toggling mute`);
     this.audio.muted = !this.audio.muted;
-    
+
     // DON'T update state here - let the volumechange event handle it
   }
 
@@ -525,17 +581,19 @@ export class PlayerUseCase {
 
   enableShuffle(): void {
     const currentState = this.playerStateSubject.value;
-    this.updatePlayerState({ isShuffleEnabled: !currentState.isShuffleEnabled });
+    this.updatePlayerState({
+      isShuffleEnabled: !currentState.isShuffleEnabled,
+    });
   }
 
   // Seek Control
   seekTo(time: number): void {
     if (!this.audio?.duration) return;
     const clampedTime = Math.max(0, Math.min(time, this.audio.duration));
-    
+
     console.log(`[${this.instanceId}] Seeking to ${clampedTime}s`);
     this.audio.currentTime = clampedTime;
-    
+
     // DON'T update state here - let the timeupdate event handle it
   }
 

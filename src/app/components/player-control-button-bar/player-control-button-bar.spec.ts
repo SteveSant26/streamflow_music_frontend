@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlayerControlButtonBar } from "./player-control-button-bar";
+import { PlayerControlButtonBar } from './player-control-button-bar';
 
-describe("PlayerControlButtonBar", () => {
+describe('PlayerControlButtonBar', () => {
   let component: PlayerControlButtonBar;
   let fixture: ComponentFixture<PlayerControlButtonBar>;
 
@@ -16,7 +16,7 @@ describe("PlayerControlButtonBar", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

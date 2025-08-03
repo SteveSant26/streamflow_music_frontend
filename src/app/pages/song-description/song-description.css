@@ -2,9 +2,16 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  background: white;
+  background: var(--theme-bg, white);
   min-height: 100vh;
-  color: #333;
+  color: var(--theme-text, #333);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode song description container */
+:host-context(body.dark) .song-description-container {
+  background: #0f172a !important;
+  color: #f8fafc !important;
 }
 
 /* Header Section */
@@ -16,9 +23,16 @@
 }
 
 .back-button {
-  color: black !important;
-  background: rgba(0, 0, 0, 0.1);
+  color: var(--theme-text, black) !important;
+  background: var(--theme-button-bg, rgba(0, 0, 0, 0.1));
   margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Dark mode back button */
+:host-context(body.dark) .back-button {
+  color: #f8fafc !important;
+  background: rgba(55, 65, 81, 0.5) !important;
 }
 
 .song-main-info {
@@ -34,6 +48,12 @@
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode album cover */
+:host-context(body.dark) .album-cover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
 }
 
 .album-cover img {
@@ -61,10 +81,16 @@
 }
 
 .play-button {
-  background-color: black !important;
+  background-color: var(--theme-play-button, black) !important;
   color: white !important;
   width: 80px !important;
   height: 80px !important;
+  transition: all 0.3s ease;
+}
+
+/* Dark mode play button */
+:host-context(body.dark) .play-button {
+  background-color: #3b82f6 !important;
 }
 
 .play-button mat-icon {
@@ -80,32 +106,58 @@
   font-size: 3rem;
   font-weight: bold;
   margin: 2rem 1rem 1rem 0rem;
-  color: black;
+  color: var(--theme-text, black);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode song title */
+:host-context(body.dark) .song-title {
+  color: #f8fafc !important;
 }
 
 .song-artist {
   font-size: 1.8rem;
   margin: 0 0 0.5rem 0;
-  color: #666;
+  color: var(--theme-text-secondary, #666);
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
+/* Dark mode song artist */
+:host-context(body.dark) .song-artist {
+  color: #d1d5db !important;
+}
+
 .song-artist:hover {
-  color: black;
+  color: var(--theme-text, black);
   text-decoration: underline;
+}
+
+/* Dark mode song artist hover */
+:host-context(body.dark) .song-artist:hover {
+  color: #f8fafc !important;
 }
 
 .song-album {
   font-size: 1.2rem;
   margin: 0 0 1.5rem 0;
-  color: #888;
+  color: var(--theme-text-secondary, #888);
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
+/* Dark mode song album */
+:host-context(body.dark) .song-album {
+  color: #9ca3af !important;
+}
+
 .song-album:hover {
-  color: black;
+  color: var(--theme-text, black);
+}
+
+/* Dark mode song album hover */
+:host-context(body.dark) .song-album:hover {
+  color: #f8fafc !important;
 }
 
 .song-stats {
@@ -118,22 +170,47 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #3c3c3c;
+  color: var(--theme-text-secondary, #3c3c3c);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode stat item */
+:host-context(body.dark) .stat-item {
+  color: #d1d5db !important;
 }
 
 .stat-item mat-icon {
   font-size: 1.2rem;
-  color: black;
+  color: var(--theme-text, black);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode stat icon */
+:host-context(body.dark) .stat-item mat-icon {
+  color: #f8fafc !important;
 }
 
 .genre-chips {
   margin-bottom: 1rem;
-  color: white;
+  color: var(--theme-text, white);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode genre chips */
+:host-context(body.dark) .genre-chips {
+  color: #f8fafc !important;
 }
 
 .genre-chips mat-chip-option {
-  background-color: rgb(0, 0, 0);
-  color: white;
+  background-color: var(--theme-chip-bg, rgb(0, 0, 0));
+  color: var(--theme-chip-text, white);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode genre chip option */
+:host-context(body.dark) .genre-chips mat-chip-option {
+  background-color: #374151 !important;
+  color: #f8fafc !important;
 }
 
 /* Action Controls */
@@ -149,33 +226,67 @@
   border-radius: 2rem;
   padding: 0.8rem 1.5rem;
   font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .action-button.primary {
-  background-color: black !important;
+  background-color: var(--theme-primary-button, black) !important;
   color: white !important;
+}
+
+/* Dark mode primary action button */
+:host-context(body.dark) .action-button.primary {
+  background-color: #3b82f6 !important;
 }
 
 .action-button:not(.primary) {
-  border-color: black;
-  color: black;
+  border-color: var(--theme-border, black);
+  color: var(--theme-text, black);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode non-primary action button */
+:host-context(body.dark) .action-button:not(.primary) {
+  border-color: #6b7280 !important;
+  color: #f8fafc !important;
 }
 
 .action-button:not(.primary):hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--theme-hover-bg, rgba(0, 0, 0, 0.1));
+}
+
+/* Dark mode non-primary action button hover */
+:host-context(body.dark) .action-button:not(.primary):hover {
+  background-color: rgba(55, 65, 81, 0.5) !important;
 }
 
 .action-button.liked {
-  background-color: black !important;
+  background-color: var(--theme-liked-button, black) !important;
   color: white !important;
 }
 
+/* Dark mode liked button */
+:host-context(body.dark) .action-button.liked {
+  background-color: #ef4444 !important;
+}
+
 .action-button-icon {
-  color: black;
+  color: var(--theme-text, black);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode action button icon */
+:host-context(body.dark) .action-button-icon {
+  color: #f8fafc !important;
 }
 
 .action-button-icon:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--theme-hover-bg, rgba(0, 0, 0, 0.1));
+}
+
+/* Dark mode action button icon hover */
+:host-context(body.dark) .action-button-icon:hover {
+  background-color: rgba(55, 65, 81, 0.5) !important;
 }
 
 /* Content Section */
@@ -187,9 +298,18 @@
 
 .description-card,
 .lyrics-card {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: var(--theme-card-bg, white);
+  border: 1px solid var(--theme-border, #e0e0e0);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode description and lyrics cards */
+:host-context(body.dark) .description-card,
+:host-context(body.dark) .lyrics-card {
+  background: #1f2937 !important;
+  border: 1px solid #374151 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
 .description-card mat-card-title,
@@ -197,12 +317,26 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: black;
+  color: var(--theme-text, black);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode card titles */
+:host-context(body.dark) .description-card mat-card-title,
+:host-context(body.dark) .lyrics-card mat-card-title {
+  color: #f8fafc !important;
 }
 
 .description-card mat-card-title mat-icon,
 .lyrics-card mat-card-title mat-icon {
-  color: black;
+  color: var(--theme-text, black);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode card title icons */
+:host-context(body.dark) .description-card mat-card-title mat-icon,
+:host-context(body.dark) .lyrics-card mat-card-title mat-icon {
+  color: #f8fafc !important;
 }
 
 .lyrics-card mat-card-header {
@@ -212,10 +346,16 @@
 }
 
 .lyrics-content {
-  background: #f5f5f5;
+  background: var(--theme-lyrics-bg, #f5f5f5);
   padding: 1.5rem;
   border-radius: 0.5rem;
   margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Dark mode lyrics content */
+:host-context(body.dark) .lyrics-content {
+  background: #111827 !important;
 }
 
 .lyrics-content pre {
@@ -223,7 +363,13 @@
   white-space: pre-wrap;
   margin: 0;
   line-height: 1.6;
-  color: #333;
+  color: var(--theme-text, #333);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode lyrics text */
+:host-context(body.dark) .lyrics-content pre {
+  color: #e5e7eb !important;
 }
 
 /* Similar Songs Section */
@@ -237,7 +383,13 @@
   gap: 0.5rem;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  color: black;
+  color: var(--theme-text, inherit);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode similar songs title */
+:host-context(body.dark) .similar-songs-section h3 {
+  color: #f8fafc !important;
 }
 
 .similar-songs-section h3 mat-icon {

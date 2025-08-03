@@ -62,8 +62,10 @@ export const routes: Routes = [
   {
     path: 'profile',
     loadComponent: () =>
-      import('./presentation/pages/users/user-p/user-perfil').then((m) => m.UserPerfilComponent),
-    canActivate: [authGuard], 
+      import('./presentation/pages/users/user-p/user-perfil').then(
+        (m) => m.UserPerfilComponent,
+      ),
+    canActivate: [authGuard],
   },
   {
     path: 'subscription-plans',
@@ -75,11 +77,20 @@ export const routes: Routes = [
   {
     path: 'library',
     loadComponent: () =>
-      import('./presentation/pages/users/user-p/user-perfil').then((m) => m.UserPerfilComponent),
+      import('./presentation/pages/users/user-p/user-perfil').then(
+        (m) => m.UserPerfilComponent,
+      ),
   },
   {
     path: 'subscription',
     children: SUSBSRIPTION_ROUTES,
+  },
+  {
+    path: 'terms-and-conditions',
+    loadComponent: () =>
+      import(
+        './presentation/pages/terms-and-condition/terms-and-condition'
+      ).then((m) => m.TermsAndCondition),
   },
 
   {

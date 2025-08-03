@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { ApiService } from "./api.service";
-import { Song, Artist, Album, Playlist, SearchFilters } from "../models";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
+import { Song, Artist, Album, Playlist, SearchFilters } from '../models';
 
 export interface SearchResults {
   songs: Song[];
@@ -12,10 +12,10 @@ export interface SearchResults {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class SearchService {
-  private endpoint = "/search";
+  private endpoint = '/search';
 
   constructor(private apiService: ApiService) {}
 
@@ -34,7 +34,7 @@ export class SearchService {
    */
   searchByType(
     query: string,
-    type: "song" | "artist" | "album" | "playlist",
+    type: 'song' | 'artist' | 'album' | 'playlist',
     limit?: number,
     offset?: number,
   ): Observable<any> {
@@ -102,7 +102,7 @@ export class SearchService {
    */
   searchByGenre(
     genre: string,
-    type?: "song" | "artist" | "album",
+    type?: 'song' | 'artist' | 'album',
     limit?: number,
   ): Observable<any> {
     const endpoint = type
