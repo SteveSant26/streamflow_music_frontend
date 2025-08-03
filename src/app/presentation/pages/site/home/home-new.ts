@@ -1,9 +1,10 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Card } from '../../components/card/card';
-import { Greeting } from '../../components/greeting/greeting';
-import { MusicsTable } from '../../components/musics-table/musics-table';
-import { PlayListItemCard } from '../../components/play-list-item-card/play-list-item-card';
+import { Router } from '@angular/router';
+import { Card } from '../../../../components/card/card';
+import { Greeting } from '../../../../components/greeting/greeting';
+import { MusicsTable } from '../../../../components/musics-table/musics-table';
+import { PlayListItemCard } from '../../../../components/play-list-item-card/play-list-item-card';
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { 
@@ -12,8 +13,8 @@ import {
   PlayRandomPlaylistUseCase,
   PlayPopularPlaylistUseCase,
   PlaySongUseCase
-} from '../../domain/usecases/song/song.usecases';
-import { Song } from '../../domain/entities/song.entity';
+} from '../../../../domain/usecases/song/song.usecases';
+import { Song } from '../../../../domain/entities/song.entity';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +34,7 @@ import { Song } from '../../domain/entities/song.entity';
 })
 export class HomeComponent implements OnInit {
   // Servicios inyectados
+  private readonly router = inject(Router);
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playRandomPlaylistUseCase = inject(PlayRandomPlaylistUseCase);
@@ -160,7 +162,7 @@ export class HomeComponent implements OnInit {
     this.loadHomeData();
   }
 
-  // Método para reproducir una canción específica
+  // Métodos que el template está esperando
   playSong(song: Song): void {
     this.playSongUseCase.execute(song.id, true).subscribe({
       next: () => {
@@ -172,13 +174,13 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  // Método para formatear el conteo de reproducciones
-  formatPlayCount(count: number): string {
-    if (count >= 1000000) {
-      return `${(count / 1000000).toFixed(1)}M`;
-    } else if (count >= 1000) {
-      return `${(count / 1000).toFixed(1)}K`;
+  formatPlayCount(plays: number): string {
+    if (plays >= 1000000) {
+      return `${(plays / 1000000).toFixed(1)}M`;
     }
-    return count.toString();
+    if (plays >= 1000) {
+      return `${(plays / 1000).toFixed(1)}K`;
+    }
+    return plays.toString();
   }
 }

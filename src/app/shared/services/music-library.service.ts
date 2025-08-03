@@ -82,6 +82,16 @@ export class MusicLibraryService {
     const samplePlaylist: Playlist = {
       id: 'default-playlist',
       name: 'Demo Playlist',
+      description: 'Una playlist de demostración',
+      coverImage: 'https://picsum.photos/300/300?random=1',
+      isPublic: true,
+      createdDate: new Date().toISOString(),
+      songCount: sampleSongs.length,
+      duration: sampleSongs.reduce((total, song) => total + (song.durationSeconds || 0), 0),
+      owner: {
+        id: 'demo-user',
+        username: 'Demo User'
+      },
       songs: sampleSongs,
     };
 

@@ -28,3 +28,12 @@ export class ApiPutUseCase {
     return this.apiService.put<T>(endpoint, data);
   }
 }
+
+@Injectable({ providedIn: 'root' })
+export class ApiDeleteUseCase {
+  private readonly apiService = inject(ApiService);
+  
+  execute<T>(endpoint: string): Observable<T> {
+    return this.apiService.delete<T>(endpoint);
+  }
+}

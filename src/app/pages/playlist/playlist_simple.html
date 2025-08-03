@@ -75,11 +75,10 @@
       </div>
 
       <div class="songs-list">
-        <button 
+        <div 
           *ngFor="let song of playlist()?.songs; let i = index" 
           class="song-item"
           (click)="playSong(song, i)"
-          type="button"
         >
           <div class="song-number">
             <span class="track-number">{{ i + 1 }}</span>
@@ -112,7 +111,10 @@
             >
               <mat-icon>add</mat-icon>
             </button>
-            <span class="duration-text">{{ formatSongDuration(song.durationSeconds || 0) }}</span>
+            <span class="duration-text">{{ formatSongDuration(song.duration) }}</span>
           </div>
-        </button>
+        </div>
       </div>
+    </div>
+  </div>
+</div>

@@ -9,7 +9,7 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     loadComponent: () =>
-      import('./pages/home/home').then((m) => m.HomeComponent),
+      import('./presentation/pages/site/home/home').then((m) => m.HomeComponent),
   },
   {
     path: ROUTES_CONFIG_AUTH.BASE_URL.path,
@@ -18,7 +18,7 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () =>
-      import('./pages/home/home').then((m) => m.HomeComponent),
+      import('./presentation/pages/site/home/home').then((m) => m.HomeComponent),
   },
   {
     path: 'search',
@@ -47,6 +47,11 @@ export const routes: Routes = [
     path: 'artist/:id',
     loadComponent: () =>
       import('./pages/artist/artist').then((m) => m.ArtistComponent),
+  },
+  {
+    path: 'playlist/:id',
+    loadComponent: () =>
+      import('./pages/playlist/playlist').then((m) => m.PlaylistComponent),
   },
   {
     path: 'song/:id',

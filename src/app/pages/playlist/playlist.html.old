@@ -1,0 +1,89 @@
+<div
+  class="playlist-container"
+  [ngClass]="{
+    'playlist-purple': playlistId === '1',
+    'playlist-blue': playlistId === '2',
+    'playlist-red': playlistId === '3',
+  }"
+>
+  <div class="playlist-header" [style.background]="dynamicGradient">
+    <div class="playlist-hero">
+      <div class="playlist-cover">
+        <img
+          [src]="currentPlaylistImage"
+          [alt]="playlistName || 'Playlist Cover'"
+          class="playlist-image"
+          (load)="onImageLoad($event)"
+          (error)="onImageError($event)"
+          crossorigin="anonymous"
+        />
+      </div>
+      <div class="playlist-info-text">
+        <span class="playlist-type">Lista pública</span>
+        <h1 class="playlist-title">
+          {{ playlistName || "Mi Playlist #" + playlistId }}
+        </h1>
+        <p class="playlist-description">
+          {{
+            playlistDescription ||
+              "Una colección especial de tus canciones
+          favoritas"
+          }}
+        </p>
+        <div class="playlist-meta">
+          <span class="playlist-owner">🎵 StreamFlow Music</span>
+          <span class="meta-separator">•</span>
+          <span class="playlist-stats-inline"
+            >{{ songCount }} canciones, {{ duration }}</span
+          >
+        </div>
+        <!-- Botón de prueba para cambiar imagen y gradiente -->
+        <button (click)="testDifferentImage()" class="test-gradient-button">
+          🎨 Probar otra imagen
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="playlist-content">
+    <!-- Controles de reproducción -->
+    <div class="playlist-controls">
+      <button class="play-button">
+        <mat-icon class="play-icon">play_arrow</mat-icon>
+        Reproducir
+      </button>
+
+      <button class="shuffle-button">
+        <mat-icon class="shuffle-icon">shuffle</mat-icon>
+        Aleatorio
+      </button>
+
+      <button class="more-button">
+        <mat-icon class="more-icon">more_vert</mat-icon>
+      </button>
+    </div>
+
+    <!-- Lista de canciones -->
+    <div class="songs-list">
+      <div class="songs-header">
+        <div class="song-number">#</div>
+        <div class="song-title">Título</div>
+        <div class="song-artist">Artista</div>
+        <div class="song-album">Álbum</div>
+        <div class="song-duration">Duración</div>
+      </div>
+
+      <!-- Ejemplo de canciones - esto será dinámico -->
+      <div class="song-item" *ngFor="let song of songs; let i = index">
+        <div class="song-number">{{ i + 1 }}</div>
+        <div class="song-info">
+          <div class="song-title">{{ song.title }}</div>
+          <div class="song-artist-name">{{ song.artist }}</div>
+        </div>
+        <div class="song-artist">{{ song.artist }}</div>
+        <div class="song-album">{{ song.album }}</div>
+        <div class="song-duration">{{ song.duration }}</div>
+      </div>
+    </div>
+  </div>
+</div>
