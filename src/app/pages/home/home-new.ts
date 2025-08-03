@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Card } from '../../components/card/card';
 import { Greeting } from '../../components/greeting/greeting';
 import { MusicsTable } from '../../components/musics-table/musics-table';
@@ -10,7 +11,8 @@ import {
   GetMostPopularSongsUseCase, 
   GetRandomSongsUseCase,
   PlayRandomPlaylistUseCase,
-  PlayPopularPlaylistUseCase 
+  PlayPopularPlaylistUseCase,
+  PlaySongUseCase
 } from '../../domain/usecases/song/song.usecases';
 import { Song } from '../../domain/entities/song.entity';
 
@@ -32,10 +34,12 @@ import { Song } from '../../domain/entities/song.entity';
 })
 export class HomeComponent implements OnInit {
   // Servicios inyectados
+  private readonly router = inject(Router);
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playRandomPlaylistUseCase = inject(PlayRandomPlaylistUseCase);
   private readonly playPopularPlaylistUseCase = inject(PlayPopularPlaylistUseCase);
+  private readonly playSongUseCase = inject(PlaySongUseCase);
 
   // Signals para el estado del componente
   readonly popularSongs = signal<Song[]>([]);
@@ -156,5 +160,27 @@ export class HomeComponent implements OnInit {
   // Método para refrescar toda la data
   refreshHomeData(): void {
     this.loadHomeData();
+  }
+
+  // Métodos que el template está esperando
+  playSong(song: Song): void {
+    this.playSongUseCase.execute(song.id, true).subscribe({
+      next: () => {
+        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
+      },
+      error: (error) => {
+        console.error('Error al reproducir canción:', error);
+      }
+    });
+  }
+
+  formatPlayCount(plays: number): string {
+    if (plays >= 1000000) {
+      return `${(plays / 1000000).toFixed(1)}M`;
+    }
+    if (plays >= 1000) {
+      return `${(plays / 1000).toFixed(1)}K`;
+    }
+    return plays.toString();
   }
 }

@@ -9,7 +9,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // Domain
 import { Song } from '../../domain/entities/song.entity';
-import { SongSearchParams } from '../../domain/dtos/song.dto';
 import { SearchSongsUseCase, PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
 
 // Components

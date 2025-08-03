@@ -1,20 +1,11 @@
 import { MatIcon } from '@angular/material/icon';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-
-interface Song {
-  id: number;
-  title: string;
-  artists: string[];
-  album: string;
-  albumId: number;
-  duration: string;
-  image: string;
-}
+import { Song } from '../../domain/entities/song.entity';
+import { PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
 
 interface Playlist {
-  id: number;
-  albumId?: number;
+  id: string;
   name?: string;
   description?: string;
 }
@@ -35,6 +26,8 @@ export class MusicsTablePlay {
   @Input() song!: Song;
   @Input() isCurrentSong = false;
 
+  private readonly playSongUseCase = inject(PlaySongUseCase);
+
   // Mock state para el reproductor
   currentMusic: CurrentMusic = {
     song: null,
@@ -44,32 +37,36 @@ export class MusicsTablePlay {
   isPlaying = false;
 
   isNewSongOfAnotherPlaylist(song: Song): boolean {
-    return this.currentMusic.playlist?.id !== song.albumId;
+    return this.currentMusic.playlist?.id !== song.album;
   }
 
   isCurrentSongRunning(song: Song): boolean {
     return (
       this.currentMusic.song?.id === song.id &&
-      this.currentMusic.playlist?.albumId === song.albumId &&
+      this.currentMusic.playlist?.id === song.album &&
       this.isPlaying
     );
   }
 
   setNewCurrentMusic(song: Song): void {
-    // Mock: simular carga de nueva playlist
-    setTimeout(() => {
-      this.currentMusic = {
-        song: song,
-        playlist: {
-          id: song.albumId,
-          albumId: song.albumId,
-          name: `Album ${song.album}`,
-          description: `Playlist for ${song.album}`,
-        },
-        songs: [song],
-      };
-      this.isPlaying = true;
-    }, 100);
+    this.playSongUseCase.execute(song.id, true).subscribe({
+      next: () => {
+        this.currentMusic = {
+          song: song,
+          playlist: {
+            id: song.album,
+            name: `Album ${song.album}`,
+            description: `Playlist for ${song.album}`,
+          },
+          songs: [song],
+        };
+        this.isPlaying = true;
+        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
+      },
+      error: (error) => {
+        console.error('Error al reproducir canción:', error);
+      }
+    });
   }
 
   handleClick(song: Song): void {

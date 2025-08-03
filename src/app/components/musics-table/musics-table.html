@@ -48,7 +48,7 @@
         </div>
 
         <!-- Duration -->
-        <span class="text-subdued text-xs">{{ formatPlayCount(song.plays) }}</span>
+        <span class="text-subdued text-xs">{{ formatPlayCount(song.playCount) }}</span>
       </div>
     </div>
   }
@@ -117,7 +117,7 @@
         </td>
         <td class="px-4 py-2 hidden md:table-cell">{{ song.album }}</td>
         <td class="px-4 py-2 rounded-tr-lg rounded-br-lg">
-          {{ formatPlayCount(song.plays) }} reproducciones
+          {{ formatPlayCount(song.playCount) }} reproducciones
         </td>
       </tr>
     }
