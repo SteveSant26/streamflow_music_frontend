@@ -1,7 +1,7 @@
 <div class="subscription-plans-container">
   <div class="header">
-    <h1>{{ 'PLANS.HEADER.TITLE' | translate }}</h1>
-    <p class="subtitle">{{ 'PLANS.HEADER.SUBTITLE' | translate }}</p>
+    <h1>{{ "PLANS.HEADER.TITLE" | translate }}</h1>
+    <p class="subtitle">{{ "PLANS.HEADER.SUBTITLE" | translate }}</p>
   </div>
 
   <div class="plans-grid">
@@ -12,7 +12,7 @@
     >
       <!-- Badge de plan popular -->
       <div class="popular-badge" *ngIf="plan.popular">
-        <span>{{ 'PLANS.MOST_POPULAR' | translate }}</span>
+        <span>{{ "PLANS.MOST_POPULAR" | translate }}</span>
       </div>
 
       <!-- Header de la tarjeta -->
@@ -30,11 +30,19 @@
         <div class="price-section">
           <span class="currency">$</span>
           <span class="price">{{ plan.price }}</span>
-          <span class="period" *ngIf="plan.price > 0">/{{ plan.periodKey | translate }}</span>
-          <span class="period" *ngIf="plan.price === 0">{{ plan.periodKey | translate }}</span>
+          <span class="period" *ngIf="plan.price > 0"
+            >/{{ plan.periodKey | translate }}</span
+          >
+          <span class="period" *ngIf="plan.price === 0">{{
+            plan.periodKey | translate
+          }}</span>
         </div>
         <div class="monthly-equivalent" *ngIf="plan.id === 'annual'">
-          <small>${{ getMonthlyPrice(plan).toFixed(2) }}/{{ 'PLANS.MONTHLY_EQUIVALENT' | translate }}</small>
+          <small
+            >${{ getMonthlyPrice(plan).toFixed(2) }}/{{
+              "PLANS.MONTHLY_EQUIVALENT" | translate
+            }}</small
+          >
         </div>
         <div class="savings-text" *ngIf="plan.id === 'annual'">
           <small class="savings">{{ getSavingsText(plan) }}</small>
@@ -67,35 +75,35 @@
   <!-- Información adicional -->
   <div class="additional-info">
     <div class="info-section">
-      <h4>{{ 'PLANS.BENEFITS.TITLE' | translate }}</h4>
+      <h4>{{ "PLANS.BENEFITS.TITLE" | translate }}</h4>
       <div class="benefits-grid">
         <div class="benefit">
           <div class="benefit-icon">
             <span class="material-icons">library_music</span>
           </div>
-          <h5>{{ 'PLANS.BENEFITS.BENEFIT_1.TITLE' | translate }}</h5>
-          <p>{{ 'PLANS.BENEFITS.BENEFIT_1.DESCRIPTION' | translate }}</p>
+          <h5>{{ "PLANS.BENEFITS.BENEFIT_1.TITLE" | translate }}</h5>
+          <p>{{ "PLANS.BENEFITS.BENEFIT_1.DESCRIPTION" | translate }}</p>
         </div>
         <div class="benefit">
           <div class="benefit-icon">
             <span class="material-icons">devices</span>
           </div>
-          <h5>{{ 'PLANS.BENEFITS.BENEFIT_4.TITLE' | translate }}</h5>
-          <p>{{ 'PLANS.BENEFITS.BENEFIT_4.DESCRIPTION' | translate }}</p>
+          <h5>{{ "PLANS.BENEFITS.BENEFIT_4.TITLE" | translate }}</h5>
+          <p>{{ "PLANS.BENEFITS.BENEFIT_4.DESCRIPTION" | translate }}</p>
         </div>
         <div class="benefit">
           <div class="benefit-icon">
             <span class="material-icons">high_quality</span>
           </div>
-          <h5>{{ 'PLANS.BENEFITS.BENEFIT_3.TITLE' | translate }}</h5>
-          <p>{{ 'PLANS.BENEFITS.BENEFIT_3.DESCRIPTION' | translate }}</p>
+          <h5>{{ "PLANS.BENEFITS.BENEFIT_3.TITLE" | translate }}</h5>
+          <p>{{ "PLANS.BENEFITS.BENEFIT_3.DESCRIPTION" | translate }}</p>
         </div>
         <div class="benefit">
           <div class="benefit-icon">
             <span class="material-icons">cloud_download</span>
           </div>
-          <h5>{{ 'PLANS.BENEFITS.BENEFIT_2.TITLE' | translate }}</h5>
-          <p>{{ 'PLANS.BENEFITS.BENEFIT_2.DESCRIPTION' | translate }}</p>
+          <h5>{{ "PLANS.BENEFITS.BENEFIT_2.TITLE" | translate }}</h5>
+          <p>{{ "PLANS.BENEFITS.BENEFIT_2.DESCRIPTION" | translate }}</p>
         </div>
       </div>
     </div>
@@ -103,42 +111,42 @@
     <div class="faq-section">
       <h4>
         <span class="material-icons faq-title-icon">help_outline</span>
-        {{ 'PLANS.FAQ.TITLE' | translate }}
+        {{ "PLANS.FAQ.TITLE" | translate }}
       </h4>
       <div class="faq-item">
         <strong>
           <span class="material-icons faq-icon">cancel</span>
-          {{ 'PLANS.FAQ.QUESTION_3' | translate }}
+          {{ "PLANS.FAQ.QUESTION_3" | translate }}
         </strong>
-        <p>{{ 'PLANS.FAQ.ANSWER_3' | translate }}</p>
+        <p>{{ "PLANS.FAQ.ANSWER_3" | translate }}</p>
       </div>
       <div class="faq-item">
         <strong>
           <span class="material-icons faq-icon">free_breakfast</span>
-          {{ 'PLANS.FAQ.QUESTION_2' | translate }}
+          {{ "PLANS.FAQ.QUESTION_2" | translate }}
         </strong>
-        <p>{{ 'PLANS.FAQ.ANSWER_2' | translate }}</p>
+        <p>{{ "PLANS.FAQ.ANSWER_2" | translate }}</p>
       </div>
       <div class="faq-item">
         <strong>
           <span class="material-icons faq-icon">payment</span>
-          {{ 'PLANS.FAQ.QUESTION_5' | translate }}
+          {{ "PLANS.FAQ.QUESTION_5" | translate }}
         </strong>
-        <p>{{ 'PLANS.FAQ.ANSWER_5' | translate }}</p>
+        <p>{{ "PLANS.FAQ.ANSWER_5" | translate }}</p>
       </div>
       <div class="faq-item">
         <strong>
           <span class="material-icons faq-icon">cloud_download</span>
-          {{ 'PLANS.FAQ.QUESTION_4' | translate }}
+          {{ "PLANS.FAQ.QUESTION_4" | translate }}
         </strong>
-        <p>{{ 'PLANS.FAQ.ANSWER_4' | translate }}</p>
+        <p>{{ "PLANS.FAQ.ANSWER_4" | translate }}</p>
       </div>
       <div class="faq-item">
         <strong>
           <span class="material-icons faq-icon">swap_horiz</span>
-          {{ 'PLANS.FAQ.QUESTION_1' | translate }}
+          {{ "PLANS.FAQ.QUESTION_1" | translate }}
         </strong>
-        <p>{{ 'PLANS.FAQ.ANSWER_1' | translate }}</p>
+        <p>{{ "PLANS.FAQ.ANSWER_1" | translate }}</p>
       </div>
     </div>
   </div>

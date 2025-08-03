@@ -8,7 +8,7 @@ export const environment = {
     SUPABASE_URL: 'https://ebipcvxpxrqdihhhhfyf.supabase.co',
     SUPABASE_ANON_KEY: 'tu-anon-key-produccion',
     SUPABASE_SERVICE_KEY: '', // ⚠ No poner aquí
-    SUPABASE_JWT_SECRET: '',  // ⚠ No poner aquí
+    SUPABASE_JWT_SECRET: '', // ⚠ No poner aquí
     SUPABASE_JWT_ALGORITHM: 'HS256',
   },
 };

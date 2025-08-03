@@ -5,5 +5,7 @@ export abstract class IAuthService {
   abstract getSession(): AuthSession | null;
   abstract isAuthenticated(): boolean;
   abstract getUser(): any;
-  abstract onAuthStateChange(callback: (session: AuthSession | null) => void): void;
+  abstract onAuthStateChange(
+    callback: (session: AuthSession | null) => void,
+  ): void;
 }

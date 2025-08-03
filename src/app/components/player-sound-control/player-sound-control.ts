@@ -2,20 +2,20 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  ElementRef, 
+  ElementRef,
   OnInit,
   OnDestroy,
   ChangeDetectorRef,
-  inject
-} from "@angular/core";
+  inject,
+} from '@angular/core';
 import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 @Component({
-  selector: "app-player-sound-control",
+  selector: 'app-player-sound-control',
   imports: [TranslateModule],
-  templateUrl: "./player-sound-control.html",
+  templateUrl: './player-sound-control.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerSoundControl implements OnInit, OnDestroy {
@@ -37,26 +37,27 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
   formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 
   onSeek(event: Event): void {
     const target = event.target as HTMLInputElement;
     const seekPercentage = parseFloat(target.value);
-    
+
     console.log('PlayerSoundControl: Seek to', seekPercentage + '%');
-    
+
     // Use the PlayerUseCase through GlobalPlayerStateService to handle seeking
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.seekToPercentage(seekPercentage);
-    
+
     // Force sync after seek
     this.globalPlayerState.forceSyncAllComponents();
   }
 
   ngOnInit(): void {
     // Subscribe to global player state
-    this.globalPlayerState.getPlayerState$()
+    this.globalPlayerState
+      .getPlayerState$()
       .pipe(takeUntil(this.destroy$))
       .subscribe((state: PlayerState) => {
         this.playerState = state;

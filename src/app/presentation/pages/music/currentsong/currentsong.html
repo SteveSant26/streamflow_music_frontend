@@ -9,20 +9,7 @@
     <!-- Header con botón de regreso -->
     <div class="current-song-header">
       <button (click)="goBack()" class="back-button" aria-label="Volver">
-        <svg
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
+        <mat-icon>arrow_back</mat-icon>
       </button>
       <h1 class="current-song-title">Reproduciendo ahora</h1>
 
@@ -33,20 +20,7 @@
         aria-label="Ver letras"
         [class.active]="showLyricsPanel"
       >
-        <svg
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          />
-        </svg>
+        <mat-icon>lyrics</mat-icon>
       </button>
     </div>
 
@@ -106,13 +80,7 @@
         class="control-button secondary"
         aria-label="Canción anterior"
       >
-        <svg width="32" height="32" fill="currentColor" viewBox="0 0 24 24">
-          <path
-            d="M7 6V18L17 12L7 6Z"
-            transform="scale(-1 1) translate(-24 0)"
-          />
-          <rect x="6" y="6" width="2" height="12" />
-        </svg>
+        <mat-icon>skip_previous</mat-icon>
       </button>
 
       <button
@@ -120,24 +88,8 @@
         class="control-button primary"
         [attr.aria-label]="currentSong.isPlaying ? 'Pausar' : 'Reproducir'"
       >
-        <svg
-          *ngIf="currentSong.isPlaying"
-          width="40"
-          height="40"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path d="M6 4H10V20H6V4ZM14 4H18V20H14V4Z" />
-        </svg>
-        <svg
-          *ngIf="!currentSong.isPlaying"
-          width="40"
-          height="40"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path d="M8 5V19L19 12L8 5Z" />
-        </svg>
+        <mat-icon *ngIf="currentSong.isPlaying">pause</mat-icon>
+        <mat-icon *ngIf="!currentSong.isPlaying">play_arrow</mat-icon>
       </button>
 
       <button
@@ -145,27 +97,14 @@
         class="control-button secondary"
         aria-label="Siguiente canción"
       >
-        <svg width="32" height="32" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M7 6V18L17 12L7 6Z" />
-          <rect x="16" y="6" width="2" height="12" />
-        </svg>
+        <mat-icon>skip_next</mat-icon>
       </button>
     </div>
 
     <!-- Control de volumen -->
     <div class="volume-section">
       <div class="volume-container">
-        <svg
-          width="20"
-          height="20"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          class="volume-icon"
-        >
-          <path
-            d="M3 9V15H7L12 20V4L7 9H3ZM16.5 12C16.5 10.23 15.48 8.71 14 7.97V16.02C15.48 15.29 16.5 13.77 16.5 12ZM14 3.23V5.29C16.89 6.15 19 8.83 19 12C19 15.17 16.89 17.85 14 18.71V20.77C18.01 19.86 21 16.28 21 12C21 7.72 18.01 4.14 14 3.23Z"
-          />
-        </svg>
+        <mat-icon class="volume-icon">volume_up</mat-icon>
         <input
           type="range"
           min="0"
@@ -175,7 +114,9 @@
           class="volume-slider"
           aria-label="Control de volumen"
         />
-        <span class="volume-value">{{ (currentSong.volume * 100) | number:'1.0-0' }}%</span>
+        <span class="volume-value"
+          >{{ currentSong.volume * 100 | number: "1.0-0" }}%</span
+        >
       </div>
     </div>
 
@@ -183,52 +124,13 @@
     <div class="song-footer">
       <div class="footer-actions">
         <button class="action-button" aria-label="Agregar a favoritos">
-          <svg
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
+          <mat-icon>favorite_border</mat-icon>
         </button>
         <button class="action-button" aria-label="Compartir">
-          <svg
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-            />
-          </svg>
+          <mat-icon>share</mat-icon>
         </button>
         <button class="action-button" aria-label="Más opciones">
-          <svg
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-            />
-          </svg>
+          <mat-icon>more_vert</mat-icon>
         </button>
       </div>
     </div>
@@ -243,20 +145,7 @@
         class="close-lyrics-button"
         aria-label="Cerrar letras"
       >
-        <svg
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+        <mat-icon>close</mat-icon>
       </button>
     </div>
 

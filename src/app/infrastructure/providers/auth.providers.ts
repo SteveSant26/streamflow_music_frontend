@@ -7,11 +7,11 @@ import { AuthStateService } from '@app/domain/services/auth-state-service';
 export const authProviders: Provider[] = [
   {
     provide: AUTH_REPOSITORY_TOKEN,
-    useClass: SupabaseAuthRepository
+    useClass: SupabaseAuthRepository,
   },
   {
     provide: IAuthRepository,
-    useClass: SupabaseAuthRepository
+    useClass: SupabaseAuthRepository,
   },
-  AuthStateService
+  AuthStateService,
 ];

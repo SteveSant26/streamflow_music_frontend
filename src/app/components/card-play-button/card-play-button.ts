@@ -1,17 +1,17 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: "app-card-play-button",
+  selector: 'app-card-play-button',
   imports: [MatIconModule, TranslateModule],
-  templateUrl: "./card-play-button.html",
-  styleUrl: "./card-play-button.css",
+  templateUrl: './card-play-button.html',
+  styleUrl: './card-play-button.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardPlayButton {
   @Input() id = 0;
-  @Input() size: "small" | "large" = "small";
+  @Input() size: 'small' | 'large' = 'small';
 
   // Mock state para el reproductor
   isPlaying = false;
@@ -26,7 +26,7 @@ export class CardPlayButton {
   }
 
   get iconClassName(): string {
-    return this.size === "small" ? "w-4 h-4" : "w-5 h-5";
+    return this.size === 'small' ? 'w-4 h-4' : 'w-5 h-5';
   }
 
   handleClick(): void {

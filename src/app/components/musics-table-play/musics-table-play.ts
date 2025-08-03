@@ -1,5 +1,5 @@
 import { MatIcon } from '@angular/material/icon';
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 interface Song {
@@ -26,9 +26,9 @@ interface CurrentMusic {
 }
 
 @Component({
-  selector: "app-musics-table-play",
+  selector: 'app-musics-table-play',
   imports: [MatIcon, TranslateModule],
-  templateUrl: "./musics-table-play.html",
+  templateUrl: './musics-table-play.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MusicsTablePlay {

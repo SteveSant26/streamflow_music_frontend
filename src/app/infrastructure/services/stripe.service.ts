@@ -27,9 +27,17 @@ export interface StripeElements {
 
 export interface StripeInstance {
   elements(options?: any): StripeElements;
-  createPaymentMethod(options: any): Promise<{ paymentMethod?: any; error?: any }>;
-  confirmCardPayment(clientSecret: string, options?: any): Promise<{ paymentIntent?: any; error?: any }>;
-  confirmCardSetup(clientSecret: string, options?: any): Promise<{ setupIntent?: any; error?: any }>;
+  createPaymentMethod(
+    options: any,
+  ): Promise<{ paymentMethod?: any; error?: any }>;
+  confirmCardPayment(
+    clientSecret: string,
+    options?: any,
+  ): Promise<{ paymentIntent?: any; error?: any }>;
+  confirmCardSetup(
+    clientSecret: string,
+    options?: any,
+  ): Promise<{ setupIntent?: any; error?: any }>;
   redirectToCheckout(options: { sessionId: string }): Promise<{ error?: any }>;
 }
 
@@ -39,7 +47,7 @@ export class StripeService {
   private elements: StripeElements | null = null;
   private cardElement: StripeCardElement | null = null;
   private readonly isLoaded = new BehaviorSubject<boolean>(false);
-  
+
   readonly isLoaded$ = this.isLoaded.asObservable();
 
   constructor(private readonly paymentRepository: IPaymentRepository) {}
@@ -56,12 +64,14 @@ export class StripeService {
       }
 
       // Obtener la clave pública de Stripe
-      const publicKey = await firstValueFrom(this.paymentRepository.getStripePublicKey());
-      
+      const publicKey = await firstValueFrom(
+        this.paymentRepository.getStripePublicKey(),
+      );
+
       // Inicializar Stripe
       this.stripe = window.Stripe(publicKey);
       this.isLoaded.next(true);
-      
+
       console.log('✅ StripeService: Stripe inicializado correctamente');
     } catch (error) {
       console.error('❌ StripeService: Error al inicializar Stripe:', error);
@@ -115,7 +125,10 @@ export class StripeService {
       hidePostalCode: true,
     };
 
-    this.cardElement = this.elements!.create('card', { ...defaultOptions, ...options });
+    this.cardElement = this.elements!.create('card', {
+      ...defaultOptions,
+      ...options,
+    });
     return this.cardElement;
   }
 
@@ -123,7 +136,10 @@ export class StripeService {
     return this.cardElement;
   }
 
-  async createPaymentMethod(cardElement: StripeCardElement, billingDetails?: any): Promise<{ paymentMethod?: any; error?: any }> {
+  async createPaymentMethod(
+    cardElement: StripeCardElement,
+    billingDetails?: any,
+  ): Promise<{ paymentMethod?: any; error?: any }> {
     if (!this.stripe) {
       throw new Error('Stripe no está inicializado');
     }
@@ -135,13 +151,17 @@ export class StripeService {
     });
   }
 
-  async confirmCardPayment(clientSecret: string, cardElement?: StripeCardElement, paymentMethodData?: any): Promise<{ paymentIntent?: any; error?: any }> {
+  async confirmCardPayment(
+    clientSecret: string,
+    cardElement?: StripeCardElement,
+    paymentMethodData?: any,
+  ): Promise<{ paymentIntent?: any; error?: any }> {
     if (!this.stripe) {
       throw new Error('Stripe no está inicializado');
     }
 
     const confirmationData: any = {};
-    
+
     if (cardElement) {
       confirmationData.payment_method = {
         card: cardElement,
@@ -152,7 +172,11 @@ export class StripeService {
     return this.stripe.confirmCardPayment(clientSecret, confirmationData);
   }
 
-  async confirmCardSetup(clientSecret: string, cardElement: StripeCardElement, paymentMethodData?: any): Promise<{ setupIntent?: any; error?: any }> {
+  async confirmCardSetup(
+    clientSecret: string,
+    cardElement: StripeCardElement,
+    paymentMethodData?: any,
+  ): Promise<{ setupIntent?: any; error?: any }> {
     if (!this.stripe) {
       throw new Error('Stripe no está inicializado');
     }
@@ -191,7 +215,7 @@ export class StripeService {
       diners: 'Diners Club',
       jcb: 'JCB',
       unionpay: 'UnionPay',
-      unknown: 'Unknown'
+      unknown: 'Unknown',
     };
 
     return brandMap[brand] || brandMap['unknown'];
@@ -208,24 +232,24 @@ export class StripeService {
     // Basic Luhn algorithm validation
     const cleanNumber = cardNumber.replace(/\s/g, '');
     if (!/^\d+$/.test(cleanNumber)) return false;
-    
+
     let sum = 0;
     let shouldDouble = false;
-    
+
     for (let i = cleanNumber.length - 1; i >= 0; i--) {
       let digit = parseInt(cleanNumber.charAt(i), 10);
-      
+
       if (shouldDouble) {
         digit *= 2;
         if (digit > 9) {
           digit -= 9;
         }
       }
-      
+
       sum += digit;
       shouldDouble = !shouldDouble;
     }
-    
+
     return sum % 10 === 0;
   }
 }

@@ -1,16 +1,18 @@
 // ✅ Esto debe estar en la primera línea y solo una vez
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 // ✅ Define el tema utilizando el sistema Material 3 (CSS variables)
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
 }
 
 // ✅ Reglas personalizadas para body

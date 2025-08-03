@@ -8,9 +8,9 @@ import { GetAvailableLanguagesUseCase } from '../../domain/usecases/get-availabl
 export const languageProviders: Provider[] = [
   {
     provide: LANGUAGE_REPOSITORY_TOKEN,
-    useClass: LanguageRepository
+    useClass: LanguageRepository,
   },
   ChangeLanguageUseCase,
   GetCurrentLanguageUseCase,
-  GetAvailableLanguagesUseCase
+  GetAvailableLanguagesUseCase,
 ];

@@ -10,7 +10,13 @@ import { LanguageService } from '@app/domain/services/language.service';
 
 @Component({
   selector: 'app-aside-menu',
-  imports: [RouterLink, SideMenuItem, SideMenuCard, MatIconModule, TranslateModule],
+  imports: [
+    RouterLink,
+    SideMenuItem,
+    SideMenuCard,
+    MatIconModule,
+    TranslateModule,
+  ],
   templateUrl: './aside-menu.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -19,7 +25,7 @@ export class AsideMenu {
   private readonly authStatusUseCase = inject(AuthStatusUseCase);
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
-  
+
   isAuthenticated = this.authStatusUseCase.isAuthenticated;
   user = this.authStatusUseCase.user;
 

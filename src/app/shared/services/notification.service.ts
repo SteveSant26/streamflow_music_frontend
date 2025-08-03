@@ -45,7 +45,7 @@ export class NotificationService {
   removeNotification(notificationToRemove: Notification) {
     const currentNotifications = this.notifications();
     this.notifications.set(
-      currentNotifications.filter(n => n !== notificationToRemove)
+      currentNotifications.filter((n) => n !== notificationToRemove),
     );
   }
 

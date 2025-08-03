@@ -1,12 +1,22 @@
-import { Injectable, signal, inject, PLATFORM_ID, computed } from "@angular/core";
-import { isPlatformBrowser } from "@angular/common";
-import { Router } from "@angular/router";
-import { SupabaseService } from "@app/infrastructure/supabase/supabase.service";
-import { AuthChangeEvent, Session, User as SupabaseUser } from "@supabase/supabase-js";
-import { User } from "../../domain/entities/user.entity";
+import {
+  Injectable,
+  signal,
+  inject,
+  PLATFORM_ID,
+  computed,
+} from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
+import { SupabaseService } from '@app/infrastructure/supabase/supabase.service';
+import {
+  AuthChangeEvent,
+  Session,
+  User as SupabaseUser,
+} from '@supabase/supabase-js';
+import { User } from '../../domain/entities/user.entity';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
   /**
@@ -14,9 +24,10 @@ export class AuthService {
    */
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
-      const { error } = await this.supabaseService.client.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/reset-password',
-      });
+      const { error } =
+        await this.supabaseService.client.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/reset-password',
+        });
       if (error) throw error;
     } catch (error) {
       throw error;
@@ -26,7 +37,9 @@ export class AuthService {
    * Inicia sesión/registro con proveedor social (OAuth) usando Supabase.
    * Ejemplo de uso: this.authService.signInWithProvider('google')
    */
-  async signInWithProvider(provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord') {
+  async signInWithProvider(
+    provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord',
+  ) {
     this.isLoading.set(true);
     this.error.set(null);
     try {
@@ -39,7 +52,7 @@ export class AuthService {
       if (error) throw error;
     } catch (error: any) {
       this.error.set(error.message);
-      console.error("OAuth sign in error:", error);
+      console.error('OAuth sign in error:', error);
     } finally {
       this.isLoading.set(false);
     }
@@ -53,22 +66,23 @@ export class AuthService {
       this.isAuthenticated.set(false);
       this._supabaseUser.set(null);
       this.session.set(null);
-      this.router.navigate(["/login"]);
+      this.router.navigate(['/login']);
       return null;
     }
     try {
-      const { data, error } = await this.supabaseService.client.auth.refreshSession();
+      const { data, error } =
+        await this.supabaseService.client.auth.refreshSession();
       if (error) throw error;
       this.session.set(data.session);
       this._supabaseUser.set(data.session?.user ?? null);
       this.isAuthenticated.set(!!data.session);
       return data.session;
     } catch (error) {
-      console.error("Error refreshing session:", error);
+      console.error('Error refreshing session:', error);
       this.isAuthenticated.set(false);
       this._supabaseUser.set(null);
       this.session.set(null);
-      this.router.navigate(["/login"]);
+      this.router.navigate(['/login']);
       return null;
     }
   }
@@ -91,21 +105,20 @@ export class AuthService {
 
     return {
       id: supabaseUser.id,
-      email: supabaseUser.email ?? "",
-      name: supabaseUser.user_metadata?.["name"] ?? "",
-      createdAt: new Date(supabaseUser.created_at ?? ""),
-      updatedAt: new Date(supabaseUser.updated_at ?? ""),
+      email: supabaseUser.email ?? '',
+      name: supabaseUser.user_metadata?.['name'] ?? '',
+      createdAt: new Date(supabaseUser.created_at ?? ''),
+      updatedAt: new Date(supabaseUser.updated_at ?? ''),
     };
   });
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
-      this.supabaseService.client.auth
-        .onAuthStateChange(
-          (event: AuthChangeEvent, session: Session | null) => {
-            this.handleAuthStateChange(event, session);
-          },
-        );
+      this.supabaseService.client.auth.onAuthStateChange(
+        (event: AuthChangeEvent, session: Session | null) => {
+          this.handleAuthStateChange(event, session);
+        },
+      );
       // La inicialización de sesión se debe llamar manualmente con init()
     } else {
       this.isLoading.set(false);
@@ -123,10 +136,10 @@ export class AuthService {
       const {
         data: { session },
       } = await this.supabaseService.client.auth.getSession();
-      this.handleAuthStateChange("INITIAL_SESSION", session);
+      this.handleAuthStateChange('INITIAL_SESSION', session);
     } catch (error) {
-      console.error("Error getting initial session:", error);
-      this.handleAuthStateChange("SIGNED_OUT", null);
+      console.error('Error getting initial session:', error);
+      this.handleAuthStateChange('SIGNED_OUT', null);
     } finally {
       this.isLoading.set(false);
     }
@@ -142,10 +155,10 @@ export class AuthService {
 
     console.log(`Auth event: ${event}`);
 
-    if (event === "SIGNED_IN" || (event === "INITIAL_SESSION" && session)) {
-      this.router.navigate(["/home"]);
-    } else if (event === "SIGNED_OUT") {
-      this.router.navigate(["/login"]);
+    if (event === 'SIGNED_IN' || (event === 'INITIAL_SESSION' && session)) {
+      this.router.navigate(['/home']);
+    } else if (event === 'SIGNED_OUT') {
+      this.router.navigate(['/login']);
     }
   }
 
@@ -155,7 +168,7 @@ export class AuthService {
       email: user.email,
       user_metadata: { name: user.name },
       app_metadata: {},
-      aud: "authenticated",
+      aud: 'authenticated',
       created_at: user.createdAt.toISOString(),
       updated_at: user.updatedAt.toISOString(),
     };
@@ -163,8 +176,8 @@ export class AuthService {
     this._supabaseUser.set(supabaseUser);
     this.session.set({
       access_token: token,
-      refresh_token: "",
-      token_type: "bearer",
+      refresh_token: '',
+      token_type: 'bearer',
       user: supabaseUser,
       expires_in: 3600,
       expires_at: Date.now() + 3600 * 1000,
@@ -181,7 +194,7 @@ export class AuthService {
       if (error) throw error;
     } catch (error: any) {
       this.error.set(error.message);
-      console.error("Sign in error:", error);
+      console.error('Sign in error:', error);
     } finally {
       this.isLoading.set(false);
     }
@@ -204,10 +217,10 @@ export class AuthService {
         },
       });
       if (error) throw error;
-      if (!user) throw new Error("Sign up failed: no user returned.");
+      if (!user) throw new Error('Sign up failed: no user returned.');
     } catch (error: any) {
       this.error.set(error.message);
-      console.error("Sign up error:", error);
+      console.error('Sign up error:', error);
     } finally {
       this.isLoading.set(false);
     }
@@ -217,9 +230,9 @@ export class AuthService {
     this.isLoading.set(true);
     try {
       await this.supabaseService.client.auth.signOut();
-    } catch (error:  any) {
-      this.error.set(error.message || "Error al cerrar sesión");
-      console.error("Sign out error:", error);
+    } catch (error: any) {
+      this.error.set(error.message || 'Error al cerrar sesión');
+      console.error('Sign out error:', error);
     } finally {
       this.isLoading.set(false);
     }

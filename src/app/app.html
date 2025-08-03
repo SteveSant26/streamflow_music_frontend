@@ -1,8 +1,5 @@
 <!-- Layout principal para páginas normales -->
-<div
-  *ngIf="showLayout"
-  class="flex flex-col h-screen bg-gradient-to-br"
->
+<div *ngIf="showLayout" class="flex flex-col h-screen bg-gradient-to-br">
   <!-- Header Bar -->
   <header
     class="backdrop-white backdrop-blur-md border-b border-base p-4 shadow-base"
@@ -24,25 +21,24 @@
         </div>
         <h1 class="text-base font-bold text-xl">StreamFlow</h1>
       </div>
-      
+
       <div class="hidden lg:flex items-center gap-4">
         <nav class="flex gap-3" aria-label="Main Navigation">
           <app-theme-toggle></app-theme-toggle>
-          
+
           <a
             href="/"
             class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
-          >Inicio</a>
-          
+            >Inicio</a
+          >
+
           <a
             href="/explore"
             class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
-          >Explorar</a>
-          
-          <a
-            href="/subscription-plans"
-            class="btn-spotify"
-          >Planes</a>
+            >Explorar</a
+          >
+
+          <a href="/subscription-plans" class="btn-spotify">Planes</a>
         </nav>
       </div>
     </div>
@@ -79,9 +75,7 @@
         href="/"
         class="flex flex-col items-center gap-1 text-base hover:text-accent transition-colors"
       >
-        <div
-          class="p-2 rounded-full bg-tinted"
-        >
+        <div class="p-2 rounded-full bg-tinted">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
           </svg>

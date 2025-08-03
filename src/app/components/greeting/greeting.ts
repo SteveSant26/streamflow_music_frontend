@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: "app-greeting",
+  selector: 'app-greeting',
   imports: [TranslateModule],
-  templateUrl: "./greeting.html",
-  styleUrl: "./greeting.css",
+  templateUrl: './greeting.html',
+  styleUrl: './greeting.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Greeting implements OnInit {
-  greetingKey = "";
+  greetingKey = '';
   greetingParams = { name: 'Justin' };
 
   ngOnInit(): void {

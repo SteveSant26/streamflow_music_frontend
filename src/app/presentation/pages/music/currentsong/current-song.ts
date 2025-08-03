@@ -5,12 +5,13 @@ import {
   ChangeDetectorRef,
   Inject,
   PLATFORM_ID,
-} from "@angular/core";
-import { CommonModule, DOCUMENT, isPlatformBrowser } from "@angular/common";
-import { Router } from "@angular/router";
-import { GlobalPlayerStateService } from "../../../../shared/services/global-player-state.service";
-import { PlayerState } from "../../../../domain/entities/player-state.entity";
-import { Subject, takeUntil } from "rxjs";
+} from '@angular/core';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { GlobalPlayerStateService } from '../../../../shared/services/global-player-state.service';
+import { PlayerState } from '../../../../domain/entities/player-state.entity';
+import { Subject, takeUntil } from 'rxjs';
 
 interface CurrentSongView {
   id: string;
@@ -28,11 +29,11 @@ interface CurrentSongView {
 }
 
 @Component({
-  selector: "app-current-song",
+  selector: 'app-current-song',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: "./currentsong.html",
-  styleUrls: ["./current-song.css"],
+  imports: [CommonModule, MatIconModule],
+  templateUrl: './currentsong.html',
+  styleUrls: ['./current-song.css'],
 })
 export class CurrentSongComponent implements OnInit, OnDestroy {
   currentSong: CurrentSongView | null = null;
@@ -51,32 +52,33 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setupPlayerStateSubscription();
     this.initializePlayer();
-    
+
     // Evitar scroll en el body solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
-      this.document.body.style.overflow = "hidden";
-      this.document.body.style.margin = "0";
-      this.document.body.style.padding = "0";
+      this.document.body.style.overflow = 'hidden';
+      this.document.body.style.margin = '0';
+      this.document.body.style.padding = '0';
     }
   }
 
   ngOnDestroy() {
     // CRITICAL: Preserve state before any component destruction
     this.globalPlayerState.preserveStateForNavigation();
-    
+
     this.destroy$.next();
     this.destroy$.complete();
-    
+
     // Restaurar scroll cuando se salga de la vista solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
-      this.document.body.style.overflow = "";
-      this.document.body.style.margin = "";
-      this.document.body.style.padding = "";
+      this.document.body.style.overflow = '';
+      this.document.body.style.margin = '';
+      this.document.body.style.padding = '';
     }
   }
 
   private setupPlayerStateSubscription(): void {
-    this.globalPlayerState.getPlayerState$()
+    this.globalPlayerState
+      .getPlayerState$()
       .pipe(takeUntil(this.destroy$))
       .subscribe((playerState: PlayerState) => {
         this.updateCurrentSongView(playerState);
@@ -87,7 +89,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   private initializePlayer(): void {
     // Ensure global player state is initialized
     this.globalPlayerState.ensureInitialized();
-    
+
     // Force a state update to ensure we have the latest player state
     const currentState = this.globalPlayerState.getPlayerState();
     this.updateCurrentSongView(currentState);
@@ -105,9 +107,9 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         progress: playerState.progress,
         volume: playerState.volume,
         cover: playerState.currentSong.albumCover || '/assets/gorillaz2.jpg',
-        gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         isPlaying: playerState.isPlaying,
-        lyrics: "🎵 Lyrics not available yet 🎵"
+        lyrics: '🎵 Lyrics not available yet 🎵',
       };
     } else {
       this.currentSong = null;
@@ -115,7 +117,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   private formatTime(seconds: number): string {
-    if (!seconds || seconds === 0) return "0:00";
+    if (!seconds || seconds === 0) return '0:00';
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
@@ -123,7 +125,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   onImageLoad(event: Event) {
     const img = event.target as HTMLImageElement;
-    console.log("Imagen de canción cargada:", img.src);
+    console.log('Imagen de canción cargada:', img.src);
 
     setTimeout(() => {
       this.extractColorsFromImage(img);
@@ -131,17 +133,17 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   onImageError(event: Event) {
-    console.error("Error al cargar imagen de canción:", event);
+    console.error('Error al cargar imagen de canción:', event);
     this.applyFallbackGradient();
   }
 
   togglePlayPause() {
     console.log('Current-song: togglePlayPause clicked');
-    
+
     // Use ONLY the centralized method
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.togglePlayPause();
-    
+
     // Force sync immediately after action
     this.globalPlayerState.forceSyncAllComponents();
   }
@@ -149,36 +151,36 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   toggleLyricsPanel() {
     this.showLyricsPanel = !this.showLyricsPanel;
     console.log(
-      "Panel de letras:",
-      this.showLyricsPanel ? "Abierto" : "Cerrado",
+      'Panel de letras:',
+      this.showLyricsPanel ? 'Abierto' : 'Cerrado',
     );
   }
 
   goBack() {
     // CRITICAL: Preserve state before navigation
     this.globalPlayerState.preserveStateForNavigation();
-    
-    this.router.navigate(["/home"]);
+
+    this.router.navigate(['/home']);
   }
 
   skipPrevious() {
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     this.globalPlayerState.ensureInitialized();
-    
+
     playerUseCase.playPrevious().catch((error: any) => {
-      console.error("Error al reproducir canción anterior:", error);
+      console.error('Error al reproducir canción anterior:', error);
     });
-    console.log("Canción anterior");
+    console.log('Canción anterior');
   }
 
   skipNext() {
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     this.globalPlayerState.ensureInitialized();
-    
+
     playerUseCase.playNext().catch((error: any) => {
-      console.error("Error al reproducir siguiente canción:", error);
+      console.error('Error al reproducir siguiente canción:', error);
     });
-    console.log("Siguiente canción");
+    console.log('Siguiente canción');
   }
 
   onProgressClick(event: MouseEvent) {
@@ -188,12 +190,12 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     const width = rect.width;
     const newProgress = (clickX / width) * 100;
 
-    console.log("Current-song: Progress click to:", newProgress + "%");
+    console.log('Current-song: Progress click to:', newProgress + '%');
 
     // Use PlayerUseCase to handle seeking
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.seekToPercentage(newProgress);
-    
+
     // Force sync after seek
     this.globalPlayerState.forceSyncAllComponents();
   }
@@ -201,12 +203,12 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   onVolumeChange(event: Event) {
     const input = event.target as HTMLInputElement;
     const volume = parseFloat(input.value) / 100;
-    
-    console.log("Current-song: Volume change to:", volume);
-    
+
+    console.log('Current-song: Volume change to:', volume);
+
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.setVolume(volume);
-    
+
     // Force sync after volume change
     this.globalPlayerState.forceSyncAllComponents();
   }
@@ -218,11 +220,11 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     }
 
     try {
-      const canvas = this.document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+      const canvas = this.document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
 
       if (!ctx) {
-        console.error("No se pudo obtener contexto 2D del canvas");
+        console.error('No se pudo obtener contexto 2D del canvas');
         return;
       }
 
@@ -230,7 +232,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       canvas.width = analysisSize;
       canvas.height = analysisSize;
 
-      img.crossOrigin = "anonymous";
+      img.crossOrigin = 'anonymous';
       ctx.drawImage(img, 0, 0, analysisSize, analysisSize);
 
       const colors = [];
@@ -262,7 +264,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         this.applyFallbackGradient();
       }
     } catch (error) {
-      console.error("Error al extraer colores:", error);
+      console.error('Error al extraer colores:', error);
       this.applyFallbackGradient();
     }
   }
@@ -270,13 +272,11 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   private applyFallbackGradient() {
     if (this.currentSong) {
       this.currentSong.gradient =
-        "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
     }
   }
 
-  private findDominantColor(
-    colors: { r: number; g: number; b: number }[],
-  ) {
+  private findDominantColor(colors: { r: number; g: number; b: number }[]) {
     const colorGroups: any = {};
 
     colors.forEach((color) => {

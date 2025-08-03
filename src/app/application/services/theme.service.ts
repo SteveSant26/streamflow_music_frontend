@@ -13,19 +13,19 @@ export class ThemeService {
 
   isDarkMode(): Observable<boolean> {
     return this.getCurrentTheme().pipe(
-      tap(theme => console.log('Current theme:', theme)),
-      switchMap(theme => [theme.isDark])
+      tap((theme) => console.log('Current theme:', theme)),
+      switchMap((theme) => [theme.isDark]),
     );
   }
 
   toggleTheme(): Observable<void> {
     return this.getCurrentTheme().pipe(
-      switchMap(currentTheme => {
+      switchMap((currentTheme) => {
         console.log('Toggling from:', currentTheme);
         const newTheme = currentTheme.toggle();
         console.log('Toggling to:', newTheme);
         return this.themeRepository.setTheme(newTheme);
-      })
+      }),
     );
   }
 }

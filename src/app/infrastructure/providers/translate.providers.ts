@@ -23,8 +23,8 @@ export const translateProviders = [
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient]
-      }
-    })
-  )
+        deps: [HttpClient],
+      },
+    }),
+  ),
 ];

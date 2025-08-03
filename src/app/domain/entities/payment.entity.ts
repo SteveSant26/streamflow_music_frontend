@@ -2,7 +2,14 @@ export interface Subscription {
   id: string;
   userId: string;
   planId: string;
-  status: 'active' | 'canceled' | 'incomplete' | 'incomplete_expired' | 'past_due' | 'unpaid' | 'trialing';
+  status:
+    | 'active'
+    | 'canceled'
+    | 'incomplete'
+    | 'incomplete_expired'
+    | 'past_due'
+    | 'unpaid'
+    | 'trialing';
   stripeSubscriptionId: string;
   stripeCustomerId: string;
   currentPeriodStart: Date;

@@ -7,12 +7,15 @@ import { PaymentStateService } from '../services/payment-state.service';
 export class CancelSubscriptionUseCase {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
-    private readonly paymentStateService: PaymentStateService
+    private readonly paymentStateService: PaymentStateService,
   ) {}
 
   execute(subscriptionId: string): Observable<void> {
-    console.log('🎯 CancelSubscriptionUseCase: Cancelando suscripción:', subscriptionId);
-    
+    console.log(
+      '🎯 CancelSubscriptionUseCase: Cancelando suscripción:',
+      subscriptionId,
+    );
+
     this.paymentStateService.setLoading(true);
     this.paymentStateService.setError(null);
 
@@ -24,18 +27,18 @@ export class CancelSubscriptionUseCase {
         if (currentSubscription) {
           const updatedSubscription = {
             ...currentSubscription,
-            canceledAt: new Date()
+            canceledAt: new Date(),
           };
           this.paymentStateService.setSubscription(updatedSubscription);
         }
         this.paymentStateService.setLoading(false);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('❌ CancelSubscriptionUseCase: Error:', error);
         this.paymentStateService.setError('Error al cancelar suscripción');
         this.paymentStateService.setLoading(false);
         return of();
-      })
+      }),
     );
   }
 }

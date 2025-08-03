@@ -1,74 +1,120 @@
 <div class="login-container">
   <div class="login-header">
-    <h1 class="text-3xl font-bold mb-6 text-center">{{ 'LOGIN.TITLE' | translate }}</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center">
+      {{ "LOGIN.TITLE" | translate }}
+    </h1>
 
     @if (error()) {
-    <div class="error-message mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-      {{ error() }}
-    </div>
+      <div
+        class="error-message mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded"
+      >
+        {{ error() }}
+      </div>
     }
 
     <!-- Formulario de inicio de sesión -->
-    <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form space-y-6">
+    <form
+      (ngSubmit)="onLogin()"
+      #loginForm="ngForm"
+      class="login-form space-y-6"
+    >
       <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">{{ 'LOGIN.EMAIL' | translate }}</label>
-        <input type="email" id="email" name="email" [(ngModel)]="credentials.email" placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}" required
-          email [disabled]="isLoading()"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <label for="email" class="block text-sm font-medium text-gray-700">{{
+          "LOGIN.EMAIL" | translate
+        }}</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="credentials.email"
+          placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}"
+          required
+          email
+          [disabled]="isLoading()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
       <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">{{ 'LOGIN.PASSWORD' | translate }}</label>
-        <input type="password" id="password" name="password" [(ngModel)]="credentials.password" placeholder="••••••••"
-          required minlength="6" [disabled]="isLoading()"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <label for="password" class="block text-sm font-medium text-gray-700">{{
+          "LOGIN.PASSWORD" | translate
+        }}</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="credentials.password"
+          placeholder="••••••••"
+          required
+          minlength="6"
+          [disabled]="isLoading()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <input type="checkbox" id="remember"
-            class="h-4 w-4 text-black focus:ring-2 focus:ring-blue-500 border-gray-300 rounded" />
-          <label for="remember" class="ml-2 block text-sm text-gray-700">{{ 'LOGIN.REMEMBER' | translate }}</label>
+          <input
+            type="checkbox"
+            id="remember"
+            class="h-4 w-4 text-black focus:ring-2 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label for="remember" class="ml-2 block text-sm text-gray-700">{{
+            "LOGIN.REMEMBER" | translate
+          }}</label>
         </div>
         <div class="text-sm">
-          <a [routerLink]="ROUTES_CONFIG_AUTH.RESET_PASSWORD.link"
-            class="font-medium text-black focus:ring-2 hover:text-blue-500 transition-colors">{{ 'LOGIN.FORGOT' | translate }}</a>
+          <a
+            [routerLink]="ROUTES_CONFIG_AUTH.RESET_PASSWORD.link"
+            class="font-medium text-black focus:ring-2 hover:text-blue-500 transition-colors"
+            >{{ "LOGIN.FORGOT" | translate }}</a
+          >
         </div>
       </div>
 
       <div>
-        <button type="submit" [disabled]="!loginForm.form.valid || isLoading()"
-          class="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-black hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-          @if (isLoading()) { {{ 'LOGIN.LOADING' | translate }} } @else { {{ 'LOGIN.BUTTON' | translate }} }
+        <button
+          type="submit"
+          [disabled]="!loginForm.form.valid || isLoading()"
+          class="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-black hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (isLoading()) {
+            {{ "LOGIN.LOADING" | translate }}
+          } @else {
+            {{ "LOGIN.BUTTON" | translate }}
+          }
         </button>
       </div>
 
       <div class="text-center">
         <p class="text-sm text-gray-600">
-          {{ 'LOGIN.NO_ACCOUNT' | translate }}
-          <a [routerLink]="ROUTES_CONFIG_AUTH.REGISTER.link"
-            class="font-medium text-black focus:ring-2 hover:text-blue-500 transition-colors">{{ 'LOGIN.REGISTER_LINK' | translate }}</a>
+          {{ "LOGIN.NO_ACCOUNT" | translate }}
+          <a
+            [routerLink]="ROUTES_CONFIG_AUTH.REGISTER.link"
+            class="font-medium text-black focus:ring-2 hover:text-blue-500 transition-colors"
+            >{{ "LOGIN.REGISTER_LINK" | translate }}</a
+          >
         </p>
       </div>
     </form>
     <div class="social-login mt-6 flex flex-col gap-2 items-center">
       <button type="button" (click)="loginWithGoogle()" class="social-btn">
-        <mat-icon>android</mat-icon> {{ 'LOGIN.GOOGLE' | translate }}
+        <mat-icon>android</mat-icon> {{ "LOGIN.GOOGLE" | translate }}
       </button>
       <button type="button" (click)="loginWithGithub()" class="social-btn">
-        <mat-icon>commit</mat-icon> {{ 'LOGIN.GITHUB' | translate }}
+        <mat-icon>commit</mat-icon> {{ "LOGIN.GITHUB" | translate }}
       </button>
       <button type="button" (click)="loginWithTwitter()" class="social-btn">
-        <mat-icon>close</mat-icon> {{ 'LOGIN.TWITTER' | translate }}
+        <mat-icon>close</mat-icon> {{ "LOGIN.TWITTER" | translate }}
       </button>
       <button type="button" (click)="loginWithDiscord()" class="social-btn">
-        <mat-icon>discord</mat-icon> {{ 'LOGIN.DISCORD' | translate }}
+        <mat-icon>discord</mat-icon> {{ "LOGIN.DISCORD" | translate }}
       </button>
     </div>
   </div>
 </div>
 <div class="login-footer text-center mt-8">
   <p class="text-sm text-gray-500">
-    © 2023 StreamFlow. {{ 'LOGIN.RIGHTS' | translate }}
+    © 2023 StreamFlow. {{ "LOGIN.RIGHTS" | translate }}
   </p>
 </div>

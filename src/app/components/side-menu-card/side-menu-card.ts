@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { Router } from "@angular/router";
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 interface Playlist {
@@ -9,9 +9,9 @@ interface Playlist {
 }
 
 @Component({
-  selector: "app-side-menu-card",
+  selector: 'app-side-menu-card',
   imports: [TranslateModule],
-  templateUrl: "./side-menu-card.html",
+  templateUrl: './side-menu-card.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideMenuCard {
@@ -21,10 +21,10 @@ export class SideMenuCard {
 
   onImageError(event: any) {
     // Fallback a una imagen placeholder si la imagen original falla
-    event.target.src = "/assets/playlists/placeholder.jpg";
+    event.target.src = '/assets/playlists/placeholder.jpg';
   }
 
   navigateToPlaylist() {
-    this.router.navigate(["/playlist", this.playlist.id]);
+    this.router.navigate(['/playlist', this.playlist.id]);
   }
 }

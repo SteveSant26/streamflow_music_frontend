@@ -1,5 +1,5 @@
-import { User } from "@app/domain/entities/user.entity";
-import { UserDTO } from "../models/user.dto";
+import { User } from '@app/domain/entities/user.entity';
+import { UserDTO } from '../models/user.dto';
 
 export const toUser = (dto: UserDTO): User => ({
   id: dto.id,

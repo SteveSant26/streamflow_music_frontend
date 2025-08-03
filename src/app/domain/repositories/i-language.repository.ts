@@ -8,4 +8,5 @@ export interface ILanguageRepository {
   getStoredLanguage(): string | null;
 }
 
-export const LANGUAGE_REPOSITORY_TOKEN = new InjectionToken<ILanguageRepository>('ILanguageRepository');
+export const LANGUAGE_REPOSITORY_TOKEN =
+  new InjectionToken<ILanguageRepository>('ILanguageRepository');

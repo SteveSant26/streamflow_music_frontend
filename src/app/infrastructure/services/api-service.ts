@@ -1,8 +1,8 @@
-import { HttpClient, httpResource } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { environment } from "../../../environments/environment";
+import { HttpClient, httpResource } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class ApiService {
   constructor(private readonly http: HttpClient) {}
 

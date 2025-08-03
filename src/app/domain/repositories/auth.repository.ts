@@ -1,5 +1,5 @@
-import { User } from "../entities/user.entity";
-import { AuthToken } from "../entities/auth-token.entity";
+import { User } from '../entities/user.entity';
+import { AuthToken } from '../entities/auth-token.entity';
 
 export interface LoginCredentials {
   email: string;

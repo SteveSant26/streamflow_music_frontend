@@ -29,5 +29,7 @@ export abstract class IAuthRepository {
   abstract getCurrentSession(): Promise<AuthSession>;
   abstract refreshSession(): Promise<AuthSession | null>;
   abstract sendPasswordResetEmail(email: string): Promise<void>;
-  abstract signInWithProvider(provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord'): Promise<void>;
+  abstract signInWithProvider(
+    provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord',
+  ): Promise<void>;
 }

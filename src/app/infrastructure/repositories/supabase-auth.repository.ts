@@ -1,8 +1,20 @@
 import { Injectable, inject } from '@angular/core';
-import { IAuthRepository, LoginCredentials, RegisterCredentials, AuthResult, AuthSession } from '@app/domain/repositories/i-auth.repository';
+import {
+  IAuthRepository,
+  LoginCredentials,
+  RegisterCredentials,
+  AuthResult,
+  AuthSession,
+} from '@app/domain/repositories/i-auth.repository';
 import { SupabaseService } from '../supabase/supabase.service';
 import { User } from '@app/domain/entities/user.entity';
-import { AuthError, LoginError, RegisterError, SessionError, NetworkError } from '@app/domain/errors/auth.errors';
+import {
+  AuthError,
+  LoginError,
+  RegisterError,
+  SessionError,
+  NetworkError,
+} from '@app/domain/errors/auth.errors';
 
 @Injectable()
 export class SupabaseAuthRepository implements IAuthRepository {
@@ -10,8 +22,9 @@ export class SupabaseAuthRepository implements IAuthRepository {
 
   async login(credentials: LoginCredentials): Promise<AuthResult> {
     try {
-      const { data, error } = await this.supabaseService.client.auth.signInWithPassword(credentials);
-      
+      const { data, error } =
+        await this.supabaseService.client.auth.signInWithPassword(credentials);
+
       if (error) {
         throw new LoginError('Error al iniciar sesión', error);
       }
@@ -22,7 +35,7 @@ export class SupabaseAuthRepository implements IAuthRepository {
 
       return {
         user: this.mapSupabaseUserToDomain(data.user),
-        token: data.session.access_token
+        token: data.session.access_token,
       };
     } catch (error) {
       if (error instanceof AuthError) throw error;
@@ -52,7 +65,7 @@ export class SupabaseAuthRepository implements IAuthRepository {
 
       return {
         user: this.mapSupabaseUserToDomain(data.user),
-        token: data.session.access_token
+        token: data.session.access_token,
       };
     } catch (error) {
       if (error instanceof AuthError) throw error;
@@ -74,16 +87,19 @@ export class SupabaseAuthRepository implements IAuthRepository {
 
   async getCurrentSession(): Promise<AuthSession> {
     try {
-      const { data, error } = await this.supabaseService.client.auth.getSession();
-      
+      const { data, error } =
+        await this.supabaseService.client.auth.getSession();
+
       if (error) {
         throw new SessionError('Error al obtener la sesión', error);
       }
 
       return {
-        user: data.session?.user ? this.mapSupabaseUserToDomain(data.session.user) : null,
+        user: data.session?.user
+          ? this.mapSupabaseUserToDomain(data.session.user)
+          : null,
         isAuthenticated: !!data.session,
-        token: data.session?.access_token || null
+        token: data.session?.access_token || null,
       };
     } catch (error) {
       if (error instanceof AuthError) throw error;
@@ -93,8 +109,9 @@ export class SupabaseAuthRepository implements IAuthRepository {
 
   async refreshSession(): Promise<AuthSession | null> {
     try {
-      const { data, error } = await this.supabaseService.client.auth.refreshSession();
-      
+      const { data, error } =
+        await this.supabaseService.client.auth.refreshSession();
+
       if (error) {
         throw new SessionError('Error al refrescar la sesión', error);
       }
@@ -102,9 +119,11 @@ export class SupabaseAuthRepository implements IAuthRepository {
       if (!data.session) return null;
 
       return {
-        user: data.session.user ? this.mapSupabaseUserToDomain(data.session.user) : null,
+        user: data.session.user
+          ? this.mapSupabaseUserToDomain(data.session.user)
+          : null,
         isAuthenticated: !!data.session,
-        token: data.session.access_token
+        token: data.session.access_token,
       };
     } catch (error) {
       if (error instanceof AuthError) throw error;
@@ -114,12 +133,17 @@ export class SupabaseAuthRepository implements IAuthRepository {
 
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
-      const { error } = await this.supabaseService.client.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/reset-password',
-      });
-      
+      const { error } =
+        await this.supabaseService.client.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/reset-password',
+        });
+
       if (error) {
-        throw new AuthError('Error al enviar el correo de recuperación', 'PASSWORD_RESET_ERROR', error);
+        throw new AuthError(
+          'Error al enviar el correo de recuperación',
+          'PASSWORD_RESET_ERROR',
+          error,
+        );
       }
     } catch (error) {
       if (error instanceof AuthError) throw error;
@@ -127,7 +151,9 @@ export class SupabaseAuthRepository implements IAuthRepository {
     }
   }
 
-  async signInWithProvider(provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord'): Promise<void> {
+  async signInWithProvider(
+    provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord',
+  ): Promise<void> {
     try {
       const { error } = await this.supabaseService.client.auth.signInWithOAuth({
         provider,
@@ -135,7 +161,7 @@ export class SupabaseAuthRepository implements IAuthRepository {
           redirectTo: window.location.origin,
         },
       });
-      
+
       if (error) {
         throw new LoginError(`Error al iniciar sesión con ${provider}`, error);
       }

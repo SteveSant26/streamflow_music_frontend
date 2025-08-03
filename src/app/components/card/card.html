@@ -8,12 +8,12 @@
         <p class="mt-2 text-subdued">{{ body }}</p>
       </div>
       @if (showPlayButton) {
-      <div class="flex justify-end sm:ml-4">
-        <app-card-play-button
-          [id]="playlistId"
-          size="small"
-        ></app-card-play-button>
-      </div>
+        <div class="flex justify-end sm:ml-4">
+          <app-card-play-button
+            [id]="playlistId"
+            size="small"
+          ></app-card-play-button>
+        </div>
       }
     </div>
   </a>

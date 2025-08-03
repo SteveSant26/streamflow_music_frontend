@@ -20,7 +20,7 @@
 
 /* Material Icons font family class for explicit declaration */
 .font-material-icons {
-  font-family: 'Material Icons' !important;
+  font-family: "Material Icons" !important;
 }
 
 /* Print styles */
@@ -28,15 +28,15 @@
   .p-6 {
     padding: 0 !important;
   }
-  
+
   button {
     display: none !important;
   }
-  
+
   .mb-12 {
     margin-bottom: 1rem !important;
   }
-  
+
   section {
     break-inside: avoid;
     page-break-inside: avoid;

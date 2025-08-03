@@ -33,7 +33,9 @@
 :host-context(body.dark) .register-header {
   background-color: #374151 !important;
   border-color: #4b5563 !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+    0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Dark mode text */

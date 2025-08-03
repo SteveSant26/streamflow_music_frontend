@@ -5,6 +5,6 @@ import { StripePaymentRepository } from '../repositories/stripe-payment.reposito
 export const paymentProviders: Provider[] = [
   {
     provide: IPaymentRepository,
-    useClass: StripePaymentRepository
-  }
+    useClass: StripePaymentRepository,
+  },
 ];

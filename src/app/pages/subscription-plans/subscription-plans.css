@@ -310,8 +310,6 @@
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
 }
 
-
-
 .btn-success {
   background: var(--theme-success-bg, black);
   color: var(--theme-success-text, white);

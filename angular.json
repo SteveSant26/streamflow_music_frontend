@@ -15,10 +15,7 @@
           "options": {
             "outputPath": "dist/streamflow-music",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js",
-              "@angular/localize/init"
-            ],
+            "polyfills": ["zone.js", "@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -28,10 +25,7 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
-              "src/custom-theme.scss",
-              "src/styles.css"
-            ]
+            "styles": ["src/custom-theme.scss", "src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -104,18 +98,13 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "styles": ["src/styles.css"]
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }
@@ -126,4 +115,3 @@
     "schematicCollections": ["angular-eslint"]
   }
 }
-

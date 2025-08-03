@@ -131,7 +131,7 @@ export interface PaginatedResponse<T> {
 // Filtros y búsquedas
 export interface SearchFilters {
   query?: string;
-  type?: "song" | "artist" | "album" | "playlist";
+  type?: 'song' | 'artist' | 'album' | 'playlist';
   genre?: string;
   limit?: number;
   offset?: number;
@@ -142,6 +142,6 @@ export interface PlaylistFilters {
   isPublic?: boolean;
   limit?: number;
   offset?: number;
-  sortBy?: "createdAt" | "name" | "totalSongs";
-  sortOrder?: "asc" | "desc";
+  sortBy?: 'createdAt' | 'name' | 'totalSongs';
+  sortOrder?: 'asc' | 'desc';
 }

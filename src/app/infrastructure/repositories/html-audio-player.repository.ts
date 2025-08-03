@@ -1,17 +1,25 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Observable, Subject, interval, takeWhile } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  interval,
+  takeWhile,
+} from 'rxjs';
 import { IPlayerRepository } from '../../domain/repositories/player.repository.interface';
 import { Song } from '../../domain/entities/song.entity';
 import { Playlist } from '../../domain/entities/playlist.entity';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HtmlAudioPlayerRepository implements IPlayerRepository {
   private audio: HTMLAudioElement | null = null;
-  private readonly playerStateSubject = new BehaviorSubject<PlayerState>(this.getInitialPlayerState());
+  private readonly playerStateSubject = new BehaviorSubject<PlayerState>(
+    this.getInitialPlayerState(),
+  );
   private readonly currentTimeSubject = new BehaviorSubject<number>(0);
   private readonly durationSubject = new BehaviorSubject<number>(0);
   private readonly isPlayingSubject = new BehaviorSubject<boolean>(false);
@@ -54,44 +62,49 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
   private readonly onAudioError = (e: Event) => {
     console.error('Audio error event:', e);
     const audioElement = e.target as HTMLAudioElement;
-    
+
     if (audioElement?.error) {
       const errorCode = audioElement.error.code;
       const errorMessage = this.getAudioErrorMessage(errorCode);
       console.error(`Audio error (${errorCode}): ${errorMessage}`);
       console.error('Audio src:', audioElement.src);
-      
+
       // Only emit error if it's not an empty src or invalid data URL
       if (audioElement.src && !audioElement.src.startsWith('data:')) {
         this.errorSubject.next(`Failed to play audio`);
       }
     }
-    
+
     this.updatePlayerState({ isLoading: false });
   };
 
   private getAudioErrorMessage(errorCode: number): string {
     switch (errorCode) {
-      case 1: return 'MEDIA_ERR_ABORTED - The audio download was aborted';
-      case 2: return 'MEDIA_ERR_NETWORK - A network error occurred while downloading';
-      case 3: return 'MEDIA_ERR_DECODE - An error occurred while decoding the audio';
-      case 4: return 'MEDIA_ERR_SRC_NOT_SUPPORTED - The audio format is not supported';
-      default: return 'Unknown error';
+      case 1:
+        return 'MEDIA_ERR_ABORTED - The audio download was aborted';
+      case 2:
+        return 'MEDIA_ERR_NETWORK - A network error occurred while downloading';
+      case 3:
+        return 'MEDIA_ERR_DECODE - An error occurred while decoding the audio';
+      case 4:
+        return 'MEDIA_ERR_SRC_NOT_SUPPORTED - The audio format is not supported';
+      default:
+        return 'Unknown error';
     }
   }
 
   private readonly onVolumeChange = () => {
     if (!this.audio) return;
     this.volumeSubject.next(this.audio.volume);
-    this.updatePlayerState({ 
+    this.updatePlayerState({
       volume: this.audio.volume,
-      isMuted: this.audio.muted 
+      isMuted: this.audio.muted,
     });
   };
 
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);
-    
+
     if (this.isBrowser) {
       this.audio = new Audio();
       this.setupAudioEventListeners();
@@ -105,21 +118,21 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       // Remove listeners from old audio element if it exists
       this.removeAudioEventListeners();
     }
-    
+
     this.audio = audioElement;
-    
+
     // Don't set any src initially - let loadSong handle it when needed
     // This prevents invalid audio format errors
-    
+
     this.setupAudioEventListeners();
-    
+
     // Sync current state with the new audio element
     if (this.audio) {
       this.audio.volume = this.volumeSubject.value;
       const currentState = this.playerStateSubject.value;
       if (currentState.currentSong) {
         // If there's already a current song, load it properly
-        this.loadSong(currentState.currentSong).catch(error => {
+        this.loadSong(currentState.currentSong).catch((error) => {
           console.error('Failed to load current song:', error);
         });
       }
@@ -128,7 +141,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
 
   private removeAudioEventListeners(): void {
     if (!this.audio) return;
-    
+
     // Remove all event listeners
     this.audio.removeEventListener('loadstart', this.onLoadStart);
     this.audio.removeEventListener('canplay', this.onCanPlay);
@@ -150,7 +163,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       isLoading: false,
       isMuted: false,
       repeatMode: 'none',
-      isShuffleEnabled: false
+      isShuffleEnabled: false,
     };
   }
 
@@ -168,24 +181,24 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
 
   private startTimeUpdater(): void {
     if (!this.isBrowser) return;
-    
-    interval(100).pipe(
-      takeWhile(() => true)
-    ).subscribe(() => {
-      if (this.audio && !this.audio.paused && !this.audio.seeking) {
-        const currentTime = this.audio.currentTime;
-        const duration = this.audio.duration || 0;
-        const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
-        this.currentTimeSubject.next(currentTime);
-        this.progressSubject.next(progress);
-        this.updatePlayerState({ 
-          currentTime, 
-          duration, 
-          progress 
-        });
-      }
-    });
+    interval(100)
+      .pipe(takeWhile(() => true))
+      .subscribe(() => {
+        if (this.audio && !this.audio.paused && !this.audio.seeking) {
+          const currentTime = this.audio.currentTime;
+          const duration = this.audio.duration || 0;
+          const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+          this.currentTimeSubject.next(currentTime);
+          this.progressSubject.next(progress);
+          this.updatePlayerState({
+            currentTime,
+            duration,
+            progress,
+          });
+        }
+      });
   }
 
   private updatePlayerState(updates: Partial<PlayerState>): void {
@@ -196,17 +209,17 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
 
   private handleSongEnd(): void {
     this.songEndSubject.next();
-    
+
     switch (this.repeatMode) {
       case 'one':
         // Repeat current song
-        this.play().catch(error => {
+        this.play().catch((error) => {
           console.error('Failed to repeat song:', error);
         });
         break;
       case 'all':
         // Go to next song, or loop back to first
-        this.nextSong().catch(error => {
+        this.nextSong().catch((error) => {
           console.error('Failed to play next song:', error);
         });
         break;
@@ -214,7 +227,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       default:
         // Just go to next song if available
         if (this.hasNextSong()) {
-          this.nextSong().catch(error => {
+          this.nextSong().catch((error) => {
             console.error('Failed to play next song:', error);
           });
         }
@@ -269,11 +282,11 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       } else {
         audioUrl = `/assets/music/${song.id}.wav`;
       }
-      
+
       this.audio!.src = audioUrl;
-      this.updatePlayerState({ 
-        currentSong: song, 
-        isLoading: true 
+      this.updatePlayerState({
+        currentSong: song,
+        isLoading: true,
       });
 
       const onCanPlay = () => {
@@ -286,13 +299,13 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       const onError = (event: Event) => {
         this.audio!.removeEventListener('canplay', onCanPlay);
         this.audio!.removeEventListener('error', onError);
-        
+
         console.error(`Failed to load audio file: ${audioUrl}`);
-        
+
         // Don't set fallback audio, just reject with clear error
-        this.updatePlayerState({ 
+        this.updatePlayerState({
           isLoading: false,
-          currentSong: null
+          currentSong: null,
         });
         reject(new Error(`Failed to load audio file: ${audioUrl}`));
       };
@@ -398,7 +411,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       // Shuffle: randomize order
       const currentSong = this.currentPlaylist.songs[this.currentSongIndex];
       const shuffled = [...this.currentPlaylist.songs];
-      
+
       // Fisher-Yates shuffle algorithm
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -406,7 +419,9 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
       }
 
       this.currentPlaylist.songs = shuffled;
-      this.currentSongIndex = shuffled.findIndex(song => song.id === currentSong.id);
+      this.currentSongIndex = shuffled.findIndex(
+        (song) => song.id === currentSong.id,
+      );
       this.isShuffleEnabled = true;
     }
 

@@ -5,16 +5,16 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   inject,
-} from "@angular/core";
-import { MatIcon } from "@angular/material/icon";
+} from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 @Component({
-  selector: "app-player-volume-control",
+  selector: 'app-player-volume-control',
   imports: [MatIcon, TranslateModule],
-  templateUrl: "./player-volume-control.html",
+  templateUrl: './player-volume-control.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerVolumeControl implements OnInit, OnDestroy {
@@ -31,7 +31,7 @@ export class PlayerVolumeControl implements OnInit, OnDestroy {
   onVolumeChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     const newVolume = parseFloat(target.value);
-    
+
     // Use the PlayerUseCase through GlobalPlayerStateService to handle volume change
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.setVolume(newVolume);
@@ -39,7 +39,8 @@ export class PlayerVolumeControl implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Subscribe to global player state for volume updates
-    this.globalPlayerState.getPlayerState$()
+    this.globalPlayerState
+      .getPlayerState$()
       .pipe(takeUntil(this.destroy$))
       .subscribe((state: PlayerState) => {
         this.playerState = state;

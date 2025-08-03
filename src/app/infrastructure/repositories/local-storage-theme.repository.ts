@@ -4,11 +4,13 @@ import { ThemeEntity } from '../../domain/entities/theme.entity';
 import { ThemeRepository } from '../../domain/repositories/theme.repository';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocalStorageThemeRepository implements ThemeRepository {
   private readonly THEME_KEY = 'streamflow_theme';
-  private themeSubject = new BehaviorSubject<ThemeEntity>(this.getInitialTheme());
+  private themeSubject = new BehaviorSubject<ThemeEntity>(
+    this.getInitialTheme(),
+  );
 
   getCurrentTheme(): Observable<ThemeEntity> {
     return this.themeSubject.asObservable();
@@ -36,10 +38,13 @@ export class LocalStorageThemeRepository implements ThemeRepository {
 
   saveTheme(theme: ThemeEntity): void {
     try {
-      localStorage.setItem(this.THEME_KEY, JSON.stringify({
-        isDark: theme.isDark,
-        name: theme.name
-      }));
+      localStorage.setItem(
+        this.THEME_KEY,
+        JSON.stringify({
+          isDark: theme.isDark,
+          name: theme.name,
+        }),
+      );
     } catch (error) {
       console.warn('Error saving theme to localStorage:', error);
     }
@@ -54,9 +59,13 @@ export class LocalStorageThemeRepository implements ThemeRepository {
     }
 
     // 2. Check system preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const systemTheme = prefersDark ? ThemeEntity.createDark() : ThemeEntity.createLight();
-    
+    const prefersDark = window.matchMedia(
+      '(prefers-color-scheme: dark)',
+    ).matches;
+    const systemTheme = prefersDark
+      ? ThemeEntity.createDark()
+      : ThemeEntity.createLight();
+
     this.applyThemeToDOM(systemTheme);
     return systemTheme;
   }
@@ -64,7 +73,7 @@ export class LocalStorageThemeRepository implements ThemeRepository {
   private applyThemeToDOM(theme: ThemeEntity): void {
     const body = document.body;
     const html = document.documentElement;
-    
+
     if (theme.isDark) {
       body.classList.add('dark');
       html.classList.add('dark');

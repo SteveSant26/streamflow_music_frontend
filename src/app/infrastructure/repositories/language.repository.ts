@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ILanguageRepository } from '../../domain/repositories/i-language.repository';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LanguageRepository implements ILanguageRepository {
   private readonly translateService = inject(TranslateService);
@@ -46,12 +46,13 @@ export class LanguageRepository implements ILanguageRepository {
   private initializeLanguage(): void {
     const storedLanguage = this.getStoredLanguage();
     const browserLanguage = this.getBrowserLanguage();
-    
-    const languageToUse = storedLanguage && this.isLanguageSupported(storedLanguage) 
-      ? storedLanguage 
-      : this.isLanguageSupported(browserLanguage) 
-        ? browserLanguage 
-        : this.DEFAULT_LANGUAGE;
+
+    const languageToUse =
+      storedLanguage && this.isLanguageSupported(storedLanguage)
+        ? storedLanguage
+        : this.isLanguageSupported(browserLanguage)
+          ? browserLanguage
+          : this.DEFAULT_LANGUAGE;
 
     this.translateService.setDefaultLang(this.DEFAULT_LANGUAGE);
     this.setLanguage(languageToUse);
@@ -67,7 +68,7 @@ export class LanguageRepository implements ILanguageRepository {
     if (typeof window === 'undefined') {
       return this.DEFAULT_LANGUAGE;
     }
-    
+
     const browserLang = navigator.language.split('-')[0];
     return browserLang;
   }

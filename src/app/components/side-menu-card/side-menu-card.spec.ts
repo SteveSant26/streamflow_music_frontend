@@ -1,21 +1,21 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { Router } from "@angular/router";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
-import { SideMenuCard } from "./side-menu-card";
+import { SideMenuCard } from './side-menu-card';
 
-describe("SideMenuCard", () => {
+describe('SideMenuCard', () => {
   let component: SideMenuCard;
   let fixture: ComponentFixture<SideMenuCard>;
   let mockRouter: jasmine.SpyObj<Router>;
 
   const mockPlaylist = {
     id: 1,
-    name: "Test Playlist",
-    cover: "test-cover.jpg",
+    name: 'Test Playlist',
+    cover: 'test-cover.jpg',
   };
 
   beforeEach(async () => {
-    mockRouter = jasmine.createSpyObj("Router", ["navigate"]);
+    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
       imports: [SideMenuCard],
@@ -31,7 +31,7 @@ describe("SideMenuCard", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

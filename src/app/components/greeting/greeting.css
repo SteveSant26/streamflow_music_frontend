@@ -69,14 +69,13 @@ h1 {
   font-size: 1.875rem;
   font-weight: 700;
   color: var(--theme-text, #1f2937);
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 /* Dark mode text */
 :host-context(body.dark) h1 {
   color: #f9fafb !important;
 }
-
 
 @media (min-width: 640px) {
   h1 {

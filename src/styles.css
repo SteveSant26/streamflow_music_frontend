@@ -14,7 +14,7 @@
   --bg-subdued: #f6f6f6;
   --bg-subdued-highlight: #eeeeee;
   --bg-subdued-press: #e0e0e0;
-  
+
   /* Textos - Tema Claro */
   --text-base: #000000;
   --text-subdued: #6a6a6a;
@@ -23,13 +23,13 @@
   --text-warning: #ffa724;
   --text-positive: #1db954;
   --text-announcement: #0d72ea;
-  
+
   /* Bordes - Tema Claro */
   --border-base: #d9dadc;
   --border-elevated: #d9dadc;
   --border-bright: #ffffff;
   --border-subdued: #e8e8e8;
-  
+
   /* Elementos interactivos - Tema Claro */
   --decorative-base: #1db954;
   --decorative-subdued: #179443;
@@ -40,7 +40,7 @@
   --essential-warning: #ffa724;
   --essential-positive: #1db954;
   --essential-announcement: #0d72ea;
-  
+
   /* Sombras - Tema Claro */
   --shadow-base: rgba(0, 0, 0, 0.1);
   --shadow-elevated: rgba(0, 0, 0, 0.15);
@@ -60,7 +60,7 @@ body.dark {
   --bg-subdued: #121212;
   --bg-subdued-highlight: #1a1a1a;
   --bg-subdued-press: #000000;
-  
+
   /* Textos - Tema Oscuro */
   --text-base: #ffffff;
   --text-subdued: #b3b3b3;
@@ -69,13 +69,13 @@ body.dark {
   --text-warning: #ffa724;
   --text-positive: #1db954;
   --text-announcement: #8ab4f8;
-  
+
   /* Bordes - Tema Oscuro */
   --border-base: #282828;
   --border-elevated: #282828;
   --border-bright: #535353;
   --border-subdued: #282828;
-  
+
   /* Elementos interactivos - Tema Oscuro */
   --decorative-base: #1db954;
   --decorative-subdued: #1ed760;
@@ -86,7 +86,7 @@ body.dark {
   --essential-warning: #ffa724;
   --essential-positive: #1db954;
   --essential-announcement: #8ab4f8;
-  
+
   /* Sombras - Tema Oscuro */
   --shadow-base: rgba(0, 0, 0, 0.6);
   --shadow-elevated: rgba(0, 0, 0, 0.8);
@@ -94,83 +94,158 @@ body.dark {
 }
 
 /* Configuración base del HTML y Body */
-html, body { 
-  height: 100%; 
-  margin: 0; 
-  font-family: 'Circular Sp', 'Circular Std', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family:
+    "Circular Sp", "Circular Std", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
   background-color: var(--bg-base);
   color: var(--text-base);
-  transition: background-color 0.3s cubic-bezier(0.3, 0, 0, 1), color 0.3s cubic-bezier(0.3, 0, 0, 1);
+  transition:
+    background-color 0.3s cubic-bezier(0.3, 0, 0, 1),
+    color 0.3s cubic-bezier(0.3, 0, 0, 1);
 }
 
 /* Clases utilitarias basadas en variables CSS */
 @layer utilities {
   /* Fondos */
-  .bg-base { background-color: var(--bg-base); }
-  .bg-elevated { background-color: var(--bg-elevated-base); }
-  .bg-elevated-highlight { background-color: var(--bg-elevated-highlight); }
-  .bg-tinted { background-color: var(--bg-tinted-base); }
-  .bg-subdued { background-color: var(--bg-subdued); }
-  
+  .bg-base {
+    background-color: var(--bg-base);
+  }
+  .bg-elevated {
+    background-color: var(--bg-elevated-base);
+  }
+  .bg-elevated-highlight {
+    background-color: var(--bg-elevated-highlight);
+  }
+  .bg-tinted {
+    background-color: var(--bg-tinted-base);
+  }
+  .bg-subdued {
+    background-color: var(--bg-subdued);
+  }
+
   /* Textos */
-  .text-base { color: var(--text-base); }
-  .text-subdued { color: var(--text-subdued); }
-  .text-accent { color: var(--text-bright-accent); }
-  .text-negative { color: var(--text-negative); }
-  .text-warning { color: var(--text-warning); }
-  .text-positive { color: var(--text-positive); }
-  
+  .text-base {
+    color: var(--text-base);
+  }
+  .text-subdued {
+    color: var(--text-subdued);
+  }
+  .text-accent {
+    color: var(--text-bright-accent);
+  }
+  .text-negative {
+    color: var(--text-negative);
+  }
+  .text-warning {
+    color: var(--text-warning);
+  }
+  .text-positive {
+    color: var(--text-positive);
+  }
+
   /* Bordes */
-  .border-base { border-color: var(--border-base); }
-  .border-elevated { border-color: var(--border-elevated); }
-  .border-bright { border-color: var(--border-bright); }
-  
+  .border-base {
+    border-color: var(--border-base);
+  }
+  .border-elevated {
+    border-color: var(--border-elevated);
+  }
+  .border-bright {
+    border-color: var(--border-bright);
+  }
+
   /* Hover states */
-  .hover-bg-elevated:hover { background-color: var(--bg-elevated-highlight); }
-  .hover-bg-tinted:hover { background-color: var(--bg-tinted-highlight); }
-  .hover-bg-subdued:hover { background-color: var(--bg-subdued-highlight); }
-  
+  .hover-bg-elevated:hover {
+    background-color: var(--bg-elevated-highlight);
+  }
+  .hover-bg-tinted:hover {
+    background-color: var(--bg-tinted-highlight);
+  }
+  .hover-bg-subdued:hover {
+    background-color: var(--bg-subdued-highlight);
+  }
+
   /* Hover con colores blancos */
-  .hover-text-white:hover { color: var(--text-base); }
-  .hover-border-white:hover { border-color: var(--text-base); }
-  
+  .hover-text-white:hover {
+    color: var(--text-base);
+  }
+  .hover-border-white:hover {
+    border-color: var(--text-base);
+  }
+
   /* Sombras */
-  .shadow-base { box-shadow: 0 2px 4px var(--shadow-base); }
-  .shadow-elevated { box-shadow: 0 8px 24px var(--shadow-elevated); }
-  .shadow-overlay { box-shadow: 0 16px 40px var(--shadow-overlay); }
+  .shadow-base {
+    box-shadow: 0 2px 4px var(--shadow-base);
+  }
+  .shadow-elevated {
+    box-shadow: 0 8px 24px var(--shadow-elevated);
+  }
+  .shadow-overlay {
+    box-shadow: 0 16px 40px var(--shadow-overlay);
+  }
 }
 
 /* Overwrites para hacer que Tailwind use nuestras variables */
-.bg-white { background-color: var(--bg-base) !important; }
-.bg-gray-50 { background-color: var(--bg-subdued) !important; }
-.bg-gray-100 { background-color: var(--bg-elevated-base) !important; }
-.bg-gray-900 { background-color: var(--bg-base) !important; }
+.bg-white {
+  background-color: var(--bg-base) !important;
+}
+.bg-gray-50 {
+  background-color: var(--bg-subdued) !important;
+}
+.bg-gray-100 {
+  background-color: var(--bg-elevated-base) !important;
+}
+.bg-gray-900 {
+  background-color: var(--bg-base) !important;
+}
 
-.text-black { color: var(--text-base) !important; }
-.text-gray-900 { color: var(--text-base) !important; }
-.text-gray-700 { color: var(--text-base) !important; }
-.text-gray-600 { color: var(--text-subdued) !important; }
-.text-gray-500 { color: var(--text-subdued) !important; }
-.text-gray-400 { color: var(--text-subdued) !important; }
-.text-white { color: var(--text-base) !important; }
+.text-black {
+  color: var(--text-base) !important;
+}
+.text-gray-900 {
+  color: var(--text-base) !important;
+}
+.text-gray-700 {
+  color: var(--text-base) !important;
+}
+.text-gray-600 {
+  color: var(--text-subdued) !important;
+}
+.text-gray-500 {
+  color: var(--text-subdued) !important;
+}
+.text-gray-400 {
+  color: var(--text-subdued) !important;
+}
+.text-white {
+  color: var(--text-base) !important;
+}
 
-.border-gray-200 { border-color: var(--border-base) !important; }
-.border-gray-300 { border-color: var(--border-elevated) !important; }
+.border-gray-200 {
+  border-color: var(--border-base) !important;
+}
+.border-gray-300 {
+  border-color: var(--border-elevated) !important;
+}
 
 /* Gradientes que se adaptan al tema */
 .bg-gradient-to-br {
   background: linear-gradient(
-    to bottom right, 
-    var(--bg-base), 
-    var(--bg-elevated-base), 
+    to bottom right,
+    var(--bg-base),
+    var(--bg-elevated-base),
     var(--bg-subdued)
   ) !important;
 }
 
 .bg-gradient-to-r {
   background: linear-gradient(
-    to right, 
-    var(--bg-elevated-base), 
+    to right,
+    var(--bg-elevated-base),
     var(--bg-tinted-base)
   ) !important;
 }
@@ -253,7 +328,8 @@ body.dark .backdrop-white {
 }
 
 /* Material Icons con color de tema */
-.material-icons, mat-icon {
+.material-icons,
+mat-icon {
   color: var(--text-subdued);
   transition: color 0.3s cubic-bezier(0.3, 0, 0, 1);
 }
@@ -398,7 +474,9 @@ a:hover {
 }
 
 /* Inputs estilo Spotify */
-input, textarea, select {
+input,
+textarea,
+select {
   background-color: var(--bg-elevated-base);
   color: var(--text-base);
   border: 1px solid var(--border-base);
@@ -407,7 +485,9 @@ input, textarea, select {
   transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
   border-color: var(--text-base);
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
@@ -422,7 +502,8 @@ input:focus, textarea:focus, select:focus {
 
 /* Animaciones suaves para cambio de tema */
 * {
-  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-property:
+    background-color, border-color, color, fill, stroke, box-shadow;
   transition-timing-function: cubic-bezier(0.3, 0, 0, 1);
   transition-duration: 300ms;
 }

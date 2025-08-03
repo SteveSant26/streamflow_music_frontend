@@ -1,13 +1,22 @@
-import { Injectable, signal, computed, PLATFORM_ID, inject } from '@angular/core';
+import {
+  Injectable,
+  signal,
+  computed,
+  PLATFORM_ID,
+  inject,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { IAuthRepository, AuthSession } from '@app/domain/repositories/i-auth.repository';
+import {
+  IAuthRepository,
+  AuthSession,
+} from '@app/domain/repositories/i-auth.repository';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStateService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly _session = signal<AuthSession | null>(null);
   private readonly STORAGE_KEY = 'auth-session';
-  
+
   constructor(private readonly authRepository: IAuthRepository) {
     // Inicializar desde localStorage si estamos en el navegador
     if (isPlatformBrowser(this.platformId)) {
@@ -16,7 +25,7 @@ export class AuthStateService {
   }
 
   readonly session = this._session.asReadonly();
-  
+
   readonly isAuthenticated = computed(() => {
     const session = this._session();
     return session?.isAuthenticated ?? false;
@@ -42,19 +51,24 @@ export class AuthStateService {
           console.log('📦 AuthStateService: Sesión cargada desde localStorage');
           this._session.set(session);
         } else {
-          console.log('🗑️ AuthStateService: Sesión inválida en localStorage, limpiando');
+          console.log(
+            '🗑️ AuthStateService: Sesión inválida en localStorage, limpiando',
+          );
           this.clearStorage();
         }
       }
     } catch (error) {
-      console.error('❌ AuthStateService: Error cargando desde localStorage:', error);
+      console.error(
+        '❌ AuthStateService: Error cargando desde localStorage:',
+        error,
+      );
       this.clearStorage();
     }
   }
 
   private saveToStorage(session: AuthSession | null): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    
+
     try {
       if (session) {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(session));
@@ -63,18 +77,24 @@ export class AuthStateService {
         this.clearStorage();
       }
     } catch (error) {
-      console.error('❌ AuthStateService: Error guardando en localStorage:', error);
+      console.error(
+        '❌ AuthStateService: Error guardando en localStorage:',
+        error,
+      );
     }
   }
 
   private clearStorage(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    
+
     try {
       localStorage.removeItem(this.STORAGE_KEY);
       console.log('🗑️ AuthStateService: localStorage limpiado');
     } catch (error) {
-      console.error('❌ AuthStateService: Error limpiando localStorage:', error);
+      console.error(
+        '❌ AuthStateService: Error limpiando localStorage:',
+        error,
+      );
     }
   }
 
@@ -89,7 +109,10 @@ export class AuthStateService {
   }
 
   updateSession(session: AuthSession | null): void {
-    console.log('🔄 AuthStateService: Actualizando sesión:', session ? 'Con datos' : 'Null');
+    console.log(
+      '🔄 AuthStateService: Actualizando sesión:',
+      session ? 'Con datos' : 'Null',
+    );
     this._session.set(session);
     this.saveToStorage(session);
   }

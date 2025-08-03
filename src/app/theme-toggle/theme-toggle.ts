@@ -18,7 +18,7 @@ import { ThemeEntity } from '../domain/entities/theme.entity';
 export class ThemeToggleComponent implements OnInit, OnDestroy {
   isDarkMode$!: Observable<boolean>;
   currentTheme$!: Observable<ThemeEntity>;
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(private readonly themeService: ThemeService) {}
@@ -32,13 +32,14 @@ export class ThemeToggleComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  
+
   toggleTheme(): void {
-    this.themeService.toggleTheme()
+    this.themeService
+      .toggleTheme()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => console.log('Theme toggled successfully'),
-        error: (error) => console.error('Error toggling theme:', error)
+        error: (error) => console.error('Error toggling theme:', error),
       });
   }
 }

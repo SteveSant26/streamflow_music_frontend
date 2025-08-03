@@ -6,7 +6,7 @@ import { ThemeService } from '../application/services/theme.service';
 export const THEME_PROVIDERS: Provider[] = [
   {
     provide: ThemeRepository,
-    useClass: LocalStorageThemeRepository
+    useClass: LocalStorageThemeRepository,
   },
-  ThemeService
+  ThemeService,
 ];

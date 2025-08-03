@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
-import { AuthStateService } from "@app/domain/services/auth-state-service";
-import { LogoutUseCase } from "./logout.usecase";
+import { Injectable } from '@angular/core';
+import { AuthStateService } from '@app/domain/services/auth-state-service';
+import { LogoutUseCase } from './logout.usecase';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthStatusUseCase {
   constructor(
     private readonly authStateService: AuthStateService,
-    private readonly logoutUseCase: LogoutUseCase
+    private readonly logoutUseCase: LogoutUseCase,
   ) {}
 
   get isAuthenticated() {

@@ -8,27 +8,33 @@ import { PaymentMethod } from '../entities/payment.entity';
 export class GetPaymentMethodsUseCase {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
-    private readonly paymentStateService: PaymentStateService
+    private readonly paymentStateService: PaymentStateService,
   ) {}
 
   execute(userId: string): Observable<PaymentMethod[]> {
-    console.log('🎯 GetPaymentMethodsUseCase: Obteniendo métodos de pago para usuario:', userId);
-    
+    console.log(
+      '🎯 GetPaymentMethodsUseCase: Obteniendo métodos de pago para usuario:',
+      userId,
+    );
+
     this.paymentStateService.setLoading(true);
     this.paymentStateService.setError(null);
 
     return this.paymentRepository.getPaymentMethods(userId).pipe(
-      tap(paymentMethods => {
-        console.log('✅ GetPaymentMethodsUseCase: Métodos de pago obtenidos:', paymentMethods);
+      tap((paymentMethods) => {
+        console.log(
+          '✅ GetPaymentMethodsUseCase: Métodos de pago obtenidos:',
+          paymentMethods,
+        );
         this.paymentStateService.setPaymentMethods(paymentMethods);
         this.paymentStateService.setLoading(false);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('❌ GetPaymentMethodsUseCase: Error:', error);
         this.paymentStateService.setError('Error al cargar métodos de pago');
         this.paymentStateService.setLoading(false);
         return of([]);
-      })
+      }),
     );
   }
 }

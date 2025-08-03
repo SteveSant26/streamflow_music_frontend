@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { catchError, map } from "rxjs/operators";
-import { environment } from "../../environments/environment";
-import { ApiResponse, PaginatedResponse } from "../models";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { ApiResponse, PaginatedResponse } from '../models';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ApiService {
   private baseUrl = environment.apiUrl;
@@ -25,7 +25,7 @@ export class ApiService {
    */
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     });
     // El token se agrega automáticamente via AuthTokenInterceptor
   }
@@ -34,30 +34,30 @@ export class ApiService {
    * Manejar errores de la API
    */
   private handleError(error: any): Observable<never> {
-    console.error("API Error:", error);
+    console.error('API Error:', error);
 
-    let errorMessage = "Ha ocurrido un error inesperado";
+    let errorMessage = 'Ha ocurrido un error inesperado';
 
     if (error.error?.message) {
       errorMessage = error.error.message;
     } else if (error.error?.errors && Array.isArray(error.error.errors)) {
-      errorMessage = error.error.errors.join(", ");
+      errorMessage = error.error.errors.join(', ');
     } else if (error.message) {
       errorMessage = error.message;
     } else if (error.status) {
       switch (error.status) {
         case 0:
           errorMessage =
-            "No se puede conectar al servidor. Verifica que el backend esté ejecutándose.";
+            'No se puede conectar al servidor. Verifica que el backend esté ejecutándose.';
           break;
         case 404:
-          errorMessage = "Endpoint no encontrado";
+          errorMessage = 'Endpoint no encontrado';
           break;
         case 500:
-          errorMessage = "Error interno del servidor";
+          errorMessage = 'Error interno del servidor';
           break;
         default:
-          errorMessage = `Error ${error.status}: ${error.statusText || "Error desconocido"}`;
+          errorMessage = `Error ${error.status}: ${error.statusText || 'Error desconocido'}`;
       }
     }
 
@@ -183,7 +183,7 @@ export class ApiService {
    */
   upload<T>(endpoint: string, file: File, additionalData?: any): Observable<T> {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
 
     if (additionalData) {
       Object.keys(additionalData).forEach((key) => {
@@ -192,9 +192,9 @@ export class ApiService {
     }
 
     let headers = new HttpHeaders();
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem('authToken');
     if (token) {
-      headers = headers.set("Authorization", `Bearer ${token}`);
+      headers = headers.set('Authorization', `Bearer ${token}`);
     }
     // No agregar Content-Type para FormData, el browser lo hace automáticamente
 

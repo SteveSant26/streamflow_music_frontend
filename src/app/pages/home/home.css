@@ -69,12 +69,16 @@
 .play-all-button {
   background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
   color: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .play-all-button:hover {
   background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
   transform: translateY(-2px) scale(1.02);
 }
 
@@ -87,12 +91,16 @@
 :host-context(body.dark) .play-all-button {
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
   color: #1e293b !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
 }
 
 :host-context(body.dark) .play-all-button:hover {
   background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.4),
+    0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
   transform: translateY(-2px) scale(1.02);
 }
 
@@ -141,14 +149,18 @@
 .trending-container {
   background: rgba(255, 255, 255, 0.4);
   border-color: rgb(229, 231, 235);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 /* Dark mode trending styles - fondo más oscuro */
 :host-context(body.dark) .trending-container {
   background: rgba(15, 23, 42, 0.8) !important;
   border-color: rgba(51, 65, 85, 0.6) !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
 }
 
 .trending-header {

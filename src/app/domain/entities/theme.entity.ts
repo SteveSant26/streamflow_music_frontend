@@ -6,7 +6,7 @@ export interface Theme {
 export class ThemeEntity implements Theme {
   constructor(
     public readonly isDark: boolean,
-    public readonly name: string = isDark ? 'dark' : 'light'
+    public readonly name: string = isDark ? 'dark' : 'light',
   ) {}
 
   toggle(): ThemeEntity {

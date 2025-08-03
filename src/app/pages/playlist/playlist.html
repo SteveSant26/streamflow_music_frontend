@@ -1,10 +1,10 @@
 <div
   class="playlist-container"
   [ngClass]="{
-       'playlist-purple': playlistId === '1',
-       'playlist-blue': playlistId === '2', 
-       'playlist-red': playlistId === '3'
-     }"
+    'playlist-purple': playlistId === '1',
+    'playlist-blue': playlistId === '2',
+    'playlist-red': playlistId === '3',
+  }"
 >
   <div class="playlist-header" [style.background]="dynamicGradient">
     <div class="playlist-hero">
@@ -21,11 +21,14 @@
       <div class="playlist-info-text">
         <span class="playlist-type">Lista pública</span>
         <h1 class="playlist-title">
-          {{ playlistName || 'Mi Playlist #' + playlistId }}
+          {{ playlistName || "Mi Playlist #" + playlistId }}
         </h1>
         <p class="playlist-description">
-          {{ playlistDescription || 'Una colección especial de tus canciones
-          favoritas' }}
+          {{
+            playlistDescription ||
+              "Una colección especial de tus canciones
+          favoritas"
+          }}
         </p>
         <div class="playlist-meta">
           <span class="playlist-owner">🎵 StreamFlow Music</span>
@@ -46,27 +49,17 @@
     <!-- Controles de reproducción -->
     <div class="playlist-controls">
       <button class="play-button">
-        <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8 5v14l11-7z" />
-        </svg>
+        <mat-icon class="play-icon">play_arrow</mat-icon>
         Reproducir
       </button>
 
       <button class="shuffle-button">
-        <svg class="shuffle-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M14.83 13.41L13.42 14.82L16.55 17.95L14.83 19.67L18.18 23.02L21.53 19.67L19.81 17.95L16.68 14.82L15.27 13.41L14.83 13.41Z"
-          />
-        </svg>
+        <mat-icon class="shuffle-icon">shuffle</mat-icon>
         Aleatorio
       </button>
 
       <button class="more-button">
-        <svg class="more-icon" viewBox="0 0 24 24" fill="currentColor">
-          <circle cx="12" cy="5" r="2" />
-          <circle cx="12" cy="12" r="2" />
-          <circle cx="12" cy="19" r="2" />
-        </svg>
+        <mat-icon class="more-icon">more_vert</mat-icon>
       </button>
     </div>
 

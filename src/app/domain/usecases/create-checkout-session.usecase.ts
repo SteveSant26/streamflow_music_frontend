@@ -8,26 +8,34 @@ import { StripeCheckoutSessionDto } from '../entities/payment-dtos';
 export class CreateCheckoutSessionUseCase {
   constructor(
     private readonly paymentRepository: IPaymentRepository,
-    private readonly paymentStateService: PaymentStateService
+    private readonly paymentStateService: PaymentStateService,
   ) {}
 
-  execute(dto: StripeCheckoutSessionDto): Observable<{ url: string; sessionId: string }> {
-    console.log('🎯 CreateCheckoutSessionUseCase: Creando sesión de checkout:', dto);
-    
+  execute(
+    dto: StripeCheckoutSessionDto,
+  ): Observable<{ url: string; sessionId: string }> {
+    console.log(
+      '🎯 CreateCheckoutSessionUseCase: Creando sesión de checkout:',
+      dto,
+    );
+
     this.paymentStateService.setLoading(true);
     this.paymentStateService.setError(null);
 
     return this.paymentRepository.createCheckoutSession(dto).pipe(
-      tap(result => {
-        console.log('✅ CreateCheckoutSessionUseCase: Sesión de checkout creada:', result);
+      tap((result) => {
+        console.log(
+          '✅ CreateCheckoutSessionUseCase: Sesión de checkout creada:',
+          result,
+        );
         this.paymentStateService.setLoading(false);
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('❌ CreateCheckoutSessionUseCase: Error:', error);
         this.paymentStateService.setError('Error al crear sesión de checkout');
         this.paymentStateService.setLoading(false);
         throw error;
-      })
+      }),
     );
   }
 }
