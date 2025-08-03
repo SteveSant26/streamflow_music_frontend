@@ -13,9 +13,8 @@ import { take } from 'rxjs';
 })
 export class App implements OnInit {
   private readonly themeService = inject(ThemeService);
-  private readonly authSessionUseCase: AuthSessionUseCase =
-    inject(AuthSessionUseCase);
-  private readonly languageService: LanguageService = inject(LanguageService);
+  private readonly authSessionUseCase = inject(AuthSessionUseCase);
+  private readonly languageService = inject(LanguageService);
 
   ngOnInit() {
     // Initialize theme first

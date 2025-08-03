@@ -1,12 +1,22 @@
 import { Routes } from '@angular/router';
 import { ROUTES_CONFIG_AUTH } from './config/routes-config/routes-auth.config';
 import { AUTH_ROUTES } from './presentation/routes/app.routes.auth';
-import { SUSBSRIPTION_ROUTES } from './presentation/routes/app.routes.subscription';
+import { SUBSCRIPTION_ROUTES } from './presentation/routes/app.routes.subscription';
 import { authGuard } from './shared/guards';
 import { AuthLoyout } from './presentation/layout/auth-loyout/auth-loyout';
 import { GlobalLoyout } from './presentation/layout/global-loyout/global-loyout';
 
 export const routes: Routes = [
+  // Rutas con pantalla completa (sin layout)
+  {
+    path: 'currentSong',
+    loadComponent: () =>
+      import('./presentation/pages/music/currentsong/current-song').then(
+        (m) => m.CurrentSongComponent,
+      ),
+  },
+  
+  // Rutas principales con GlobalLayout
   {
     path: '',
     component: GlobalLoyout,
@@ -18,7 +28,6 @@ export const routes: Routes = [
             (m) => m.HomeComponent,
           ),
       },
-
       {
         path: 'home',
         loadComponent: () =>
@@ -32,18 +41,10 @@ export const routes: Routes = [
           import('./pages/search/search').then((m) => m.SearchComponent),
       },
       {
-        path: 'currentSong',
-        loadComponent: () =>
-          import('./presentation/pages/music/currentsong/current-song').then(
-            (m) => m.CurrentSongComponent,
-          ),
-      },
-      {
         path: 'explore',
         loadComponent: () =>
           import('./pages/explore/explore').then((m) => m.ExploreComponent),
       },
-
       {
         path: 'library',
         loadComponent: () =>
@@ -82,13 +83,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'library',
-        loadComponent: () =>
-          import('./presentation/pages/users/user-p/user-perfil').then(
-            (m) => m.UserPerfilComponent,
-          ),
-      },
-      {
         path: 'terms-and-conditions',
         loadComponent: () =>
           import(
@@ -97,10 +91,12 @@ export const routes: Routes = [
       },
       {
         path: 'subscription',
-        children: SUSBSRIPTION_ROUTES,
+        children: SUBSCRIPTION_ROUTES,
       },
     ],
   },
+  
+  // Rutas de autenticación con AuthLayout
   {
     path: '',
     component: AuthLoyout,
@@ -111,6 +107,8 @@ export const routes: Routes = [
       },
     ],
   },
+  
+  // Ruta por defecto
   {
     path: '**',
     redirectTo: '/home',

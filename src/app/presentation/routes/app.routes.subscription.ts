@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@app/shared/guards';
 
-export const SUSBSRIPTION_ROUTES: Routes = [
+export const SUBSCRIPTION_ROUTES: Routes = [
   {
     path: 'plans',
     loadChildren: () =>
