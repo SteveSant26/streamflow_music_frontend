@@ -8,6 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ROUTES_CONFIG_MUSIC, ROUTES_CONFIG_GENERAL } from '@app/config/routes-config';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -82,7 +83,7 @@ export class SongDescriptionComponent implements OnInit {
         console.error('Error al cargar la canción:', error);
         this.loading.set(false);
         // Redirigir a una página de error o mostrar mensaje
-        this.router.navigate(['/not-found']);
+        this.router.navigate([ROUTES_CONFIG_GENERAL.NOT_FOUND.path]);
       }
     });
   }
@@ -164,21 +165,21 @@ export class SongDescriptionComponent implements OnInit {
   goToArtist(): void {
     const currentSong = this.song();
     if (currentSong) {
-      this.router.navigate(['/artist', currentSong.artist]);
+      this.router.navigate([ROUTES_CONFIG_MUSIC.ARTIST.getLinkWithId(currentSong.artist)]);
     }
   }
 
   goToAlbum(): void {
     const currentSong = this.song();
     if (currentSong) {
-      this.router.navigate(['/album', currentSong.album]);
+      this.router.navigate([ROUTES_CONFIG_MUSIC.ALBUM.getLinkWithId(currentSong.album)]);
     }
   }
 
   playSimilarSong(song: Song): void {
     this.playSongUseCase.execute(song.id, true).subscribe({
       next: () => {
-        this.router.navigate(['/song', song.id]);
+        this.router.navigate([ROUTES_CONFIG_MUSIC.SONG.getLinkWithId(song.id)]);
       },
       error: (error) => {
         console.error('Error al reproducir canción similar:', error);

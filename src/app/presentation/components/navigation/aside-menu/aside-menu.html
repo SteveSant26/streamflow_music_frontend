@@ -3,23 +3,23 @@
     class="bg-white backdrop-blur-sm rounded-xl p-4 border border-black/10 shadow-md"
   >
     <ul class="space-y-2">
-      <app-side-menu-item [href]="'/home'">
+      <app-side-menu-item [href]="ROUTES_CONFIG_SITE.HOME.link">
         <mat-icon>home</mat-icon>
         {{ "SIDEBAR.HOME" | translate }}
       </app-side-menu-item>
 
-      <app-side-menu-item [href]="'/search'">
+      <app-side-menu-item [href]="ROUTES_CONFIG_MUSIC.SEARCH.link">
         <mat-icon>search</mat-icon>
         {{ "SIDEBAR.SEARCH" | translate }}
       </app-side-menu-item>
 
-      <app-side-menu-item [href]="'/subscription-plans'">
+      <app-side-menu-item [href]="ROUTES_CONFIG_SUBSCRIPTION.PLANS.link">
         <mat-icon>subscriptions</mat-icon>
         {{ "SIDEBAR.SUBSCRIPTIONS" | translate }}
       </app-side-menu-item>
 
       @if (user()) {
-        <app-side-menu-item [href]="'/profile'">
+        <app-side-menu-item [href]="ROUTES_CONFIG_USER.PROFILE.link">
           <mat-icon>person</mat-icon>
           {{ "SIDEBAR.PROFILE" | translate }}
         </app-side-menu-item>

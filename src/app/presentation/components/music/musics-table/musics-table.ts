@@ -8,6 +8,7 @@ import { MusicsTablePlay } from '../musics-table-play/musics-table-play';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { Song } from '@app/domain/entities/song.entity';
 import { PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
 
@@ -31,7 +32,7 @@ export class MusicsTable {
   }
 
   goToSongDescription(songId: string): void {
-    this.router.navigate(['/song', songId]);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.SONG.getLinkWithId(songId)]);
   }
 
   playSong(song: Song): void {

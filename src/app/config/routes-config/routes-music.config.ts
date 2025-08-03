@@ -31,4 +31,9 @@ export const ROUTES_CONFIG_MUSIC = {
     link: '/song',
     getLinkWithId: (id: string) => `/song/${id}`,
   },
+  ALBUM: {
+    path: 'album/:id',
+    link: '/album',
+    getLinkWithId: (id: string) => `/album/${id}`,
+  },
 };

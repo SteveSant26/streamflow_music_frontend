@@ -22,6 +22,8 @@ export interface Playlist {
 export class PlayListItemCard {
   @Input() playlist!: Playlist;
 
+  protected readonly ROUTES_CONFIG_MUSIC = ROUTES_CONFIG_MUSIC;
+
   get artistsString(): string {
     return this.playlist?.artists?.join(', ') || '';
   }

@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 import { AudioPlayerService } from '@app/infrastructure/services/audio-player.service';
 import { Router } from '@angular/router';
+import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 
 @Component({
   selector: 'app-music-player',
@@ -299,7 +300,7 @@ export class MusicPlayerComponent {
   }
 
   goToSongDetail(songId: string): void {
-    this.router.navigate(['/song', songId]);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.SONG.getLinkWithId(songId)]);
   }
 
   onImageError(event: any): void {

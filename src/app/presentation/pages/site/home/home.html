@@ -13,7 +13,7 @@
     <app-card
       [title]="'HOME.CARD1_TITLE' | translate"
       [body]="'HOME.CARD1_BODY' | translate"
-      href="/discover"
+      [href]="ROUTES_CONFIG_SITE.DISCOVER.link"
       [playlistId]="1"
       [showPlayButton]="true"
     >
@@ -22,7 +22,7 @@
     <app-card
       [title]="'HOME.CARD2_TITLE' | translate"
       [body]="'HOME.CARD2_BODY' | translate"
-      href="/playlists"
+      [href]="ROUTES_CONFIG_SITE.PLAYLISTS.link"
       [playlistId]="2"
       [showPlayButton]="true"
     >
@@ -31,7 +31,7 @@
     <app-card
       [title]="'HOME.CARD3_TITLE' | translate"
       [body]="'HOME.CARD3_BODY' | translate"
-      href="/artists"
+      [href]="ROUTES_CONFIG_SITE.ARTISTS.link"
       [playlistId]="3"
       [showPlayButton]="true"
     >

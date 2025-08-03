@@ -12,4 +12,8 @@ export const ROUTES_CONFIG_GENERAL = {
     path: 'contact',
     link: '/contact',
   },
+  NOT_FOUND: {
+    path: 'not-found',
+    link: '/not-found',
+  },
 };

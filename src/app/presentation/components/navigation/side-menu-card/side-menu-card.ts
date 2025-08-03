@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 
 interface Playlist {
   id: number;
@@ -25,6 +26,6 @@ export class SideMenuCard {
   }
 
   navigateToPlaylist() {
-    this.router.navigate(['/playlist', this.playlist.id]);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.PLAYLIST.getLinkWithId(this.playlist.id.toString())]);
   }
 }

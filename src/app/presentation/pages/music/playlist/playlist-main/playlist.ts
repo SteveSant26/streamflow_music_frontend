@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
+import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 
 import { Playlist } from '@app/domain/entities/playlist.entity';
 import { Song } from '@app/domain/entities/song.entity';
@@ -184,6 +185,6 @@ export class PlaylistComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/library']);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.LIBRARY.path]);
   }
 }

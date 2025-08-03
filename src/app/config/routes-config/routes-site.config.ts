@@ -12,4 +12,16 @@ export const ROUTES_CONFIG_SITE = {
     path: 'explore',
     link: '/explore',
   },
+  DISCOVER: {
+    path: 'discover',
+    link: '/discover',
+  },
+  PLAYLISTS: {
+    path: 'playlists',
+    link: '/playlists',
+  },
+  ARTISTS: {
+    path: 'artists',
+    link: '/artists',
+  },
 };

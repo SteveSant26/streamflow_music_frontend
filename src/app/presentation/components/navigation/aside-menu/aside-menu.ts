@@ -57,11 +57,11 @@ export class AsideMenu {
       console.log('🚪 Iniciando logout...');
       await this.logoutUseCase.execute();
       console.log('✅ Logout exitoso, redirigiendo...');
-      await this.router.navigate(['/login']);
+      await this.router.navigate([ROUTES_CONFIG_AUTH.LOGIN.path]);
     } catch (error) {
       console.error('❌ Error en logout:', error);
       // Aunque falle, redirigimos al login
-      await this.router.navigate(['/login']);
+      await this.router.navigate([ROUTES_CONFIG_AUTH.LOGIN.path]);
     }
   }
 
