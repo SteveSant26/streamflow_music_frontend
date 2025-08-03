@@ -7,9 +7,8 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LoginSessionUseCase } from '../../../../domain/usecases/login-session.usecase';
+import { LoginSessionUseCase, SocialLoginUseCase } from '@app/domain/usecases';
 import { LoginCredentials } from '../../../../domain/repositories/i-auth.repository';
-import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import {
@@ -46,6 +45,17 @@ export class LoginComponent {
   async onLogin(): Promise<void> {
     if (this.isLoading()) return;
 
+    // Validación básica
+    if (!this.credentials.email || !this.credentials.password) {
+      this.error.set('Por favor, completa todos los campos.');
+      return;
+    }
+
+    if (!this.isValidEmail(this.credentials.email)) {
+      this.error.set('Por favor, ingresa un email válido.');
+      return;
+    }
+
     this.isLoading.set(true);
     this.error.set(null);
 
@@ -59,6 +69,11 @@ export class LoginComponent {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   private handleError(error: any): void {

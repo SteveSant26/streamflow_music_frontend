@@ -1,0 +1,88 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <div class="hero-section mb-8 text-center lg:text-left">
+    <div class="mb-6">
+      <app-greeting></app-greeting>
+    </div>
+  </div>
+
+  <!-- Cards Section -->
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8"
+  >
+    <app-card
+      [title]="'HOME.CARD1_TITLE' | translate"
+      [body]="'HOME.CARD1_BODY' | translate"
+      [href]="ROUTES_CONFIG_SITE.DISCOVER.link"
+      [playlistId]="1"
+      [showPlayButton]="true"
+    >
+    </app-card>
+
+    <app-card
+      [title]="'HOME.CARD2_TITLE' | translate"
+      [body]="'HOME.CARD2_BODY' | translate"
+      [href]="ROUTES_CONFIG_SITE.PLAYLISTS.link"
+      [playlistId]="2"
+      [showPlayButton]="true"
+    >
+    </app-card>
+
+    <app-card
+      [title]="'HOME.CARD3_TITLE' | translate"
+      [body]="'HOME.CARD3_BODY' | translate"
+      [href]="ROUTES_CONFIG_SITE.ARTISTS.link"
+      [playlistId]="3"
+      [showPlayButton]="true"
+    >
+    </app-card>
+  </div>
+
+  <!-- Canciones Populares -->
+  <app-music-section
+    [title]="popularSectionConfig.title"
+    [type]="popularSectionConfig.type"
+    [songs]="popularSectionConfig.songs"
+    [loading]="popularSectionConfig.loading"
+    [primaryButton]="popularSectionConfig.primaryButton"
+    [emptyMessage]="popularSectionConfig.emptyMessage"
+    [loadingMessage]="popularSectionConfig.loadingMessage"
+    (songSelected)="playSong($event)"
+    (retryLoad)="refreshHomeData()"
+  ></app-music-section>
+
+  <!-- Playlists Recomendadas -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">
+        {{ "HOME.MIXES" | translate }}
+      </h2>
+      <button class="text-black hover:text-gray-700 text-sm font-medium">
+        {{ "HOME.SEE_ALL" | translate }}
+      </button>
+    </div>
+    <div
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6"
+    >
+      @for (playlist of featuredPlaylists; track playlist.id) {
+        <app-play-list-item-card
+          [playlist]="playlist"
+        ></app-play-list-item-card>
+      }
+    </div>
+  </div>
+
+  <!-- Trending Now / Canciones Aleatorias -->
+  <app-music-section
+    [title]="randomSectionConfig.title"
+    [type]="randomSectionConfig.type"
+    [songs]="randomSectionConfig.songs"
+    [loading]="randomSectionConfig.loading"
+    [actionButtons]="randomSectionConfig.actionButtons"
+    [showPlayCount]="randomSectionConfig.showPlayCount"
+    [emptyMessage]="randomSectionConfig.emptyMessage"
+    [loadingMessage]="randomSectionConfig.loadingMessage"
+    (songSelected)="playSong($event)"
+    (retryLoad)="refreshHomeData()"
+  ></app-music-section>
+</div>

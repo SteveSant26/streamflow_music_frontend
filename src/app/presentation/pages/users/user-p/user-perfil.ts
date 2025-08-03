@@ -7,10 +7,11 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { GetUserProfileUseCase } from '@app/domain/usecases/get-user-profile.usecase';
-import { UpdateUserProfileUseCase } from '@app/domain/usecases/update-user-profile.usecase';
-import { UploadProfilePictureUseCase } from '@app/domain/usecases/upload-profile-picture.usecase';
-import { GetUserProfileDto } from '@app/domain/dtos/user-profile.dto';
+import {
+  GetUserProfileUseCase,
+  UploadProfilePictureUseCase,
+} from '@app/domain/usecases';
+import { User } from '@app/domain/entities/user.entity';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -23,30 +24,36 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./user-perfil.css'],
 })
 export class UserPerfilComponent implements OnInit {
+  showImageModal = false;
+  openImageModal(): void {
+    if (this.profileImageUrl()) {
+      this.showImageModal = true;
+    }
+  }
+
+  closeImageModal(): void {
+    this.showImageModal = false;
+  }
   readonly fb: FormBuilder = inject(FormBuilder);
   private readonly getUserProfileUseCase: GetUserProfileUseCase = inject(
     GetUserProfileUseCase,
   );
-  private readonly updateUserProfileUseCase: UpdateUserProfileUseCase = inject(
-    UpdateUserProfileUseCase,
-  );
   private readonly uploadProfilePictureUseCase: UploadProfilePictureUseCase =
     inject(UploadProfilePictureUseCase);
 
-  isEditing = signal(false);
-
-  // Profile data
-  currentUser = signal<GetUserProfileDto | null>(null);
+  // Solo trabajamos con la entidad User
+  currentUser = signal<User | null>(null);
   profileImageUrl = signal<string | null>(null);
-  selectedImageFile = signal<File | null>(null);
 
   // Loading and state properties
   isLoading = signal(false);
   errorMessage = signal<string>('');
   successMessage = signal<string>('');
 
+  // El formulario solo muestra información de solo lectura según la API
   profileForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+    name: [{ value: '', disabled: true }],
   });
 
   ngOnInit(): void {
@@ -59,21 +66,21 @@ export class UserPerfilComponent implements OnInit {
     this.successMessage.set('');
     console.log('🔍 Cargando datos del usuario desde backend...');
 
-    // Usar el caso de uso para obtener el perfil
     this.getUserProfileUseCase.execute().subscribe({
-      next: (userProfile: GetUserProfileDto) => {
-        console.log('✅ Datos del usuario cargados:', userProfile);
+      next: (user: User | null) => {
+        if (user) {
+          this.currentUser.set(user);
+          
+          // Actualizar formulario con datos del usuario
+          this.profileForm.patchValue({
+            email: user.email,
+            name: user.name,
+          });
 
-        this.currentUser.set(userProfile);
-
-        // Actualizar formulario
-        this.profileForm.patchValue({
-          email: userProfile.email,
-        });
-
-        // Cargar imagen de perfil si existe
-        if (userProfile.profile_picture) {
-          this.profileImageUrl.set(userProfile.profile_picture);
+          this.profileImageUrl.set(user.profile_picture || null);
+          console.log('✅ Perfil cargado:', user);
+        } else {
+          this.currentUser.set(null);
         }
 
         this.isLoading.set(false);
@@ -83,72 +90,6 @@ export class UserPerfilComponent implements OnInit {
         this.errorMessage.set('Error al cargar los datos del perfil');
         this.isLoading.set(false);
       },
-    });
-  }
-
-  enableEdit(): void {
-    this.isEditing.set(true);
-  }
-
-  cancelEdit(): void {
-    this.isEditing.set(false);
-    // Restaurar valores originales
-    const user = this.currentUser();
-    if (user) {
-      this.profileForm.patchValue({
-        email: user.email,
-      });
-    }
-  }
-
-  saveProfile(): void {
-    if (this.profileForm.valid) {
-      this.isLoading.set(true);
-      this.errorMessage.set('');
-      this.successMessage.set('');
-
-      // Comentado temporalmente hasta que el backend esté listo
-
-      const formData = this.profileForm.value;
-
-      // Usar caso de uso para actualizar perfil
-      this.updateUserProfileUseCase
-        .execute({ email: formData.email as string })
-        .subscribe({
-          next: (updatedUser) => {
-            console.log('✅ Perfil actualizado exitosamente:', updatedUser);
-
-            // Actualizar datos locales
-            this.currentUser.set(updatedUser);
-            this.isEditing.set(false);
-            this.isLoading.set(false);
-
-            // Mostrar mensaje de éxito
-            this.successMessage.set('Perfil actualizado exitosamente');
-
-            // Limpiar mensaje después de 3 segundos
-            setTimeout(() => {
-              this.successMessage.set('');
-            }, 3000);
-          },
-          error: (error: any) => {
-            console.error('❌ Error al actualizar perfil:', error);
-            this.errorMessage.set(
-              error.message || 'Error al actualizar el perfil',
-            );
-            this.isLoading.set(false);
-          },
-        });
-    } else {
-      console.log('❌ Formulario inválido');
-      this.markFormGroupTouched();
-    }
-  }
-
-  private markFormGroupTouched(): void {
-    Object.keys(this.profileForm.controls).forEach((key) => {
-      const control = this.profileForm.get(key);
-      control?.markAsTouched();
     });
   }
 
@@ -165,15 +106,20 @@ export class UserPerfilComponent implements OnInit {
     const file = target.files?.[0];
 
     if (file) {
+      this.isLoading.set(true);
+      this.errorMessage.set('');
+      
       try {
-        // Usar caso de uso para validar el archivo
+        // Usar caso de uso para validar y subir el archivo
         this.uploadProfilePictureUseCase.execute(file).subscribe({
           next: (response) => {
             console.log('✅ Imagen subida exitosamente:', response);
+            
+            // Actualizar la URL de la imagen
             this.profileImageUrl.set(response.profile_picture);
             this.successMessage.set('Imagen de perfil actualizada');
 
-            // Actualizar el usuario actual
+            // Actualizar el usuario actual con la nueva imagen
             const currentUser = this.currentUser();
             if (currentUser) {
               this.currentUser.set({
@@ -182,42 +128,37 @@ export class UserPerfilComponent implements OnInit {
               });
             }
 
+            this.isLoading.set(false);
             setTimeout(() => this.successMessage.set(''), 3000);
           },
           error: (error) => {
             console.error('❌ Error al subir imagen:', error);
             this.errorMessage.set(error.message || 'Error al subir la imagen');
+            this.isLoading.set(false);
           },
         });
 
-        // Crear preview inmediato
-        this.selectedImageFile.set(file);
+        // Crear preview inmediato mientras se sube
         const reader = new FileReader();
         reader.onload = (e) => {
           this.profileImageUrl.set(e.target?.result as string);
         };
         reader.readAsDataURL(file);
+        
       } catch (error: any) {
         console.error('❌ Error de validación:', error);
         this.errorMessage.set(error.message);
+        this.isLoading.set(false);
       }
     }
   }
 
-  removeProfileImage(): void {
-    this.selectedImageFile.set(null);
-    this.profileImageUrl.set(null);
-
-    // Clear the input
-    const input = document.getElementById(
-      'profileImageInput',
-    ) as HTMLInputElement;
-    if (input) {
-      input.value = '';
-    }
-  }
 
   get email() {
     return this.profileForm.get('email');
+  }
+
+  get name() {
+    return this.profileForm.get('name');
   }
 }

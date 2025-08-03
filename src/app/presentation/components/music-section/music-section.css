@@ -1,0 +1,35 @@
+.song-card {
+  transition: all 0.3s ease;
+}
+
+.song-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.song-card img {
+  transition: transform 0.3s ease;
+}
+
+.song-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Animaciones para los botones de acción */
+.music-section button[aria-label] {
+  transition: all 0.2s ease;
+}
+
+.music-section button[aria-label]:hover {
+  transform: scale(1.05);
+}
+
+/* Mejoras visuales para el estado de carga */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

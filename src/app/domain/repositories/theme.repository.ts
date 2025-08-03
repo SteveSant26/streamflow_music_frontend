@@ -6,4 +6,7 @@ export abstract class ThemeRepository {
   abstract setTheme(theme: ThemeEntity): Observable<void>;
   abstract getStoredTheme(): ThemeEntity | null;
   abstract saveTheme(theme: ThemeEntity): void;
+  abstract getSystemTheme(): ThemeEntity;
+  abstract watchSystemThemeChanges(): Observable<ThemeEntity>;
+  abstract clearStoredTheme(): void;
 }

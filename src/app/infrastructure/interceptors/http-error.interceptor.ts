@@ -23,6 +23,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+        console.error('HttpErrorInterceptor:', error);
         let errorMessage = 'Ha ocurrido un error inesperado';
 
         // Verificar si ErrorEvent está disponible (solo en el navegador)

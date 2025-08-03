@@ -7,7 +7,7 @@ import {
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ResetPasswordUseCase } from '../../../../domain/usecases/reset-password.usecase';
+import { ResetPasswordUseCase } from '@app/domain/usecases';
 import {
   AuthError,
   ValidationError,

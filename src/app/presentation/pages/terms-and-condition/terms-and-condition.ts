@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { ROUTES_CONFIG_SITE } from '@app/config/routes-config';
 
 interface TermsSection {
   id: string;
@@ -118,7 +119,7 @@ export class TermsAndCondition {
 
   acceptTerms(): void {
     console.log('Términos aceptados');
-    this.router.navigate(['/home']);
+    this.router.navigate([ROUTES_CONFIG_SITE.HOME.path]);
   }
 
   goBack(): void {

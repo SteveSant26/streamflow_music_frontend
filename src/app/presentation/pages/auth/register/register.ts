@@ -7,9 +7,8 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RegisterSessionUseCase } from '@app/domain/usecases/register-session.usecase';
+import { RegisterSessionUseCase, SocialLoginUseCase } from '@app/domain/usecases';
 import { RegisterCredentials } from '@app/domain/repositories/i-auth.repository';
-import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import {
@@ -48,6 +47,22 @@ export class RegisterComponent {
   async onRegister(): Promise<void> {
     if (this.isLoading()) return;
 
+    // Validación básica
+    if (!this.credentials.email || !this.credentials.password || !this.credentials.name) {
+      this.error.set('Por favor, completa todos los campos.');
+      return;
+    }
+
+    if (!this.isValidEmail(this.credentials.email)) {
+      this.error.set('Por favor, ingresa un email válido.');
+      return;
+    }
+
+    if (this.credentials.password.length < 6) {
+      this.error.set('La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+
     this.isLoading.set(true);
     this.error.set(null);
     this.success.set(null);
@@ -69,6 +84,11 @@ export class RegisterComponent {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   private handleError(error: any): void {

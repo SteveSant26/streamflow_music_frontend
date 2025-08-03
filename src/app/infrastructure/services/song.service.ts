@@ -1,0 +1,99 @@
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiGetUseCase, ApiPostUseCase } from '../../domain/usecases/api/api.usecase';
+import { API_CONFIG_SONGS } from '../../config/end-points/api-config-songs';
+import { 
+  SongDto, 
+  SongSearchDto, 
+  ProcessYoutubeDto, 
+  PaginationParams, 
+  SongSearchParams,
+  PaginatedResponse 
+} from '../../domain/dtos/song.dto';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SongService {
+  private readonly apiGetUseCase = inject(ApiGetUseCase);
+  private readonly apiPostUseCase = inject(ApiPostUseCase);
+
+  /**
+   * Obtener las canciones más populares
+   */
+  getMostPopular(params?: PaginationParams): Observable<PaginatedResponse<SongSearchDto>> {
+    const queryParams: Record<string, string> = {};
+    if (params?.page) queryParams['page'] = params.page.toString();
+    if (params?.page_size) queryParams['page_size'] = params.page_size.toString();
+    
+    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
+      API_CONFIG_SONGS.songs.mostPopular,
+      queryParams
+    );
+  }
+
+  /**
+   * Procesar video de YouTube
+   */
+  processYoutubeVideo(videoId: string): Observable<SongDto> {
+    const data: ProcessYoutubeDto = { video_id: videoId };
+    return this.apiPostUseCase.execute<SongDto>(
+      API_CONFIG_SONGS.songs.processYoutube,
+      data
+    );
+  }
+
+  /**
+   * Obtener canciones aleatorias
+   */
+  getRandomSongs(params?: PaginationParams): Observable<PaginatedResponse<SongSearchDto>> {
+    const queryParams: Record<string, string> = {};
+    if (params?.page) queryParams['page'] = params.page.toString();
+    if (params?.page_size) queryParams['page_size'] = params.page_size.toString();
+    
+    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
+      API_CONFIG_SONGS.songs.random,
+      queryParams
+    );
+  }
+
+  /**
+   * Buscar canciones
+   */
+  searchSongs(searchParams: SongSearchParams): Observable<PaginatedResponse<SongSearchDto>> {
+    const queryParams: Record<string, string> = {
+      q: searchParams.q
+    };
+    
+    if (searchParams.include_youtube !== undefined) {
+      queryParams['include_youtube'] = searchParams.include_youtube.toString();
+    }
+    if (searchParams.limit) {
+      queryParams['limit'] = searchParams.limit.toString();
+    }
+    
+    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
+      API_CONFIG_SONGS.songs.search,
+      queryParams
+    );
+  }
+
+  /**
+   * Obtener canción por ID
+   */
+  getSongById(songId: string): Observable<SongDto> {
+    return this.apiGetUseCase.execute<SongDto>(
+      API_CONFIG_SONGS.songs.getById(songId)
+    );
+  }
+
+  /**
+   * Incrementar contador de reproducciones
+   */
+  incrementPlayCount(songId: string): Observable<any> {
+    return this.apiPostUseCase.execute<any>(
+      API_CONFIG_SONGS.songs.incrementPlayCount(songId),
+      {}
+    );
+  }
+}

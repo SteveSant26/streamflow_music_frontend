@@ -133,9 +133,13 @@ export class SupabaseAuthRepository implements IAuthRepository {
 
   async sendPasswordResetEmail(email: string): Promise<void> {
     try {
+      const redirectTo = typeof window !== 'undefined' 
+        ? window.location.origin + '/reset-password'
+        : 'http://localhost:4200/reset-password';
+        
       const { error } =
         await this.supabaseService.client.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + '/reset-password',
+          redirectTo,
         });
 
       if (error) {
@@ -155,10 +159,14 @@ export class SupabaseAuthRepository implements IAuthRepository {
     provider: 'google' | 'github' | 'facebook' | 'twitter' | 'discord',
   ): Promise<void> {
     try {
+      const redirectTo = typeof window !== 'undefined' 
+        ? window.location.origin
+        : 'http://localhost:4200';
+        
       const { error } = await this.supabaseService.client.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: window.location.origin,
+          redirectTo,
         },
       });
 

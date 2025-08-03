@@ -2,11 +2,12 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { GetSubscriptionPlansUseCase } from '@app/domain/usecases/get-subscription-plans.usecase';
-import { GetUserSubscriptionUseCase } from '@app/domain/usecases/get-user-subscription.usecase';
-import { CreateCheckoutSessionUseCase } from '@app/domain/usecases/create-checkout-session.usecase';
-import { PaymentStateService } from '@app/domain/services/payment-state.service';
-import { AuthStateService } from '@app/domain/services/auth-state-service';
+import { 
+  GetSubscriptionPlansUseCase, 
+  GetUserSubscriptionUseCase, 
+  CreateCheckoutSessionUseCase 
+} from '@app/domain/usecases';
+import { PaymentStateService, AuthStateService } from '@app/shared/services';
 import { SubscriptionPlan } from '@app/domain/entities/payment.entity';
 
 @Component({

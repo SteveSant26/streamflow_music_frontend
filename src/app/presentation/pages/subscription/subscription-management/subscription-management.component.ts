@@ -1,12 +1,13 @@
 import { Component, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { GetUserSubscriptionUseCase } from '@app/domain/usecases/get-user-subscription.usecase';
-import { GetPaymentMethodsUseCase } from '@app/domain/usecases/get-payment-methods.usecase';
-import { CancelSubscriptionUseCase } from '@app/domain/usecases/cancel-subscription.usecase';
-import { CreateBillingPortalUseCase } from '@app/domain/usecases/create-billing-portal.usecase';
-import { PaymentStateService } from '@app/domain/services/payment-state.service';
-import { AuthStateService } from '@app/domain/services/auth-state-service';
+import { 
+  GetUserSubscriptionUseCase, 
+  GetPaymentMethodsUseCase, 
+  CancelSubscriptionUseCase, 
+  CreateBillingPortalUseCase 
+} from '@app/domain/usecases';
+import { PaymentStateService, AuthStateService } from '@app/shared/services';
 
 @Component({
   selector: 'app-subscription-management',

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_SUBSCRIPTION } from '@app/config/routes-config';
 
 @Component({
   selector: 'app-subscription-success',
@@ -166,10 +167,10 @@ export class SubscriptionSuccessComponent implements OnInit {
   }
 
   goToHome(): void {
-    this.router.navigate(['/home']);
+    this.router.navigate([ROUTES_CONFIG_SITE.HOME.path]);
   }
 
   manageSubscription(): void {
-    this.router.navigate(['/subscription/manage']);
+    this.router.navigate([ROUTES_CONFIG_SUBSCRIPTION.MANAGEMENT.path]);
   }
 }

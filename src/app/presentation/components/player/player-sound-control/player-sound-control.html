@@ -1,0 +1,36 @@
+<div class="flex items-center gap-3 w-full max-w-md">
+  <!-- Current Time -->
+  <span [class]="(isDarkTheme$ | async) ? 'text-white text-xs font-medium min-w-[35px]' : 'text-gray-800 text-xs font-medium min-w-[35px]'"> 
+    {{ formatTime(currentTime) }} 
+  </span>
+
+  <!-- Progress Bar Container -->
+  <div class="flex-1 relative">
+    <button [class]="(isDarkTheme$ | async) ? 'w-full h-2 bg-white/20 rounded-full cursor-pointer border-none p-0' : 'w-full h-2 bg-gray-300 rounded-full cursor-pointer border-none p-0'" 
+            (click)="onProgressClick($event)"
+            aria-label="Barra de progreso">
+      <!-- Progress Fill -->
+      <div 
+        [class]="(isDarkTheme$ | async) ? 'h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ease-out relative' : 'h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out relative'"
+        [style.width.%]="progressPercentage">
+        <!-- Progress Thumb -->
+        <div [class]="(isDarkTheme$ | async) ? 'absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-purple-400 opacity-0 hover:opacity-100 transition-opacity duration-200' : 'absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-blue-500 opacity-0 hover:opacity-100 transition-opacity duration-200'"></div>
+      </div>
+    </button>
+    <!-- Hidden range input for accessibility -->
+    <input
+      type="range"
+      min="0"
+      [max]="duration"
+      [value]="currentTime"
+      (input)="onSeek($event)"
+      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      aria-label="Progreso de la canción"
+    />
+  </div>
+
+  <!-- Total Duration -->
+  <span [class]="(isDarkTheme$ | async) ? 'text-white text-xs font-medium min-w-[35px]' : 'text-gray-800 text-xs font-medium min-w-[35px]'"> 
+    {{ formatTime(duration) }} 
+  </span>
+</div>

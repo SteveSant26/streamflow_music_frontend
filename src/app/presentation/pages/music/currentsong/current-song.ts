@@ -9,9 +9,10 @@ import {
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { GlobalPlayerStateService } from '../../../../shared/services/global-player-state.service';
+import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
+import { ThemeService } from '@app/shared/services/theme.service';
 
 interface CurrentSongView {
   id: string;
@@ -40,16 +41,20 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   showLyricsPanel = false;
   Math = Math; // Expose Math for template use
   private readonly destroy$ = new Subject<void>();
+  private previousVolume = 0.5; // Para recordar el volumen anterior al hacer mute
+  isDarkTheme$: any;
 
   constructor(
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
     private readonly globalPlayerState: GlobalPlayerStateService,
+    private readonly themeService: ThemeService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {}
 
   ngOnInit() {
+    this.isDarkTheme$ = this.themeService.isDarkMode();
     this.setupPlayerStateSubscription();
     this.initializePlayer();
 
@@ -106,7 +111,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         currentTime: this.formatTime(playerState.currentTime),
         progress: playerState.progress,
         volume: playerState.volume,
-        cover: playerState.currentSong.albumCover || '/assets/gorillaz2.jpg',
+        cover: playerState.currentSong.thumbnailUrl || '/assets/gorillaz2.jpg',
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         isPlaying: playerState.isPlaying,
         lyrics: '🎵 Lyrics not available yet 🎵',
@@ -200,9 +205,28 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     this.globalPlayerState.forceSyncAllComponents();
   }
 
+  onProgressKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      // Set to middle when using keyboard
+      const newProgress = 50;
+
+      console.log('Current-song: Progress keyboard to:', newProgress + '%');
+
+      const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+      playerUseCase.seekToPercentage(newProgress);
+      this.globalPlayerState.forceSyncAllComponents();
+    }
+  }
+
   onVolumeChange(event: Event) {
     const input = event.target as HTMLInputElement;
     const volume = parseFloat(input.value) / 100;
+
+    // Guardar el volumen anterior si no es 0
+    if (volume > 0) {
+      this.previousVolume = volume;
+    }
 
     console.log('Current-song: Volume change to:', volume);
 
@@ -211,6 +235,53 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
     // Force sync after volume change
     this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  onVolumeBarClick(event: MouseEvent): void {
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const width = rect.width;
+    const clickPercentage = clickX / width;
+    const newVolume = Math.max(0, Math.min(1, clickPercentage));
+
+    // Guardar el volumen anterior si no es 0
+    if (newVolume > 0) {
+      this.previousVolume = newVolume;
+    }
+
+    console.log('Current-song: Volume click to:', newVolume);
+
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.setVolume(newVolume);
+
+    // Force sync after volume change
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  toggleVolume(): void {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    
+    if (this.currentSong && this.currentSong.volume === 0) {
+      // Si está en mute, restaurar el volumen anterior o 100%
+      const newVolume = this.previousVolume > 0 ? this.previousVolume : 1;
+      playerUseCase.setVolume(newVolume);
+    } else if (this.currentSong) {
+      // Si tiene volumen, guardar el volumen actual y hacer mute
+      this.previousVolume = this.currentSong.volume;
+      playerUseCase.setVolume(0);
+    }
+
+    // Force sync after volume change
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  onVolumeKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      // Toggle volume when using keyboard
+      this.toggleVolume();
+    }
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {

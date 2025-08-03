@@ -20,6 +20,7 @@ export const translateProviders = [
   importProvidersFrom(
     TranslateModule.forRoot({
       defaultLanguage: 'en',
+      useDefaultLang: true,
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
