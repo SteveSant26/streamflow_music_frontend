@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SubscriptionPlansComponent } from './subscription-plans';
+import { SubscriptionPlansMainComponent } from './subscription-plans';
 
-describe('SubscriptionPlansComponent', () => {
-  let component: SubscriptionPlansComponent;
-  let fixture: ComponentFixture<SubscriptionPlansComponent>;
+describe('SubscriptionPlansMainComponent', () => {
+  let component: SubscriptionPlansMainComponent;
+  let fixture: ComponentFixture<SubscriptionPlansMainComponent>;
   let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {

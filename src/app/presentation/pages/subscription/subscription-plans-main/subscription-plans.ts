@@ -19,14 +19,14 @@ interface Plan {
 }
 
 @Component({
-  selector: 'app-subscription-plans',
+  selector: 'app-subscription-plans-main',
   standalone: true,
   imports: [CommonModule, TranslateModule],
   templateUrl: './subscription-plans.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./subscription-plans.css'],
 })
-export class SubscriptionPlansComponent {
+export class SubscriptionPlansMainComponent {
   plans: Plan[] = [
     {
       id: 'free',
