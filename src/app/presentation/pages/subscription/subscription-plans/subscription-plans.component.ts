@@ -7,8 +7,7 @@ import {
   GetUserSubscriptionUseCase, 
   CreateCheckoutSessionUseCase 
 } from '@app/domain/usecases';
-import { PaymentStateService } from '@app/domain/services/payment-state.service';
-import { AuthStateService } from '@app/domain/services/auth-state-service';
+import { PaymentStateService, AuthStateService } from '@app/shared/services';
 import { SubscriptionPlan } from '@app/domain/entities/payment.entity';
 
 @Component({

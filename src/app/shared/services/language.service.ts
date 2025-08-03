@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { ChangeLanguageUseCase, GetCurrentLanguageUseCase, GetAvailableLanguagesUseCase } from '../usecases';
+import { ChangeLanguageUseCase, GetCurrentLanguageUseCase, GetAvailableLanguagesUseCase } from '@app/domain/usecases';
 import { Observable } from 'rxjs';
 
 export type Language = 'en' | 'es';

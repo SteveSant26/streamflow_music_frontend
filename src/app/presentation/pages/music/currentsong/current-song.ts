@@ -9,7 +9,7 @@ import {
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { GlobalPlayerStateService } from '../../../../shared/services/global-player-state.service';
+import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 

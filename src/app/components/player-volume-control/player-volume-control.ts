@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
+import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';

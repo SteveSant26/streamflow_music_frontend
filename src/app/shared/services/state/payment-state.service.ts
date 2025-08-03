@@ -4,7 +4,7 @@ import {
   SubscriptionPlan,
   PaymentMethod,
   Invoice,
-} from '../entities/payment.entity';
+} from '@app/domain/entities/payment.entity';
 
 export interface PaymentState {
   subscription: Subscription | null;

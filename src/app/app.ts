@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthSessionUseCase } from './domain/usecases';
-import { LanguageService } from './domain/services';
+import { LanguageService } from '@app/shared/services';
 import { ThemeService } from './shared/services/theme.service';
 import { take } from 'rxjs';
 

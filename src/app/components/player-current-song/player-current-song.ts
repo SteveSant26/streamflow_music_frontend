@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
+import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Song } from '../../domain/entities/song.entity';
 import { Subject, takeUntil } from 'rxjs';

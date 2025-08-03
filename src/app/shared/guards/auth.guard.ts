@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthStateService } from '@app/domain/services/auth-state-service';
+import { AuthStateService } from '@app/shared/services';
 
 // Guard para proteger rutas privadas (solo usuarios autenticados)
 export const authGuard: CanActivateFn = () => {

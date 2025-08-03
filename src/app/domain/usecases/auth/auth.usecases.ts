@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { IAuthRepository, LoginCredentials, RegisterCredentials } from '@app/domain/repositories/i-auth.repository';
-import { AuthStateService } from '@app/domain/services/auth-state-service';
+import { AuthStateService } from '@app/shared/services';
 
 @Injectable({ providedIn: 'root' })
 export class AuthSessionUseCase {
