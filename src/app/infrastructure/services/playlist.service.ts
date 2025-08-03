@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Song, Playlist, PlaylistItem, PlaybackState } from '../../domain/entities/song.entity';
 
 @Injectable({ providedIn: 'root' })
