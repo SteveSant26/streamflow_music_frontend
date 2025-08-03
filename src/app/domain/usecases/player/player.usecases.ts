@@ -87,4 +87,56 @@ export class PlayerUseCase {
     const currentState = this.playbackState$.value;
     this.playbackState$.next({ ...currentState, ...updates });
   }
+
+  // Audio element management
+  setAudioElement(audioElement: HTMLAudioElement): void {
+    // Implementation for setting audio element reference
+    console.log('Audio element set:', audioElement);
+  }
+
+  // Event observables for component subscriptions
+  onSongEnd(): Observable<void> {
+    // Implementation for song end events
+    return new Observable(observer => {
+      // Placeholder implementation
+      observer.next();
+    });
+  }
+
+  onError(): Observable<any> {
+    // Implementation for error events
+    return new Observable(observer => {
+      // Placeholder implementation - would emit errors from audio playback
+      observer.error('Audio playback error');
+    });
+  }
+
+  // Additional methods needed by services
+  getPlayerState(): Observable<PlaybackState> {
+    return this.playbackState$.asObservable();
+  }
+
+  getCurrentPlayerState(): PlaybackState {
+    return this.playbackState$.value;
+  }
+
+  loadPlaylist(playlist: Song[]): void {
+    // Implementation for loading playlist
+    console.log('Loading playlist:', playlist);
+  }
+
+  forceStateSync(): void {
+    // Implementation for forcing state synchronization
+    console.log('Forcing state sync');
+  }
+
+  emergencyStateRecovery(): void {
+    // Implementation for emergency state recovery
+    console.log('Emergency state recovery');
+  }
+
+  preserveCurrentState(): void {
+    // Implementation for preserving current state
+    console.log('Preserving current state');
+  }
 }

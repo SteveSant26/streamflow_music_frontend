@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
-import { AuthStatusUseCase } from '@app/domain/usecases';
+import { AuthStatusUseCase, LogoutUseCase } from '@app/domain/usecases';
+import { AuthStateService } from '@app/domain/services/auth-state-service';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import { TranslateModule } from '@ngx-translate/core';
@@ -14,6 +16,7 @@ import { LanguageService } from '@app/domain/services/language.service';
     RouterLink,
     SideMenuItem,
     SideMenuCard,
+    CommonModule,
     MatIconModule,
     TranslateModule,
   ],
@@ -23,11 +26,13 @@ import { LanguageService } from '@app/domain/services/language.service';
 export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   private readonly authStatusUseCase = inject(AuthStatusUseCase);
+  private readonly authStateService = inject(AuthStateService);
+  private readonly logoutUseCase = inject(LogoutUseCase);
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
 
-  isAuthenticated = this.authStatusUseCase.isAuthenticated;
-  user = this.authStatusUseCase.user;
+  isAuthenticated = this.authStateService.isAuthenticated;
+  user = this.authStateService.user;
 
   // Language methods
   getCurrentLanguage() {
@@ -45,7 +50,7 @@ export class AsideMenu {
   async logout() {
     try {
       console.log('🚪 Iniciando logout...');
-      await this.authStatusUseCase.logout();
+      await this.logoutUseCase.execute();
       console.log('✅ Logout exitoso, redirigiendo...');
       await this.router.navigate(['/login']);
     } catch (error) {

@@ -63,7 +63,7 @@
     <div class="language-selector">
       <h4>{{ "SIDEBAR.LANGUAGE" | translate }}</h4>
       <div class="language-buttons">
-        @for (lang of getAvailableLanguages(); track lang.code) {
+        @for (lang of getAvailableLanguages() | async; track lang.code) {
           <button
             (click)="changeLanguage(lang.code)"
             class="language-button"

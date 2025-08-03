@@ -21,8 +21,10 @@ export class LanguageService {
 
   constructor() {
     // Initialize the signal with current language
-    const currentLang = this.getCurrentLanguage() as Language;
-    this.currentLanguageSignal.set(currentLang);
+    this.getCurrentLanguage().subscribe(currentLang => {
+      const lang = currentLang as Language;
+      this.currentLanguageSignal.set(lang);
+    });
   }
 
   getCurrentLanguage(): Observable<string> {

@@ -7,12 +7,12 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
-import { AuthStatusUseCase } from '@app/domain/usecases/auth-status.usecase';
+import { AuthStateService } from '@app/domain/services/auth-state-service';
 
 @Injectable()
 export class AuthTokenInterceptor implements HttpInterceptor {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly authStateService = inject(AuthStatusUseCase);
+  private readonly authStateService = inject(AuthStateService);
 
   intercept(
     request: HttpRequest<unknown>,
@@ -30,7 +30,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
     if (isPlatformBrowser(this.platformId)) {
       console.log('✅ isPlatformBrowser: true - Agregando token');
 
-      const token: string | null = this.authStateService.token;
+      const token: string | null = this.authStateService.token();
 
       console.log('🔍 Token obtenido de authStateService:', {
         hasToken: !!token,

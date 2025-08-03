@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { PlayerUseCase } from '../../domain/usecases/player.use-case';
+import { PlayerUseCase } from '../../domain/usecases';
 import { MusicLibraryService } from './music-library.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Observable } from 'rxjs';
@@ -30,7 +30,7 @@ export class GlobalPlayerStateService {
 
     // Subscribe to player state changes to keep track of the last known state
     if (isPlatformBrowser(this.platformId)) {
-      this.playerUseCase.getPlayerState().subscribe((state) => {
+      this.playerUseCase.getPlayerState().subscribe((state: any) => {
         this.lastKnownState = state;
 
         // Track important state values
