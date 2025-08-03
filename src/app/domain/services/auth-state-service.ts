@@ -28,7 +28,7 @@ export class AuthStateService {
 
   readonly isAuthenticated = computed(() => {
     const session = this._session();
-    return session?.isAuthenticated ?? false;
+    return !!session?.isAuthenticated && !!session?.token && !!session?.user;
   });
 
   readonly user = computed(() => {

@@ -47,6 +47,22 @@ export class RegisterComponent {
   async onRegister(): Promise<void> {
     if (this.isLoading()) return;
 
+    // Validación básica
+    if (!this.credentials.email || !this.credentials.password || !this.credentials.name) {
+      this.error.set('Por favor, completa todos los campos.');
+      return;
+    }
+
+    if (!this.isValidEmail(this.credentials.email)) {
+      this.error.set('Por favor, ingresa un email válido.');
+      return;
+    }
+
+    if (this.credentials.password.length < 6) {
+      this.error.set('La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+
     this.isLoading.set(true);
     this.error.set(null);
     this.success.set(null);
@@ -68,6 +84,11 @@ export class RegisterComponent {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   private handleError(error: any): void {

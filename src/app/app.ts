@@ -84,6 +84,7 @@ export class App implements OnInit {
       console.log('✅ App: Sesión de autenticación inicializada');
     } catch (error) {
       console.error('❌ App: Error inicializando sesión:', error);
+      // No lanzar error para evitar que falle la inicialización de la app
     }
   }
 }

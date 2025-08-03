@@ -45,6 +45,17 @@ export class LoginComponent {
   async onLogin(): Promise<void> {
     if (this.isLoading()) return;
 
+    // Validación básica
+    if (!this.credentials.email || !this.credentials.password) {
+      this.error.set('Por favor, completa todos los campos.');
+      return;
+    }
+
+    if (!this.isValidEmail(this.credentials.email)) {
+      this.error.set('Por favor, ingresa un email válido.');
+      return;
+    }
+
     this.isLoading.set(true);
     this.error.set(null);
 
@@ -58,6 +69,11 @@ export class LoginComponent {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   private handleError(error: any): void {

@@ -1,32 +1,33 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthStatusUseCase } from '@app/domain/usecases';
+import { AuthStateService } from '@app/domain/services/auth-state-service';
 
 // Guard para proteger rutas privadas (solo usuarios autenticados)
 export const authGuard: CanActivateFn = () => {
-  const authUseCase = inject(AuthStatusUseCase);
+  const authStateService = inject(AuthStateService);
   const router = inject(Router);
-  return authUseCase.execute()
-    ? true
-    : router.createUrlTree(['/login']);
+  
+  // Usar el computed signal directamente
+  const isAuthenticated = authStateService.isAuthenticated();
+  
+  if (isAuthenticated) {
+    return true;
+  } else {
+    return router.createUrlTree(['/auth/login']);
+  }
 };
 
-// Guard para rutas públicas (login/register): si ya está autenticado, redirige a home o a la página anterior
+// Guard para rutas públicas (login/register): si ya está autenticado, redirige a home
 export const publicGuard: CanActivateFn = () => {
-  const authUseCase = inject(AuthStatusUseCase);
+  const authStateService = inject(AuthStateService);
   const router = inject(Router);
-
-  if (authUseCase.execute()) {
-    // Intentar redirigir a la página anterior si existe
-    const hasHistory = window.history.length > 1;
-    if (hasHistory) {
-      window.history.back();
-      // Retornar false para cancelar la navegación actual
-      return false;
-    } else {
-      // Si no hay historial, redirigir a home
-      return router.createUrlTree(['/home']);
-    }
+  
+  // Usar el computed signal directamente
+  const isAuthenticated = authStateService.isAuthenticated();
+  
+  if (isAuthenticated) {
+    return router.createUrlTree(['/home']);
   }
+  
   return true;
 };

@@ -16,15 +16,16 @@ export class AuthSessionUseCase {
     try {
       const session = await this.authRepository.getCurrentSession();
 
-      if (session?.token && session?.user) {
+      if (session?.token && session?.user && session?.isAuthenticated) {
         console.log('✅ AuthSessionUseCase: Sesión válida encontrada:', {
           userEmail: session.user.email,
           isAuthenticated: session.isAuthenticated,
           hasToken: !!session.token,
+          userId: session.user.id,
         });
         this.authStateService.updateSession(session);
       } else {
-        console.log('❌ AuthSessionUseCase: No hay sesión válida');
+        console.log('❌ AuthSessionUseCase: No hay sesión válida o datos incompletos');
         this.authStateService.clearSession();
       }
     } catch (error) {
