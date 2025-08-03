@@ -1,19 +1,30 @@
-<div class="flex items-center gap-2 w-full max-w-md">
+<div class="flex items-center gap-3 w-full max-w-md">
   <!-- Current Time -->
-  <span class="text-subdued text-xs"> {{ formatTime(currentTime) }} </span>
+  <span class="text-white text-xs font-medium min-w-[35px]"> {{ formatTime(currentTime) }} </span>
 
-  <!-- Progress Bar -->
-  <div class="flex-1">
+  <!-- Progress Bar Container -->
+  <div class="flex-1 relative">
+    <div class="w-full h-2 bg-white/20 rounded-full cursor-pointer" (click)="onProgressClick($event)">
+      <!-- Progress Fill -->
+      <div 
+        class="h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ease-out relative"
+        [style.width.%]="progressPercentage">
+        <!-- Progress Thumb -->
+        <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-purple-400 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
+      </div>
+    </div>
+    <!-- Hidden range input for accessibility -->
     <input
       type="range"
       min="0"
       [max]="duration"
       [value]="currentTime"
       (input)="onSeek($event)"
-      class="w-full h-1 bg-border rounded-lg appearance-none cursor-pointer progress-slider"
+      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      aria-label="Progreso de la canción"
     />
   </div>
 
   <!-- Total Duration -->
-  <span class="text-subdued text-xs"> {{ formatTime(duration) }} </span>
+  <span class="text-white text-xs font-medium min-w-[35px]"> {{ formatTime(duration) }} </span>
 </div>

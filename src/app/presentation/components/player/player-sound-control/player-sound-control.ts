@@ -54,6 +54,24 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
     this.globalPlayerState.forceSyncAllComponents();
   }
 
+  onProgressClick(event: MouseEvent): void {
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const width = rect.width;
+    const clickPercentage = (clickX / width) * 100;
+    const seekTime = (clickPercentage / 100) * this.duration;
+
+    console.log('PlayerSoundControl: Click seek to', seekTime + 's');
+
+    // Use the PlayerUseCase through GlobalPlayerStateService to handle seeking
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.seekToPercentage(seekTime);
+
+    // Force sync after seek
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
   ngOnInit(): void {
     // Subscribe to global player state
     this.globalPlayerState
