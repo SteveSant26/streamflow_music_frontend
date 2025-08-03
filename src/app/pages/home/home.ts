@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Card } from '../../components/card/card';
 import { Greeting } from '../../components/greeting/greeting';
@@ -6,6 +6,13 @@ import { MusicsTable } from '../../components/musics-table/musics-table';
 import { PlayListItemCard } from '../../components/play-list-item-card/play-list-item-card';
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { 
+  GetMostPopularSongsUseCase, 
+  GetRandomSongsUseCase,
+  PlayRandomPlaylistUseCase,
+  PlayPopularPlaylistUseCase 
+} from '../../domain/usecases/song/song.usecases';
+import { Song } from '../../domain/entities/song.entity';
 
 @Component({
   selector: 'app-home',
