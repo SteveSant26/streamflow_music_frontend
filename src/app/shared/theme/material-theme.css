@@ -1,0 +1,375 @@
+/* Variables CSS dinámicas para Material UI */
+:root {
+  /* Material UI Light Theme Variables */
+  --mat-primary-main: #000000;
+  --mat-primary-light: #404040;
+  --mat-primary-dark: #000000;
+  --mat-primary-contrast: #ffffff;
+  
+  --mat-secondary-main: #1db954;
+  --mat-secondary-light: #56b37e;
+  --mat-secondary-dark: #137d39;
+  --mat-secondary-contrast: #ffffff;
+  
+  --mat-background-default: #ffffff;
+  --mat-background-paper: #fafafa;
+  --mat-surface-main: #ffffff;
+  --mat-surface-contrast: #000000;
+  
+  --mat-text-primary: #000000;
+  --mat-text-secondary: #6a6a6a;
+  --mat-text-disabled: #b3b3b3;
+  
+  --mat-divider: #e0e0e0;
+  --mat-action-active: #000000;
+  --mat-action-hover: rgba(0, 0, 0, 0.04);
+  --mat-action-selected: rgba(0, 0, 0, 0.08);
+  --mat-action-disabled: rgba(0, 0, 0, 0.26);
+  
+  --mat-error-main: #e22134;
+  --mat-warning-main: #ffa724;
+  --mat-info-main: #0d72ea;
+  --mat-success-main: #1db954;
+  
+  /* Shadow variables */
+  --mat-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --mat-shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --mat-shadow-overlay: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark theme variables */
+body.dark {
+  --mat-primary-main: #ffffff;
+  --mat-primary-light: #ffffff;
+  --mat-primary-dark: #b3b3b3;
+  --mat-primary-contrast: #000000;
+  
+  --mat-secondary-main: #1db954;
+  --mat-secondary-light: #56b37e;
+  --mat-secondary-dark: #137d39;
+  --mat-secondary-contrast: #ffffff;
+  
+  --mat-background-default: #000000;
+  --mat-background-paper: #121212;
+  --mat-surface-main: #121212;
+  --mat-surface-contrast: #ffffff;
+  
+  --mat-text-primary: #ffffff;
+  --mat-text-secondary: #b3b3b3;
+  --mat-text-disabled: #535353;
+  
+  --mat-divider: #282828;
+  --mat-action-active: #ffffff;
+  --mat-action-hover: rgba(255, 255, 255, 0.04);
+  --mat-action-selected: rgba(255, 255, 255, 0.08);
+  --mat-action-disabled: rgba(255, 255, 255, 0.26);
+  
+  --mat-error-main: #e22134;
+  --mat-warning-main: #ffa724;
+  --mat-info-main: #8ab4f8;
+  --mat-success-main: #1db954;
+  
+  /* Shadow variables for dark theme */
+  --mat-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.6);
+  --mat-shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.8);
+  --mat-shadow-overlay: 0 16px 40px rgba(0, 0, 0, 0.9);
+}
+
+/* Material UI Component Overrides */
+
+/* Global Material UI styles */
+.mat-mdc-button {
+  --mdc-text-button-label-text-color: var(--mat-primary-main) !important;
+  --mdc-outlined-button-label-text-color: var(--mat-primary-main) !important;
+  --mdc-filled-button-container-color: var(--mat-primary-main) !important;
+  --mdc-filled-button-label-text-color: var(--mat-primary-contrast) !important;
+  border-radius: 500px !important;
+  transition: all 0.3s cubic-bezier(0.3, 0, 0, 1) !important;
+}
+
+.mat-mdc-button:hover {
+  transform: scale(1.04) !important;
+}
+
+.mat-mdc-raised-button {
+  box-shadow: var(--mat-shadow-base) !important;
+}
+
+.mat-mdc-raised-button:hover {
+  box-shadow: var(--mat-shadow-elevated) !important;
+}
+
+/* Card components */
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--mat-background-paper) !important;
+  --mdc-elevated-card-container-shadow: var(--mat-shadow-base) !important;
+  border-radius: 8px !important;
+  transition: all 0.3s cubic-bezier(0.3, 0, 0, 1) !important;
+}
+
+.mat-mdc-card:hover {
+  transform: translateY(-2px) !important;
+  --mdc-elevated-card-container-shadow: var(--mat-shadow-elevated) !important;
+}
+
+/* Icon buttons */
+.mat-mdc-icon-button {
+  --mdc-icon-button-state-layer-color: var(--mat-action-hover) !important;
+  --mdc-icon-button-icon-color: var(--mat-text-primary) !important;
+  transition: all 0.3s cubic-bezier(0.3, 0, 0, 1) !important;
+}
+
+.mat-mdc-icon-button:hover {
+  transform: scale(1.1) !important;
+}
+
+/* Form fields */
+.mat-mdc-form-field {
+  --mdc-filled-text-field-container-color: var(--mat-background-paper) !important;
+  --mdc-filled-text-field-input-text-color: var(--mat-text-primary) !important;
+  --mdc-filled-text-field-label-text-color: var(--mat-text-secondary) !important;
+  --mdc-filled-text-field-active-indicator-color: var(--mat-primary-main) !important;
+  --mdc-filled-text-field-focus-active-indicator-color: var(--mat-primary-main) !important;
+}
+
+/* Sliders */
+.mat-mdc-slider {
+  --mdc-slider-handle-color: var(--mat-primary-main) !important;
+  --mdc-slider-active-track-color: var(--mat-primary-main) !important;
+  --mdc-slider-inactive-track-color: var(--mat-text-disabled) !important;
+  --mdc-slider-handle-elevation: var(--mat-shadow-base) !important;
+}
+
+/* Tabs */
+.mat-mdc-tab-group {
+  --mdc-tab-indicator-active-indicator-color: var(--mat-primary-main) !important;
+  --mdc-secondary-navigation-tab-label-text-color: var(--mat-text-secondary) !important;
+  --mdc-secondary-navigation-tab-active-label-text-color: var(--mat-primary-main) !important;
+}
+
+/* Dialogs */
+.mat-mdc-dialog-surface {
+  --mdc-dialog-container-color: var(--mat-background-paper) !important;
+  --mdc-dialog-container-shadow: var(--mat-shadow-overlay) !important;
+  border-radius: 8px !important;
+}
+
+/* Snackbar */
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: var(--mat-background-paper) !important;
+  --mdc-snackbar-supporting-text-color: var(--mat-text-primary) !important;
+  --mdc-snackbar-container-shadow: var(--mat-shadow-elevated) !important;
+  border-radius: 8px !important;
+}
+
+/* Menu */
+.mat-mdc-menu-panel {
+  --mdc-menu-container-color: var(--mat-background-paper) !important;
+  --mdc-menu-container-shadow: var(--mat-shadow-elevated) !important;
+  border-radius: 8px !important;
+}
+
+.mat-mdc-menu-item {
+  --mdc-list-list-item-label-text-color: var(--mat-text-primary) !important;
+  --mdc-list-list-item-hover-state-layer-color: var(--mat-action-hover) !important;
+}
+
+/* Checkbox */
+.mat-mdc-checkbox {
+  --mdc-checkbox-selected-checkmark-color: var(--mat-primary-contrast) !important;
+  --mdc-checkbox-selected-container-color: var(--mat-primary-main) !important;
+  --mdc-checkbox-unselected-outline-color: var(--mat-text-secondary) !important;
+}
+
+/* Radio button */
+.mat-mdc-radio-button {
+  --mdc-radio-selected-icon-color: var(--mat-primary-main) !important;
+  --mdc-radio-unselected-icon-color: var(--mat-text-secondary) !important;
+}
+
+/* Switch */
+.mat-mdc-slide-toggle {
+  --mdc-switch-selected-track-color: var(--mat-primary-main) !important;
+  --mdc-switch-selected-handle-color: var(--mat-primary-contrast) !important;
+  --mdc-switch-unselected-track-color: var(--mat-text-disabled) !important;
+  --mdc-switch-unselected-handle-color: var(--mat-background-paper) !important;
+}
+
+/* Progress indicators */
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: var(--mat-primary-main) !important;
+  --mdc-linear-progress-track-color: var(--mat-text-disabled) !important;
+}
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: var(--mat-primary-main) !important;
+}
+
+/* Toolbar */
+.mat-toolbar {
+  background-color: var(--mat-background-paper) !important;
+  color: var(--mat-text-primary) !important;
+}
+
+/* Sidenav */
+.mat-drawer {
+  background-color: var(--mat-background-paper) !important;
+  color: var(--mat-text-primary) !important;
+}
+
+.mat-drawer-backdrop {
+  background-color: rgba(0, 0, 0, 0.32) !important;
+}
+
+/* List */
+.mat-mdc-list {
+  --mdc-list-list-item-label-text-color: var(--mat-text-primary) !important;
+  --mdc-list-list-item-supporting-text-color: var(--mat-text-secondary) !important;
+}
+
+.mat-mdc-list-item {
+  --mdc-list-list-item-hover-state-layer-color: var(--mat-action-hover) !important;
+}
+
+/* Divider */
+.mat-divider {
+  border-top-color: var(--mat-divider) !important;
+}
+
+/* Chips */
+.mat-mdc-chip {
+  --mdc-chip-elevated-container-color: var(--mat-background-paper) !important;
+  --mdc-chip-elevated-container-shadow: var(--mat-shadow-base) !important;
+  --mdc-chip-label-text-color: var(--mat-text-primary) !important;
+}
+
+/* Table */
+.mat-mdc-table {
+  background-color: var(--mat-background-paper) !important;
+  color: var(--mat-text-primary) !important;
+}
+
+.mat-mdc-header-row {
+  background-color: var(--mat-background-default) !important;
+}
+
+.mat-mdc-row:hover {
+  background-color: var(--mat-action-hover) !important;
+}
+
+/* Stepper */
+.mat-step-header {
+  --mat-stepper-header-icon-foreground-color: var(--mat-primary-contrast) !important;
+  --mat-stepper-header-selected-state-icon-background-color: var(--mat-primary-main) !important;
+  --mat-stepper-header-done-state-icon-background-color: var(--mat-primary-main) !important;
+}
+
+/* Paginator */
+.mat-mdc-paginator {
+  background-color: var(--mat-background-paper) !important;
+  color: var(--mat-text-primary) !important;
+}
+
+/* Sort header */
+.mat-sort-header-arrow {
+  color: var(--mat-text-primary) !important;
+}
+
+/* Expansion panel */
+.mat-expansion-panel {
+  background-color: var(--mat-background-paper) !important;
+}
+
+.mat-expansion-panel-header {
+  color: var(--mat-text-primary) !important;
+}
+
+/* Tree */
+.mat-tree {
+  background-color: var(--mat-background-paper) !important;
+}
+
+.mat-tree-node {
+  color: var(--mat-text-primary) !important;
+}
+
+/* Badge */
+.mat-badge-content {
+  background-color: var(--mat-primary-main) !important;
+  color: var(--mat-primary-contrast) !important;
+}
+
+/* Bottom sheet */
+.mat-bottom-sheet-container {
+  background-color: var(--mat-background-paper) !important;
+  color: var(--mat-text-primary) !important;
+}
+
+/* Grid list */
+.mat-grid-tile {
+  background-color: var(--mat-background-paper) !important;
+}
+
+/* Tooltip */
+.mat-mdc-tooltip {
+  --mdc-plain-tooltip-container-color: var(--mat-background-paper) !important;
+  --mdc-plain-tooltip-supporting-text-color: var(--mat-text-primary) !important;
+}
+
+/* Apply Material theme classes programmatically */
+.mat-app-background {
+  background-color: var(--mat-background-default) !important;
+  color: var(--mat-text-primary) !important;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow !important;
+  transition-timing-function: cubic-bezier(0.3, 0, 0, 1) !important;
+  transition-duration: 300ms !important;
+}
+
+/* Override for Material icons to use theme colors */
+.material-icons,
+mat-icon {
+  color: var(--mat-text-primary) !important;
+}
+
+/* Player specific overrides using Material theme */
+app-player-control-button-bar .mat-mdc-icon-button:nth-child(2) {
+  background-color: var(--mat-primary-main) !important;
+  color: var(--mat-primary-contrast) !important;
+  border-radius: 50% !important;
+}
+
+app-player-control-button-bar .mat-mdc-icon-button:nth-child(2):hover {
+  background-color: var(--mat-text-secondary) !important;
+  transform: scale(1.05) !important;
+}
+
+app-player-current-song {
+  background-color: var(--mat-background-paper) !important;
+  color: var(--mat-text-primary) !important;
+}
+
+/* Responsive Material Design breakpoints */
+@media (max-width: 599px) {
+  .mat-mdc-button {
+    font-size: 0.75rem !important;
+    padding: 6px 24px !important;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .mat-mdc-button {
+    font-size: 0.8125rem !important;
+    padding: 7px 28px !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .mat-mdc-button {
+    font-size: 0.875rem !important;
+    padding: 8px 32px !important;
+  }
+}

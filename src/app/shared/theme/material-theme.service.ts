@@ -137,7 +137,7 @@ export class MaterialThemeService {
       if (current.type === ThemeType.SYSTEM) {
         const updatedTheme = new ThemeEntity(ThemeType.SYSTEM, e.matches, 'system');
         this._currentTheme.set(updatedTheme);
-        this.themeRepository.setTheme(updatedTheme);
+        this.themeRepository.saveTheme(updatedTheme);
       }
     });
   }

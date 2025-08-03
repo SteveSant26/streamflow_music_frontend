@@ -1,6 +1,9 @@
 /* Importación de Tailwind CSS */
 @import "tailwindcss";
 
+/* Importación de temas Material UI personalizados */
+@import "./app/shared/theme/material-theme.css";
+
 /* Variables CSS para tema estilo Spotify - Sistema de colores mejorado */
 :root {
   /* Fondos principales - Tema Claro */
@@ -455,9 +458,14 @@ a:hover,
 *[style*="color: #1db954"],
 *[style*="border-color: #1db954"],
 .text-green-500,
-.border-green-500,
-.hover\\:text-green-500:hover,
-.hover\\:border-green-500:hover {
+.border-green-500 {
+  color: var(--text-base) !important;
+  border-color: var(--text-base) !important;
+}
+
+/* Hover states para elementos verdes */
+.hover-text-green:hover,
+.hover-border-green:hover {
   color: var(--text-base) !important;
   border-color: var(--text-base) !important;
 }
@@ -507,6 +515,3 @@ select:focus {
   transition-timing-function: cubic-bezier(0.3, 0, 0, 1);
   transition-duration: 300ms;
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
