@@ -11,7 +11,8 @@ export class GetCurrentLanguageUseCase {
   constructor(private readonly translateService: TranslateService) {}
 
   execute(): Observable<string> {
-    return of(this.translateService.currentLang || 'en');
+    const currentLang = localStorage.getItem('streamflow_language') || 'en';
+    return of(currentLang);
   }
 }
 
