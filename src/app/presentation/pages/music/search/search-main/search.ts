@@ -8,8 +8,8 @@ import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // Domain
-import { Song } from '../../domain/entities/song.entity';
-import { SearchSongsUseCase, PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
+import { Song } from '@app/domain/entities/song.entity';
+import { SearchSongsUseCase, PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
 
 // Components
 import { MusicsTable } from '@app/presentation/components/music';
