@@ -18,10 +18,10 @@ import {
   GetSongByIdUseCase, 
   PlaySongUseCase,
   GetRandomSongsUseCase 
-} from '../../domain/usecases/song/song.usecases';
-import { Song } from '../../domain/entities/song.entity';
-import { PlaylistService } from '../../infrastructure/services/playlist.service';
-import { AudioPlayerService } from '../../infrastructure/services/audio-player.service';
+} from '@app/domain/usecases/song/song.usecases';
+import { Song } from '@app/domain/entities/song.entity';
+import { PlaylistService } from '@app/infrastructure/services/playlist.service';
+import { AudioPlayerService } from '@app/infrastructure/services/audio-player.service';
 
 @Component({
   selector: 'app-song-description',

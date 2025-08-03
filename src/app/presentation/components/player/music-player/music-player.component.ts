@@ -4,8 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
-import { PlaylistService } from '../../infrastructure/services/playlist.service';
-import { AudioPlayerService } from '../../infrastructure/services/audio-player.service';
+import { PlaylistService } from '@app/infrastructure/services/playlist.service';
+import { AudioPlayerService } from '@app/infrastructure/services/audio-player.service';
 import { Router } from '@angular/router';
 
 @Component({

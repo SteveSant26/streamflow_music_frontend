@@ -9,8 +9,8 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
-import { PlayerState } from '../../domain/entities/player-state.entity';
-import { Song } from '../../domain/entities/song.entity';
+import { PlayerState } from '@app/domain/entities/player-state.entity';
+import { Song } from '@app/domain/entities/song.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 @Component({

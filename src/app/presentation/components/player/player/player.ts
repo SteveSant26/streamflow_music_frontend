@@ -12,8 +12,8 @@ import { PlayerControlButtonBar } from '../player-control-button-bar/player-cont
 import { PlayerCurrentSong } from '../player-current-song/player-current-song';
 import { PlayerSoundControl } from '../player-sound-control/player-sound-control';
 import { PlayerVolumeControl } from '../player-volume-control/player-volume-control';
-import { PlayerUseCase } from '../../domain/usecases';
-import { PlayerState } from '../../domain/entities/player-state.entity';
+import { PlayerUseCase } from '@app/domain/usecases';
+import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';

@@ -9,7 +9,7 @@ import {
   inject,
 } from '@angular/core';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
-import { PlayerState } from '../../domain/entities/player-state.entity';
+import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 @Component({

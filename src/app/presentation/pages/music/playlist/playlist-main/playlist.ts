@@ -6,10 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { Playlist } from '../../domain/entities/playlist.entity';
-import { Song } from '../../domain/entities/song.entity';
-import { GetPlaylistByIdUseCase } from '../../domain/usecases/playlist/playlist.usecases';
-import { PlaylistService } from '../../infrastructure/services/playlist.service';
+import { Playlist } from '@app/domain/entities/playlist.entity';
+import { Song } from '@app/domain/entities/song.entity';
+import { GetPlaylistByIdUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
+import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 
 @Component({
   selector: 'app-playlist',

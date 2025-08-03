@@ -1,8 +1,8 @@
 import { MatIcon } from '@angular/material/icon';
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { Song } from '../../domain/entities/song.entity';
-import { PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
+import { Song } from '@app/domain/entities/song.entity';
+import { PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
 
 interface Playlist {
   id: string;
