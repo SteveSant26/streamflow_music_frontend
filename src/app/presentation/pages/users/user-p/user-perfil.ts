@@ -72,7 +72,7 @@ export class UserPerfilComponent implements OnInit {
           const userProfileDto: GetUserProfileDto = {
             id: userProfile.id,
             email: userProfile.email,
-            profile_picture: null
+            profile_picture: null // Campo no disponible en User entity actual
           };
 
           this.currentUser.set(userProfileDto);
@@ -124,11 +124,11 @@ export class UserPerfilComponent implements OnInit {
       this.updateUserProfileUseCase
         .execute({ email: formData.email as string })
         .subscribe({
-          next: (updatedUser) => {
-            console.log('✅ Perfil actualizado exitosamente:', updatedUser);
+          next: (updatedProfile: GetUserProfileDto) => {
+            console.log('✅ Perfil actualizado exitosamente:', updatedProfile);
 
             // Actualizar datos locales
-            this.currentUser.set(updatedUser);
+            this.currentUser.set(updatedProfile);
             this.isEditing.set(false);
             this.isLoading.set(false);
 

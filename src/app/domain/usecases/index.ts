@@ -15,3 +15,6 @@ export * from './subscription/subscription.usecases';
 
 // Player Use Cases
 export * from './player/player.usecases';
+
+// API Use Cases
+export * from './api/api.usecase';

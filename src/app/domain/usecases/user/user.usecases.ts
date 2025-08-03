@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
 import { User } from '../../entities/user.entity';
+import { ProfileService } from '../../../infrastructure/services/profile.service';
+import { GetUserProfileDto, UpdateUserProfileDto } from '../../dtos/user-profile.dto';
 
 export interface UpdateUserProfileData {
   name?: string;
@@ -13,19 +15,22 @@ export interface UpdateUserProfileData {
   providedIn: 'root'
 })
 export class GetUserProfileUseCase {
-  // Note: This would typically use a repository
+  private readonly profileService = inject(ProfileService);
+
   execute(): Observable<User | null> {
-    // This is a placeholder implementation
-    // In a real app, this would fetch from a repository
-    return new Observable(observer => {
-      const storedUser = localStorage.getItem('streamflow_user');
-      if (storedUser) {
-        observer.next(JSON.parse(storedUser));
-      } else {
-        observer.next(null);
-      }
-      observer.complete();
-    });
+    return this.profileService.getCurrentUserProfile().pipe(
+      map((dto: GetUserProfileDto) => {
+        // Mapear DTO a entidad User
+        const user: User = {
+          id: dto.id,
+          email: dto.email,
+          name: dto.email.split('@')[0], // Usar parte del email como nombre temporal
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        return user;
+      })
+    );
   }
 }
 
@@ -33,9 +38,21 @@ export class GetUserProfileUseCase {
   providedIn: 'root'
 })
 export class UpdateUserProfileUseCase {
-  execute(data: UpdateUserProfileData): Observable<User> {
-    return new Observable(observer => {
-    });
+  private readonly profileService = inject(ProfileService);
+
+  execute(data: UpdateUserProfileData): Observable<GetUserProfileDto> {
+    const updateDto: UpdateUserProfileDto = {
+      email: data.email,
+      profile_picture: undefined // Se manejará por separado
+    };
+
+    return this.profileService.updateUserProfile(updateDto).pipe(
+      map((response) => ({
+        id: response.id,
+        email: response.email,
+        profile_picture: response.profile_picture
+      }))
+    );
   }
 }
 
@@ -43,19 +60,24 @@ export class UpdateUserProfileUseCase {
   providedIn: 'root'
 })
 export class UploadProfilePictureUseCase {
+  private readonly profileService = inject(ProfileService);
+
   execute(file: File): Observable<{ profile_picture: string }> {
-    return new Observable(observer => {
-      // This is a placeholder implementation
-      // In a real app, this would upload to a file service
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        // Store the base64 string as profile picture URL
-        observer.next({ profile_picture: base64String });
-        observer.complete();
-      };
-      reader.onerror = () => observer.error('Error reading file');
-      reader.readAsDataURL(file);
-    });
+    // Validar archivo antes de subir
+    if (!file) {
+      throw new Error('No se ha seleccionado ningún archivo');
+    }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      throw new Error('El archivo es demasiado grande. Máximo 5MB.');
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      throw new Error('Tipo de archivo no permitido. Solo JPEG, PNG, GIF y WebP.');
+    }
+
+    return this.profileService.uploadProfilePicture(file);
   }
 }
