@@ -5,6 +5,7 @@ import { Card, Greeting } from '@app/presentation/components/ui';
 import { MusicsTable, PlayListItemCard } from '@app/presentation/components/music';
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { 
   GetMostPopularSongsUseCase, 
   GetRandomSongsUseCase,
@@ -38,6 +39,10 @@ export class HomeComponent implements OnInit {
   private readonly playRandomPlaylistUseCase = inject(PlayRandomPlaylistUseCase);
   private readonly playPopularPlaylistUseCase = inject(PlayPopularPlaylistUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+
+  // Route configs
+  protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
+  protected readonly ROUTES_CONFIG_MUSIC = ROUTES_CONFIG_MUSIC;
 
   // Signals para el estado del componente
   readonly popularSongs = signal<Song[]>([]);

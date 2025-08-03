@@ -9,7 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { 
   ROUTES_CONFIG_AUTH, 
   ROUTES_CONFIG_MUSIC, 
-  ROUTES_CONFIG_SITE 
+  ROUTES_CONFIG_SITE,
+  ROUTES_CONFIG_SUBSCRIPTION,
+  ROUTES_CONFIG_USER
 } from '@app/config/routes-config';
 import { TranslateModule } from '@ngx-translate/core';
 
