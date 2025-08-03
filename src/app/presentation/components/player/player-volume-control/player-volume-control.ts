@@ -24,6 +24,7 @@ export class PlayerVolumeControl implements OnInit, OnDestroy {
 
   volume = 0.5;
   playerState: PlayerState | null = null;
+  previousVolume = 0.5; // Para recordar el volumen anterior al hacer mute
 
   // Hacer Math disponible en el template
   Math = Math;
@@ -32,9 +33,46 @@ export class PlayerVolumeControl implements OnInit, OnDestroy {
     const target = event.target as HTMLInputElement;
     const newVolume = parseFloat(target.value);
 
+    // Guardar el volumen anterior si no es 0
+    if (newVolume > 0) {
+      this.previousVolume = newVolume;
+    }
+
     // Use the PlayerUseCase through GlobalPlayerStateService to handle volume change
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.setVolume(newVolume);
+  }
+
+  onVolumeBarClick(event: MouseEvent): void {
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const width = rect.width;
+    const clickPercentage = clickX / width;
+    const newVolume = Math.max(0, Math.min(1, clickPercentage));
+
+    // Guardar el volumen anterior si no es 0
+    if (newVolume > 0) {
+      this.previousVolume = newVolume;
+    }
+
+    // Use the PlayerUseCase through GlobalPlayerStateService to handle volume change
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.setVolume(newVolume);
+  }
+
+  toggleVolume(): void {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    
+    if (this.volume === 0) {
+      // Si está en mute, restaurar el volumen anterior o 100%
+      const newVolume = this.previousVolume > 0 ? this.previousVolume : 1;
+      playerUseCase.setVolume(newVolume);
+    } else {
+      // Si tiene volumen, guardar el volumen actual y hacer mute
+      this.previousVolume = this.volume;
+      playerUseCase.setVolume(0);
+    }
   }
 
   ngOnInit(): void {

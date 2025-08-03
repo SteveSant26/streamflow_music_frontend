@@ -55,20 +55,17 @@
         <span class="current-time">{{ currentSong.currentTime }}</span>
         <span class="total-time">{{ currentSong.duration }}</span>
       </div>
-      <div
-        onkeypress
-        class="progress-bar-container"
-        (click)="onProgressClick($event)"
-      >
-        <div class="progress-bar">
-          <div
-            class="progress-fill"
-            [style.width.%]="currentSong.progress"
-          ></div>
-          <div
-            class="progress-thumb"
-            [style.left.%]="currentSong.progress"
-          ></div>
+      <div class="progress-bar-container">
+        <div class="w-full h-2 bg-white/30 rounded-full cursor-pointer relative" 
+             (click)="onProgressClick($event)"
+             (keydown)="$event.key === 'Enter' && onProgressClick($event)">
+          <!-- Progress Fill -->
+          <div 
+            class="h-full bg-gradient-to-r from-white to-gray-200 rounded-full transition-all duration-300 ease-out relative shadow-lg"
+            [style.width.%]="currentSong.progress">
+            <!-- Progress Thumb -->
+            <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-xl border-2 border-white/50 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
+          </div>
         </div>
       </div>
     </div>

@@ -40,6 +40,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   showLyricsPanel = false;
   Math = Math; // Expose Math for template use
   private readonly destroy$ = new Subject<void>();
+  private previousVolume = 0.5; // Para recordar el volumen anterior al hacer mute
 
   constructor(
     private readonly router: Router,
@@ -204,10 +205,54 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     const volume = parseFloat(input.value) / 100;
 
+    // Guardar el volumen anterior si no es 0
+    if (volume > 0) {
+      this.previousVolume = volume;
+    }
+
     console.log('Current-song: Volume change to:', volume);
 
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.setVolume(volume);
+
+    // Force sync after volume change
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  onVolumeBarClick(event: MouseEvent): void {
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const width = rect.width;
+    const clickPercentage = clickX / width;
+    const newVolume = Math.max(0, Math.min(1, clickPercentage));
+
+    // Guardar el volumen anterior si no es 0
+    if (newVolume > 0) {
+      this.previousVolume = newVolume;
+    }
+
+    console.log('Current-song: Volume click to:', newVolume);
+
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.setVolume(newVolume);
+
+    // Force sync after volume change
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  toggleVolume(): void {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    
+    if (this.currentSong && this.currentSong.volume === 0) {
+      // Si está en mute, restaurar el volumen anterior o 100%
+      const newVolume = this.previousVolume > 0 ? this.previousVolume : 1;
+      playerUseCase.setVolume(newVolume);
+    } else if (this.currentSong) {
+      // Si tiene volumen, guardar el volumen actual y hacer mute
+      this.previousVolume = this.currentSong.volume;
+      playerUseCase.setVolume(0);
+    }
 
     // Force sync after volume change
     this.globalPlayerState.forceSyncAllComponents();
