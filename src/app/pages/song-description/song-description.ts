@@ -3,6 +3,7 @@ import {
   OnInit,
   inject,
   ChangeDetectionStrategy,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -13,6 +14,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslateModule } from '@ngx-translate/core';
+import { 
+  GetSongByIdUseCase, 
+  PlaySongUseCase,
+  GetRandomSongsUseCase 
+} from '../../domain/usecases/song/song.usecases';
+import { Song } from '../../domain/entities/song.entity';
+import { PlaylistService } from '../../infrastructure/services/playlist.service';
+import { AudioPlayerService } from '../../infrastructure/services/audio-player.service';
 
 interface Song {
   id: number;

@@ -16,5 +16,8 @@ export * from './subscription/subscription.usecases';
 // Player Use Cases
 export * from './player/player.usecases';
 
+// Song Use Cases
+export * from './song/song.usecases';
+
 // API Use Cases
 export * from './api/api.usecase';
