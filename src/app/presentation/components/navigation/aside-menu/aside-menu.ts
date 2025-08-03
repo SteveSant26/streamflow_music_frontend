@@ -6,7 +6,11 @@ import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStateService, LanguageService } from '@app/shared/services';
 import { LogoutUseCase } from '@app/domain/usecases';
 import { MatIconModule } from '@angular/material/icon';
-import { ROUTES_CONFIG_AUTH } from '@app/config';
+import { 
+  ROUTES_CONFIG_AUTH, 
+  ROUTES_CONFIG_MUSIC, 
+  ROUTES_CONFIG_SITE 
+} from '@app/config/routes-config';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -25,6 +29,8 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
+  protected readonly ROUTES_CONFIG_MUSIC = ROUTES_CONFIG_MUSIC;
+  protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
   private readonly authStateService = inject(AuthStateService);
   private readonly logoutUseCase = inject(LogoutUseCase);
   private readonly router = inject(Router);
