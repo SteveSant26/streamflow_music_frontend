@@ -56,9 +56,10 @@
         <span class="total-time">{{ currentSong.duration }}</span>
       </div>
       <div class="progress-bar-container">
-        <div class="w-full h-2 bg-white/30 rounded-full cursor-pointer relative" 
-             (click)="onProgressClick($event)"
-             (keydown)="$event.key === 'Enter' && onProgressClick($event)">
+        <button class="w-full h-2 bg-white/30 rounded-full cursor-pointer relative border-none p-0" 
+                (click)="onProgressClick($event)"
+                (keydown)="onProgressKeydown($event)"
+                aria-label="Barra de progreso">
           <!-- Progress Fill -->
           <div 
             class="h-full bg-gradient-to-r from-white to-gray-200 rounded-full transition-all duration-300 ease-out relative shadow-lg"
@@ -66,7 +67,7 @@
             <!-- Progress Thumb -->
             <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-xl border-2 border-white/50 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
           </div>
-        </div>
+        </button>
       </div>
     </div>
 
@@ -112,9 +113,10 @@
         </button>
         
         <div class="relative flex-1 mx-4">
-          <div class="w-full h-2 bg-white/30 rounded-full cursor-pointer" 
-               (click)="onVolumeBarClick($event)"
-               (keydown)="$event.key === 'Enter' && onVolumeBarClick($event)">
+          <button class="w-full h-2 bg-white/30 rounded-full cursor-pointer border-none p-0" 
+                  (click)="onVolumeBarClick($event)"
+                  (keydown)="onVolumeKeydown($event)"
+                  aria-label="Barra de volumen">
             <!-- Volume Fill -->
             <div 
               class="h-full bg-gradient-to-r from-white to-gray-200 rounded-full transition-all duration-300 ease-out relative shadow-lg"
@@ -122,7 +124,7 @@
               <!-- Volume Thumb -->
               <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg border border-white/50 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
             </div>
-          </div>
+          </button>
           <!-- Hidden range input for accessibility -->
           <input
             type="range"

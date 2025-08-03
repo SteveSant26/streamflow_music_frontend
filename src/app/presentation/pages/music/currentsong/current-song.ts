@@ -201,6 +201,23 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     this.globalPlayerState.forceSyncAllComponents();
   }
 
+  onProgressKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      // Simulate a click in the middle for keyboard users
+      const progressBar = event.currentTarget as HTMLElement;
+      const rect = progressBar.getBoundingClientRect();
+      const centerX = rect.width / 2;
+      const newProgress = 50; // Set to middle when using keyboard
+
+      console.log('Current-song: Progress keyboard to:', newProgress + '%');
+
+      const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+      playerUseCase.seekToPercentage(newProgress);
+      this.globalPlayerState.forceSyncAllComponents();
+    }
+  }
+
   onVolumeChange(event: Event) {
     const input = event.target as HTMLInputElement;
     const volume = parseFloat(input.value) / 100;
