@@ -186,4 +186,49 @@ export class HomeComponent implements OnInit {
     }
     return count.toString();
   }
+
+  // Configuraciones para las secciones de música
+  get popularSectionConfig(): any {
+    const primaryButton: MusicSectionButton = {
+      text: 'Ver todas',
+      action: () => this.loadPopularSongs(),
+      ariaLabel: 'Ver todas las canciones populares'
+    };
+
+    return {
+      title: '🔥 Más Populares',
+      type: 'grid' as const,
+      primaryButton,
+      songs: this.popularSongs(),
+      loading: this.loading(),
+      emptyMessage: 'No se pudieron cargar las canciones populares',
+      loadingMessage: 'Cargando canciones populares...'
+    };
+  }
+
+  get randomSectionConfig(): any {
+    const actionButtons: MusicSectionButton[] = [
+      {
+        icon: 'refresh',
+        action: () => this.loadRandomSongs(),
+        ariaLabel: 'Refrescar canciones aleatorias'
+      },
+      {
+        icon: 'play_arrow',
+        action: () => this.playRandomPlaylist(),
+        ariaLabel: 'Reproducir playlist aleatoria'
+      }
+    ];
+
+    return {
+      title: '🎲 Descubre Música Nueva',
+      type: 'table' as const,
+      actionButtons,
+      songs: this.randomSongs(),
+      loading: this.loading(),
+      showPlayCount: false,
+      emptyMessage: 'No se pudieron cargar las canciones',
+      loadingMessage: 'Cargando música...'
+    };
+  }
 }

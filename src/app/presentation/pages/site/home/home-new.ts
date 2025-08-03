@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Card, Greeting } from '@app/presentation/components/ui';
 import { MusicsTable, PlayListItemCard } from '@app/presentation/components/music';
+import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
