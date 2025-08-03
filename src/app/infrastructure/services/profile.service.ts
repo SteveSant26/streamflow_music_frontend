@@ -1,14 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiGetUseCase, ApiPostUseCase, ApiPutUseCase } from '../../domain/usecases/api/api.usecase';
+import { ApiGetUseCase, ApiPostUseCase } from '../../domain/usecases/api/api.usecase';
 import { API_CONFIG_PROFILE } from '../../config/end-points/api-config-profile';
-import { GetUserProfileDto, UpdateUserProfileDto, UserProfileResponse } from '../../domain/dtos/user-profile.dto';
+import { GetUserProfileDto } from '../../domain/dtos/user-profile.dto';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
   private readonly apiGetUseCase = inject(ApiGetUseCase);
   private readonly apiPostUseCase = inject(ApiPostUseCase);
-  private readonly apiPutUseCase = inject(ApiPutUseCase);
 
   /**
    * Obtener perfil del usuario actual
@@ -29,30 +28,16 @@ export class ProfileService {
   }
 
   /**
-   * Actualizar perfil del usuario
-   * LIMITACIÓN: La API actual solo permite actualizar la imagen de perfil
-   * No hay endpoint para actualizar otros campos del perfil
-   */
-  updateUserProfile(data: UpdateUserProfileDto): Observable<UserProfileResponse> {
-    // La API actual NO tiene endpoint para actualizar perfil completo
-    throw new Error('Full profile update not supported. Use uploadProfilePicture() for image updates.');
-  }
-
-  /**
-   * Crear perfil de usuario
-   * NOTA: Según la API, los perfiles se crean automáticamente
-   * Este método está deshabilitado según la documentación del backend
-   */
-  private createUserProfile(data: UpdateUserProfileDto): Observable<UserProfileResponse> {
-    // Este endpoint está bloqueado según la API YAML
-    throw new Error('Profile creation is automatic. Manual creation is not allowed.');
-  }
-
-  /**
-   * Subir imagen de perfil (método simplificado - no implementado completamente)
+   * Subir imagen de perfil usando FormData
+   * Según la API: POST /api/user/profile/upload-profile-picture/
    */
   uploadProfilePicture(file: File): Observable<{ profile_picture: string }> {
-    // Por ahora retornamos un error hasta implementar correctamente
-    throw new Error('Upload functionality not yet implemented');
+    const formData = new FormData();
+    formData.append('profile_picture', file);
+    
+    return this.apiPostUseCase.execute<{ profile_picture: string }>(
+      API_CONFIG_PROFILE.profileUploadPicture.post,
+      formData
+    );
   }
 }

@@ -8,7 +8,10 @@ export * from './theme/theme.usecases';
 export * from './language/language.usecases';
 
 // User Use Cases
-export * from './user/user.usecases';
+export { 
+  GetUserProfileUseCase, 
+  UploadProfilePictureUseCase 
+} from './user/user.usecases';
 
 // Subscription Use Cases
 export * from './subscription/subscription.usecases';
