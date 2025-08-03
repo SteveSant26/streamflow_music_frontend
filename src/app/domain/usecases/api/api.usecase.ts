@@ -53,7 +53,21 @@ export class ApiDeleteUseCase {
 @Injectable({ providedIn: 'root' })
 export class ApiUploadUseCase {
   private readonly apiService = inject(ApiService);
-  execute<T>(endpoint: string, file: File, additionalData?: any): Observable<T> {
-    return this.apiService.upload<T>(endpoint, file, additionalData);
+  execute<T>(
+    endpoint: string,
+    file: File,
+    key: string = 'profile_picture',
+    additionalData?: any,
+  ): Observable<T> {
+    return this.apiService.upload<T>(
+      endpoint,
+      [
+        {
+          key,
+          value: file,
+        },
+      ],
+      additionalData,
+    );
   }
 }

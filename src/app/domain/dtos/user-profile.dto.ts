@@ -16,3 +16,7 @@ export interface UserProfileResponse {
   email: string;
   profile_picture?: string | null;
 }
+
+export interface UpdateUserProfilePictureDto {
+  profile_picture?: string | null;
+}

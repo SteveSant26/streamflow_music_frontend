@@ -5,6 +5,11 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import {  PaginatedResponse } from '../models';
 
+interface UploadData {
+  key: string;
+  value: any;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -181,9 +186,11 @@ export class ApiService {
   /**
    * Upload de archivos - Django REST Framework
    */
-  upload<T>(endpoint: string, file: File, additionalData?: any): Observable<T> {
+  upload<T>(endpoint: string, data: UploadData[], additionalData?: any): Observable<T> {
     const formData = new FormData();
-    formData.append('file', file);
+    data.forEach((item) => {  
+      formData.append(item.key, item.value);
+    });
 
     if (additionalData) {
       Object.keys(additionalData).forEach((key) => {
