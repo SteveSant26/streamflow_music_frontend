@@ -1,6 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Song {
   title: string;
@@ -39,9 +40,10 @@ interface Artist {
 @Component({
   selector: "app-artist",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: "./artist.html",
   styleUrls: ["./artist.css"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtistComponent implements OnInit {
   artistId: string | null = null;

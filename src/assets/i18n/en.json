@@ -1,4 +1,145 @@
 {
+  "GREETING": {
+    "GOOD_MORNING": "Good morning, {{name}}",
+    "GOOD_AFTERNOON": "Good afternoon, {{name}}",
+    "GOOD_EVENING": "Good evening, {{name}}"
+  },
+  "PLAYER": {
+    "NO_SONG": "No song",
+    "SELECT_SONG": "Select a song"
+  },
+  "TABLE": {
+    "TITLE": "Title",
+    "ALBUM": "Album"
+  },
+  "PLAYLIST": {
+    "TYPE": "Playlist"
+  },
+  "SEARCH": {
+    "TITLE": "Search",
+    "PLACEHOLDER": "Search songs, artists, albums...",
+    "BROWSE_GENRES": "Browse by genre",
+    "RESULTS_FOR": "Results for: \"{{query}}\"",
+    "CLEAR": "Clear search",
+    "IMPLEMENTING": "Implementing search...",
+    "RESULTS_SOON": "Search results will appear here soon"
+  },
+  "GENRES": {
+    "ROCK": "Rock",
+    "ROCK_DESC": "Classic and modern",
+    "POP": "Pop",
+    "POP_DESC": "Current hits",
+    "HIP_HOP": "Hip Hop",
+    "HIP_HOP_DESC": "Rap and urban beats",
+    "ELECTRONIC": "Electronic",
+    "ELECTRONIC_DESC": "EDM and synthwave",
+    "JAZZ": "Jazz",
+    "JAZZ_DESC": "Smooth and classic",
+    "REGGAETON": "Reggaeton",
+    "REGGAETON_DESC": "Latin rhythms",
+    "CLASSICAL": "Classical",
+    "CLASSICAL_DESC": "Classical music",
+    "ALTERNATIVE": "Alternative",
+    "ALTERNATIVE_DESC": "Indie and alternative"
+  },
+  "LIBRARY": {
+    "TITLE": "Your Library",
+    "CREATE_PLAYLIST": "Create Playlist",
+    "PLAYLISTS": "Playlists",
+    "ARTISTS": "Artists",
+    "ALBUMS": "Albums",
+    "SONG_COUNT": "{{count}} songs",
+    "CREATE_NEW_PLAYLIST": "Create new playlist",
+    "CLOSE_MODAL": "Close modal",
+    "CANCEL": "Cancel",
+    "CREATE": "Create",
+    "PLAYLIST_NAME": "Playlist name",
+    "PLAYLIST_NAME_PLACEHOLDER": "My playlist #1",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PLACEHOLDER": "Add an optional description",
+    "PLAYLIST_IMAGE": "Playlist image"
+  },
+  "PLANS": {
+    "HEADER": {
+      "TITLE": "Choose Your StreamFlow Plan",
+      "SUBTITLE": "Enjoy the best music without limits"
+    },
+    "MOST_POPULAR": "MOST POPULAR",
+    "MONTHLY_EQUIVALENT": "month",
+    "WHY_CHOOSE": "Why choose StreamFlow?",
+    "FREE": {
+      "NAME": "Free Plan",
+      "PERIOD": "forever",
+      "BUTTON": "Start Free",
+      "FEATURE_1": "Playback with ads",
+      "FEATURE_2": "Standard quality",
+      "FEATURE_3": "Basic library access",
+      "FEATURE_4": "No offline downloads",
+      "FEATURE_5": "1 device session"
+    },
+    "MONTHLY": {
+      "NAME": "Monthly Plan",
+      "PERIOD": "month",
+      "BUTTON": "Subscribe Monthly",
+      "FEATURE_1": "No ads",
+      "FEATURE_2": "High audio quality",
+      "FEATURE_3": "Complete library",
+      "FEATURE_4": "Unlimited offline downloads",
+      "FEATURE_5": "Up to 5 device sessions",
+      "FEATURE_6": "Personalized playlists"
+    },
+    "ANNUAL": {
+      "NAME": "Annual Plan",
+      "PERIOD": "year",
+      "BUTTON": "Subscribe Annually",
+      "FEATURE_1": "Everything from monthly plan",
+      "FEATURE_2": "2 free months (save $20)",
+      "FEATURE_3": "Premium audio quality",
+      "FEATURE_4": "Early access to new features",
+      "FEATURE_5": "Priority support",
+      "FEATURE_6": "Unlimited device sessions"
+    },
+    "BENEFITS": {
+      "TITLE": "Why choose StreamFlow Premium?",
+      "BENEFIT_1": {
+        "TITLE": "Massive Library",
+        "DESCRIPTION": "Over 50 million songs available"
+      },
+      "BENEFIT_2": {
+        "TITLE": "Offline",
+        "DESCRIPTION": "Download your music to listen without internet"
+      },
+      "BENEFIT_3": {
+        "TITLE": "Premium Quality",
+        "DESCRIPTION": "High fidelity audio up to 320kbps"
+      },
+      "BENEFIT_4": {
+        "TITLE": "Multiplatform",
+        "DESCRIPTION": "Available on web, mobile and desktop"
+      },
+      "BENEFIT_5": {
+        "TITLE": "Personalized Playlists",
+        "DESCRIPTION": "Discover new music with personalized recommendations"
+      },
+      "BENEFIT_6": {
+        "TITLE": "Priority Support",
+        "DESCRIPTION": "Get quick help when you need it"
+      }
+    },
+    "FAQ": {
+      "TITLE": "Frequently Asked Questions",
+      "QUESTION_1": "Can I change my plan at any time?",
+      "ANSWER_1": "Yes, you can change your plan at any time from your account settings. Changes will apply on your next billing cycle.",
+      "QUESTION_2": "Is there a free trial available?",
+      "ANSWER_2": "Yes, we offer a 30-day free trial for new StreamFlow Premium users. No credit card required.",
+      "QUESTION_3": "Can I cancel my subscription?",
+      "ANSWER_3": "Of course. You can cancel your subscription at any time from your account settings. You'll keep premium access until the end of your current billing period.",
+      "QUESTION_4": "Does offline music work?",
+      "ANSWER_4": "Yes, with StreamFlow Premium you can download up to 10,000 songs on up to 5 devices for offline listening.",
+      "QUESTION_5": "What payment methods do you accept?",
+      "ANSWER_5": "We accept credit cards, debit cards, PayPal, and other local payment options depending on your region."
+    }
+  },
   "LOGIN": {
     "TITLE": "Sign In",
     "EMAIL": "Email",
@@ -65,7 +206,12 @@
     "PODCAST": "Podcasts",
     "LANGUAGE": "Language",
     "SPANISH": "Spanish",
-    "ENGLISH": "English"
+    "ENGLISH": "English",
+    "SUBSCRIPTIONS": "Subscriptions",
+    "PROFILE": "My Profile",
+    "LOGOUT": "Log Out",
+    "LOGIN": "Log In",
+    "REGISTER": "Sign Up"
   },
   "PROFILE": {
     "TITLE": "My Profile",

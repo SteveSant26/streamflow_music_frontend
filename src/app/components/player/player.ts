@@ -16,6 +16,7 @@ import { PlayerUseCase } from '../../domain/usecases/player.use-case';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Song {
   id: number;
@@ -46,6 +47,7 @@ interface CurrentMusic {
     PlayerCurrentSong,
     PlayerSoundControl,
     PlayerVolumeControl,
+    TranslateModule,
   ],
   templateUrl: "./player.html",
   changeDetection: ChangeDetectionStrategy.OnPush,

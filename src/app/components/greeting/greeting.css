@@ -1,14 +1,21 @@
 .greeting-container {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--theme-card-bg, rgba(255, 255, 255, 0.9));
   backdrop-filter: blur(10px);
   border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--theme-border, rgba(0, 0, 0, 0.1));
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   height: 100px;
+}
+
+/* Dark mode styles */
+:host-context(body.dark) .greeting-container {
+  background: rgba(55, 65, 81, 0.9) !important;
+  border: 1px solid rgba(75, 85, 99, 0.5) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 .greeting-container::before {
@@ -29,6 +36,16 @@
   z-index: 1;
 }
 
+/* Dark mode gradient overlay */
+:host-context(body.dark) .greeting-container::before {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.15) 0%,
+    rgba(147, 51, 234, 0.15) 50%,
+    rgba(79, 70, 229, 0.15) 100%
+  );
+}
+
 .greeting-container:hover::before {
   opacity: 1;
 }
@@ -38,19 +55,28 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Dark mode hover */
+:host-context(body.dark) .greeting-container:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
 .greeting-content {
   position: relative;
   z-index: 2;
 }
 
 h1 {
-  margin: 0;
   font-size: 1.875rem;
   font-weight: 700;
-  color: #1f2937;
-  transition: all 0.3s ease;
-  margin-top: 0.8rem;
+  color: var(--theme-text, #1f2937);
+    transition: all 0.3s ease;
 }
+
+/* Dark mode text */
+:host-context(body.dark) h1 {
+  color: #f9fafb !important;
+}
+
 
 @media (min-width: 640px) {
   h1 {

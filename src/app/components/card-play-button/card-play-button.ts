@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: "app-card-play-button",
-  imports: [MatIconModule],
+  imports: [MatIconModule, TranslateModule],
   templateUrl: "./card-play-button.html",
   styleUrl: "./card-play-button.css",
   changeDetection: ChangeDetectionStrategy.OnPush,

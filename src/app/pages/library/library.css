@@ -2,7 +2,13 @@
 .library-container {
   padding: 1rem;
   min-height: 100vh;
-  background: rgb(255, 255, 255);
+  background: var(--theme-bg, rgb(255, 255, 255));
+  transition: all 0.3s ease;
+}
+
+/* Dark mode library container */
+:host-context(body.dark) .library-container {
+  background: #000000 !important;
 }
 
 @media (min-width: 768px) {
@@ -35,9 +41,16 @@
 .page-title {
   font-size: 1.875rem;
   font-weight: bold;
-  color: rgb(0, 0, 0);
+  color: var(--theme-text, rgb(0, 0, 0));
   margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode page title */
+:host-context(body.dark) .page-title {
+  color: #f8fafc !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 @media (min-width: 640px) {
@@ -62,20 +75,33 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--theme-button-bg, rgba(255, 255, 255, 0.2));
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--theme-border, rgba(255, 255, 255, 0.3));
   border-radius: 0.75rem;
-  color: rgb(0, 0, 0);
+  color: var(--theme-text, rgb(0, 0, 0));
   font-weight: 500;
   transition: all 0.3s ease;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
+/* Dark mode add playlist button */
+:host-context(body.dark) .add-playlist-btn {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid rgba(75, 85, 99, 0.5) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
 .add-playlist-btn:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: var(--theme-button-hover-bg, rgba(255, 255, 255, 0.3));
   transform: scale(1.05);
+}
+
+/* Dark mode add playlist button hover */
+:host-context(body.dark) .add-playlist-btn:hover {
+  background-color: rgba(32, 32, 32, 0.9) !important;
 }
 
 /* Tabs */
@@ -87,18 +113,26 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--theme-card-bg, rgba(255, 255, 255, 0.1));
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--theme-border, rgba(255, 255, 255, 0.2));
   border-radius: 1rem;
   padding: 0.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode tabs */
+:host-context(body.dark) .tabs {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid rgba(55, 65, 81, 0.5) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
 }
 
 .tab-button {
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--theme-text-secondary, rgba(0, 0, 0, 0.8));
   font-weight: 500;
   transition: all 0.3s ease;
   border: none;
@@ -106,15 +140,33 @@
   cursor: pointer;
 }
 
+/* Dark mode tab button */
+:host-context(body.dark) .tab-button {
+  color: rgba(209, 213, 219, 0.8) !important;
+}
+
 .tab-button:hover {
-  color: rgb(65, 65, 65);
-  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--theme-text, rgb(65, 65, 65));
+  background-color: var(--theme-hover-bg, rgba(255, 255, 255, 0.1));
+}
+
+/* Dark mode tab button hover */
+:host-context(body.dark) .tab-button:hover {
+  color: rgba(249, 250, 251, 1) !important;
+  background-color: rgba(55, 65, 81, 0.5) !important;
 }
 
 .tab-button.active {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: rgb(0, 0, 0);
+  background-color: var(--theme-active-bg, rgba(255, 255, 255, 0.2));
+  color: var(--theme-text, rgb(0, 0, 0));
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode active tab button */
+:host-context(body.dark) .tab-button.active {
+  background-color: rgba(59, 130, 246, 0.3) !important;
+  color: rgba(249, 250, 251, 1) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* Content Grid */
@@ -166,9 +218,9 @@
 .playlist-card,
 .artist-card,
 .album-card {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--theme-card-bg, rgba(255, 255, 255, 0.15));
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--theme-border, rgba(255, 255, 255, 0.2));
   border-radius: 1rem;
   padding: 1rem;
   transition: all 0.3s ease;
@@ -176,12 +228,29 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
+/* Dark mode cards */
+:host-context(body.dark) .playlist-card,
+:host-context(body.dark) .artist-card,
+:host-context(body.dark) .album-card {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid rgba(55, 65, 81, 0.5) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
 .playlist-card:hover,
 .artist-card:hover,
 .album-card:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--theme-card-hover-bg, rgba(255, 255, 255, 0.2));
   transform: scale(1.05) translateY(-4px);
   box-shadow: 0 16px 64px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode cards hover */
+:host-context(body.dark) .playlist-card:hover,
+:host-context(body.dark) .artist-card:hover,
+:host-context(body.dark) .album-card:hover {
+  background-color: rgba(32, 32, 32, 0.9) !important;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* Image Containers */
@@ -234,7 +303,7 @@
 }
 
 .play-button {
-  background-color: #000000;
+  background-color: var(--theme-button-dark, #000000);
   color: white;
   border: none;
   border-radius: 50%;
@@ -244,9 +313,20 @@
   box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
 }
 
+/* Dark mode play button */
+:host-context(body.dark) .play-button {
+  background-color: #1f2937 !important;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4) !important;
+}
+
 .play-button:hover {
-  background-color: #000000;
+  background-color: var(--theme-button-dark, #000000);
   transform: scale(1.1);
+}
+
+/* Dark mode play button hover */
+:host-context(body.dark) .play-button:hover {
+  background-color: #374151 !important;
 }
 
 /* Info Sections */
@@ -262,23 +342,37 @@
 .album-title {
   font-size: 1.125rem;
   font-weight: bold;
-  color: rgb(0, 0, 0);
+  color: var(--theme-text, rgb(0, 0, 0));
   margin-bottom: 0.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Dark mode titles */
+:host-context(body.dark) .playlist-name,
+:host-context(body.dark) .artist-name,
+:host-context(body.dark) .album-title {
+  color: #f8fafc !important;
 }
 
 .artist-name,
 .album-title {
   margin-bottom: 0.25rem;
-  color: black;
+  color: var(--theme-text, black);
 }
 
 /* Descriptions and Details */
 .playlist-description {
   font-size: 1rem;
-  color: rgba(0, 0, 0, 1);
+  color: var(--theme-text-secondary, rgba(0, 0, 0, 1));
+  transition: all 0.3s ease;
+}
+
+/* Dark mode description */
+:host-context(body.dark) .playlist-description {
+  color: rgba(209, 213, 219, 0.8) !important;
   margin-bottom: 0.5rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -289,8 +383,15 @@
 .artist-genre,
 .album-artist {
   font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.7);
+  color: var(--theme-text-secondary, rgba(0, 0, 0, 0.7));
   margin-bottom: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+/* Dark mode genre and artist */
+:host-context(body.dark) .artist-genre,
+:host-context(body.dark) .album-artist {
+  color: rgba(156, 163, 175, 0.7) !important;
 }
 
 .playlist-count,

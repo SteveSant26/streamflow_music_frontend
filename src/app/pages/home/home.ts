@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Card } from "../../components/card/card";
 import { Greeting } from "../../components/greeting/greeting";
@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
   selector: "app-home",
   standalone: true,
   imports: [CommonModule, Card, Greeting, MusicsTable, PlayListItemCard, MatIcon, TranslateModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./home.html",
   styleUrl: "./home.css",
 })

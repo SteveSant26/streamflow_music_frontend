@@ -3,11 +3,12 @@ import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import { PlaylistService, SongService } from "../../services";
 import { Playlist, Song } from "../../models";
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: "app-playlist",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: "./playlist.html",
   styleUrls: ["./playlist.css"],
 })

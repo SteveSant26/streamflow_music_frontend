@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Playlist {
   id: string;
@@ -33,7 +34,8 @@ interface Album {
 @Component({
   selector: "app-library",
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./library.html",
   styleUrl: "./library.css",
 })

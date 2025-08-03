@@ -1,12 +1,12 @@
 <div class="search-container">
   <div class="search-header">
-    <h1 class="text-3xl font-bold mb-6">Buscar</h1>
+    <h1 class="text-3xl font-bold mb-6">{{ 'SEARCH.TITLE' | translate }}</h1>
 
     <!-- Barra de búsqueda -->
     <div class="search-bar mb-8">
       <input
         type="text"
-        placeholder="Buscar canciones, artistas, álbumes..."
+        [placeholder]="'SEARCH.PLACEHOLDER' | translate"
         class="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
         (input)="onSearch($any($event.target).value || '')"
       />
@@ -15,7 +15,7 @@
 
   <!-- Géneros Sugeridos -->
   <div class="suggested-genres" *ngIf="!searchQuery">
-    <h2 class="text-2xl font-semibold mb-6">Buscar por género</h2>
+    <h2 class="text-2xl font-semibold mb-6">{{ 'SEARCH.BROWSE_GENRES' | translate }}</h2>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       <button
@@ -24,8 +24,8 @@
         (click)="onGenreClick(genre.name)"
         (keydown.enter)="onGenreClick(genre.name)"
       >
-        <h3 class="font-bold text-lg mb-2">{{ genre.name }}</h3>
-        <p class="text-sm opacity-90">{{ genre.description }}</p>
+        <h3 class="font-bold text-lg mb-2">{{ genre.nameKey | translate }}</h3>
+        <p class="text-sm opacity-90">{{ genre.descriptionKey | translate }}</p>
       </button>
     </div>
   </div>
@@ -33,7 +33,7 @@
   <!-- Resultados de búsqueda -->
   <div class="search-results" *ngIf="searchQuery">
     <div class="mb-6 flex items-center justify-between">
-      <p class="text-gray-600">Resultados para: "{{ searchQuery }}"</p>
+      <p class="text-gray-600">{{ 'SEARCH.RESULTS_FOR' | translate: {query: searchQuery} }}</p>
       <button
         (click)="clearSearch()"
         class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
@@ -51,7 +51,7 @@
             d="M6 18L18 6M6 6l12 12"
           />
         </svg>
-        Limpiar búsqueda
+        {{ 'SEARCH.CLEAR' | translate }}
       </button>
     </div>
 
@@ -73,10 +73,10 @@
             />
           </svg>
           <h3 class="text-lg font-medium text-gray-900 mb-2">
-            Implementando búsqueda...
+            {{ 'SEARCH.IMPLEMENTING' | translate }}
           </h3>
           <p class="text-gray-500">
-            Los resultados de búsqueda aparecerán aquí próximamente
+            {{ 'SEARCH.RESULTS_SOON' | translate }}
           </p>
         </div>
       </div>

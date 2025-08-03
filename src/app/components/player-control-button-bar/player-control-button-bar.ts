@@ -11,10 +11,11 @@ import { MatIconModule } from "@angular/material/icon";
 import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: "app-player-control-button-bar",
-  imports: [MatIconModule],
+  imports: [MatIconModule, TranslateModule],
   templateUrl: "./player-control-button-bar.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,0 +1,44 @@
+/* Essential animations that can't be converted to Tailwind */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.fill-mode-both {
+  animation-fill-mode: both;
+}
+
+/* Material Icons font family class for explicit declaration */
+.font-material-icons {
+  font-family: 'Material Icons' !important;
+}
+
+/* Print styles */
+@media print {
+  .p-6 {
+    padding: 0 !important;
+  }
+  
+  button {
+    display: none !important;
+  }
+  
+  .mb-12 {
+    margin-bottom: 1rem !important;
+  }
+  
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

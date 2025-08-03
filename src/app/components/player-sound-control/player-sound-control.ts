@@ -11,10 +11,10 @@ import {
 import { GlobalPlayerStateService } from '../../shared/services/global-player-state.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
-
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: "app-player-sound-control",
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: "./player-sound-control.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Playlist {
   id: number;
@@ -9,7 +10,7 @@ interface Playlist {
 
 @Component({
   selector: "app-side-menu-card",
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: "./side-menu-card.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

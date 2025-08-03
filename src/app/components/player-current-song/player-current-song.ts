@@ -12,10 +12,10 @@ import { GlobalPlayerStateService } from '../../shared/services/global-player-st
 import { PlayerState } from '../../domain/entities/player-state.entity';
 import { Song } from '../../domain/entities/song.entity';
 import { Subject, takeUntil } from 'rxjs';
-
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: "app-player-current-song",
-  imports: [MatIconModule],
+  imports: [MatIconModule, TranslateModule],
   templateUrl: "./player-current-song.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

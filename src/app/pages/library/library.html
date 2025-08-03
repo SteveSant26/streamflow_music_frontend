@@ -1,6 +1,6 @@
 <div class="library-container">
   <div class="library-header">
-    <h1 class="page-title">Tu Biblioteca</h1>
+    <h1 class="page-title">{{ 'LIBRARY.TITLE' | translate }}</h1>
     <div class="header-actions">
       <button class="add-playlist-btn" (click)="createPlaylist()">
         <svg
@@ -16,7 +16,7 @@
             d="M12 4v16m8-8H4"
           />
         </svg>
-        Crear Playlist
+        {{ 'LIBRARY.CREATE_PLAYLIST' | translate }}
       </button>
     </div>
   </div>
@@ -28,21 +28,21 @@
         [class.active]="activeTab === 'playlists'"
         (click)="setActiveTab('playlists')"
       >
-        Playlists
+        {{ 'LIBRARY.PLAYLISTS' | translate }}
       </button>
       <button
         class="tab-button"
         [class.active]="activeTab === 'artists'"
         (click)="setActiveTab('artists')"
       >
-        Artistas
+        {{ 'LIBRARY.ARTISTS' | translate }}
       </button>
       <button
         class="tab-button"
         [class.active]="activeTab === 'albums'"
         (click)="setActiveTab('albums')"
       >
-        Álbumes
+        {{ 'LIBRARY.ALBUMS' | translate }}
       </button>
     </div>
   </div>
@@ -83,7 +83,7 @@
         <div class="playlist-info">
           <h3 class="playlist-name">{{ playlist.name }}</h3>
           <p class="playlist-description">{{ playlist.description }}</p>
-          <span class="playlist-count">{{ playlist.songCount }} canciones</span>
+          <span class="playlist-count">{{ 'LIBRARY.SONG_COUNT' | translate: {count: playlist.songCount} }}</span>
         </div>
       </div>
     </div>
@@ -180,11 +180,11 @@
 <div class="modal-backdrop" (click)="onModalBackdropClick($event)">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Crear nueva playlist</h2>
+      <h2>{{ 'LIBRARY.CREATE_NEW_PLAYLIST' | translate }}</h2>
       <button
         class="close-button"
         (click)="closeModal()"
-        aria-label="Cerrar modal"
+        [attr.aria-label]="'LIBRARY.CLOSE_MODAL' | translate"
       >
         <svg
           width="24"
@@ -202,13 +202,13 @@
 
     <form (ngSubmit)="savePlaylist()" class="playlist-form">
       <div class="form-group">
-        <label for="playlistName">Nombre de la playlist*</label>
+        <label for="playlistName">{{ 'LIBRARY.PLAYLIST_NAME' | translate }}*</label>
         <input
           type="text"
           id="playlistName"
           [(ngModel)]="newPlaylist.name"
           name="playlistName"
-          placeholder="Mi playlist #1"
+          [placeholder]="'LIBRARY.PLAYLIST_NAME_PLACEHOLDER' | translate"
           maxlength="100"
           required
           autocomplete="off"
@@ -216,19 +216,19 @@
       </div>
 
       <div class="form-group">
-        <label for="playlistDescription">Descripción</label>
+        <label for="playlistDescription">{{ 'LIBRARY.DESCRIPTION' | translate }}</label>
         <textarea
           id="playlistDescription"
           [(ngModel)]="newPlaylist.description"
           name="playlistDescription"
-          placeholder="Añade una descripción opcional"
+          [placeholder]="'LIBRARY.DESCRIPTION_PLACEHOLDER' | translate"
           rows="3"
           maxlength="300"
         ></textarea>
       </div>
 
       <div class="form-group">
-        <label>Imagen de la playlist</label>
+        <label>{{ 'LIBRARY.PLAYLIST_IMAGE' | translate }}</label>
         <div class="image-upload-section">
           <!-- Hidden file input -->
           <input
@@ -325,14 +325,14 @@
 
       <div class="modal-actions">
         <button type="button" class="cancel-button" (click)="closeModal()">
-          Cancelar
+          {{ 'LIBRARY.CANCEL' | translate }}
         </button>
         <button
           type="submit"
           class="create-button"
           [disabled]="!newPlaylist.name.trim()"
         >
-          Crear
+          {{ 'LIBRARY.CREATE' | translate }}
         </button>
       </div>
     </form>

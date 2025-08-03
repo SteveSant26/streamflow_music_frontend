@@ -1,14 +1,20 @@
-import { Component } from "@angular/core";
+import { Component , ChangeDetectionStrategy} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
+import { TranslateModule } from '@ngx-translate/core';
+
 
 interface Plan {
   id: string;
+  nameKey: string;
   name: string;
   price: number;
+  periodKey: string;
   period: string;
+  featuresKeys: string[];
   features: string[];
   popular: boolean;
+  buttonTextKey: string;
   buttonText: string;
   buttonClass: string;
 }
@@ -16,17 +22,27 @@ interface Plan {
 @Component({
   selector: "app-subscription-plans",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: "./subscription-plans.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ["./subscription-plans.css"],
 })
 export class SubscriptionPlansComponent {
   plans: Plan[] = [
     {
       id: "free",
+      nameKey: "PLANS.FREE.NAME",
       name: "Plan Gratuito",
       price: 0,
+      periodKey: "PLANS.FREE.PERIOD",
       period: "siempre",
+      featuresKeys: [
+        "PLANS.FREE.FEATURE_1",
+        "PLANS.FREE.FEATURE_2",
+        "PLANS.FREE.FEATURE_3",
+        "PLANS.FREE.FEATURE_4",
+        "PLANS.FREE.FEATURE_5",
+      ],
       features: [
         "Reprodución con anuncios",
         "Calidad estándar",
@@ -35,31 +51,53 @@ export class SubscriptionPlansComponent {
         "Sesión en 1 dispositivo",
       ],
       popular: false,
+      buttonTextKey: "PLANS.FREE.BUTTON",
       buttonText: "Comenzar Gratis",
       buttonClass: "btn-outline",
     },
     {
       id: "monthly",
+      nameKey: "PLANS.MONTHLY.NAME",
       name: "Plan Mensual",
       price: 9.99,
+      periodKey: "PLANS.MONTHLY.PERIOD",
       period: "mes",
+      featuresKeys: [
+        "PLANS.MONTHLY.FEATURE_1",
+        "PLANS.MONTHLY.FEATURE_2",
+        "PLANS.MONTHLY.FEATURE_3",
+        "PLANS.MONTHLY.FEATURE_4",
+        "PLANS.MONTHLY.FEATURE_5",
+        "PLANS.MONTHLY.FEATURE_6",
+      ],
       features: [
         "Sin anuncios",
-        "Calidad de audio alta",
+        "Calidad de audio alta", 
         "Biblioteca completa",
         "Descargas offline ilimitadas",
         "Sesión en hasta 5 dispositivos",
         "Playlists personalizadas",
       ],
       popular: true,
+      buttonTextKey: "PLANS.MONTHLY.BUTTON",
       buttonText: "Suscribirse Mensual",
       buttonClass: "btn-primary",
     },
     {
       id: "annual",
+      nameKey: "PLANS.ANNUAL.NAME",
       name: "Plan Anual",
       price: 99.99,
+      periodKey: "PLANS.ANNUAL.PERIOD",
       period: "año",
+      featuresKeys: [
+        "PLANS.ANNUAL.FEATURE_1",
+        "PLANS.ANNUAL.FEATURE_2",
+        "PLANS.ANNUAL.FEATURE_3",
+        "PLANS.ANNUAL.FEATURE_4",
+        "PLANS.ANNUAL.FEATURE_5",
+        "PLANS.ANNUAL.FEATURE_6",
+      ],
       features: [
         "Todo del plan mensual",
         "2 meses gratis (ahorra $20)",
@@ -69,6 +107,7 @@ export class SubscriptionPlansComponent {
         "Sesión en dispositivos ilimitados",
       ],
       popular: false,
+      buttonTextKey: "PLANS.ANNUAL.BUTTON",
       buttonText: "Suscribirse Anual",
       buttonClass: "btn-success",
     },

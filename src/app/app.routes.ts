@@ -81,6 +81,13 @@ export const routes: Routes = [
     path: 'subscription',
     children: SUSBSRIPTION_ROUTES,
   },
+  {
+    path: 'terms-and-conditions',
+    loadComponent: () =>
+      import('./presentation/pages/terms-and-condition/terms-and-condition').then(
+        (m) => m.TermsAndCondition,
+      ),
+  },
 
   {
     path: '**',
