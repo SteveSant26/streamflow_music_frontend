@@ -1,11 +1,13 @@
 import { Injectable, inject, OnDestroy } from '@angular/core';
 import { Observable, map, distinctUntilChanged, takeUntil, Subject, switchMap, filter } from 'rxjs';
 import { ThemeEntity, ThemeType } from '../../domain/entities/theme.entity';
-import { GetCurrentThemeUseCase } from '../../domain/usecases/get-current-theme.usecase';
-import { SetThemeUseCase } from '../../domain/usecases/set-theme.usecase';
-import { ToggleThemeUseCase } from '../../domain/usecases/toggle-theme.usecase';
-import { GetSystemThemeUseCase } from '../../domain/usecases/get-system-theme.usecase';
-import { ResetToSystemThemeUseCase } from '../../domain/usecases/reset-to-system-theme.usecase';
+import { 
+  GetCurrentThemeUseCase, 
+  SetThemeUseCase, 
+  ToggleThemeUseCase, 
+  GetSystemThemeUseCase, 
+  ResetToSystemThemeUseCase 
+} from '../../domain/usecases';
 
 @Injectable({
   providedIn: 'root',

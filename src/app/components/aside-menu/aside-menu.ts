@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
-import { AuthStatusUseCase } from '@app/domain/usecases/auth-status.usecase';
+import { AuthStateService } from '@app/domain/services/auth-state-service';
+import { LogoutUseCase } from '@app/domain/usecases';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import { TranslateModule } from '@ngx-translate/core';
@@ -23,12 +24,13 @@ import { LanguageService } from '@app/domain/services/language.service';
 })
 export class AsideMenu {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
-  private readonly authStatusUseCase = inject(AuthStatusUseCase);
+  private readonly authStateService = inject(AuthStateService);
+  private readonly logoutUseCase = inject(LogoutUseCase);
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
 
-  isAuthenticated = this.authStatusUseCase.isAuthenticated;
-  user = this.authStatusUseCase.user;
+  isAuthenticated = this.authStateService.isAuthenticated;
+  user = this.authStateService.user;
 
   // Language methods
   getCurrentLanguage() {
