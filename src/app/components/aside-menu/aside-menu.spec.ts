@@ -17,6 +17,7 @@ import { LanguageService } from '@app/domain/services/language.service';
     SideMenuItem,
     SideMenuCard,
     CommonModule,
+    AsyncPipe,
     MatIconModule,
     TranslateModule,
   ],

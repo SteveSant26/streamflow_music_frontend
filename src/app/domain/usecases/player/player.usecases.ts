@@ -139,4 +139,26 @@ export class PlayerUseCase {
     // Implementation for preserving current state
     console.log('Preserving current state');
   }
+
+  // Player control methods needed by components
+  togglePlayPause(): void {
+    const currentState = this.playbackState$.value;
+    this.updatePlaybackState({ isPlaying: !currentState.isPlaying });
+  }
+
+  async playPrevious(): Promise<void> {
+    // Implementation for playing previous song
+    console.log('Playing previous song');
+  }
+
+  async playNext(): Promise<void> {
+    // Implementation for playing next song
+    console.log('Playing next song');
+  }
+
+  seekToPercentage(percentage: number): void {
+    const currentState = this.playbackState$.value;
+    const newTime = (percentage / 100) * currentState.duration;
+    this.updatePlaybackState({ currentTime: newTime });
+  }
 }
