@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardPlayButton } from '../card-play-button/card-play-button';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 
 export interface Playlist {
   id: number;
