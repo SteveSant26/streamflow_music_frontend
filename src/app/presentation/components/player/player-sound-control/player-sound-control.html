@@ -1,16 +1,19 @@
 <div class="flex items-center gap-3 w-full max-w-md">
   <!-- Current Time -->
-  <span class="text-white text-xs font-medium min-w-[35px]"> {{ formatTime(currentTime) }} </span>
+  <span [class]="(isDarkTheme$ | async) ? 'text-white text-xs font-medium min-w-[35px]' : 'text-gray-800 text-xs font-medium min-w-[35px]'"> 
+    {{ formatTime(currentTime) }} 
+  </span>
 
   <!-- Progress Bar Container -->
   <div class="flex-1 relative">
-    <div class="w-full h-2 bg-white/20 rounded-full cursor-pointer" (click)="onProgressClick($event)">
+    <div [class]="(isDarkTheme$ | async) ? 'w-full h-2 bg-white/20 rounded-full cursor-pointer' : 'w-full h-2 bg-gray-300 rounded-full cursor-pointer'" 
+         (click)="onProgressClick($event)">
       <!-- Progress Fill -->
       <div 
-        class="h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ease-out relative"
+        [class]="(isDarkTheme$ | async) ? 'h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ease-out relative' : 'h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out relative'"
         [style.width.%]="progressPercentage">
         <!-- Progress Thumb -->
-        <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-purple-400 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
+        <div [class]="(isDarkTheme$ | async) ? 'absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-purple-400 opacity-0 hover:opacity-100 transition-opacity duration-200' : 'absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-blue-500 opacity-0 hover:opacity-100 transition-opacity duration-200'"></div>
       </div>
     </div>
     <!-- Hidden range input for accessibility -->
@@ -26,5 +29,7 @@
   </div>
 
   <!-- Total Duration -->
-  <span class="text-white text-xs font-medium min-w-[35px]"> {{ formatTime(duration) }} </span>
+  <span [class]="(isDarkTheme$ | async) ? 'text-white text-xs font-medium min-w-[35px]' : 'text-gray-800 text-xs font-medium min-w-[35px]'"> 
+    {{ formatTime(duration) }} 
+  </span>
 </div>
