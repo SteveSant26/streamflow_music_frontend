@@ -12,6 +12,8 @@ import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { ThemeService } from '@app/shared/services/theme.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-player-sound-control',
   imports: [TranslateModule],

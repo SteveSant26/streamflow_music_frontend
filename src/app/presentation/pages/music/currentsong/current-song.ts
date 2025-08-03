@@ -204,11 +204,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   onProgressKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      // Simulate a click in the middle for keyboard users
-      const progressBar = event.currentTarget as HTMLElement;
-      const rect = progressBar.getBoundingClientRect();
-      const centerX = rect.width / 2;
-      const newProgress = 50; // Set to middle when using keyboard
+      // Set to middle when using keyboard
+      const newProgress = 50;
 
       console.log('Current-song: Progress keyboard to:', newProgress + '%');
 
@@ -273,6 +270,14 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
     // Force sync after volume change
     this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  onVolumeKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      // Toggle volume when using keyboard
+      this.toggleVolume();
+    }
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {
