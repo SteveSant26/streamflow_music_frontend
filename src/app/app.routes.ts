@@ -37,11 +37,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/explore/explore').then((m) => m.ExploreComponent),
   },
-  {
-    path: 'playlist/:id',
-    loadComponent: () =>
-      import('./pages/playlist/playlist').then((m) => m.PlaylistComponent),
-  },
+  // {
+  //   path: 'playlist/:id',
+  //   loadComponent: () =>
+  //     import('./pages/playlist/playlist').then((m) => m.PlaylistComponent),
+  // },
   {
     path: 'library',
     loadComponent: () =>

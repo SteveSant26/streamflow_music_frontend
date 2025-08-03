@@ -38,7 +38,7 @@ export class MusicsTable {
     this.playSongUseCase.execute(song.id, true).subscribe({
       next: () => {
         this.currentSong = song;
-        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
+        console.log(`Reproduciendo: ${song.title} - ${song.artist || 'Artista desconocido'}`);
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);

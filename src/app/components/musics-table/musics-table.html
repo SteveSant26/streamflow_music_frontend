@@ -1,5 +1,10 @@
 <!-- Mobile view - Card layout -->
-<div class="block sm:hidden space-y-3">
+<div clas            <span class="text-subdued text-xs truncate">{{ song.artist || 'Artista desconocido' }}</span>
+          </div>
+        </div>
+
+        <!-- Duration -->
+        <span class="text-subdued text-xs">{{ formatPlayCount(song.playCount) }}</span>ck sm:hidden space-y-3">
   @for (song of songs; track song.id; let i = $index) {
     <div
       class="bg-elevated rounded-lg p-3 hover-bg-elevated-hover transition duration-300 group"
@@ -43,7 +48,7 @@
             >
               {{ song.title }}
             </button>
-            <span class="text-subdued text-xs truncate">{{ song.artist }}</span>
+            <span class="text-subdued text-xs truncate">{{ song.artist?.name || 'Artista desconocido' }}</span>
           </div>
         </div>
 
@@ -96,7 +101,7 @@
         <td class="px-4 py-2 flex gap-3">
           <picture>
             <img
-              [src]="song.albumCover"
+              [src]="song.thumbnailUrl"
               [alt]="song.title"
               class="w-11 h-11 rounded"
               onerror="this.src='/assets/default-album.jpg'"
@@ -112,10 +117,10 @@
             >
               {{ song.title }}
             </button>
-            <span class="text-subdued">{{ song.artist }}</span>
+            <span class="text-subdued">{{ song.artist || 'Artista desconocido' }}</span>
           </div>
         </td>
-        <td class="px-4 py-2 hidden md:table-cell">{{ song.album }}</td>
+        <td class="px-4 py-2 hidden md:table-cell">{{ song.album || 'Álbum desconocido' }}</td>
         <td class="px-4 py-2 rounded-tr-lg rounded-br-lg">
           {{ formatPlayCount(song.playCount) }} reproducciones
         </td>

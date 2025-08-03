@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { PlaylistService, SongService } from '../../services';
-import { Playlist, Song } from '../../models';
+import { PlaylistService } from '../../infrastructure/services/playlist.service';
+import { SongService } from '../../infrastructure/services/song.service';
+import { Playlist } from '../../domain/entities/playlist.entity';
+import { Song } from '../../domain/entities/song.entity';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 

@@ -1,7 +1,7 @@
 import { MatIcon } from '@angular/material/icon';
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { Song } from '../../domain/entities/song.entity';
+import { Song } from '../../models';
 import { PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
 
 interface Playlist {
@@ -37,13 +37,13 @@ export class MusicsTablePlay {
   isPlaying = false;
 
   isNewSongOfAnotherPlaylist(song: Song): boolean {
-    return this.currentMusic.playlist?.id !== song.album;
+    return this.currentMusic.playlist?.id !== song.albumId;
   }
 
   isCurrentSongRunning(song: Song): boolean {
     return (
       this.currentMusic.song?.id === song.id &&
-      this.currentMusic.playlist?.id === song.album &&
+      this.currentMusic.playlist?.id === song.albumId &&
       this.isPlaying
     );
   }
@@ -54,14 +54,14 @@ export class MusicsTablePlay {
         this.currentMusic = {
           song: song,
           playlist: {
-            id: song.album,
-            name: `Album ${song.album}`,
-            description: `Playlist for ${song.album}`,
+            id: song.albumId || song.id,
+            name: `Album ${song.album?.title || 'Desconocido'}`,
+            description: `Playlist for ${song.album?.title || 'Album desconocido'}`,
           },
           songs: [song],
         };
         this.isPlaying = true;
-        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
+        console.log(`Reproduciendo: ${song.title} - ${song.artist?.name || 'Artista desconocido'}`);
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);
