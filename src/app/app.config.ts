@@ -18,7 +18,7 @@ import { paymentProviders } from './infrastructure/providers/payment.providers';
 import { translateProviders } from './infrastructure/providers/translate.providers';
 import { languageProviders } from './infrastructure/providers/language.providers';
 import { userProfileProviders } from './infrastructure/providers/user-profile.providers';
-import { THEME_PROVIDERS } from './theme-toggle/theme.providers';
+import { THEME_PROVIDERS } from './shared/providers/theme.providers';
 import { AuthTokenInterceptor } from './infrastructure/interceptors/auth-token.interceptor';
 import { HttpErrorInterceptor } from './infrastructure/interceptors/http-error.interceptor';
 

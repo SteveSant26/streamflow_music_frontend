@@ -1,0 +1,54 @@
+<div class="theme-toggle-container">
+  <!-- Botón principal de toggle -->
+  <button
+    mat-icon-button
+    (click)="toggleTheme()"
+    [attr.aria-label]="(getToggleAriaLabel() | async)"
+    class="theme-toggle-button"
+  >
+    <mat-icon>{{ (getThemeIcon() | async) }}</mat-icon>
+  </button>
+
+  <!-- Menú desplegable para opciones de tema -->
+  <div class="theme-options" [class.show]="showOptions">
+    <button
+      mat-button
+      (click)="setLightTheme()"
+      [class.active]="(themeType$ | async) === 'light'"
+      class="theme-option"
+    >
+      <mat-icon>wb_sunny</mat-icon>
+      <span>Claro</span>
+    </button>
+
+    <button
+      mat-button
+      (click)="setDarkTheme()"
+      [class.active]="(themeType$ | async) === 'dark'"
+      class="theme-option"
+    >
+      <mat-icon>nights_stay</mat-icon>
+      <span>Oscuro</span>
+    </button>
+
+    <button
+      mat-button
+      (click)="setSystemTheme()"
+      [class.active]="(themeType$ | async) === 'system'"
+      class="theme-option"
+    >
+      <mat-icon>settings_brightness</mat-icon>
+      <span>Sistema</span>
+    </button>
+  </div>
+
+  <!-- Botón para mostrar/ocultar opciones -->
+  <button
+    mat-icon-button
+    (click)="toggleOptions()"
+    class="options-toggle"
+    [attr.aria-label]="'Opciones de tema'"
+  >
+    <mat-icon>expand_more</mat-icon>
+  </button>
+</div>

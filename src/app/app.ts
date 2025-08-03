@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { AuthSessionUseCase } from '@app/domain/usecases/auth-session.usecase';
 import { AsideMenu } from './components/aside-menu/aside-menu';
 import { Player } from './components/player/player';
 import { CommonModule } from '@angular/common';
 import { GlobalPlayerStateService } from './shared/services/global-player-state.service';
-import { filter } from 'rxjs';
+import { filter, take } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from './domain/services/language.service';
-import { ThemeToggleComponent } from './theme-toggle/theme-toggle';
+import { ThemeToggleComponent } from './presentation/components/theme-toggle/theme-toggle';
+import { ThemeService } from './shared/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle';
 })
 export class App implements OnInit {
   showLayout = true;
+  private readonly themeService = inject(ThemeService);
 
   constructor(
     private readonly router: Router,
@@ -44,7 +46,10 @@ export class App implements OnInit {
   }
 
   ngOnInit() {
-    // Initialize language service first
+    // Initialize theme first
+    this.initializeTheme();
+    
+    // Initialize language service
     this.initializeLanguage();
 
     // Initialize auth session
@@ -53,6 +58,13 @@ export class App implements OnInit {
     // Initialize global player state when app starts
     this.globalPlayerState.initializePlayer().catch((error) => {
       console.error('Failed to initialize global player state:', error);
+    });
+  }
+
+  private initializeTheme() {
+    // Asegurar que el tema se aplique correctamente al iniciar la app
+    this.themeService.getCurrentTheme().pipe(take(1)).subscribe(theme => {
+      console.log('🎨 App: Theme initialized:', theme);
     });
   }
 
