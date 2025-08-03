@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { AuthSessionUseCase } from './domain/usecases';
 import { LanguageService } from '@app/shared/services';
 import { ThemeService } from './shared/services/theme.service';
+import { MaterialThemeService } from './shared/theme/material-theme.service';
 import { take } from 'rxjs';
 
 @Component({
@@ -13,18 +14,27 @@ import { take } from 'rxjs';
 })
 export class App implements OnInit {
   private readonly themeService = inject(ThemeService);
+  private readonly materialThemeService = inject(MaterialThemeService);
   private readonly authSessionUseCase = inject(AuthSessionUseCase);
   private readonly languageService = inject(LanguageService);
 
   ngOnInit() {
     // Initialize theme first
     this.initializeTheme();
+    
+    // Initialize Material theme
+    this.initializeMaterialTheme();
 
     // Initialize language service
     this.initializeLanguage();
 
     // Initialize auth session
     this.initializeAuth();
+  }
+  
+  private initializeMaterialTheme() {
+    // Inicializar el listener del tema del sistema
+    this.materialThemeService.initSystemThemeListener();
   }
 
   private initializeLanguage() {
