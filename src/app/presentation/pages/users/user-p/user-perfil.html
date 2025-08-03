@@ -84,17 +84,18 @@
 
       <!-- Modal para ver imagen completa -->
       @if (showImageModal) {
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80" (click)="closeImageModal()">
-          <div class="relative">
+        <div class="fixed inset-0 z-50 flex items-center justify-center" style="backdrop-filter: blur(8px); background: rgba(0,0,0,0.7);" (click)="closeImageModal()">
+          <div class="relative flex items-center justify-center" style="min-width: 320px; min-height: 320px;">
             <img
               [src]="profileImageUrl()"
               alt="Foto de perfil completa"
-              class="max-w-full max-h-full rounded-2xl shadow-2xl border-4 border-white"
+              class="max-w-[90vw] max-h-[80vh] rounded-2xl shadow-2xl border-4 border-white object-contain"
+              style="display: block; margin: auto;"
               (click)="$event.stopPropagation()"
             />
             <button
               (click)="closeImageModal()"
-              class="absolute top-2 right-2 bg-black bg-opacity-70 text-white rounded-full p-2 shadow-lg hover:bg-gray-800 transition-all duration-300"
+              class="absolute top-3 right-3 bg-black bg-opacity-70 text-white rounded-full p-2 shadow-lg hover:bg-gray-800 transition-all duration-300"
               title="Cerrar"
               style="z-index: 10;"
             >
