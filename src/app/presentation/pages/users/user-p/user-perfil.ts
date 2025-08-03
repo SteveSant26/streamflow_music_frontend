@@ -65,7 +65,7 @@ export class UserPerfilComponent implements OnInit {
     // Usar el caso de uso para obtener el perfil
     this.getUserProfileUseCase.execute().subscribe({
       next: (userProfile: User | null) => {
-        console.log('✅ Datos del usuario cargados:', userProfile);
+        console.log('✅ Datos del usuario cargados:', userProfile); 
 
         if (userProfile) {
           // Convertir User a GetUserProfileDto con solo los campos disponibles
@@ -74,6 +74,7 @@ export class UserPerfilComponent implements OnInit {
             email: userProfile.email,
             profile_picture: null
           };
+
           this.currentUser.set(userProfileDto);
           
           // Actualizar formulario

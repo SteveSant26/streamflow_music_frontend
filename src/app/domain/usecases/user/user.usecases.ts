@@ -35,13 +35,6 @@ export class GetUserProfileUseCase {
 export class UpdateUserProfileUseCase {
   execute(data: UpdateUserProfileData): Observable<User> {
     return new Observable(observer => {
-      // This is a placeholder implementation
-      // In a real app, this would update via a repository
-      const currentUser = JSON.parse(localStorage.getItem('streamflow_user') || '{}');
-      const updatedUser = { ...currentUser, ...data };
-      localStorage.setItem('streamflow_user', JSON.stringify(updatedUser));
-      observer.next(updatedUser);
-      observer.complete();
     });
   }
 }
