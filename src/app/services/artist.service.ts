@@ -199,7 +199,7 @@ export class ArtistService {
   uploadArtistImage(artistId: string, file: File): Observable<Artist> {
     return this.apiService.upload<Artist>(
       `${this.endpoint}/${artistId}/image`,
-      file,
+      [{ key: 'profile_picture', value: file }],
     );
   }
 
