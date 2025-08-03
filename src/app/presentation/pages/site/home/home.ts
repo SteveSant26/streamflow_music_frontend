@@ -1,9 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Card } from '../../../../components/card/card';
-import { Greeting } from '../../../../components/greeting/greeting';
-import { MusicsTable } from '../../../../components/musics-table/musics-table';
-import { PlayListItemCard } from '../../../../components/play-list-item-card/play-list-item-card';
+import { Card, Greeting } from '@app/presentation/components/ui';
+import { MusicsTable, PlayListItemCard } from '@app/presentation/components/music';
 import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { 

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MusicsTable } from '../../components/musics-table/musics-table';
+import { MusicsTable } from '@app/presentation/components/music';
 
 @Component({
   selector: 'app-explore',

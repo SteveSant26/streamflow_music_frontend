@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { AsideMenu } from '@app/components/aside-menu/aside-menu';
-import { Player } from '@app/components/player/player';
+import { AsideMenu } from '@app/presentation/components/navigation';
+import { Player } from '@app/presentation/components/player';
 import { LanguageService } from '@app/shared/services';
 import { AuthSessionUseCase } from '@app/domain/usecases';
 import { ThemeToggleComponent } from '@app/presentation/components/theme-toggle/theme-toggle';

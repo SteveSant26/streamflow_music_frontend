@@ -12,7 +12,7 @@ import { Song } from '../../domain/entities/song.entity';
 import { SearchSongsUseCase, PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
 
 // Components
-import { MusicsTable } from '../../components/musics-table/musics-table';
+import { MusicsTable } from '@app/presentation/components/music';
 
 @Component({
   selector: 'app-search',
