@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
+import { ThemeService } from '@app/shared/services/theme.service';
 
 interface CurrentSongView {
   id: string;
@@ -41,16 +42,19 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   Math = Math; // Expose Math for template use
   private readonly destroy$ = new Subject<void>();
   private previousVolume = 0.5; // Para recordar el volumen anterior al hacer mute
+  isDarkTheme$: any;
 
   constructor(
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
     private readonly globalPlayerState: GlobalPlayerStateService,
+    private readonly themeService: ThemeService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {}
 
   ngOnInit() {
+    this.isDarkTheme$ = this.themeService.isDarkMode();
     this.setupPlayerStateSubscription();
     this.initializePlayer();
 
