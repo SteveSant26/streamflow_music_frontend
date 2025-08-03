@@ -61,7 +61,7 @@ export class MusicsTablePlay {
           songs: [song],
         };
         this.isPlaying = true;
-        console.log(`Reproduciendo: ${song.title} - ${song.artist?.name || 'Artista desconocido'}`);
+        console.log(`Reproduciendo: ${song.title} - ${song.artist || 'Artista desconocido'}`);
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);
