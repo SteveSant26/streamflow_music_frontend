@@ -31,22 +31,30 @@ export class ProfileService {
 
   /**
    * Actualizar perfil del usuario
+   * LIMITACIÓN: La API actual solo permite actualizar la imagen de perfil
+   * No hay endpoint para actualizar otros campos del perfil
    */
   updateUserProfile(data: UpdateUserProfileDto): Observable<UserProfileResponse> {
-    return this.apiPatchUseCase.execute<UserProfileResponse>(
-      API_CONFIG_PROFILE.profileMe.get,
-      data
-    );
+    // La API actual NO tiene endpoint para actualizar perfil completo
+    // Solo se puede actualizar la imagen usando uploadProfilePicture()
+    throw new Error('Full profile update not supported. Use uploadProfilePicture() for image updates.');
   }
 
   /**
-   * Crear perfil de usuario
+   * Actualizar solo la imagen de perfil (método recomendado)
+   * Este es el único campo que se puede actualizar según la API actual
    */
-  createUserProfile(data: UpdateUserProfileDto): Observable<UserProfileResponse> {
-    return this.apiPostUseCase.execute<UserProfileResponse>(
-      API_CONFIG_PROFILE.profileMe.post,
-      data
-    );
+  updateProfilePicture = this.uploadProfilePicture; // Alias más claro
+
+  /**
+   * Crear perfil de usuario
+   * NOTA: Según la API, los perfiles se crean automáticamente
+   * Este método está deshabilitado según la documentación del backend
+   */
+  private createUserProfile(data: UpdateUserProfileDto): Observable<UserProfileResponse> {
+    // Este endpoint está bloqueado según la API YAML
+    // "Bloquea la creación de perfiles ya que se crean automáticamente"
+    throw new Error('Profile creation is automatic. Manual creation is not allowed.');
   }
 
   /**
