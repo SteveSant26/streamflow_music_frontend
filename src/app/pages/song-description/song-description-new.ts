@@ -23,31 +23,6 @@ import { Song } from '../../domain/entities/song.entity';
 import { PlaylistService } from '../../infrastructure/services/playlist.service';
 import { AudioPlayerService } from '../../infrastructure/services/audio-player.service';
 
-import {
-  Component,
-  OnInit,
-  inject,
-  ChangeDetectionStrategy,
-  signal,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { TranslateModule } from '@ngx-translate/core';
-import { 
-  GetSongByIdUseCase, 
-  PlaySongUseCase,
-  GetRandomSongsUseCase 
-} from '../../domain/usecases/song/song.usecases';
-import { Song } from '../../domain/entities/song.entity';
-import { PlaylistService } from '../../infrastructure/services/playlist.service';
-import { AudioPlayerService } from '../../infrastructure/services/audio-player.service';
-
 @Component({
   selector: 'app-song-description',
   standalone: true,
