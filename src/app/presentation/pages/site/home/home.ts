@@ -1,9 +1,8 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Card, Greeting } from '@app/presentation/components/ui';
-import { MusicsTable, PlayListItemCard } from '@app/presentation/components/music';
+import { PlayListItemCard } from '@app/presentation/components/music';
 import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
-import { MatIcon } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { 
@@ -22,10 +21,8 @@ import { Song } from '../../../../domain/entities/song.entity';
     CommonModule,
     Card,
     Greeting,
-    MusicsTable,
     PlayListItemCard,
     MusicSectionComponent,
-    MatIcon,
     TranslateModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -188,7 +185,7 @@ export class HomeComponent implements OnInit {
   }
 
   // Configuraciones para las secciones de música
-  get popularSectionConfig(): any {
+  get popularSectionConfig() {
     const primaryButton: MusicSectionButton = {
       text: 'Ver todas',
       action: () => this.loadPopularSongs(),
@@ -206,7 +203,7 @@ export class HomeComponent implements OnInit {
     };
   }
 
-  get randomSectionConfig(): any {
+  get randomSectionConfig() {
     const actionButtons: MusicSectionButton[] = [
       {
         icon: 'refresh',
