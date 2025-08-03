@@ -305,7 +305,7 @@ export class GlobalPlayerStateService {
 
     try {
       // Don't restore if the current song is already loaded correctly
-      if (this.audioElement.src === this.lastKnownState.currentSong.audioUrl) {
+      if (this.audioElement.src === this.lastKnownState.currentSong.fileUrl) {
         console.log('Audio source already correct, skipping restore');
         return;
       }
@@ -321,7 +321,7 @@ export class GlobalPlayerStateService {
       this.audioElement.pause();
 
       // Set the audio source to the current song
-      this.audioElement.src = this.lastKnownState.currentSong.audioUrl;
+      this.audioElement.src = this.lastKnownState.currentSong.fileUrl;
 
       // Wait for metadata to load before setting currentTime
       const handleLoadedMetadata = () => {
@@ -425,7 +425,7 @@ export class GlobalPlayerStateService {
         currentTime: this.lastKnownCurrentTime,
         isPlaying: this.lastKnownIsPlaying,
         volume: this.lastKnownState?.volume || 1,
-        src: this.lastKnownState?.currentSong?.audioUrl || '',
+        src: this.lastKnownState?.currentSong?.fileUrl || '',
       };
 
       if (this.audioElement && stateToRestore.src) {

@@ -18,6 +18,10 @@ export interface Song {
   audioDownloaded: boolean;
   createdAt: Date;
   publishedAt: Date;
+  // Additional properties for compatibility
+  albumCover?: string; // Alias for thumbnailUrl
+  audioUrl?: string;   // Alias for fileUrl
+  lyrics?: string;     // Optional lyrics
 }
 
 export interface PlaylistItem extends Song {

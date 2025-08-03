@@ -125,8 +125,8 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
         artists: [state.currentSong.artist],
         album: 'Unknown Album',
         albumId: 1,
-        duration: this.formatTime(state.currentSong.duration),
-        image: state.currentSong.albumCover || '/assets/gorillaz2.jpg',
+        duration: state.currentSong.duration, // Already a string
+        image: state.currentSong.thumbnailUrl || '/assets/gorillaz2.jpg',
       };
 
       // Don't manually set the audio source - let the repository handle it

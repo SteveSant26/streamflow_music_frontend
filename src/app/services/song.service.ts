@@ -148,17 +148,6 @@ export class SongService {
   }
 
   /**
-   * Subir una nueva canción (para artistas/administradores)
-   */
-  uploadSong(file: File, songData?: any): Observable<Song> {
-    return this.apiService.upload<Song>(
-      `${this.endpoint}/upload`,
-      file,
-      songData,
-    );
-  }
-
-  /**
    * Actualizar información de una canción
    */
   updateSong(songId: string, songData: Partial<Song>): Observable<Song> {

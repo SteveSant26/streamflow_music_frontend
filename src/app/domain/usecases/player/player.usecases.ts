@@ -6,7 +6,7 @@ export interface PlaybackState {
   currentSong: Song | null;
   isPlaying: boolean;
   currentTime: number;
-  duration: number;
+  duration: number; // Will convert from string to number
   progress: number; // 0 to 100 percentage
   volume: number;
   isMuted: boolean;
@@ -43,7 +43,11 @@ export class PlayerUseCase {
 
   playSong(song: Song): void {
     this.currentSong$.next(song);
-    this.updatePlaybackState({ isPlaying: true, duration: song.duration, currentTime: 0 });
+    this.updatePlaybackState({ 
+      isPlaying: true, 
+      duration: song.durationSeconds || 0, 
+      currentTime: 0 
+    });
   }
 
   pauseSong(): void {

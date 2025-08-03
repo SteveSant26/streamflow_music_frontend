@@ -205,4 +205,25 @@ export class SongDescriptionComponent implements OnInit {
     }
     return count.toString();
   }
+
+  // Estado de liked (placeholder - implementar con API real)
+  isLiked(): boolean {
+    // TODO: Implementar lógica real con API de favoritos
+    return false;
+  }
+
+  toggleLike(): void {
+    const currentSong = this.song();
+    if (!currentSong) return;
+    
+    // TODO: Implementar lógica real con API de favoritos
+    console.log(`Toggle like para: ${currentSong.title}`);
+  }
+
+  getSongDescription(): string {
+    const currentSong = this.song();
+    if (!currentSong) return '';
+    
+    return `${currentSong.title} de ${currentSong.artist}`;
+  }
 }

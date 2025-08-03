@@ -106,7 +106,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         currentTime: this.formatTime(playerState.currentTime),
         progress: playerState.progress,
         volume: playerState.volume,
-        cover: playerState.currentSong.albumCover || '/assets/gorillaz2.jpg',
+        cover: playerState.currentSong.thumbnailUrl || '/assets/gorillaz2.jpg',
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         isPlaying: playerState.isPlaying,
         lyrics: '🎵 Lyrics not available yet 🎵',

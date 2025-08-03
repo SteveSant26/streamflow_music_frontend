@@ -63,10 +63,10 @@ import { Router } from '@angular/router';
           <mat-slider 
             class="progress-slider"
             [max]="state.duration"
-            [value]="state.currentTime"
-            (input)="onSeek($event)"
             [disabled]="audioPlayer.isLoadingAudio()"
-          ></mat-slider>
+          >
+            <input matSliderThumb [value]="state.currentTime" (input)="onSeek($event)">
+          </mat-slider>
           <span class="time-label">{{ formatTime(state.duration) }}</span>
         </div>
 
@@ -99,9 +99,9 @@ import { Router } from '@angular/router';
             [max]="1"
             [min]="0"
             [step]="0.1"
-            [value]="audioPlayer.getVolume()"
-            (input)="onVolumeChange($event)"
-          ></mat-slider>
+          >
+            <input matSliderThumb [value]="audioPlayer.getVolume()" (input)="onVolumeChange($event)">
+          </mat-slider>
         </div>
 
         <!-- Error Message -->
