@@ -76,4 +76,23 @@ export class SongService {
       queryParams
     );
   }
+
+  /**
+   * Obtener canción por ID
+   */
+  getSongById(songId: string): Observable<SongDto> {
+    return this.apiGetUseCase.execute<SongDto>(
+      API_CONFIG_SONGS.songs.getById(songId)
+    );
+  }
+
+  /**
+   * Incrementar contador de reproducciones
+   */
+  incrementPlayCount(songId: string): Observable<any> {
+    return this.apiPostUseCase.execute<any>(
+      API_CONFIG_SONGS.songs.incrementPlayCount(songId),
+      {}
+    );
+  }
 }
