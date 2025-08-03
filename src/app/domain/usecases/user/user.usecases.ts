@@ -50,7 +50,7 @@ export class UpdateUserProfileUseCase {
   providedIn: 'root'
 })
 export class UploadProfilePictureUseCase {
-  execute(file: File): Observable<string> {
+  execute(file: File): Observable<{ profile_picture: string }> {
     return new Observable(observer => {
       // This is a placeholder implementation
       // In a real app, this would upload to a file service
@@ -58,7 +58,7 @@ export class UploadProfilePictureUseCase {
       reader.onload = () => {
         const base64String = reader.result as string;
         // Store the base64 string as profile picture URL
-        observer.next(base64String);
+        observer.next({ profile_picture: base64String });
         observer.complete();
       };
       reader.onerror = () => observer.error('Error reading file');

@@ -7,9 +7,11 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { GetUserProfileUseCase } from '@app/domain/usecases/get-user-profile.usecase';
-import { UpdateUserProfileUseCase } from '@app/domain/usecases/update-user-profile.usecase';
-import { UploadProfilePictureUseCase } from '@app/domain/usecases/upload-profile-picture.usecase';
+import { 
+  GetUserProfileUseCase, 
+  UpdateUserProfileUseCase, 
+  UploadProfilePictureUseCase 
+} from '@app/domain/usecases';
 import { GetUserProfileDto } from '@app/domain/dtos/user-profile.dto';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';

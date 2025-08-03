@@ -7,9 +7,8 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LoginSessionUseCase } from '../../../../domain/usecases/login-session.usecase';
+import { LoginSessionUseCase, SocialLoginUseCase } from '@app/domain/usecases';
 import { LoginCredentials } from '../../../../domain/repositories/i-auth.repository';
-import { SocialLoginUseCase } from '../../../../domain/usecases/social-login.usecase';
 import { MatIcon } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import {

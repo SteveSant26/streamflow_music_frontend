@@ -76,11 +76,11 @@ export class GetUserSubscriptionUseCase {
   providedIn: 'root'
 })
 export class CreateCheckoutSessionUseCase {
-  execute(planId: string): Observable<{ url: string }> {
+  execute(checkoutData: { planId: string; successUrl?: string; cancelUrl?: string; allowPromotionCodes?: boolean }): Observable<{ url: string }> {
     return new Observable(observer => {
       // This is a placeholder implementation
       // In a real app, this would create a Stripe checkout session
-      const checkoutUrl = `https://checkout.stripe.com/pay/${planId}`;
+      const checkoutUrl = `https://checkout.stripe.com/pay/${checkoutData.planId}`;
       observer.next({ url: checkoutUrl });
       observer.complete();
     });

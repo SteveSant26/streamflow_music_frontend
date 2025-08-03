@@ -1,7 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { ChangeLanguageUseCase } from '../usecases/change-language.usecase';
-import { GetCurrentLanguageUseCase } from '../usecases/get-current-language.usecase';
-import { GetAvailableLanguagesUseCase } from '../usecases/get-available-languages.usecase';
+import { ChangeLanguageUseCase, GetCurrentLanguageUseCase, GetAvailableLanguagesUseCase } from '../usecases';
+import { Observable } from 'rxjs';
 
 export type Language = 'en' | 'es';
 
@@ -26,7 +25,7 @@ export class LanguageService {
     this.currentLanguageSignal.set(currentLang);
   }
 
-  getCurrentLanguage(): string {
+  getCurrentLanguage(): Observable<string> {
     return this.getCurrentLanguageUseCase.execute();
   }
 
@@ -40,13 +39,8 @@ export class LanguageService {
     }
   }
 
-  getAvailableLanguages(): { code: Language; name: string }[] {
-    const languages = this.getAvailableLanguagesUseCase.execute();
-
-    return languages.map((lang) => ({
-      code: lang as Language,
-      name: lang === 'en' ? 'English' : 'Español',
-    }));
+  getAvailableLanguages(): Observable<{ code: Language; name: string }[]> {
+    return this.getAvailableLanguagesUseCase.execute();
   }
 
   // Getter for reactive signal

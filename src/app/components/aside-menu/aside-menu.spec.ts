@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
-import { AuthStatusUseCase } from '@app/domain/usecases/auth-status.usecase';
+import { AuthStatusUseCase } from '@app/domain/usecases';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import { TranslateModule } from '@ngx-translate/core';

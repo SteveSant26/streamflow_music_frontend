@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
-import { AuthSessionUseCase } from '@app/domain/usecases/auth-session.usecase';
+import { AuthSessionUseCase } from '@app/domain/usecases';
 import { AsideMenu } from './components/aside-menu/aside-menu';
 import { Player } from './components/player/player';
 import { CommonModule } from '@angular/common';

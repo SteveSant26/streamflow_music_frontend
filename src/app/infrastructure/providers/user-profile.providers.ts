@@ -1,11 +1,9 @@
 import { Provider } from '@angular/core';
-import {
-  USER_PROFILE_REPOSITORY_TOKEN,
-  GetUserProfileUseCase,
-} from '../../domain/usecases/get-user-profile.usecase';
+import { GetUserProfileUseCase, UpdateUserProfileUseCase, UploadProfilePictureUseCase } from '../../domain/usecases';
 import { UserProfileRepository } from '../repositories/user-profile.repository';
-import { UpdateUserProfileUseCase } from '../../domain/usecases/update-user-profile.usecase';
-import { UploadProfilePictureUseCase } from '../../domain/usecases/upload-profile-picture.usecase';
+
+// Create the token locally since it's not exported from the new consolidated file
+export const USER_PROFILE_REPOSITORY_TOKEN = 'USER_PROFILE_REPOSITORY_TOKEN';
 
 export const userProfileProviders: Provider[] = [
   {

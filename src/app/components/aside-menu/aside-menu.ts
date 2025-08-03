@@ -48,7 +48,7 @@ export class AsideMenu {
   async logout() {
     try {
       console.log('🚪 Iniciando logout...');
-      await this.authStatusUseCase.logout();
+      await this.logoutUseCase.execute();
       console.log('✅ Logout exitoso, redirigiendo...');
       await this.router.navigate(['/login']);
     } catch (error) {

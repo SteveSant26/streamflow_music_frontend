@@ -1,9 +1,7 @@
 import { Provider } from '@angular/core';
 import { LANGUAGE_REPOSITORY_TOKEN } from '../../domain/repositories/i-language.repository';
 import { LanguageRepository } from '../repositories/language.repository';
-import { ChangeLanguageUseCase } from '../../domain/usecases/change-language.usecase';
-import { GetCurrentLanguageUseCase } from '../../domain/usecases/get-current-language.usecase';
-import { GetAvailableLanguagesUseCase } from '../../domain/usecases/get-available-languages.usecase';
+import { ChangeLanguageUseCase, GetCurrentLanguageUseCase, GetAvailableLanguagesUseCase } from '../../domain/usecases';
 
 export const languageProviders: Provider[] = [
   {
