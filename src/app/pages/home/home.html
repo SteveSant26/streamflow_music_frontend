@@ -38,6 +38,49 @@
     </app-card>
   </div>
 
+  <!-- Canciones Populares -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">
+        🔥 Más Populares
+      </h2>
+      <button 
+        class="text-black hover:text-gray-700 text-sm font-medium"
+        (click)="loadPopularSongs()"
+      >
+        Ver todas
+      </button>
+    </div>
+    
+    <!-- Loading state -->
+    <div *ngIf="loading()" class="flex justify-center items-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+    </div>
+    
+    <!-- Popular Songs Grid -->
+    <div 
+      *ngIf="!loading() && popularSongs().length > 0"
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6"
+    >
+      @for (song of popularSongs(); track song.id) {
+        <button class="song-card bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors w-full text-left"
+                (click)="playSong(song)">
+          <img 
+            [src]="song.thumbnailUrl || '/assets/gorillaz2.jpg'" 
+            [alt]="song.title"
+            class="w-full aspect-square object-cover rounded-md mb-3"
+          />
+          <h3 class="text-white font-medium text-sm truncate">{{ song.title }}</h3>
+          <p class="text-gray-400 text-xs truncate">{{ song.artist }}</p>
+          <div class="flex items-center mt-2 text-xs text-gray-500">
+            <mat-icon class="text-xs mr-1">play_arrow</mat-icon>
+            <span>{{ formatPlayCount(song.playCount) }}</span>
+          </div>
+        </button>
+      }
+    </div>
+  </div>
+
   <!-- Playlists Recomendadas -->
   <div class="mb-8">
     <div class="flex items-center justify-between mb-6">
@@ -59,23 +102,45 @@
     </div>
   </div>
 
-  <!-- Trending Now -->
+  <!-- Trending Now / Canciones Aleatorias -->
   <div class="trending-section">
     <div class="trending-container">
       <div class="trending-header">
         <h2 class="trending-title">
-          {{ "HOME.TRENDING" | translate }}
+          🎲 Descubre Música Nueva
         </h2>
         <div class="trending-controls">
-          <button class="trending-control-button">
-            <mat-icon>menu</mat-icon>
+          <button class="trending-control-button" (click)="loadRandomSongs()">
+            <mat-icon>refresh</mat-icon>
           </button>
-          <button class="trending-control-button">
-            <mat-icon>equalizer</mat-icon>
+          <button class="trending-control-button" (click)="playRandomPlaylist()">
+            <mat-icon>play_arrow</mat-icon>
           </button>
         </div>
       </div>
-      <app-musics-table></app-musics-table>
+      
+      <!-- Random Songs Table -->
+      <div *ngIf="!loading() && randomSongs().length > 0" class="mt-4">
+        <app-musics-table [songs]="randomSongs()"></app-musics-table>
+      </div>
+      
+      <!-- Loading state for random songs -->
+      <div *ngIf="loading()" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+        <span class="ml-3 text-white">Cargando música...</span>
+      </div>
+      
+      <!-- Empty state -->
+      <div *ngIf="!loading() && randomSongs().length === 0" class="text-center py-8">
+        <mat-icon class="text-gray-400 text-4xl mb-2">music_note</mat-icon>
+        <p class="text-gray-400">No se pudieron cargar las canciones</p>
+        <button 
+          class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          (click)="refreshHomeData()"
+        >
+          Reintentar
+        </button>
+      </div>
     </div>
   </div>
 </div>

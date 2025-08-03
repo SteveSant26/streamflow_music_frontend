@@ -10,7 +10,8 @@ import {
   GetMostPopularSongsUseCase, 
   GetRandomSongsUseCase,
   PlayRandomPlaylistUseCase,
-  PlayPopularPlaylistUseCase 
+  PlayPopularPlaylistUseCase,
+  PlaySongUseCase
 } from '../../domain/usecases/song/song.usecases';
 import { Song } from '../../domain/entities/song.entity';
 
@@ -36,6 +37,7 @@ export class HomeComponent implements OnInit {
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playRandomPlaylistUseCase = inject(PlayRandomPlaylistUseCase);
   private readonly playPopularPlaylistUseCase = inject(PlayPopularPlaylistUseCase);
+  private readonly playSongUseCase = inject(PlaySongUseCase);
 
   // Signals para el estado del componente
   readonly popularSongs = signal<Song[]>([]);
@@ -156,5 +158,27 @@ export class HomeComponent implements OnInit {
   // Método para refrescar toda la data
   refreshHomeData(): void {
     this.loadHomeData();
+  }
+
+  // Método para reproducir una canción específica
+  playSong(song: Song): void {
+    this.playSongUseCase.execute(song.id, true).subscribe({
+      next: () => {
+        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
+      },
+      error: (error) => {
+        console.error('Error al reproducir canción:', error);
+      }
+    });
+  }
+
+  // Método para formatear el conteo de reproducciones
+  formatPlayCount(count: number): string {
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`;
+    } else if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+    return count.toString();
   }
 }

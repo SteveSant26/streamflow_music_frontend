@@ -5,7 +5,7 @@ export const AUTH_ROUTES: Routes = [
   {
     path: ROUTES_CONFIG_AUTH.LOGIN.path,
     loadComponent: () =>
-      import('./../presentation/pages/auth/login/login').then(
+      import('../pages/auth/login/login').then(
         (m) => m.LoginComponent,
       ),
     canActivate: [publicGuard],
@@ -13,14 +13,14 @@ export const AUTH_ROUTES: Routes = [
   {
     path: ROUTES_CONFIG_AUTH.REGISTER.path,
     loadComponent: () =>
-      import('./../presentation/pages/auth/register/register').then(
+      import('../pages/auth/register/register').then(
         (m) => m.RegisterComponent,
       ),
   },
   {
     path: ROUTES_CONFIG_AUTH.RESET_PASSWORD.path,
     loadComponent: () =>
-      import('./../presentation/pages/auth/reset-password/reset-password').then(
+      import('../pages/auth/reset-password/reset-password').then(
         (m) => m.ResetPasswordComponent,
       ),
   },

@@ -6,15 +6,15 @@
     <div class="search-bar mb-8">
       <input
         type="text"
+        [formControl]="searchControl"
         [placeholder]="'SEARCH.PLACEHOLDER' | translate"
         class="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        (input)="onSearch($any($event.target).value || '')"
       />
     </div>
   </div>
 
   <!-- Géneros Sugeridos -->
-  <div class="suggested-genres" *ngIf="!searchQuery">
+  <div class="suggested-genres" *ngIf="!hasSearched()">
     <h2 class="text-2xl font-semibold mb-6">
       {{ "SEARCH.BROWSE_GENRES" | translate }}
     </h2>
@@ -34,11 +34,20 @@
     </div>
   </div>
 
+  <!-- Estado de carga -->
+  <div class="loading-state" *ngIf="isSearching()">
+    <div class="flex items-center justify-center py-12">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <span class="ml-3 text-gray-600">{{ "SEARCH.SEARCHING" | translate }}</span>
+    </div>
+  </div>
+
   <!-- Resultados de búsqueda -->
-  <div class="search-results" *ngIf="searchQuery">
+  <div class="search-results" *ngIf="hasSearched() && !isSearching()">
     <div class="mb-6 flex items-center justify-between">
       <p class="text-gray-600">
-        {{ "SEARCH.RESULTS_FOR" | translate: { query: searchQuery } }}
+        {{ "SEARCH.RESULTS_FOR" | translate: { query: searchQuery() } }}
+        ({{ searchResults().length }} {{ "SEARCH.RESULTS_COUNT" | translate }})
       </p>
       <button
         (click)="clearSearch()"
@@ -49,23 +58,29 @@
       </button>
     </div>
 
-    <!-- Lista de resultados -->
-    <div class="grid grid-cols-1 gap-4">
+    <!-- Resultados encontrados -->
+    <div *ngIf="hasResults(); else noResults">
+      <h3 class="text-xl font-semibold mb-4">{{ "SEARCH.SONGS" | translate }}</h3>
+      <app-musics-table [songs]="searchResults()"></app-musics-table>
+    </div>
+
+    <!-- Sin resultados -->
+    <ng-template #noResults>
       <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-200">
         <div class="text-center">
           <mat-icon
             class="w-16 h-16 text-gray-400 mx-auto mb-4"
             style="font-size: 64px; width: 64px; height: 64px"
-            >search</mat-icon
+            >search_off</mat-icon
           >
           <h3 class="text-lg font-medium text-gray-900 mb-2">
-            {{ "SEARCH.IMPLEMENTING" | translate }}
+            {{ "SEARCH.NO_RESULTS" | translate }}
           </h3>
           <p class="text-gray-500">
-            {{ "SEARCH.RESULTS_SOON" | translate }}
+            {{ "SEARCH.TRY_DIFFERENT" | translate }}
           </p>
         </div>
       </div>
-    </div>
+    </ng-template>
   </div>
 </div>

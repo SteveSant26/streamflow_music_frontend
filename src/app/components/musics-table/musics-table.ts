@@ -8,16 +8,8 @@ import { MusicsTablePlay } from '../musics-table-play/musics-table-play';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-
-interface Song {
-  id: number;
-  title: string;
-  artists: string[];
-  album: string;
-  albumId: number;
-  duration: string;
-  image: string;
-}
+import { Song } from '../../domain/entities/song.entity';
+import { PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
 
 @Component({
   selector: 'app-musics-table',
@@ -29,61 +21,38 @@ export class MusicsTable {
   @Input() songs: Song[] = [];
 
   private readonly router = inject(Router);
+  private readonly playSongUseCase = inject(PlaySongUseCase);
 
-  // Mock state para el reproductor
+  // Estado del reproductor actual
   currentSong: Song | null = null;
-  currentPlaylistId: number | null = null;
 
   isCurrentSong(song: Song): boolean {
-    return (
-      this.currentSong?.id === song.id &&
-      this.currentPlaylistId === song.albumId
-    );
+    return this.currentSong?.id === song.id;
   }
 
-  goToSongDescription(songId: number): void {
+  goToSongDescription(songId: string): void {
     this.router.navigate(['/song', songId]);
   }
 
-  // Mock songs data para testing
-  constructor() {
-    this.songs = [
-      {
-        id: 1,
-        title: 'Bohemian Rhapsody',
-        artists: ['Queen'],
-        album: 'A Night at the Opera',
-        albumId: 101,
-        duration: '5:55',
-        image: '/assets/playlists/playlist1.jpg',
+  playSong(song: Song): void {
+    this.playSongUseCase.execute(song.id, true).subscribe({
+      next: () => {
+        this.currentSong = song;
+        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
       },
-      {
-        id: 2,
-        title: 'Hotel California',
-        artists: ['Eagles'],
-        album: 'Hotel California',
-        albumId: 102,
-        duration: '6:30',
-        image: '/assets/playlists/playlist2.webp',
-      },
-      {
-        id: 3,
-        title: 'Stairway to Heaven',
-        artists: ['Led Zeppelin'],
-        album: 'Led Zeppelin IV',
-        albumId: 103,
-        duration: '8:02',
-        image: '/assets/playlists/playlist3.jpg',
-      },
-      {
-        id: 4,
-        title: "Sweet Child O' Mine",
-        artists: ["Guns N' Roses"],
-        album: 'Appetite for Destruction',
-        albumId: 104,
-        duration: '5:03',
-        image: '/assets/playlists/playlist4.jpg',
-      },
-    ];
+      error: (error) => {
+        console.error('Error al reproducir canción:', error);
+      }
+    });
+  }
+
+  formatPlayCount(plays: number): string {
+    if (plays >= 1000000) {
+      return `${(plays / 1000000).toFixed(1)}M`;
+    }
+    if (plays >= 1000) {
+      return `${(plays / 1000).toFixed(1)}K`;
+    }
+    return plays.toString();
   }
 }

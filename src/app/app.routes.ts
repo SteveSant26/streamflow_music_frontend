@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { ROUTES_CONFIG_AUTH } from './config/routes-config/routes-auth.config';
-import { AUTH_ROUTES } from './routes/app.routes.auth';
-import { SUSBSRIPTION_ROUTES } from './routes/app.routes.subscription';
+import { AUTH_ROUTES } from './presentation/routes/app.routes.auth';
+import { SUSBSRIPTION_ROUTES } from './presentation/routes/app.routes.subscription';
 import { authGuard } from './shared/guards';
 
 export const routes: Routes = [

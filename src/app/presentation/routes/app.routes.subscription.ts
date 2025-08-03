@@ -6,14 +6,14 @@ export const SUSBSRIPTION_ROUTES: Routes = [
     path: 'plans',
     loadChildren: () =>
       import(
-        '../presentation/pages/subscription/subscription-plans/subscription-plans.component'
+        '../pages/subscription/subscription-plans/subscription-plans.component'
       ).then((m) => m.SubscriptionPlansComponent),
   },
   {
     path: 'success',
     loadChildren: () =>
       import(
-        '../presentation/pages/subscription/subscription-success/subscription-success.component'
+        '../pages/subscription/subscription-success/subscription-success.component'
       ).then((m) => m.SubscriptionSuccessComponent),
   },
   {
@@ -21,7 +21,7 @@ export const SUSBSRIPTION_ROUTES: Routes = [
     canActivate: [authGuard],
     loadChildren: () =>
       import(
-        '../presentation/pages/subscription/subscription-management/subscription-management.component'
+        '../pages/subscription/subscription-management/subscription-management.component'
       ).then((m) => m.SubscriptionManagementComponent),
   },
   {

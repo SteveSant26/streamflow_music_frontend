@@ -1,18 +1,45 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+// Domain
+import { Song } from '../../domain/entities/song.entity';
+import { SongSearchParams } from '../../domain/dtos/song.dto';
+import { SearchSongsUseCase, PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
+
+// Components
+import { MusicsTable } from '../../components/musics-table/musics-table';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, TranslateModule, MatIconModule],
+  imports: [CommonModule, TranslateModule, MatIconModule, ReactiveFormsModule, MusicsTable],
   templateUrl: './search.html',
   styleUrl: './search.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent {
-  searchQuery = '';
+  // Inyección de dependencias
+  private readonly router = inject(Router);
+  private readonly searchSongsUseCase = inject(SearchSongsUseCase);
+  private readonly playSongUseCase = inject(PlaySongUseCase);
+
+  // Control de formulario para la búsqueda
+  searchControl = new FormControl('');
+
+  // Signals para el estado de la búsqueda
+  searchResults = signal<Song[]>([]);
+  isSearching = signal(false);
+  hasSearched = signal(false);
+
+  // Computed para verificar si hay resultados
+  hasResults = computed(() => this.searchResults().length > 0);
+  searchQuery = computed(() => this.searchControl.value || '');
 
   genres = [
     {
@@ -65,23 +92,64 @@ export class SearchComponent {
     },
   ];
 
-  constructor() {}
+  constructor() {
+    // Configurar el observable de búsqueda con debounce
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((query) => {
+          if (!query || query.trim().length < 2) {
+            this.searchResults.set([]);
+            this.hasSearched.set(false);
+            this.isSearching.set(false);
+            return of([]);
+          }
+
+          this.isSearching.set(true);
+          return this.searchSongsUseCase.execute({ 
+            q: query.trim(),
+            include_youtube: false,
+            limit: 50
+          });
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe({
+        next: (songs) => {
+          this.searchResults.set(songs);
+          this.hasSearched.set(true);
+          this.isSearching.set(false);
+        },
+        error: (error) => {
+          console.error('Error en la búsqueda:', error);
+          this.searchResults.set([]);
+          this.hasSearched.set(true);
+          this.isSearching.set(false);
+        }
+      });
+  }
 
   onSearch(query: string) {
-    this.searchQuery = query.trim();
-    if (this.searchQuery) {
-      // Implementar lógica de búsqueda
-      console.log('Buscando:', this.searchQuery);
-    }
+    this.searchControl.setValue(query.trim());
   }
 
   onGenreClick(genre: string) {
-    this.searchQuery = genre;
-    // Simular búsqueda por género
-    console.log('Búsqueda por género:', genre);
+    this.searchControl.setValue(genre);
   }
 
   clearSearch() {
-    this.searchQuery = '';
+    this.searchControl.setValue('');
+  }
+
+  playSong(song: Song): void {
+    this.playSongUseCase.execute(song.id, true).subscribe({
+      next: () => {
+        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
+      },
+      error: (error) => {
+        console.error('Error al reproducir canción:', error);
+      }
+    });
   }
 }
