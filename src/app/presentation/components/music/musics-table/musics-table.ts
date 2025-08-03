@@ -8,8 +8,8 @@ import { MusicsTablePlay } from '../musics-table-play/musics-table-play';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { Song } from '../../domain/entities/song.entity';
-import { PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
+import { Song } from '@app/domain/entities/song.entity';
+import { PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
 
 @Component({
   selector: 'app-musics-table',
