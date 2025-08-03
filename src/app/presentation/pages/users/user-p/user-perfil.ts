@@ -13,6 +13,7 @@ import {
   UploadProfilePictureUseCase 
 } from '@app/domain/usecases';
 import { GetUserProfileDto } from '@app/domain/dtos/user-profile.dto';
+import { User } from '@app/domain/entities/user.entity';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -63,19 +64,24 @@ export class UserPerfilComponent implements OnInit {
 
     // Usar el caso de uso para obtener el perfil
     this.getUserProfileUseCase.execute().subscribe({
-      next: (userProfile: GetUserProfileDto) => {
+      next: (userProfile: User | null) => {
         console.log('✅ Datos del usuario cargados:', userProfile);
 
-        this.currentUser.set(userProfile);
-
-        // Actualizar formulario
-        this.profileForm.patchValue({
-          email: userProfile.email,
-        });
-
-        // Cargar imagen de perfil si existe
-        if (userProfile.profile_picture) {
-          this.profileImageUrl.set(userProfile.profile_picture);
+        if (userProfile) {
+          // Convertir User a GetUserProfileDto con solo los campos disponibles
+          const userProfileDto: GetUserProfileDto = {
+            id: userProfile.id,
+            email: userProfile.email,
+            profile_picture: null
+          };
+          this.currentUser.set(userProfileDto);
+          
+          // Actualizar formulario
+          this.profileForm.patchValue({
+            email: userProfile.email,
+          });
+        } else {
+          this.currentUser.set(null);
         }
 
         this.isLoading.set(false);

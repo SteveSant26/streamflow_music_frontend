@@ -105,7 +105,7 @@ export class GlobalPlayerStateService {
       if (!currentState.currentSong) {
         const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
         if (defaultPlaylist && defaultPlaylist.songs.length > 0) {
-          this.playerUseCase.loadPlaylist(defaultPlaylist);
+          this.playerUseCase.loadPlaylist(defaultPlaylist.songs);
         }
       }
 

@@ -1,24 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-
-export interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  album: string;
-  duration: number;
-  url: string;
-  coverArt?: string;
-}
+import { Song } from '../../entities/song.entity';
 
 export interface PlaybackState {
+  currentSong: Song | null;
   isPlaying: boolean;
   currentTime: number;
   duration: number;
+  progress: number; // 0 to 100 percentage
   volume: number;
   isMuted: boolean;
-  repeatMode: 'off' | 'one' | 'all';
-  shuffleMode: boolean;
+  repeatMode: 'none' | 'one' | 'all';
+  isShuffleEnabled: boolean;
+  isLoading: boolean;
 }
 
 @Injectable({
@@ -27,13 +21,16 @@ export interface PlaybackState {
 export class PlayerUseCase {
   private readonly currentSong$ = new BehaviorSubject<Song | null>(null);
   private readonly playbackState$ = new BehaviorSubject<PlaybackState>({
+    currentSong: null,
     isPlaying: false,
     currentTime: 0,
     duration: 0,
+    progress: 0,
     volume: 1,
     isMuted: false,
-    repeatMode: 'off',
-    shuffleMode: false
+    repeatMode: 'none',
+    isShuffleEnabled: false,
+    isLoading: false
   });
 
   getCurrentSong(): Observable<Song | null> {
@@ -70,13 +67,13 @@ export class PlayerUseCase {
     this.updatePlaybackState({ isMuted: !currentState.isMuted });
   }
 
-  setRepeatMode(mode: 'off' | 'one' | 'all'): void {
+  setRepeatMode(mode: 'none' | 'one' | 'all'): void {
     this.updatePlaybackState({ repeatMode: mode });
   }
 
   toggleShuffle(): void {
     const currentState = this.playbackState$.value;
-    this.updatePlaybackState({ shuffleMode: !currentState.shuffleMode });
+    this.updatePlaybackState({ isShuffleEnabled: !currentState.isShuffleEnabled });
   }
 
   updateCurrentTime(time: number): void {

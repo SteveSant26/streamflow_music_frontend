@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStateService } from '@app/domain/services/auth-state-service';
@@ -15,6 +16,7 @@ import { LanguageService } from '@app/domain/services/language.service';
     RouterLink,
     SideMenuItem,
     SideMenuCard,
+    AsyncPipe,
     MatIconModule,
     TranslateModule,
   ],

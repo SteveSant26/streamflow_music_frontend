@@ -66,8 +66,9 @@ export class GetSubscriptionPlansUseCase {
   providedIn: 'root'
 })
 export class GetUserSubscriptionUseCase {
-  execute(): Observable<UserSubscription | null> {
+  execute(userId?: string): Observable<UserSubscription | null> {
     // This is a placeholder implementation
+    console.log('Getting user subscription for userId:', userId);
     return of(null);
   }
 }
@@ -131,8 +132,9 @@ export class CancelSubscriptionUseCase {
   providedIn: 'root'
 })
 export class GetPaymentMethodsUseCase {
-  execute(): Observable<PaymentMethod[]> {
+  execute(userId?: string): Observable<PaymentMethod[]> {
     // This is a placeholder implementation
+    console.log('Getting payment methods for userId:', userId);
     return of([]);
   }
 }
@@ -141,9 +143,10 @@ export class GetPaymentMethodsUseCase {
   providedIn: 'root'
 })
 export class CreateBillingPortalUseCase {
-  execute(): Observable<{ url: string }> {
+  execute(customerId?: string, options?: any): Observable<{ url: string }> {
     return new Observable(observer => {
       // This is a placeholder implementation
+      console.log('Creating billing portal for customerId:', customerId, 'with options:', options);
       const portalUrl = 'https://billing.stripe.com/session/portal';
       observer.next({ url: portalUrl });
       observer.complete();

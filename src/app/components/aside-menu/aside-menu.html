@@ -67,8 +67,8 @@
           <button
             (click)="changeLanguage(lang.code)"
             class="language-button"
-            [class.active]="getCurrentLanguage() === lang.code"
-            [class.inactive]="getCurrentLanguage() !== lang.code"
+            [class.active]="(getCurrentLanguage() | async) === lang.code"
+            [class.inactive]="(getCurrentLanguage() | async) !== lang.code"
           >
             {{ lang.name }}
           </button>
