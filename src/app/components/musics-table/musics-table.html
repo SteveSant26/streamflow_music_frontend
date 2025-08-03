@@ -1,0 +1,121 @@
+<!-- Mobile view - Card layout -->
+<div class="block sm:hidden space-y-3">
+  @for (song of songs; track song.id; let i = $index) {
+    <div
+      class="bg-elevated rounded-lg p-3 hover-bg-elevated-hover transition duration-300 group"
+    >
+      <div class="flex items-center gap-3">
+        <!-- Play button / Number -->
+        <div class="relative w-6 h-6 flex-shrink-0">
+          <span
+            class="absolute inset-0 flex items-center justify-center text-sm opacity-100 transition-all group-hover:opacity-0"
+          >
+            {{ i + 1 }}
+          </span>
+          <app-musics-table-play
+            [song]="song"
+            [isCurrentSong]="isCurrentSong(song)"
+            class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all"
+          />
+        </div>
+
+        <!-- Song info -->
+        <div class="flex-1 min-w-0 flex items-center gap-3">
+          <picture class="w-12 h-12 flex-shrink-0">
+            <img
+              [src]="song.thumbnailUrl"
+              [alt]="song.title"
+              class="w-full h-full rounded object-cover"
+              onerror="this.src='/assets/default-album.jpg'"
+            />
+          </picture>
+
+          <div class="flex-1 min-w-0">
+            <button
+              [class]="
+                'text-base font-normal hover:underline text-left bg-transparent border-none p-0 truncate block w-full ' +
+                (isCurrentSong(song) ? 'text-accent' : 'text-base')
+              "
+              (click)="goToSongDescription(song.id)"
+            >
+              {{ song.title }}
+            </button>
+            <span class="text-subdued text-xs truncate">{{ song.artist || 'Artista desconocido' }}</span>
+          </div>
+        </div>
+
+        <!-- Duration -->
+        <span class="text-subdued text-xs">{{ formatPlayCount(song.playCount) }}</span>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Desktop view - Table layout -->
+<table
+  class="hidden sm:table table-auto text-left min-w-full divide-y divide-border"
+>
+  <thead>
+    <tr class="h-4"></tr>
+    <tr>
+      <th class="px-4 py-2 font-bold">#</th>
+      <th class="px-4 py-2 font-bold">
+        {{ "TABLE.TITLE" | translate }}
+      </th>
+      <th class="px-4 py-2 font-bold hidden md:table-cell">
+        {{ "TABLE.ALBUM" | translate }}
+      </th>
+      <th class="px-4 py-2 font-bold">
+        <mat-icon>schedule</mat-icon>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr class="h-4"></tr>
+    @for (song of songs; track song.id; let i = $index) {
+      <tr
+        class="text-base border-spacing-0 font-bold hover-bg-elevated-hover overflow-hidden transition duration-300 group"
+      >
+        <td class="relative px-4 py-2 rounded-tl-lg rounded-bl-lg w-5">
+          <span
+            class="absolute top-5 opacity-100 transition-all group-hover:opacity-0"
+          >
+            {{ i + 1 }}
+          </span>
+          <app-musics-table-play
+            [song]="song"
+            [isCurrentSong]="isCurrentSong(song)"
+            class="absolute top-3 opacity-0 group-hover:opacity-100 transition-all"
+          />
+        </td>
+        <td class="px-4 py-2 flex gap-3">
+          <picture>
+            <img
+              [src]="song.thumbnailUrl"
+              [alt]="song.title"
+              class="w-11 h-11 rounded"
+              onerror="this.src='/assets/default-album.jpg'"
+            />
+          </picture>
+          <div class="flex flex-col">
+            <button
+              [class]="
+                'text-base font-normal hover:underline text-left bg-transparent border-none p-0 ' +
+                (isCurrentSong(song) ? 'text-accent' : 'text-base')
+              "
+              (click)="goToSongDescription(song.id)"
+            >
+              {{ song.title }}
+            </button>
+            <span class="text-subdued">{{ song.artist || 'Artista desconocido' }}</span>
+          </div>
+        </td>
+        <td class="px-4 py-2 hidden md:table-cell">{{ song.album || 'Álbum desconocido' }}</td>
+        <td class="px-4 py-2 rounded-tr-lg rounded-br-lg">
+          {{ formatPlayCount(song.playCount) }} reproducciones
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
