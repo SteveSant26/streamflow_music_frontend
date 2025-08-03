@@ -1,7 +1,7 @@
 import { MatIcon } from '@angular/material/icon';
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { Song } from '../../models';
+import { Song } from '../../domain/entities/song.entity';
 import { PlaySongUseCase } from '../../domain/usecases/song/song.usecases';
 
 interface Playlist {
@@ -37,13 +37,13 @@ export class MusicsTablePlay {
   isPlaying = false;
 
   isNewSongOfAnotherPlaylist(song: Song): boolean {
-    return this.currentMusic.playlist?.id !== song.albumId;
+    return this.currentMusic.playlist?.id !== song.id;
   }
 
   isCurrentSongRunning(song: Song): boolean {
     return (
       this.currentMusic.song?.id === song.id &&
-      this.currentMusic.playlist?.id === song.albumId &&
+      this.currentMusic.playlist?.id === song.id &&
       this.isPlaying
     );
   }
@@ -54,9 +54,9 @@ export class MusicsTablePlay {
         this.currentMusic = {
           song: song,
           playlist: {
-            id: song.albumId || song.id,
-            name: `Album ${song.album?.title || 'Desconocido'}`,
-            description: `Playlist for ${song.album?.title || 'Album desconocido'}`,
+            id: song.id,
+            name: `Album ${song.album || 'Desconocido'}`,
+            description: `Playlist for ${song.album || 'Album desconocido'}`,
           },
           songs: [song],
         };
