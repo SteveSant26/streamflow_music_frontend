@@ -40,7 +40,7 @@ export const routes: Routes = [
       
       // Playlist routes
       {
-        path: 'playlists',
+        path: 'my-playlists',
         loadComponent: () =>
           import('./pages/playlist/playlists.component').then(
             (m) => m.PlaylistsComponent,
@@ -48,7 +48,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       {
-        path: 'playlist/:id/detail',
+        path: 'my-playlist/:id',
         loadComponent: () =>
           import('./pages/playlist/playlist-detail.component').then(
             (m) => m.PlaylistDetailComponent,

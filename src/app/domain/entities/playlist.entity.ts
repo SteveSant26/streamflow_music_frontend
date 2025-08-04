@@ -1,3 +1,6 @@
+import { Song } from './song.entity';
+
+// Nueva interfaz para nuestro backend
 export interface Playlist {
   id: string;
   name: string;
@@ -23,6 +26,23 @@ export interface PlaylistSong {
 
 export interface PlaylistWithSongs extends Playlist {
   songs: PlaylistSong[];
+}
+
+// Interfaz de compatibilidad para el reproductor existente
+export interface LegacyPlaylist {
+  id: string;
+  name: string;
+  description?: string;
+  coverImage?: string;
+  isPublic: boolean;
+  createdDate: string;
+  songs: Song[];
+  songCount: number;
+  duration: number; // in seconds
+  owner: {
+    id: string;
+    username: string;
+  };
 }
 
 // DTOs para crear/actualizar playlists

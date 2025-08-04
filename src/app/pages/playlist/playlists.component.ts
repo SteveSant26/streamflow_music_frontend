@@ -70,14 +70,14 @@ import { Playlist } from '../../domain/entities/playlist.entity';
             <button 
               mat-button 
               color="primary"
-              [routerLink]="['/playlist', playlist.id]">
+              [routerLink]="['/my-playlist', playlist.id]">
               <mat-icon>play_arrow</mat-icon>
               Reproducir
             </button>
             
             <button 
               mat-button
-              [routerLink]="['/playlist', playlist.id, 'edit']"
+              [routerLink]="['/my-playlist', playlist.id, 'edit']"
               *ngIf="!playlist.is_default">
               <mat-icon>edit</mat-icon>
               Editar

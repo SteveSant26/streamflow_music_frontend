@@ -9,7 +9,7 @@ import {
 } from 'rxjs';
 import { IPlayerRepository } from '../../domain/repositories/player.repository.interface';
 import { Song } from '../../domain/entities/song.entity';
-import { Playlist } from '../../domain/entities/playlist.entity';
+import { LegacyPlaylist as Playlist } from '../../domain/entities/playlist.entity';
 import { PlayerState } from '../../domain/entities/player-state.entity';
 
 @Injectable({

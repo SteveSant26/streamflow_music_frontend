@@ -7,7 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 
-import { Playlist } from '@app/domain/entities/playlist.entity';
+import { LegacyPlaylist as Playlist } from '@app/domain/entities/playlist.entity';
 import { Song } from '@app/domain/entities/song.entity';
 import { GetPlaylistByIdUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
 import { PlaylistService } from '@app/infrastructure/services/playlist.service';

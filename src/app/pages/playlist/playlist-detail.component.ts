@@ -56,7 +56,7 @@ import { PlaylistWithSongs, PlaylistSong } from '../../domain/entities/playlist.
           
           <button 
             mat-raised-button 
-            [routerLink]="['/playlist', playlist()!.id, 'edit']"
+            [routerLink]="['/my-playlist', playlist()!.id, 'edit']"
             *ngIf="!playlist()!.is_default">
             <mat-icon>edit</mat-icon>
             Editar
