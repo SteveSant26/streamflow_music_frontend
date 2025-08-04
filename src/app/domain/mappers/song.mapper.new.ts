@@ -27,7 +27,34 @@ export function mapSongDtoToEntity(dto: SongDto): Song {
     updated_at: dto.updated_at ? new Date(dto.updated_at) : undefined,
     published_at: dto.published_at ? new Date(dto.published_at) : undefined,
     // Calculated fields for compatibility
-    duration_seconds: convertFormattedDurationToSeconds(dto.duration_formatted)
+    duration_seconds: convertFormattedDurationToSeconds(dto.duration_formatted),
+    albumCover: dto.thumbnail_url, // Alias for compatibility
+    audioUrl: dto.file_url, // Alias for compatibility
+    // TODO: Add artist and album full objects when backend provides them
+    artist: dto.artist_id ? {
+      id: dto.artist_id,
+      name: dto.artist_name || 'Unknown Artist',
+      biography: '',
+      country: '',
+      image_url: dto.thumbnail_url,
+      followers_count: 0,
+      is_verified: false,
+      created_at: new Date(),
+      updated_at: new Date()
+    } : undefined,
+    album: dto.album_id ? {
+      id: dto.album_id,
+      title: dto.album_name || 'Unknown Album',
+      artist_name: dto.artist_name || 'Unknown Artist',
+      artist_id: dto.artist_id,
+      release_date: dto.published_at ? new Date(dto.published_at) : new Date(),
+      cover_url: dto.thumbnail_url,
+      genre: dto.genre_names_display,
+      total_tracks: 1,
+      duration_formatted: dto.duration_formatted,
+      created_at: new Date(),
+      updated_at: new Date()
+    } : undefined
   };
 }
 

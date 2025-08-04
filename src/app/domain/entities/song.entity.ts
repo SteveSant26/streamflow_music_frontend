@@ -1,11 +1,16 @@
 // Entidades de dominio para Songs basadas en la nueva API
+import type { Artist } from './artist.entity';
+import type { Album } from './album.entity';
+
 export interface Song {
   id: string;
   title: string;
   artist_id: string;
   artist_name?: string;
+  artist?: Artist; // Información completa del artista
   album_id?: string;
   album_name?: string;
+  album?: Album; // Información completa del álbum
   duration_formatted: string; // Formato MM:SS desde la API
   duration_seconds?: number; // Calculado localmente si es necesario
   genre_names_display: string; // Géneros como string separado por comas

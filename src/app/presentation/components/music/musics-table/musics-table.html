@@ -48,8 +48,15 @@
           </div>
         </div>
 
-        <!-- Duration -->
-        <span class="text-subdued text-xs">{{ formatPlayCount(song.play_count) }}</span>
+        <!-- Duration and Playlist Button -->
+        <div class="flex items-center gap-2">
+          <app-add-to-playlist-button 
+            [song]="song"
+            size="small"
+            variant="icon"
+          ></app-add-to-playlist-button>
+          <span class="text-subdued text-xs">{{ formatPlayCount(song.play_count) }}</span>
+        </div>
       </div>
     </div>
   }
@@ -117,7 +124,14 @@
         </td>
         <td class="px-4 py-2 hidden md:table-cell">{{ song.album_name || 'Álbum desconocido' }}</td>
         <td class="px-4 py-2 rounded-tr-lg rounded-br-lg">
-          {{ formatPlayCount(song.play_count) }} reproducciones
+          <div class="flex items-center justify-between">
+            <span>{{ formatPlayCount(song.play_count) }} reproducciones</span>
+            <app-add-to-playlist-button 
+              [song]="song"
+              size="small"
+              variant="icon"
+            ></app-add-to-playlist-button>
+          </div>
         </td>
       </tr>
     }

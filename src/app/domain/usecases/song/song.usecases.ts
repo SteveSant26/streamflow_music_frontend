@@ -70,12 +70,16 @@ export class PlaySongUseCase {
   execute(songId: string, createNewPlaylist: boolean = true): Observable<Song> {
     return this.getSongUseCase.execute(songId).pipe(
       tap((song) => {
-        // Mock implementation - in a real app this would interact with a playlist service
-        console.log(`Playing song: ${song.title} by ${song.artist_name}`);
+        console.log(`Preparando reproducción: ${song.title} by ${song.artist_name}`);
+        
+        if (!song.file_url && !song.audioUrl && !song.youtube_url) {
+          console.warn('No hay URL de audio disponible para esta canción');
+        }
+        
         if (createNewPlaylist) {
-          console.log('Creating new playlist with this song');
+          console.log('Creando nueva playlist con esta canción');
         } else {
-          console.log('Adding song to current playlist');
+          console.log('Agregando canción a la playlist actual');
         }
       })
     );

@@ -109,12 +109,16 @@ export class SongDescriptionComponent implements OnInit {
     
     if (state.currentSong?.id === currentSong.id) {
       // Si es la misma canción, toggle play/pause
-      this.audioPlayerService.play();
+      this.playlistService.togglePlayback();
     } else {
       // Si es una canción diferente, reproducirla
       this.playSongUseCase.execute(currentSong.id, true).subscribe({
-        next: () => {
-          console.log(`Reproduciendo: ${currentSong.title}`);
+        next: (song) => {
+          console.log(`Reproduciendo: ${song.title}`);
+          // Crear una nueva playlist con esta canción
+          this.playlistService.createPlaylist([song], 'Current Song', 0);
+          // Iniciar reproducción
+          this.playlistService.togglePlayback();
         },
         error: (error) => {
           console.error('Error al reproducir canción:', error);
