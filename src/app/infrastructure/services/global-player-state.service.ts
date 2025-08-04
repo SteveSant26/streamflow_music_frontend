@@ -103,7 +103,7 @@ export class GlobalPlayerStateService {
       // Load default playlist if no playlist is loaded
       const currentState = this.getPlayerState();
       if (!currentState.currentSong) {
-        this.musicLibraryService.getDefaultPlaylist().subscribe(songs => {
+        this.musicLibraryService.getAllSongs().subscribe(songs => {
           if (songs && songs.length > 0) {
             this.playerUseCase.loadPlaylist(songs);
           }
