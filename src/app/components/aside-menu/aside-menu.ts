@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { SideMenuItem } from '../side-menu-item/side-menu-item';
-import { SideMenuCard } from '../side-menu-card/side-menu-card';
-import { AuthStatusUseCase } from '@app/domain/usecases/auth-status.usecase';
+import { SideMenuItem } from '@app/presentation/components/navigation/side-menu-item/side-menu-item';
+import { SideMenuCard } from '@app/presentation/components/navigation/side-menu-card/side-menu-card';
+import { AuthStatusUseCase } from '@app/domain/usecases/auth/auth.usecases';
 import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import { TranslateModule } from '@ngx-translate/core';
-import { LanguageService } from '@app/domain/services/language.service';
+import { LanguageService } from '@app/shared/services/language.service';
 import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({

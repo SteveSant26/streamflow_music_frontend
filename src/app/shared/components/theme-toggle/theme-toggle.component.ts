@@ -4,8 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { MaterialThemeService } from '../theme/material-theme.service';
-import { ThemeType } from '../../domain/entities/theme.entity';
+import { MaterialThemeService } from '../../services/material-theme.service';
 
 @Component({
   selector: 'app-theme-toggle',
@@ -30,7 +29,7 @@ import { ThemeType } from '../../domain/entities/theme.entity';
       <button 
         mat-menu-item 
         (click)="setTheme('light')"
-        [class.active]="themeService.themeType() === 'light'">
+        [class.active]="isThemeActive('light')">
         <mat-icon>light_mode</mat-icon>
         <span>Tema Claro</span>
       </button>
@@ -38,7 +37,7 @@ import { ThemeType } from '../../domain/entities/theme.entity';
       <button 
         mat-menu-item 
         (click)="setTheme('dark')"
-        [class.active]="themeService.themeType() === 'dark'">
+        [class.active]="isThemeActive('dark')">
         <mat-icon>dark_mode</mat-icon>
         <span>Tema Oscuro</span>
       </button>
@@ -46,7 +45,7 @@ import { ThemeType } from '../../domain/entities/theme.entity';
       <button 
         mat-menu-item 
         (click)="setTheme('system')"
-        [class.active]="themeService.themeType() === 'system'">
+        [class.active]="isThemeActive('system')">
         <mat-icon>settings_brightness</mat-icon>
         <span>Sistema</span>
       </button>
@@ -54,44 +53,44 @@ import { ThemeType } from '../../domain/entities/theme.entity';
   `,
   styles: [`
     .theme-toggle-button {
-      color: var(--mat-text-primary);
+      color: var(--mdc-theme-on-surface);
       transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
     }
 
     .theme-toggle-button:hover {
-      color: var(--mat-primary-main);
+      color: var(--mdc-theme-primary);
       transform: scale(1.1);
     }
 
     .theme-menu {
-      background-color: var(--mat-background-paper);
+      background-color: var(--mdc-theme-surface);
       border-radius: 8px;
-      box-shadow: var(--mat-shadow-elevated);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     .theme-menu .mat-mdc-menu-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      color: var(--mat-text-primary);
+      color: var(--mdc-theme-on-surface);
       transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
     }
 
     .theme-menu .mat-mdc-menu-item:hover {
-      background-color: var(--mat-action-hover);
+      background-color: var(--mdc-theme-surface-variant);
     }
 
     .theme-menu .mat-mdc-menu-item.active {
-      background-color: var(--mat-action-selected);
-      color: var(--mat-primary-main);
+      background-color: var(--mdc-theme-primary-container);
+      color: var(--mdc-theme-on-primary-container);
     }
 
     .theme-menu .mat-mdc-menu-item.active mat-icon {
-      color: var(--mat-primary-main);
+      color: var(--mdc-theme-primary);
     }
 
     .theme-menu mat-icon {
-      color: var(--mat-text-secondary);
+      color: var(--mdc-theme-on-surface-variant);
       margin-right: 0;
     }
   `]
@@ -101,46 +100,40 @@ export class ThemeToggleComponent {
 
   // Computed properties para iconos y tooltips
   readonly currentIcon = computed(() => {
-    switch (this.themeService.themeType()) {
-      case ThemeType.LIGHT:
-        return 'light_mode';
-      case ThemeType.DARK:
-        return 'dark_mode';
-      case ThemeType.SYSTEM:
-        return 'settings_brightness';
-      default:
-        return 'light_mode';
+    const theme = this.themeService.currentTheme();
+    if (theme.isSystemTheme()) {
+      return 'settings_brightness';
     }
+    return theme.isDark ? 'dark_mode' : 'light_mode';
   });
 
   readonly tooltipText = computed(() => {
-    switch (this.themeService.themeType()) {
-      case ThemeType.LIGHT:
-        return 'Cambiar a tema oscuro';
-      case ThemeType.DARK:
-        return 'Cambiar a tema del sistema';
-      case ThemeType.SYSTEM:
-        return 'Cambiar a tema claro';
-      default:
-        return 'Cambiar tema';
+    const theme = this.themeService.currentTheme();
+    if (theme.isSystemTheme()) {
+      return 'Cambiar a tema claro';
     }
+    return theme.isDark ? 'Cambiar a tema del sistema' : 'Cambiar a tema oscuro';
   });
 
   setTheme(type: 'light' | 'dark' | 'system'): void {
-    switch (type) {
-      case 'light':
-        this.themeService.setTheme(ThemeType.LIGHT);
-        break;
-      case 'dark':
-        this.themeService.setTheme(ThemeType.DARK);
-        break;
-      case 'system':
-        this.themeService.setTheme(ThemeType.SYSTEM);
-        break;
-    }
+    this.themeService.setTheme(type);
   }
 
-  toggleTheme(): void {
-    this.themeService.toggleTheme();
+  isThemeActive(type: 'light' | 'dark' | 'system'): boolean {
+    const theme = this.themeService.currentTheme();
+    
+    if (type === 'system') {
+      return theme.isSystemTheme();
+    }
+    
+    if (type === 'light') {
+      return !theme.isDark && !theme.isSystemTheme();
+    }
+    
+    if (type === 'dark') {
+      return theme.isDark && !theme.isSystemTheme();
+    }
+    
+    return false;
   }
 }
