@@ -256,7 +256,7 @@ export class DiscoverPageComponent implements OnInit {
   private getPopularGenresUseCase = inject(GetPopularGenresUseCase);
 
   // Signals
-  isDarkTheme = this.themeService.isDarkTheme;
+  isDarkTheme = this.themeService.isDarkMode;
   popularAlbums = signal<AlbumListItem[]>([]);
   popularArtists = signal<ArtistListItem[]>([]);
   popularGenres = signal<GenreListItem[]>([]);
@@ -276,7 +276,7 @@ export class DiscoverPageComponent implements OnInit {
   }
 
   toggleTheme() {
-    this.themeService.toggleTheme();
+    this.themeService.setTheme(this.themeService._isDarkMode() ? 'light' : 'dark');
   }
 
   private loadPopularAlbums() {
