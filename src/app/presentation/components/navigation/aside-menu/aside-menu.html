@@ -76,6 +76,55 @@
       </div>
     </div>
 
+    <!-- Theme Selector -->
+    <div class="theme-selector">
+      <h4>{{ "SIDEBAR.THEME" | translate }}</h4>
+      <div class="theme-toggle-container">
+        <!-- Botón principal para mostrar opciones -->
+        <button
+          mat-icon-button
+          (click)="toggleThemeOptions()"
+          [attr.aria-label]="'THEME.TOGGLE' | translate"
+          class="theme-toggle-button"
+        >
+          <mat-icon>{{ themeIcon() }}</mat-icon>
+        </button>
+
+        <!-- Menú desplegable para opciones de tema -->
+        <div class="theme-options" [class.show]="showThemeOptions">
+          <button
+            mat-button
+            (click)="setLightTheme()"
+            [class.active]="isLightActive()"
+            class="theme-option"
+          >
+            <mat-icon>wb_sunny</mat-icon>
+            <span>{{ 'THEME.LIGHT' | translate }}</span>
+          </button>
+
+          <button
+            mat-button
+            (click)="setDarkTheme()"
+            [class.active]="isDarkActive()"
+            class="theme-option"
+          >
+            <mat-icon>nights_stay</mat-icon>
+            <span>{{ 'THEME.DARK' | translate }}</span>
+          </button>
+
+          <button
+            mat-button
+            (click)="setSystemTheme()"
+            [class.active]="isSystemActive()"
+            class="theme-option"
+          >
+            <mat-icon>settings_brightness</mat-icon>
+            <span>{{ 'THEME.SYSTEM' | translate }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="space-y-2">
       @for (playlist of playlists; track playlist.id) {
         <app-side-menu-card [playlist]="playlist" />

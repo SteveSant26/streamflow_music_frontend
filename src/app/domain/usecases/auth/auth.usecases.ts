@@ -37,7 +37,36 @@ export class AuthSessionUseCase {
 
 @Injectable({ providedIn: 'root' })
 export class AuthStatusUseCase {
-  constructor(private readonly authStateService: AuthStateService) {}
+  constructor(
+    private readonly authStateService: AuthStateService,
+    private readonly authRepository: IAuthRepository
+  ) {}
+
+  get isAuthenticated() {
+    return this.authStateService.isAuthenticated;
+  }
+
+  get user() {
+    return this.authStateService.user;
+  }
+
+  get token() {
+    return this.authStateService.token;
+  }
+
+  get session() {
+    return this.authStateService.session;
+  }
+
+  async logout() {
+    try {
+      await this.authRepository.logout();
+      this.authStateService.clearSession();
+    } catch (error) {
+      console.error('Error en logout:', error);
+      this.authStateService.clearSession();
+    }
+  }
 
   execute(): Observable<boolean> {
     return of(this.authStateService.isAuthenticated());
@@ -104,7 +133,7 @@ export class LogoutUseCase {
       await this.authRepository.logout();
       this.authStateService.clearSession();
     } catch (error) {
-      console.error('Error en logout:', error);
+      console.error('Error en logout desde LogoutUseCase:', error);
       this.authStateService.clearSession();
     }
   }

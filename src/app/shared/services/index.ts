@@ -1,6 +1,6 @@
 // Shared Services - UI Utilities and Cross-Cutting Concerns
 export { NotificationService } from './notification.service';
-export { ThemeService } from './theme.service';
+export { MaterialThemeService } from './material-theme.service';
 export { LanguageService } from './language.service';
 
 // State Management Services

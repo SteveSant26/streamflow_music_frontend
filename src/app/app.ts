@@ -2,8 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthSessionUseCase } from './domain/usecases';
 import { LanguageService } from '@app/shared/services';
-import { ThemeService } from './shared/services/theme.service';
-import { take } from 'rxjs';
+import { MaterialThemeService } from './shared/services/material-theme.service';
 
 @Component({
   selector: 'app-root',
@@ -12,19 +11,24 @@ import { take } from 'rxjs';
   styleUrl: './app.css',
 })
 export class App implements OnInit {
-  private readonly themeService = inject(ThemeService);
+  private readonly materialThemeService = inject(MaterialThemeService);
   private readonly authSessionUseCase = inject(AuthSessionUseCase);
   private readonly languageService = inject(LanguageService);
 
   ngOnInit() {
-    // Initialize theme first
-    this.initializeTheme();
+    // Initialize Material theme (se inicializa automáticamente)
+    this.initializeMaterialTheme();
 
     // Initialize language service
     this.initializeLanguage();
 
     // Initialize auth session
     this.initializeAuth();
+  }
+  
+  private initializeMaterialTheme() {
+    // El MaterialThemeService se inicializa automáticamente en el constructor
+    // this.materialThemeService.initSystemThemeListener();
   }
 
   private initializeLanguage() {
@@ -42,10 +46,5 @@ export class App implements OnInit {
       console.error('❌ App: Error inicializando sesión:', error);
       // No lanzar error para evitar que falle la inicialización de la app
     }
-  }
-
-  private initializeTheme() {
-    // Asegurar que el tema se aplique correctamente al iniciar la app
-    this.themeService.getCurrentTheme().pipe(take(1)).subscribe();
   }
 }

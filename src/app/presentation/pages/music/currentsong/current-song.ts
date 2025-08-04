@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
-import { ThemeService } from '@app/shared/services/theme.service';
+import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 
 interface CurrentSongView {
   id: string;
@@ -48,13 +48,13 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
     private readonly globalPlayerState: GlobalPlayerStateService,
-    private readonly themeService: ThemeService,
+    private readonly materialThemeService: MaterialThemeService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {}
 
   ngOnInit() {
-    this.isDarkTheme$ = this.themeService.isDarkMode();
+    this.isDarkTheme$ = this.materialThemeService.isDarkMode();
     this.setupPlayerStateSubscription();
     this.initializePlayer();
 

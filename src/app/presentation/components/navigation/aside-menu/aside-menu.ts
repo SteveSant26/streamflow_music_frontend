@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStateService, LanguageService } from '@app/shared/services';
 import { LogoutUseCase } from '@app/domain/usecases';
+import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { 
   ROUTES_CONFIG_AUTH, 
   ROUTES_CONFIG_MUSIC, 
@@ -23,6 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
     SideMenuCard,
     AsyncPipe,
     MatIconModule,
+    MatButtonModule,
     TranslateModule,
   ],
   templateUrl: './aside-menu.html',
@@ -39,9 +42,40 @@ export class AsideMenu {
   private readonly logoutUseCase = inject(LogoutUseCase);
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
+  private readonly materialThemeService = inject(MaterialThemeService);
 
   isAuthenticated = this.authStateService.isAuthenticated;
   user = this.authStateService.user;
+
+  // Theme properties
+  showThemeOptions = false;
+  readonly isDarkMode = this.materialThemeService.isDarkMode;
+  readonly currentTheme = this.materialThemeService.currentTheme;
+  readonly effectiveTheme = this.materialThemeService.effectiveTheme;
+
+  // Computed para obtener el ícono apropiado del tema
+  readonly themeIcon = computed(() => {
+    const theme = this.currentTheme();
+    if (theme.isSystemTheme()) {
+      return 'settings_brightness';
+    }
+    return theme.isDark ? 'nights_stay' : 'wb_sunny';
+  });
+
+  // Computed para saber qué opción está activa
+  readonly isLightActive = computed(() => {
+    const theme = this.currentTheme();
+    return !theme.isSystemTheme() && !theme.isDark;
+  });
+
+  readonly isDarkActive = computed(() => {
+    const theme = this.currentTheme();
+    return !theme.isSystemTheme() && theme.isDark;
+  });
+
+  readonly isSystemActive = computed(() => {
+    return this.currentTheme().isSystemTheme();
+  });
 
   // Language methods
   getCurrentLanguage() {
@@ -54,6 +88,26 @@ export class AsideMenu {
 
   changeLanguage(language: 'en' | 'es') {
     this.languageService.changeLanguage(language);
+  }
+
+  // Theme methods
+  toggleThemeOptions(): void {
+    this.showThemeOptions = !this.showThemeOptions;
+  }
+
+  setLightTheme(): void {
+    this.materialThemeService.setTheme('light');
+    this.showThemeOptions = false;
+  }
+
+  setDarkTheme(): void {
+    this.materialThemeService.setTheme('dark');
+    this.showThemeOptions = false;
+  }
+
+  setSystemTheme(): void {
+    this.materialThemeService.setTheme('system');
+    this.showThemeOptions = false;
   }
 
   async logout() {

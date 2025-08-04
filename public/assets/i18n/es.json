@@ -205,6 +205,7 @@
     "CREATE_PLAYLIST": "Crear Lista de Reproducción",
     "PODCAST": "Podcasts",
     "LANGUAGE": "Idioma",
+    "THEME": "Tema",
     "SPANISH": "Español",
     "ENGLISH": "Inglés",
     "SUBSCRIPTIONS": "Suscripciones",
@@ -212,6 +213,12 @@
     "LOGOUT": "Cerrar Sesión",
     "LOGIN": "Iniciar Sesión",
     "REGISTER": "Registrarse"
+  },
+  "THEME": {
+    "TOGGLE": "Cambiar tema",
+    "LIGHT": "Tema claro",
+    "DARK": "Tema oscuro",
+    "SYSTEM": "Tema del sistema"
   },
   "PROFILE": {
     "TITLE": "Mi Perfil",
