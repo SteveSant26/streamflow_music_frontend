@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { GetUserPlaylistsUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
 import { GetPopularArtistsUseCase } from '@app/domain/usecases/artist.usecases';
 import { GetPopularAlbumsUseCase } from '@app/domain/usecases/album.usecases';
-import { LegacyPlaylist } from '@app/domain/entities/playlist.entity';
+import { Playlist } from '@app/domain/entities/playlist.entity';
 import { ArtistListItem } from '@app/domain/entities/artist.entity';
 import { AlbumListItem } from '@app/domain/entities/album.entity';
 
@@ -22,13 +22,13 @@ import { AlbumListItem } from '@app/domain/entities/album.entity';
   styleUrls: ['./library.css']
 })
 export class LibraryComponent implements OnInit {
-  private getUserPlaylistsUseCase = inject(GetUserPlaylistsUseCase);
-  private getPopularArtistsUseCase = inject(GetPopularArtistsUseCase);
-  private getPopularAlbumsUseCase = inject(GetPopularAlbumsUseCase);
-  private router = inject(Router);
+  private readonly getUserPlaylistsUseCase = inject(GetUserPlaylistsUseCase);
+  private readonly getPopularArtistsUseCase = inject(GetPopularArtistsUseCase);
+  private readonly getPopularAlbumsUseCase = inject(GetPopularAlbumsUseCase);
+  private readonly router = inject(Router);
 
   // States
-  playlists = signal<LegacyPlaylist[]>([]);
+  playlists = signal<Playlist[]>([]);
   artists = signal<ArtistListItem[]>([]);
   albums = signal<AlbumListItem[]>([]);
   
@@ -59,7 +59,7 @@ export class LibraryComponent implements OnInit {
     this.playlistsError.set(null);
     
     try {
-      const result = await this.getUserPlaylistsUseCase.execute() as any;
+      const result = this.getUserPlaylistsUseCase.execute() as any;
       if (result.success && result.data) {
         this.playlists.set(result.data);
       } else {
@@ -78,7 +78,7 @@ export class LibraryComponent implements OnInit {
     this.artistsError.set(null);
     
     try {
-      const result = await this.getPopularArtistsUseCase.execute({ limit: 10 }) as any;
+      const result = this.getPopularArtistsUseCase.execute({ limit: 10 }) as any;
       if (result.success && result.data) {
         this.artists.set(result.data);
       } else {
@@ -97,7 +97,7 @@ export class LibraryComponent implements OnInit {
     this.albumsError.set(null);
     
     try {
-      const result = await this.getPopularAlbumsUseCase.execute({ limit: 10 }) as any;
+      const result = this.getPopularAlbumsUseCase.execute({ limit: 10 }) as any;
       if (result.success && result.data) {
         this.albums.set(result.data);
       } else {
@@ -134,6 +134,4 @@ export class LibraryComponent implements OnInit {
   onImageLoad(event: any): void {
     // Image loaded successfully
   }
-}
-}
 }

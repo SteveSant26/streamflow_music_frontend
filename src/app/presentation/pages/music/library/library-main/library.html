@@ -5,275 +5,148 @@
     <p>Gestiona tus playlists, artistas favoritos y álbumes guardados</p>
   </div>
 
-  <div class="tabs-container">
-    <div class="tabs">
-      <button
-        class="tab-button"
-        [class.active]="activeTab === 'playlists'"
-        (click)="setActiveTab('playlists')"
-      >
-        {{ "LIBRARY.PLAYLISTS" | translate }}
-      </button>
-      <button
-        class="tab-button"
-        [class.active]="activeTab === 'artists'"
-        (click)="setActiveTab('artists')"
-      >
-        {{ "LIBRARY.ARTISTS" | translate }}
-      </button>
-      <button
-        class="tab-button"
-        [class.active]="activeTab === 'albums'"
-        (click)="setActiveTab('albums')"
-      >
-        {{ "LIBRARY.ALBUMS" | translate }}
-      </button>
-    </div>
+  <!-- Loading States -->
+  <div *ngIf="playlistsLoading() || artistsLoading() || albumsLoading()" class="loading-container">
+    <mat-progress-spinner diameter="60" mode="indeterminate"></mat-progress-spinner>
+    <p>Cargando tu biblioteca...</p>
   </div>
 
-  <div class="content" [ngSwitch]="activeTab">
-    <!-- Tab Playlists -->
-    <div *ngSwitchCase="'playlists'" class="playlists-grid">
-      <div
-        class="playlist-card"
-        *ngFor="let playlist of mockPlaylists"
-        (click)="playPlaylist(playlist)"
-        (keydown.enter)="playPlaylist(playlist)"
-        (keydown.space)="playPlaylist(playlist)"
-        tabindex="0"
-        role="button"
-        [attr.aria-label]="'Ver playlist ' + playlist.name"
-      >
-        <div class="playlist-image-container">
-          <img
-            [src]="playlist.image"
-            [alt]="playlist.name"
-            class="playlist-image"
-          />
-          <div class="play-overlay">
-            <button
-              class="play-button"
-              (click)="startPlayingPlaylist(playlist, $event)"
-              (keydown.enter)="startPlayingPlaylist(playlist, $event)"
-              (keydown.space)="startPlayingPlaylist(playlist, $event)"
-              [attr.aria-label]="'Reproducir playlist ' + playlist.name"
-            >
-              <mat-icon>play_arrow</mat-icon>
-            </button>
-          </div>
-        </div>
-        <div class="playlist-info">
-          <h3 class="playlist-name">{{ playlist.name }}</h3>
-          <p class="playlist-description">{{ playlist.description }}</p>
-          <span class="playlist-count">{{
-            "LIBRARY.SONG_COUNT" | translate: { count: playlist.songCount }
-          }}</span>
-        </div>
+  <!-- Error States -->
+  <div *ngIf="playlistsError() || artistsError() || albumsError()" class="error-container">
+    <mat-icon>error</mat-icon>
+    <h2>Error al cargar contenido</h2>
+    <p *ngIf="playlistsError()">Playlists: {{ playlistsError() }}</p>
+    <p *ngIf="artistsError()">Artistas: {{ artistsError() }}</p>
+    <p *ngIf="albumsError()">Álbumes: {{ albumsError() }}</p>
+    <button mat-raised-button color="primary" (click)="refreshData()">
+      <mat-icon>refresh</mat-icon>
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!playlistsLoading() && !artistsLoading() && !albumsLoading() && !playlistsError() && !artistsError() && !albumsError()" class="library-content">
+
+    <!-- User Playlists Section -->
+    <section class="playlists-section">
+      <div class="section-header">
+        <h2>Tus Playlists</h2>
+        <span class="section-count">{{ playlists().length }}</span>
       </div>
-    </div>
-
-    <!-- Tab Artistas -->
-    <div *ngSwitchCase="'artists'" class="artists-grid">
-      <button
-        class="create-artist-button"
-        class="artist-card"
-        *ngFor="let artist of mockArtists"
-        (click)="viewArtist(artist)"
-        (keydown.enter)="viewArtist(artist)"
-        (keydown.space)="viewArtist(artist)"
-        tabindex="0"
-        [attr.aria-label]="'Ver artista ' + artist.name"
-      >
-        <div class="artist-image-container">
-          <img [src]="artist.image" [alt]="artist.name" class="artist-image" />
-        </div>
-        <div class="artist-info">
-          <h3 class="artist-name">{{ artist.name }}</h3>
-          <p class="artist-genre">{{ artist.genre }}</p>
-          <span class="artist-followers"
-            >{{ artist.followers }} seguidores</span
-          >
-        </div>
-      </button>
-    </div>
-
-    <!-- Tab Álbumes -->
-    <div *ngSwitchCase="'albums'" class="albums-grid">
-      <div
-        class="album-card"
-        *ngFor="let album of mockAlbums"
-        (click)="playAlbum(album)"
-        (keydown.enter)="playAlbum(album)"
-        (keydown.space)="playAlbum(album)"
-        tabindex="0"
-        role="button"
-        [attr.aria-label]="'Reproducir álbum ' + album.title"
-      >
-        <div class="album-image-container">
-          <img [src]="album.image" [alt]="album.title" class="album-image" />
-          <div class="album-overlay">
-            <button
-              class="play-button"
-              (click)="playAlbum(album); $event.stopPropagation()"
-              (keydown.enter)="playAlbum(album); $event.stopPropagation()"
-              (keydown.space)="playAlbum(album); $event.stopPropagation()"
-              [attr.aria-label]="'Reproducir álbum ' + album.title"
-            >
-              <mat-icon>play_arrow</mat-icon>
-            </button>
-          </div>
-        </div>
-        <div class="album-info">
-          <h3 class="album-title">{{ album.title }}</h3>
-          <p class="album-artist">{{ album.artist }}</p>
-          <span class="album-year">{{ album.year }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Estado vacío -->
-  <div *ngIf="isEmpty" class="empty-state">
-    <div class="empty-icon">
-      <mat-icon
-        class="text-gray-400"
-        style="font-size: 64px; width: 64px; height: 64px"
-        >library_music</mat-icon
-      >
-    </div>
-    <h3 class="empty-title">Tu biblioteca está vacía</h3>
-    <p class="empty-description">
-      Comienza creando tu primera playlist o siguiendo algunos artistas.
-    </p>
-    <button class="cta-button" (click)="exploreMusic()">Explorar música</button>
-  </div>
-</div>
-
-<!-- Modal para crear playlist -->
-@if (showCreateModal) {
-  <div class="modal-backdrop" (click)="onModalBackdropClick($event)">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>{{ "LIBRARY.CREATE_NEW_PLAYLIST" | translate }}</h2>
-        <button
-          class="close-button"
-          (click)="closeModal()"
-          [attr.aria-label]="'LIBRARY.CLOSE_MODAL' | translate"
+      
+      <div *ngIf="playlists().length > 0" class="playlists-grid">
+        <div 
+          *ngFor="let playlist of playlists()" 
+          class="playlist-card"
+          (click)="navigateToPlaylist(playlist.id)"
+          (keydown.enter)="navigateToPlaylist(playlist.id)"
         >
-          <mat-icon>close</mat-icon>
+          <div class="playlist-image">
+            <img 
+              [src]="'/assets/default-playlist.png'"
+              [alt]="playlist.name"
+              class="playlist-cover"
+              (error)="onImageError($event)"
+            >
+            <div class="playlist-overlay">
+              <button class="play-playlist-btn" (click)="navigateToPlaylist(playlist.id); $event.stopPropagation()">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="playlist-info">
+            <h3 class="playlist-name">{{ playlist.name }}</h3>
+            <p class="playlist-description" *ngIf="playlist.description">{{ playlist.description }}</p>
+            <p class="playlist-stats">{{ playlist.total_songs || 0 }} canciones</p>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="playlists().length === 0" class="empty-section">
+        <mat-icon>playlist_add</mat-icon>
+        <p>Aún no tienes playlists</p>
+        <button mat-raised-button color="primary">
+          <mat-icon>add</mat-icon>
+          Crear Playlist
         </button>
       </div>
+    </section>
 
-      <form (ngSubmit)="savePlaylist()" class="playlist-form">
-        <div class="form-group">
-          <label for="playlistName"
-            >{{ "LIBRARY.PLAYLIST_NAME" | translate }}*</label
-          >
-          <input
-            type="text"
-            id="playlistName"
-            [(ngModel)]="newPlaylist.name"
-            name="playlistName"
-            [placeholder]="'LIBRARY.PLAYLIST_NAME_PLACEHOLDER' | translate"
-            maxlength="100"
-            required
-            autocomplete="off"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="playlistDescription">{{
-            "LIBRARY.DESCRIPTION" | translate
-          }}</label>
-          <textarea
-            id="playlistDescription"
-            [(ngModel)]="newPlaylist.description"
-            name="playlistDescription"
-            [placeholder]="'LIBRARY.DESCRIPTION_PLACEHOLDER' | translate"
-            rows="3"
-            maxlength="300"
-          ></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>{{ "LIBRARY.PLAYLIST_IMAGE" | translate }}</label>
-          <div class="image-upload-section">
-            <!-- Hidden file input -->
-            <input
-              type="file"
-              id="imageInput"
-              accept="image/*"
-              (change)="onImageSelected($event)"
-              style="display: none"
-            />
-
-            <!-- Image preview or placeholder -->
-            <div class="image-preview-container">
-              @if (imagePreviewUrl) {
-                <div class="image-preview">
-                  <img [src]="imagePreviewUrl" alt="Vista previa" />
-                  <button
-                    type="button"
-                    class="remove-image-btn"
-                    (click)="removeImage()"
-                    aria-label="Eliminar imagen"
-                  >
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
-              } @else {
-                <div class="image-placeholder" (click)="triggerImageUpload()">
-                  <mat-icon style="font-size: 48px; width: 48px; height: 48px"
-                    >image</mat-icon
-                  >
-                  <span>Haz clic para agregar una imagen</span>
-                </div>
-              }
-            </div>
-
-            <!-- Upload button -->
-            @if (!imagePreviewUrl) {
-              <button
-                type="button"
-                class="upload-btn"
-                (click)="triggerImageUpload()"
-              >
-                <mat-icon>upload</mat-icon>
-                Subir imagen
-              </button>
-            }
-
-            <p class="upload-hint">
-              Formatos soportados: JPEG, PNG, GIF, WebP. Máximo 5MB.
-            </p>
+    <!-- Popular Artists Section -->
+    <section class="artists-section">
+      <div class="section-header">
+        <h2>Artistas Populares</h2>
+        <span class="section-count">{{ artists().length }}</span>
+      </div>
+      
+      <div *ngIf="artists().length > 0" class="artists-grid">
+        <div 
+          *ngFor="let artist of artists()" 
+          class="artist-card"
+          (click)="navigateToArtist(artist.id)"
+          (keydown.enter)="navigateToArtist(artist.id)"
+        >
+          <div class="artist-image">
+            <img 
+              [src]="artist.image_url || '/assets/default-artist.png'"
+              [alt]="artist.name"
+              class="artist-avatar"
+              (error)="onImageError($event)"
+            >
+          </div>
+          <div class="artist-info">
+            <h3 class="artist-name">{{ artist.name }}</h3>
+            <p class="artist-genre" *ngIf="artist.country">{{ artist.country }}</p>
           </div>
         </div>
+      </div>
+      
+      <div *ngIf="artists().length === 0" class="empty-section">
+        <mat-icon>person</mat-icon>
+        <p>No hay artistas disponibles</p>
+      </div>
+    </section>
 
-        <div class="form-group checkbox-group">
-          <label class="checkbox-container">
-            <input
-              type="checkbox"
-              [(ngModel)]="newPlaylist.isPrivate"
-              name="isPrivate"
-            />
-            <span class="checkmark"></span>
-            Hacer esta playlist privada
-          </label>
+    <!-- Popular Albums Section -->
+    <section class="albums-section">
+      <div class="section-header">
+        <h2>Álbumes Populares</h2>
+        <span class="section-count">{{ albums().length }}</span>
+      </div>
+      
+      <div *ngIf="albums().length > 0" class="albums-grid">
+        <div 
+          *ngFor="let album of albums()" 
+          class="album-card"
+          (click)="navigateToAlbum(album.id)"
+          (keydown.enter)="navigateToAlbum(album.id)"
+        >
+          <div class="album-image">
+            <img 
+              [src]="album.cover_url || '/assets/default-album.png'"
+              [alt]="album.title"
+              class="album-cover"
+              (error)="onImageError($event)"
+            >
+            <div class="album-overlay">
+              <button class="play-album-btn" (click)="navigateToAlbum(album.id); $event.stopPropagation()">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="album-info">
+            <h3 class="album-title">{{ album.title }}</h3>
+            <p class="album-artist">{{ album.artist_name }}</p>
+            <p class="album-tracks">{{ album.total_tracks || 0 }} canciones</p>
+          </div>
         </div>
+      </div>
+      
+      <div *ngIf="albums().length === 0" class="empty-section">
+        <mat-icon>album</mat-icon>
+        <p>No hay álbumes disponibles</p>
+      </div>
+    </section>
 
-        <div class="modal-actions">
-          <button type="button" class="cancel-button" (click)="closeModal()">
-            {{ "LIBRARY.CANCEL" | translate }}
-          </button>
-          <button
-            type="submit"
-            class="create-button"
-            [disabled]="!newPlaylist.name.trim()"
-          >
-            {{ "LIBRARY.CREATE" | translate }}
-          </button>
-        </div>
-      </form>
-    </div>
   </div>
-}
+</div>
