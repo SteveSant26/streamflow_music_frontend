@@ -19,20 +19,20 @@ export class SongService {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * Get a specific song by ID
-   * GET /api/songs/{id}/
+   * Get a specific song by ID using the ViewSet
+   * GET /api/songs/list/{id}/
    */
   getSongById(songId: string): Observable<SongDto> {
-    return this.http.get<SongDto>(`${this.baseUrl}/${songId}/`);
+    return this.http.get<SongDto>(`${this.baseUrl}/list/${songId}/`);
   }
 
   /**
    * Increment play count for a song
-   * POST /api/songs/{id}/increment-play-count/
+   * POST /api/songs/api/{id}/increment-play-count/
    */
   incrementPlayCount(songId: string): Observable<PlayCountResponseDto> {
     return this.http.post<PlayCountResponseDto>(
-      `${this.baseUrl}/${songId}/increment-play-count/`,
+      `${this.baseUrl}/api/${songId}/increment-play-count/`,
       {}
     );
   }

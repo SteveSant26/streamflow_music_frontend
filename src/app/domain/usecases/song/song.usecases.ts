@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { SongService } from '../../../infrastructure/services/song.service';
+import { PlaylistService } from '../../../infrastructure/services/playlist.service';
 import { Song } from '../../entities/song.entity';
 import { SongSearchParams } from '../../dtos/song.dto';
 import { 
@@ -66,6 +67,7 @@ export class SearchSongsUseCase {
 @Injectable({ providedIn: 'root' })
 export class PlaySongUseCase {
   private readonly getSongUseCase = inject(GetSongByIdUseCase);
+  private readonly playlistService = inject(PlaylistService);
 
   execute(songId: string, createNewPlaylist: boolean = true): Observable<Song> {
     return this.getSongUseCase.execute(songId).pipe(
@@ -74,12 +76,32 @@ export class PlaySongUseCase {
         
         if (!song.file_url && !song.audioUrl && !song.youtube_url) {
           console.warn('No hay URL de audio disponible para esta canción');
+          throw new Error('No hay URL de audio disponible para esta canción');
         }
         
         if (createNewPlaylist) {
           console.log('Creando nueva playlist con esta canción');
+          // Crear nueva playlist y comenzar reproducción
+          this.playlistService.createPlaylist([song], `Playing: ${song.title}`);
         } else {
           console.log('Agregando canción a la playlist actual');
+          // Agregar a playlist actual y seleccionarla
+          this.playlistService.addToPlaylist(song);
+          
+          // Encontrar el índice de la canción recién agregada y seleccionarla
+          const currentPlaylist = this.playlistService.getCurrentPlaylist();
+          if (currentPlaylist) {
+            const songIndex = currentPlaylist.items.findIndex((item: any) => item.id === song.id);
+            if (songIndex !== -1) {
+              this.playlistService.selectSong(songIndex);
+            }
+          }
+        }
+        
+        // Iniciar reproducción si no está ya reproduciendo
+        const currentState = this.playlistService.getCurrentState();
+        if (!currentState.isPlaying) {
+          this.playlistService.togglePlayback();
         }
       })
     );

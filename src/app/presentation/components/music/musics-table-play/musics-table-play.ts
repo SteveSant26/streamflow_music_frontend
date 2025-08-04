@@ -58,21 +58,22 @@ export class MusicsTablePlay {
 
   setNewCurrentMusic(song: Song): void {
     this.playSongUseCase.execute(song.id, true).subscribe({
-      next: () => {
+      next: (loadedSong) => {
         this.currentMusic = {
-          song: song,
+          song: loadedSong,
           playlist: {
-            id: song.id,
-            name: `Album ${song.album_name || 'Desconocido'}`,
-            description: `Playlist for ${song.album_name || 'Album desconocido'}`,
+            id: loadedSong.id,
+            name: `Album ${loadedSong.album_name || 'Desconocido'}`,
+            description: `Playlist for ${loadedSong.album_name || 'Album desconocido'}`,
           },
-          songs: [song],
+          songs: [loadedSong],
         };
         this.isPlaying = true;
-        console.log(`Reproduciendo: ${song.title} - ${song.artist_name || 'Artista desconocido'}`);
+        console.log(`Reproduciendo: ${loadedSong.title} - ${loadedSong.artist_name || 'Artista desconocido'}`);
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);
+        this.isPlaying = false;
       }
     });
   }
