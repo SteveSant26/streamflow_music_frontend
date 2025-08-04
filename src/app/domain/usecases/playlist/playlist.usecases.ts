@@ -66,22 +66,18 @@ function formatDuration(seconds: number): string {
 export class GetUserPlaylistsUseCase {
   private readonly playlistService = inject(PlaylistHttpService);
 
-  execute(): Observable<LegacyPlaylist[]> {
+  execute(): Observable<Playlist[]> {
     return this.playlistService.getPlaylists().pipe(
       map(playlists => playlists.map(playlist => ({
         id: playlist.id,
         name: playlist.name,
-        description: playlist.description,
-        coverImage: `https://picsum.photos/300/300?random=${playlist.id}`,
-        isPublic: playlist.is_public,
-        createdDate: playlist.created_at,
-        songCount: playlist.total_songs,
-        duration: 0, // No tenemos esta información en la lista
-        owner: {
-          id: playlist.user_id,
-          username: 'Usuario'
-        },
-        songs: [] // No incluimos canciones en la lista
+        description: playlist.description || '',
+        user_id: playlist.user_id,
+        is_default: playlist.is_default,
+        is_public: playlist.is_public,
+        total_songs: playlist.total_songs,
+        created_at: playlist.created_at,
+        updated_at: playlist.updated_at
       })))
     );
   }
