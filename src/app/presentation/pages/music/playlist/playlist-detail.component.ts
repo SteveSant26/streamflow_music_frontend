@@ -9,9 +9,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { 
   GetPlaylistByIdUseCase,
   RemoveSongFromPlaylistUseCase
-} from '../../domain/usecases/playlist/playlist.usecases';
-import { LegacyPlaylist as PlaylistWithSongs } from '../../domain/entities/playlist.entity';
-import { Song } from '../../domain/entities/song.entity';
+} from '../../../../domain/usecases/playlist/playlist.usecases';
+import { LegacyPlaylist as PlaylistWithSongs } from '../../../../domain/entities/playlist.entity';
+import { Song } from '../../../../domain/entities/song.entity';
 
 @Component({
   selector: 'app-playlist-detail',
