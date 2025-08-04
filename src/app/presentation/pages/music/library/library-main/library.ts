@@ -1,350 +1,139 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
-import { finalize } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
 
-// Domain
-import { LegacyPlaylist as Playlist } from '@app/domain/entities/playlist.entity';
-import { ArtistListItem as Artist } from '@app/domain/entities/artist.entity';
-import { AlbumListItem as Album } from '@app/domain/entities/album.entity';
-
-// Use Cases
+// Domain imports
 import { GetUserPlaylistsUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
 import { GetPopularArtistsUseCase } from '@app/domain/usecases/artist.usecases';
 import { GetPopularAlbumsUseCase } from '@app/domain/usecases/album.usecases';
+import { LegacyPlaylist } from '@app/domain/entities/playlist.entity';
+import { ArtistListItem } from '@app/domain/entities/artist.entity';
+import { AlbumListItem } from '@app/domain/entities/album.entity';
 
 @Component({
   selector: 'app-library',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, MatIconModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatCardModule, MatProgressSpinnerModule],
   templateUrl: './library.html',
-  styleUrl: './library.css',
+  styleUrls: ['./library.css']
 })
-export class LibraryComponent {
-  activeTab: 'playlists' | 'artists' | 'albums' = 'playlists';
+export class LibraryComponent implements OnInit {
+  private getUserPlaylistsUseCase = inject(GetUserPlaylistsUseCase);
+  private getPopularArtistsUseCase = inject(GetPopularArtistsUseCase);
+  private getPopularAlbumsUseCase = inject(GetPopularAlbumsUseCase);
+  private router = inject(Router);
 
-  // Modal state
-  showCreateModal = false;
+  // States
+  playlists = signal<LegacyPlaylist[]>([]);
+  artists = signal<ArtistListItem[]>([]);
+  albums = signal<AlbumListItem[]>([]);
+  
+  // Loading states
+  playlistsLoading = signal(false);
+  artistsLoading = signal(false);
+  albumsLoading = signal(false);
+  
+  // Error states
+  playlistsError = signal<string | null>(null);
+  artistsError = signal<string | null>(null);
+  albumsError = signal<string | null>(null);
 
-  // Image upload state
-  selectedImageFile: File | null = null;
-  imagePreviewUrl: string | null = null;
-
-  // Form data for new playlist
-  newPlaylist = {
-    name: '',
-    description: '',
-    isPrivate: false,
-  };
-
-  constructor(private readonly router: Router) {}
-
-  // Mock data para playlists
-  mockPlaylists: Playlist[] = [
-    {
-      id: '1',
-      name: 'Mi Playlist Favorita',
-      description: 'Las mejores canciones para relajarse',
-      image: 'https://picsum.photos/400/400?random=1',
-      songCount: 25,
-      createdAt: new Date(),
-    },
-    {
-      id: '2',
-      name: 'Música para Trabajar',
-      description: 'Concentración y productividad',
-      image: 'https://picsum.photos/400/400?random=2',
-      songCount: 42,
-      createdAt: new Date(),
-    },
-    {
-      id: '3',
-      name: 'Road Trip Vibes',
-      description: 'Para esos viajes largos en carretera',
-      image: 'https://picsum.photos/400/400?random=3',
-      songCount: 18,
-      createdAt: new Date(),
-    },
-    {
-      id: '4',
-      name: 'Chill Evening',
-      description: 'Perfecta para las noches tranquilas',
-      image: 'https://picsum.photos/400/400?random=4',
-      songCount: 31,
-      createdAt: new Date(),
-    },
-    {
-      id: '5',
-      name: 'Workout Energy',
-      description: 'Música enérgica para el gimnasio',
-      image: 'https://picsum.photos/400/400?random=5',
-      songCount: 20,
-      createdAt: new Date(),
-    },
-    {
-      id: '6',
-      name: 'Sunday Morning',
-      description: 'Despertar con buena música',
-      image: 'https://picsum.photos/400/400?random=6',
-      songCount: 15,
-      createdAt: new Date(),
-    },
-  ];
-
-  // Mock data para artistas
-  mockArtists: Artist[] = [
-    {
-      id: '1',
-      name: 'Arctic Monkeys',
-      genre: 'Indie Rock',
-      image: 'https://picsum.photos/400/400?random=11',
-      followers: '2.4M',
-      isFollowing: true,
-    },
-    {
-      id: '2',
-      name: 'Billie Eilish',
-      genre: 'Pop Alternativo',
-      image: 'https://picsum.photos/400/400?random=12',
-      followers: '8.1M',
-      isFollowing: true,
-    },
-    {
-      id: '3',
-      name: 'The Weeknd',
-      genre: 'R&B',
-      image: 'https://picsum.photos/400/400?random=13',
-      followers: '6.7M',
-      isFollowing: false,
-    },
-    {
-      id: '4',
-      name: 'Tame Impala',
-      genre: 'Psychedelic Pop',
-      image: 'https://picsum.photos/400/400?random=14',
-      followers: '1.8M',
-      isFollowing: true,
-    },
-    {
-      id: '5',
-      name: 'Dua Lipa',
-      genre: 'Pop',
-      image: 'https://picsum.photos/400/400?random=15',
-      followers: '5.2M',
-      isFollowing: false,
-    },
-  ];
-
-  // Mock data para álbumes
-  mockAlbums: Album[] = [
-    {
-      id: '1',
-      title: 'AM',
-      artist: 'Arctic Monkeys',
-      year: 2013,
-      image: 'https://picsum.photos/400/400?random=21',
-      songCount: 12,
-    },
-    {
-      id: '2',
-      title: 'When We All Fall Asleep',
-      artist: 'Billie Eilish',
-      year: 2019,
-      image: 'https://picsum.photos/400/400?random=22',
-      songCount: 14,
-    },
-    {
-      id: '3',
-      title: 'After Hours',
-      artist: 'The Weeknd',
-      year: 2020,
-      image: 'https://picsum.photos/400/400?random=23',
-      songCount: 14,
-    },
-    {
-      id: '4',
-      title: 'Currents',
-      artist: 'Tame Impala',
-      year: 2015,
-      image: 'https://picsum.photos/400/400?random=24',
-      songCount: 13,
-    },
-    {
-      id: '5',
-      title: 'Future Nostalgia',
-      artist: 'Dua Lipa',
-      year: 2020,
-      image: 'https://picsum.photos/400/400?random=25',
-      songCount: 11,
-    },
-    {
-      id: '6',
-      title: 'Tranquility Base Hotel',
-      artist: 'Arctic Monkeys',
-      year: 2018,
-      image: 'https://picsum.photos/400/400?random=26',
-      songCount: 11,
-    },
-  ];
-
-  get isEmpty(): boolean {
-    switch (this.activeTab) {
-      case 'playlists':
-        return this.mockPlaylists.length === 0;
-      case 'artists':
-        return this.mockArtists.length === 0;
-      case 'albums':
-        return this.mockAlbums.length === 0;
-      default:
-        return true;
-    }
+  ngOnInit(): void {
+    this.loadUserContent();
   }
 
-  setActiveTab(tab: 'playlists' | 'artists' | 'albums'): void {
-    this.activeTab = tab;
+  private async loadUserContent(): Promise<void> {
+    await Promise.all([
+      this.loadUserPlaylists(),
+      this.loadPopularArtists(),
+      this.loadPopularAlbums()
+    ]);
   }
 
-  createPlaylist(): void {
-    this.showCreateModal = true;
-  }
-
-  closeModal(): void {
-    this.showCreateModal = false;
-    this.resetForm();
-  }
-
-  resetForm(): void {
-    this.newPlaylist = {
-      name: '',
-      description: '',
-      isPrivate: false,
-    };
-    this.selectedImageFile = null;
-    this.imagePreviewUrl = null;
-  }
-
-  onImageSelected(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const file = target.files?.[0];
-
-    if (file) {
-      // Validate file type
-      const allowedTypes = [
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-        'image/webp',
-      ];
-      if (!allowedTypes.includes(file.type)) {
-        alert('Por favor selecciona una imagen válida (JPEG, PNG, GIF, WebP)');
-        return;
+  private async loadUserPlaylists(): Promise<void> {
+    this.playlistsLoading.set(true);
+    this.playlistsError.set(null);
+    
+    try {
+      const result = await this.getUserPlaylistsUseCase.execute() as any;
+      if (result.success && result.data) {
+        this.playlists.set(result.data);
+      } else {
+        this.playlistsError.set(result.error || 'Error al cargar playlists');
       }
+    } catch (error) {
+      this.playlistsError.set('Error de conexión al cargar playlists');
+      console.error('Error loading playlists:', error);
+    } finally {
+      this.playlistsLoading.set(false);
+    }
+  }
 
-      // Validate file size (max 5MB)
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (file.size > maxSize) {
-        alert('La imagen es demasiado grande. El tamaño máximo es 5MB');
-        return;
+  private async loadPopularArtists(): Promise<void> {
+    this.artistsLoading.set(true);
+    this.artistsError.set(null);
+    
+    try {
+      const result = await this.getPopularArtistsUseCase.execute({ limit: 10 }) as any;
+      if (result.success && result.data) {
+        this.artists.set(result.data);
+      } else {
+        this.artistsError.set(result.error || 'Error al cargar artistas');
       }
-
-      this.selectedImageFile = file;
-
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.imagePreviewUrl = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
+    } catch (error) {
+      this.artistsError.set('Error de conexión al cargar artistas');
+      console.error('Error loading artists:', error);
+    } finally {
+      this.artistsLoading.set(false);
     }
   }
 
-  removeImage(): void {
-    this.selectedImageFile = null;
-    this.imagePreviewUrl = null;
-
-    // Clear the input
-    const input = document.getElementById('imageInput') as HTMLInputElement;
-    if (input) {
-      input.value = '';
+  private async loadPopularAlbums(): Promise<void> {
+    this.albumsLoading.set(true);
+    this.albumsError.set(null);
+    
+    try {
+      const result = await this.getPopularAlbumsUseCase.execute({ limit: 10 }) as any;
+      if (result.success && result.data) {
+        this.albums.set(result.data);
+      } else {
+        this.albumsError.set(result.error || 'Error al cargar álbumes');
+      }
+    } catch (error) {
+      this.albumsError.set('Error de conexión al cargar álbumes');
+      console.error('Error loading albums:', error);
+    } finally {
+      this.albumsLoading.set(false);
     }
   }
 
-  triggerImageUpload(): void {
-    const input = document.getElementById('imageInput') as HTMLInputElement;
-    input?.click();
+  refreshData(): void {
+    this.loadUserContent();
   }
 
-  savePlaylist(): void {
-    if (!this.newPlaylist.name.trim()) {
-      return;
-    }
-
-    // Use the selected image or a default placeholder
-    const playlistImage =
-      this.imagePreviewUrl ||
-      'https://picsum.photos/400/400?random=' + Date.now();
-
-    const newPlaylist: Playlist = {
-      id: Date.now().toString(),
-      name: this.newPlaylist.name.trim(),
-      description: this.newPlaylist.description.trim(),
-      image: playlistImage,
-      songCount: 0,
-      createdAt: new Date(),
-    };
-
-    this.mockPlaylists.unshift(newPlaylist);
-    this.closeModal();
+  navigateToArtist(artistId: string): void {
+    this.router.navigate(['/music/artist', artistId]);
   }
 
-  onModalBackdropClick(event: Event): void {
-    if (event.target === event.currentTarget) {
-      this.closeModal();
-    }
+  navigateToAlbum(albumId: string): void {
+    this.router.navigate(['/music/album', albumId]);
   }
 
-  playPlaylist(playlist: Playlist): void {
-    // Navegar a la vista individual de la playlist
-    this.router.navigate(['/playlist', playlist.id]);
+  navigateToPlaylist(playlistId: string): void {
+    this.router.navigate(['/music/playlist', playlistId]);
   }
 
-  startPlayingPlaylist(playlist: Playlist, event: Event): void {
-    // Prevenir que se navegue cuando se hace click en el botón de play
-    event.stopPropagation();
-    // Aquí iría la lógica para empezar a reproducir la playlist
-    console.log('Reproduciendo playlist:', playlist.name);
+  onImageError(event: any): void {
+    event.target.src = '/assets/default-placeholder.png';
   }
 
-  playAlbum(album: Album): void {
-    console.log('Reproducir álbum:', album.title);
+  onImageLoad(event: any): void {
+    // Image loaded successfully
   }
-
-  viewArtist(artist: Artist): void {
-    // Navegar a la vista individual del artista
-    this.router.navigate(['/artist', artist.id]);
-  }
-
-  toggleFollowArtist(artist: Artist): void {
-    artist.isFollowing = !artist.isFollowing;
-    console.log(
-      artist.isFollowing ? 'Siguiendo' : 'Dejando de seguir',
-      artist.name,
-    );
-  }
-
-  exploreMusic(): void {
-    console.log('Explorar música');
-  }
-
-  // Métodos para manejo de eventos de teclado
-  onKeyDown(event: KeyboardEvent, action: () => void): void {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      action();
-    }
-  }
+}
+}
 }

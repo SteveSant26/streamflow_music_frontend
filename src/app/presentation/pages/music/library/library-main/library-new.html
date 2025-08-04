@@ -1,0 +1,151 @@
+<div class="library-container">
+  <!-- Header -->
+  <div class="library-header">
+    <h1>Tu Biblioteca</h1>
+    <p>Gestiona tus playlists, artistas favoritos y álbumes guardados</p>
+  </div>
+
+  <!-- Loading States -->
+  <div *ngIf="playlistsLoading() || artistsLoading() || albumsLoading()" class="loading-container">
+    <mat-progress-spinner diameter="60" mode="indeterminate"></mat-progress-spinner>
+    <p>Cargando tu biblioteca...</p>
+  </div>
+
+  <!-- Error States -->
+  <div *ngIf="playlistsError() || artistsError() || albumsError()" class="error-container">
+    <mat-icon>error</mat-icon>
+    <h2>Error al cargar contenido</h2>
+    <p *ngIf="playlistsError()">Playlists: {{ playlistsError() }}</p>
+    <p *ngIf="artistsError()">Artistas: {{ artistsError() }}</p>
+    <p *ngIf="albumsError()">Álbumes: {{ albumsError() }}</p>
+    <button mat-raised-button color="primary" (click)="refreshData()">
+      <mat-icon>refresh</mat-icon>
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!playlistsLoading() && !artistsLoading() && !albumsLoading() && !playlistsError() && !artistsError() && !albumsError()" class="library-content">
+
+    <!-- User Playlists Section -->
+    <section class="playlists-section">
+      <div class="section-header">
+        <h2>Tus Playlists</h2>
+        <span class="section-count">{{ playlists().length }}</span>
+      </div>
+      
+      <div *ngIf="playlists().length > 0" class="playlists-grid">
+        <div 
+          *ngFor="let playlist of playlists()" 
+          class="playlist-card"
+          (click)="navigateToPlaylist(playlist.id)"
+        >
+          <div class="playlist-image">
+            <img 
+              [src]="playlist.image || '/assets/default-playlist.png'"
+              [alt]="playlist.name"
+              class="playlist-cover"
+              (error)="onImageError($event)"
+            >
+            <div class="playlist-overlay">
+              <button class="play-playlist-btn" (click)="navigateToPlaylist(playlist.id); $event.stopPropagation()">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="playlist-info">
+            <h3 class="playlist-name">{{ playlist.name }}</h3>
+            <p class="playlist-description" *ngIf="playlist.description">{{ playlist.description }}</p>
+            <p class="playlist-stats">{{ playlist.songCount || 0 }} canciones</p>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="playlists().length === 0" class="empty-section">
+        <mat-icon>playlist_add</mat-icon>
+        <p>Aún no tienes playlists</p>
+        <button mat-raised-button color="primary">
+          <mat-icon>add</mat-icon>
+          Crear Playlist
+        </button>
+      </div>
+    </section>
+
+    <!-- Popular Artists Section -->
+    <section class="artists-section">
+      <div class="section-header">
+        <h2>Artistas Populares</h2>
+        <span class="section-count">{{ artists().length }}</span>
+      </div>
+      
+      <div *ngIf="artists().length > 0" class="artists-grid">
+        <div 
+          *ngFor="let artist of artists()" 
+          class="artist-card"
+          (click)="navigateToArtist(artist.id)"
+        >
+          <div class="artist-image">
+            <img 
+              [src]="artist.image || '/assets/default-artist.png'"
+              [alt]="artist.name"
+              class="artist-avatar"
+              (error)="onImageError($event)"
+            >
+          </div>
+          <div class="artist-info">
+            <h3 class="artist-name">{{ artist.name }}</h3>
+            <p class="artist-genre" *ngIf="artist.genre">{{ artist.genre }}</p>
+            <p class="artist-followers" *ngIf="artist.followers">{{ artist.followers }} seguidores</p>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="artists().length === 0" class="empty-section">
+        <mat-icon>person</mat-icon>
+        <p>No hay artistas disponibles</p>
+      </div>
+    </section>
+
+    <!-- Popular Albums Section -->
+    <section class="albums-section">
+      <div class="section-header">
+        <h2>Álbumes Populares</h2>
+        <span class="section-count">{{ albums().length }}</span>
+      </div>
+      
+      <div *ngIf="albums().length > 0" class="albums-grid">
+        <div 
+          *ngFor="let album of albums()" 
+          class="album-card"
+          (click)="navigateToAlbum(album.id)"
+        >
+          <div class="album-image">
+            <img 
+              [src]="album.image || '/assets/default-album.png'"
+              [alt]="album.title"
+              class="album-cover"
+              (error)="onImageError($event)"
+            >
+            <div class="album-overlay">
+              <button class="play-album-btn" (click)="navigateToAlbum(album.id); $event.stopPropagation()">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="album-info">
+            <h3 class="album-title">{{ album.title }}</h3>
+            <p class="album-artist">{{ album.artist }}</p>
+            <p class="album-year" *ngIf="album.year">{{ album.year }}</p>
+            <p class="album-tracks" *ngIf="album.songCount">{{ album.songCount }} canciones</p>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="albums().length === 0" class="empty-section">
+        <mat-icon>album</mat-icon>
+        <p>No hay álbumes disponibles</p>
+      </div>
+    </section>
+
+  </div>
+</div>
