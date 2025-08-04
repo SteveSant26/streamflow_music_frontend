@@ -144,7 +144,7 @@ export class SearchComponent {
   playSong(song: Song): void {
     this.playSongUseCase.execute(song.id, true).subscribe({
       next: () => {
-        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
+        console.log(`Reproduciendo: ${song.title} - ${song.artist_name}`);
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);

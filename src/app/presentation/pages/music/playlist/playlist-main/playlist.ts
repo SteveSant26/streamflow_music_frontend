@@ -115,14 +115,13 @@ export class PlaylistComponent implements OnInit {
         thumbnail_url: `https://picsum.photos/64/64?random=${i + 1}`,
         youtube_url: `https://youtube.com/watch?v=${i + 1}`,
         genre_names_display: 'Rock',
-        tags: ['rock', 'indie'],
-        playCount: Math.floor(Math.random() * 1000000),
-        youtubeViewCount: Math.floor(Math.random() * 5000000),
-        youtubeLikeCount: Math.floor(Math.random() * 100000),
-        isExplicit: false,
-        audioDownloaded: true,
-        createdAt: new Date(2020 + Math.floor(Math.random() * 4), 0, 1),
-        publishedAt: new Date(2020 + Math.floor(Math.random() * 4), 0, 1)
+        play_count: Math.floor(Math.random() * 1000000),
+        youtube_view_count: Math.floor(Math.random() * 5000000),
+        youtube_like_count: Math.floor(Math.random() * 100000),
+        is_explicit: false,
+        audio_downloaded: true,
+        created_at: new Date(2020 + Math.floor(Math.random() * 4), 0, 1),
+        published_at: new Date(2020 + Math.floor(Math.random() * 4), 0, 1)
       });
     }
 

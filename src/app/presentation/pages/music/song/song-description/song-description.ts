@@ -90,7 +90,7 @@ export class SongDescriptionComponent implements OnInit {
 
   private loadSimilarSongs(): void {
     // Cargar canciones aleatorias como "similares"
-    this.getRandomSongsUseCase.execute({ page_size: 6 }).subscribe({
+    this.getRandomSongsUseCase.execute(6).subscribe({
       next: (songs) => {
         this.similarSongs.set(songs.slice(0, 3)); // Solo mostrar 3
       },

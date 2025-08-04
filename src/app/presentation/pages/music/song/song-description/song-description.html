@@ -7,7 +7,7 @@
 
     <div class="song-main-info">
       <div class="album-cover">
-        <img [src]="song()?.thumbnailUrl || '/assets/gorillaz2.jpg'" [alt]="song()?.album" />
+        <img [src]="song()?.thumbnail_url || '/assets/gorillaz2.jpg'" [alt]="song()?.album_name" />
         <div class="play-overlay">
           <button mat-fab class="play-button" (click)="togglePlay()">
             <mat-icon>{{ isCurrentSongPlaying() ? "pause" : "play_arrow" }}</mat-icon>
@@ -17,32 +17,28 @@
 
       <div class="song-details">
         <h1 class="song-title">{{ song()?.title }}</h1>
-        <button class="song-artist" (click)="goToArtist()">{{ song()?.artist }}</button>
+        <button class="song-artist" (click)="goToArtist()">{{ song()?.artist_name }}</button>
         <button class="song-album" (click)="goToAlbum()">
-          {{ song()?.album }} • {{ song()?.publishedAt | date:'yyyy' }}
+          {{ song()?.album_name }} • {{ song()?.published_at | date:'yyyy' }}
         </button>
 
         <div class="song-stats">
           <div class="stat-item">
             <mat-icon>access_time</mat-icon>
-            <span>{{ song()?.duration }}</span>
+            <span>{{ song()?.duration_formatted }}</span>
           </div>
           <div class="stat-item">
             <mat-icon>play_arrow</mat-icon>
-            <span>{{ formatPlayCount(song()?.playCount || 0) }} reproducciones</span>
+            <span>{{ formatPlayCount(song()?.play_count || 0) }} reproducciones</span>
           </div>
-          <div class="stat-item" *ngIf="song()?.youtubeViewCount">
+          <div class="stat-item" *ngIf="song()?.youtube_view_count">
             <mat-icon>visibility</mat-icon>
-            <span>{{ formatPlayCount(song()?.youtubeViewCount || 0) }} vistas</span>
+            <span>{{ formatPlayCount(song()?.youtube_view_count || 0) }} vistas</span>
           </div>
         </div>
 
-        <mat-chip-listbox class="genre-chips" *ngIf="song()?.genre">
-          <mat-chip-option>{{ song()?.genre }}</mat-chip-option>
-        </mat-chip-listbox>
-        
-        <mat-chip-listbox class="tags-chips" *ngIf="song()?.tags?.length">
-          <mat-chip-option *ngFor="let tag of song()?.tags">{{ tag }}</mat-chip-option>
+        <mat-chip-listbox class="genre-chips" *ngIf="song()?.genre_names_display">
+          <mat-chip-option>{{ song()?.genre_names_display }}</mat-chip-option>
         </mat-chip-listbox>
       </div>
     </div>
@@ -90,17 +86,6 @@
 
   <!-- Descripción y letras -->
   <div class="content-section">
-    <mat-card class="description-card" *ngIf="song()?.tags?.length">
-      <mat-card-header>
-        <mat-card-title>
-          <mat-icon>info</mat-icon>
-          Acerca de esta canción
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{ getSongDescription() }}</p>
-      </mat-card-content>
-    </mat-card>
 
     <mat-card class="lyrics-card" *ngIf="song()?.lyrics">
       <mat-card-header>
@@ -134,15 +119,15 @@
         (click)="playSimilarSong(similar)"
       >
         <div class="similar-song-cover">
-          <img [src]="similar.thumbnailUrl || '/assets/gorillaz2.jpg'" [alt]="similar.title" />
+          <img [src]="similar.thumbnail_url || '/assets/gorillaz2.jpg'" [alt]="similar.title" />
           <div class="play-overlay-small">
             <mat-icon>play_arrow</mat-icon>
           </div>
         </div>
         <div class="similar-song-info">
           <h4>{{ similar.title }}</h4>
-          <p>{{ similar.artist }}</p>
-          <span class="duration">{{ similar.duration }}</span>
+          <p>{{ similar.artist_name }}</p>
+          <span class="duration">{{ similar.duration_formatted }}</span>
         </div>
       </button>
     </div>
