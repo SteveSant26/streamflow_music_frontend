@@ -1,99 +1,83 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiGetUseCase, ApiPostUseCase } from '../../domain/usecases/api/api.usecase';
-import { API_CONFIG_SONGS } from '../../config/end-points/api-config-songs';
+import { environment } from '../../../environments/environment';
 import { 
   SongDto, 
-  SongSearchDto, 
-  ProcessYoutubeDto, 
-  PaginationParams, 
+  SongListDto, 
   SongSearchParams,
-  PaginatedResponse 
+  PlayCountResponseDto,
+  PaginatedResponse
 } from '../../domain/dtos/song.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SongService {
-  private readonly apiGetUseCase = inject(ApiGetUseCase);
-  private readonly apiPostUseCase = inject(ApiPostUseCase);
+  private readonly baseUrl = `${environment.apiUrl}/api/songs`;
+
+  constructor(private readonly http: HttpClient) {}
 
   /**
-   * Obtener las canciones más populares
-   */
-  getMostPopular(params?: PaginationParams): Observable<PaginatedResponse<SongSearchDto>> {
-    const queryParams: Record<string, string> = {};
-    if (params?.page) queryParams['page'] = params.page.toString();
-    if (params?.page_size) queryParams['page_size'] = params.page_size.toString();
-    
-    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
-      API_CONFIG_SONGS.songs.mostPopular,
-      queryParams
-    );
-  }
-
-  /**
-   * Procesar video de YouTube
-   */
-  processYoutubeVideo(videoId: string): Observable<SongDto> {
-    const data: ProcessYoutubeDto = { video_id: videoId };
-    return this.apiPostUseCase.execute<SongDto>(
-      API_CONFIG_SONGS.songs.processYoutube,
-      data
-    );
-  }
-
-  /**
-   * Obtener canciones aleatorias
-   */
-  getRandomSongs(params?: PaginationParams): Observable<PaginatedResponse<SongSearchDto>> {
-    const queryParams: Record<string, string> = {};
-    if (params?.page) queryParams['page'] = params.page.toString();
-    if (params?.page_size) queryParams['page_size'] = params.page_size.toString();
-    
-    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
-      API_CONFIG_SONGS.songs.random,
-      queryParams
-    );
-  }
-
-  /**
-   * Buscar canciones
-   */
-  searchSongs(searchParams: SongSearchParams): Observable<PaginatedResponse<SongSearchDto>> {
-    const queryParams: Record<string, string> = {
-      q: searchParams.q
-    };
-    
-    if (searchParams.include_youtube !== undefined) {
-      queryParams['include_youtube'] = searchParams.include_youtube.toString();
-    }
-    if (searchParams.limit) {
-      queryParams['limit'] = searchParams.limit.toString();
-    }
-    
-    return this.apiGetUseCase.execute<PaginatedResponse<SongSearchDto>>(
-      API_CONFIG_SONGS.songs.search,
-      queryParams
-    );
-  }
-
-  /**
-   * Obtener canción por ID
+   * Get a specific song by ID
+   * GET /api/songs/{id}/
    */
   getSongById(songId: string): Observable<SongDto> {
-    return this.apiGetUseCase.execute<SongDto>(
-      API_CONFIG_SONGS.songs.getById(songId)
+    return this.http.get<SongDto>(`${this.baseUrl}/${songId}/`);
+  }
+
+  /**
+   * Increment play count for a song
+   * POST /api/songs/{id}/increment-play-count/
+   */
+  incrementPlayCount(songId: string): Observable<PlayCountResponseDto> {
+    return this.http.post<PlayCountResponseDto>(
+      `${this.baseUrl}/${songId}/increment-play-count/`,
+      {}
     );
   }
 
   /**
-   * Incrementar contador de reproducciones
+   * Get most popular songs
+   * GET /api/songs/most-popular/
    */
-  incrementPlayCount(songId: string): Observable<any> {
-    return this.apiPostUseCase.execute<any>(
-      API_CONFIG_SONGS.songs.incrementPlayCount(songId),
-      {}
-    );
+  getMostPopular(page: number = 1, pageSize: number = 10): Observable<PaginatedResponse<SongListDto>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString());
+
+    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}/most-popular/`, { params });
+  }
+
+  /**
+   * Get random songs
+   * GET /api/songs/random/
+   */
+  getRandomSongs(page: number = 1, pageSize: number = 10): Observable<PaginatedResponse<SongListDto>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString());
+
+    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}/random/`, { params });
+  }
+
+  /**
+   * Search songs
+   * GET /api/songs/search/
+   */
+  searchSongs(searchParams: SongSearchParams): Observable<PaginatedResponse<SongListDto>> {
+    let params = new HttpParams();
+    
+    if (searchParams.q) {
+      params = params.set('q', searchParams.q);
+    }
+    if (searchParams.include_youtube !== undefined) {
+      params = params.set('include_youtube', searchParams.include_youtube.toString());
+    }
+    if (searchParams.limit) {
+      params = params.set('limit', searchParams.limit.toString());
+    }
+
+    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}/search/`, { params });
   }
 }

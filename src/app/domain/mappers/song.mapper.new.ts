@@ -1,7 +1,9 @@
-import { Song, SongListItem } from '../entities/song.entity';
 import { SongDto, SongListDto } from '../dtos/song.dto';
+import { Song, SongListItem } from '../entities/song.entity';
 
-// Mappers de DTO a Entity
+/**
+ * Map SongDto to Song entity
+ */
 export function mapSongDtoToEntity(dto: SongDto): Song {
   return {
     id: dto.id,
@@ -24,12 +26,14 @@ export function mapSongDtoToEntity(dto: SongDto): Song {
     created_at: dto.created_at ? new Date(dto.created_at) : undefined,
     updated_at: dto.updated_at ? new Date(dto.updated_at) : undefined,
     published_at: dto.published_at ? new Date(dto.published_at) : undefined,
-    // Compatibility aliases
-    albumCover: dto.thumbnail_url,
-    audioUrl: dto.file_url
+    // Calculated fields for compatibility
+    duration_seconds: convertFormattedDurationToSeconds(dto.duration_formatted)
   };
 }
 
+/**
+ * Map SongListDto to SongListItem entity
+ */
 export function mapSongListDtoToEntity(dto: SongListDto): SongListItem {
   return {
     id: dto.id,
@@ -42,39 +46,36 @@ export function mapSongListDtoToEntity(dto: SongListDto): SongListItem {
   };
 }
 
-// Convert SongListItem array to Songs array for compatibility
-export function mapSongListToSongs(songList: SongListDto[]): Song[] {
-  return songList.map(dto => ({
+/**
+ * Map array of SongListDto to array of Song entities
+ */
+export function mapSongListToSongs(dtos: SongListDto[]): Song[] {
+  return dtos.map(dto => ({
     id: dto.id,
     title: dto.title,
-    artist_id: '', // No disponible en SongListDto
     artist_name: dto.artist_name,
     duration_formatted: dto.duration_formatted,
     genre_names_display: dto.genre_names_display,
-    file_url: undefined,
     thumbnail_url: dto.thumbnail_url,
-    youtube_url: undefined,
-    youtube_id: undefined,
     play_count: dto.play_count,
-    youtube_view_count: undefined,
-    youtube_like_count: undefined,
-    is_explicit: undefined,
-    audio_downloaded: undefined,
-    created_at: undefined,
-    updated_at: undefined,
-    published_at: undefined,
-    albumCover: dto.thumbnail_url,
-    audioUrl: undefined
-  }));
+    // Set default values for required fields not in SongListDto
+    artist_id: '', // Will be populated from full song data if needed
+    // Calculated fields
+    duration_seconds: convertFormattedDurationToSeconds(dto.duration_formatted)
+  } as Song));
 }
 
-// Helper function to calculate duration in seconds from MM:SS format
-export function parseDurationToSeconds(duration: string): number {
-  const parts = duration.split(':');
-  if (parts.length === 2) {
-    const minutes = parseInt(parts[0], 10);
-    const seconds = parseInt(parts[1], 10);
-    return minutes * 60 + seconds;
-  }
-  return 0;
+/**
+ * Convert MM:SS formatted duration to seconds
+ */
+function convertFormattedDurationToSeconds(formatted: string): number {
+  if (!formatted) return 0;
+  
+  const parts = formatted.split(':');
+  if (parts.length !== 2) return 0;
+  
+  const minutes = parseInt(parts[0], 10) || 0;
+  const seconds = parseInt(parts[1], 10) || 0;
+  
+  return minutes * 60 + seconds;
 }

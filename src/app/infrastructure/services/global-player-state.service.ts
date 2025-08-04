@@ -103,10 +103,11 @@ export class GlobalPlayerStateService {
       // Load default playlist if no playlist is loaded
       const currentState = this.getPlayerState();
       if (!currentState.currentSong) {
-        const defaultPlaylist = this.musicLibraryService.getDefaultPlaylist();
-        if (defaultPlaylist && defaultPlaylist.songs.length > 0) {
-          this.playerUseCase.loadPlaylist(defaultPlaylist.songs);
-        }
+        this.musicLibraryService.getDefaultPlaylist().subscribe(songs => {
+          if (songs && songs.length > 0) {
+            this.playerUseCase.loadPlaylist(songs);
+          }
+        });
       }
 
       this.isInitialized = true;
@@ -305,7 +306,7 @@ export class GlobalPlayerStateService {
 
     try {
       // Don't restore if the current song is already loaded correctly
-      if (this.audioElement.src === this.lastKnownState.currentSong.fileUrl) {
+      if (this.audioElement.src === this.lastKnownState.currentSong.file_url) {
         console.log('Audio source already correct, skipping restore');
         return;
       }
@@ -321,7 +322,7 @@ export class GlobalPlayerStateService {
       this.audioElement.pause();
 
       // Set the audio source to the current song
-      this.audioElement.src = this.lastKnownState.currentSong.fileUrl;
+      this.audioElement.src = this.lastKnownState.currentSong.file_url || '';
 
       // Wait for metadata to load before setting currentTime
       const handleLoadedMetadata = () => {
@@ -425,7 +426,7 @@ export class GlobalPlayerStateService {
         currentTime: this.lastKnownCurrentTime,
         isPlaying: this.lastKnownIsPlaying,
         volume: this.lastKnownState?.volume || 1,
-        src: this.lastKnownState?.currentSong?.fileUrl || '',
+        src: this.lastKnownState?.currentSong?.file_url || '',
       };
 
       if (this.audioElement && stateToRestore.src) {

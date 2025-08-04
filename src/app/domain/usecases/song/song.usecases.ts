@@ -1,20 +1,21 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { SongService } from '../../../infrastructure/services/song.service';
-import { PlaylistService } from '../../../infrastructure/services/playlist.service';
 import { Song } from '../../entities/song.entity';
-import { SongSearchParams, PaginationParams } from '../../dtos/song.dto';
+import { SongSearchParams } from '../../dtos/song.dto';
 import { 
   mapSongDtoToEntity,
-  mapPaginatedSongSearchResponse 
-} from '../../mappers/song.mapper';
+  mapSongListToSongs
+} from '../../mappers/song.mapper.new';
 
 @Injectable({ providedIn: 'root' })
 export class GetSongByIdUseCase {
   private readonly songService = inject(SongService);
 
   execute(songId: string): Observable<Song> {
-    return this.songService.getSongById(songId).pipe(map(mapSongDtoToEntity));
+    return this.songService.getSongById(songId).pipe(
+      map(mapSongDtoToEntity)
+    );
   }
 }
 
@@ -33,21 +34,10 @@ export class IncrementPlayCountUseCase {
 export class GetMostPopularSongsUseCase {
   private readonly songService = inject(SongService);
 
-  execute(params?: PaginationParams): Observable<Song[]> {
+  execute(page: number = 1, pageSize: number = 10): Observable<Song[]> {
     return this.songService
-      .getMostPopular(params)
-      .pipe(map((response) => mapPaginatedSongSearchResponse(response)));
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class ProcessYoutubeVideoUseCase {
-  private readonly songService = inject(SongService);
-
-  execute(videoId: string): Observable<Song> {
-    return this.songService
-      .processYoutubeVideo(videoId)
-      .pipe(map(mapSongDtoToEntity));
+      .getMostPopular(page, pageSize)
+      .pipe(map((response) => mapSongListToSongs(response.results)));
   }
 }
 
@@ -55,10 +45,10 @@ export class ProcessYoutubeVideoUseCase {
 export class GetRandomSongsUseCase {
   private readonly songService = inject(SongService);
 
-  execute(params?: PaginationParams): Observable<Song[]> {
+  execute(page: number = 1, pageSize: number = 10): Observable<Song[]> {
     return this.songService
-      .getRandomSongs(params)
-      .pipe(map((response) => mapPaginatedSongSearchResponse(response)));
+      .getRandomSongs(page, pageSize)
+      .pipe(map((response) => mapSongListToSongs(response.results)));
   }
 }
 
@@ -69,79 +59,25 @@ export class SearchSongsUseCase {
   execute(searchParams: SongSearchParams): Observable<Song[]> {
     return this.songService
       .searchSongs(searchParams)
-      .pipe(map((response) => mapPaginatedSongSearchResponse(response)));
+      .pipe(map((response) => mapSongListToSongs(response.results)));
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class PlaySongUseCase {
-  private readonly playlistService = inject(PlaylistService);
   private readonly getSongUseCase = inject(GetSongByIdUseCase);
 
   execute(songId: string, createNewPlaylist: boolean = true): Observable<Song> {
     return this.getSongUseCase.execute(songId).pipe(
       tap((song) => {
+        // Mock implementation - in a real app this would interact with a playlist service
+        console.log(`Playing song: ${song.title} by ${song.artist_name}`);
         if (createNewPlaylist) {
-          this.playlistService.createPlaylist([song], 'Now Playing', 0);
+          console.log('Creating new playlist with this song');
         } else {
-          this.playlistService.addToPlaylist(song);
+          console.log('Adding song to current playlist');
         }
-      }),
-    );
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class PlayRandomPlaylistUseCase {
-  private readonly playlistService = inject(PlaylistService);
-  private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
-
-  execute(limit: number = 20): Observable<Song[]> {
-    return this.getRandomSongsUseCase.execute({ page_size: limit }).pipe(
-      tap((songs) => {
-        if (songs.length > 0) {
-          this.playlistService.createPlaylist(songs, 'Random Mix', 0);
-        }
-      }),
-    );
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class PlaySearchResultsUseCase {
-  private readonly playlistService = inject(PlaylistService);
-  private readonly searchSongsUseCase = inject(SearchSongsUseCase);
-
-  execute(
-    searchParams: SongSearchParams,
-    startIndex: number = 0,
-  ): Observable<Song[]> {
-    return this.searchSongsUseCase.execute(searchParams).pipe(
-      tap((songs) => {
-        if (songs.length > 0) {
-          this.playlistService.createPlaylist(
-            songs,
-            `Search: ${searchParams.q}`,
-            startIndex,
-          );
-        }
-      }),
-    );
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class PlayPopularPlaylistUseCase {
-  private readonly playlistService = inject(PlaylistService);
-  private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
-
-  execute(limit: number = 50): Observable<Song[]> {
-    return this.getMostPopularUseCase.execute({ page_size: limit }).pipe(
-      tap((songs) => {
-        if (songs.length > 0) {
-          this.playlistService.createPlaylist(songs, 'Popular Songs', 0);
-        }
-      }),
+      })
     );
   }
 }

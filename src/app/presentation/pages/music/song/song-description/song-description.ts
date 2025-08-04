@@ -90,7 +90,7 @@ export class SongDescriptionComponent implements OnInit {
 
   private loadSimilarSongs(): void {
     // Cargar canciones aleatorias como "similares"
-    this.getRandomSongsUseCase.execute({ page_size: 6 }).subscribe({
+    this.getRandomSongsUseCase.execute(6).subscribe({
       next: (songs) => {
         this.similarSongs.set(songs.slice(0, 3)); // Solo mostrar 3
       },
@@ -136,8 +136,8 @@ export class SongDescriptionComponent implements OnInit {
     if (!currentSong) return;
     
     // Abrir el archivo de audio en una nueva pestaña para descarga
-    if (currentSong.fileUrl) {
-      window.open(currentSong.fileUrl, '_blank');
+    if (currentSong.file_url) {
+      window.open(currentSong.file_url, '_blank');
     }
   }
 
@@ -148,7 +148,7 @@ export class SongDescriptionComponent implements OnInit {
     if (navigator.share) {
       navigator.share({
         title: currentSong.title,
-        text: `Escucha "${currentSong.title}" de ${currentSong.artist}`,
+        text: `Escucha "${currentSong.title}" de ${currentSong.artist_name}`,
         url: window.location.href
       });
     } else {
@@ -165,14 +165,14 @@ export class SongDescriptionComponent implements OnInit {
   goToArtist(): void {
     const currentSong = this.song();
     if (currentSong) {
-      this.router.navigate([ROUTES_CONFIG_MUSIC.ARTIST.getLinkWithId(currentSong.artist)]);
+      this.router.navigate([ROUTES_CONFIG_MUSIC.ARTIST.getLinkWithId(currentSong.artist_id || currentSong.artist_name || 'unknown')]);
     }
   }
 
   goToAlbum(): void {
     const currentSong = this.song();
     if (currentSong) {
-      this.router.navigate([ROUTES_CONFIG_MUSIC.ALBUM.getLinkWithId(currentSong.album)]);
+      this.router.navigate([ROUTES_CONFIG_MUSIC.ALBUM.getLinkWithId(currentSong.album_id || currentSong.album_name || 'unknown')]);
     }
   }
 
@@ -225,6 +225,6 @@ export class SongDescriptionComponent implements OnInit {
     const currentSong = this.song();
     if (!currentSong) return '';
     
-    return `${currentSong.title} de ${currentSong.artist}`;
+    return `${currentSong.title} de ${currentSong.artist_name}`;
   }
 }

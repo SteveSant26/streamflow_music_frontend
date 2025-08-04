@@ -4,12 +4,12 @@ export const SITE_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('../pages/site/home/home').then((m) => m.HomeComponent),
+      import('../../pages/home/home').then((m) => m.HomePage),
   },
   {
     path: 'home',
     loadComponent: () =>
-      import('../pages/site/home/home').then((m) => m.HomeComponent),
+      import('../../pages/home/home').then((m) => m.HomePage),
   },
   {
     path: 'explore',

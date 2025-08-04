@@ -2,13 +2,17 @@
 <div class="block sm:hidden space-y-3">
   @for (song of songs; track song.id; let i = $index) {
     <div
-      class="bg-elevated rounded-lg p-3 hover-bg-elevated-hover transition duration-300 group"
+      [class]="(isDarkTheme$ | async) 
+        ? 'bg-gray-800 text-white rounded-lg p-3 hover:bg-gray-700 transition duration-300 group' 
+        : 'bg-white text-black rounded-lg p-3 hover:bg-gray-50 transition duration-300 group border border-gray-200'"
     >
       <div class="flex items-center gap-3">
         <!-- Play button / Number -->
         <div class="relative w-6 h-6 flex-shrink-0">
           <span
-            class="absolute inset-0 flex items-center justify-center text-sm opacity-100 transition-all group-hover:opacity-0"
+            [class]="(isDarkTheme$ | async) 
+              ? 'absolute inset-0 flex items-center justify-center text-sm opacity-100 transition-all group-hover:opacity-0 text-gray-300' 
+              : 'absolute inset-0 flex items-center justify-center text-sm opacity-100 transition-all group-hover:opacity-0 text-gray-600'"
           >
             {{ i + 1 }}
           </span>
@@ -23,7 +27,7 @@
         <div class="flex-1 min-w-0 flex items-center gap-3">
           <picture class="w-12 h-12 flex-shrink-0">
             <img
-              [src]="song.thumbnailUrl"
+              [src]="song.thumbnail_url"
               [alt]="song.title"
               class="w-full h-full rounded object-cover"
               onerror="this.src='/assets/default-album.jpg'"
@@ -40,12 +44,12 @@
             >
               {{ song.title }}
             </button>
-            <span class="text-subdued text-xs truncate">{{ song.artist || 'Artista desconocido' }}</span>
+            <span class="text-subdued text-xs truncate">{{ song.artist_name || 'Artista desconocido' }}</span>
           </div>
         </div>
 
         <!-- Duration -->
-        <span class="text-subdued text-xs">{{ formatPlayCount(song.playCount) }}</span>
+        <span class="text-subdued text-xs">{{ formatPlayCount(song.play_count) }}</span>
       </div>
     </div>
   }
@@ -92,7 +96,7 @@
         <td class="px-4 py-2 flex gap-3">
           <picture>
             <img
-              [src]="song.thumbnailUrl"
+              [src]="song.thumbnail_url"
               [alt]="song.title"
               class="w-11 h-11 rounded"
               onerror="this.src='/assets/default-album.jpg'"
@@ -108,12 +112,12 @@
             >
               {{ song.title }}
             </button>
-            <span class="text-subdued">{{ song.artist || 'Artista desconocido' }}</span>
+            <span class="text-subdued">{{ song.artist_name || 'Artista desconocido' }}</span>
           </div>
         </td>
-        <td class="px-4 py-2 hidden md:table-cell">{{ song.album || 'Álbum desconocido' }}</td>
+        <td class="px-4 py-2 hidden md:table-cell">{{ song.album_name || 'Álbum desconocido' }}</td>
         <td class="px-4 py-2 rounded-tr-lg rounded-br-lg">
-          {{ formatPlayCount(song.playCount) }} reproducciones
+          {{ formatPlayCount(song.play_count) }} reproducciones
         </td>
       </tr>
     }

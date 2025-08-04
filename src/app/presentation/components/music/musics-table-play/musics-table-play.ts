@@ -1,8 +1,10 @@
 import { MatIcon } from '@angular/material/icon';
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 import { Song } from '@app/domain/entities/song.entity';
 import { PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
+import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
 
 interface Playlist {
   id: string;
@@ -18,7 +20,7 @@ interface CurrentMusic {
 
 @Component({
   selector: 'app-musics-table-play',
-  imports: [MatIcon, TranslateModule],
+  imports: [MatIcon, TranslateModule, CommonModule],
   templateUrl: './musics-table-play.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,6 +29,12 @@ export class MusicsTablePlay {
   @Input() isCurrentSong = false;
 
   private readonly playSongUseCase = inject(PlaySongUseCase);
+
+  constructor(private readonly materialTheme: MaterialThemeService) {}
+
+  get isDarkTheme() {
+    return this.materialTheme._isDarkMode();
+  }
 
   // Mock state para el reproductor
   currentMusic: CurrentMusic = {
@@ -55,13 +63,13 @@ export class MusicsTablePlay {
           song: song,
           playlist: {
             id: song.id,
-            name: `Album ${song.album || 'Desconocido'}`,
-            description: `Playlist for ${song.album || 'Album desconocido'}`,
+            name: `Album ${song.album_name || 'Desconocido'}`,
+            description: `Playlist for ${song.album_name || 'Album desconocido'}`,
           },
           songs: [song],
         };
         this.isPlaying = true;
-        console.log(`Reproduciendo: ${song.title} - ${song.artist || 'Artista desconocido'}`);
+        console.log(`Reproduciendo: ${song.title} - ${song.artist_name || 'Artista desconocido'}`);
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);

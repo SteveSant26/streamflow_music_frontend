@@ -1,5 +1,7 @@
 <button
-  class="text-black hover:text-gray-700 hover:scale-125 transition-all duration-200"
+  [class]="isDarkTheme 
+    ? 'text-white hover:text-green-400 hover:scale-125 transition-all duration-200' 
+    : 'text-gray-900 hover:text-green-600 hover:scale-125 transition-all duration-200'"
   (click)="handleClick(song)"
 >
   @if (isCurrentSongRunning(song)) {

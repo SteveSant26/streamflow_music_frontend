@@ -8,8 +8,6 @@ import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-conf
 import { 
   GetMostPopularSongsUseCase, 
   GetRandomSongsUseCase,
-  PlayRandomPlaylistUseCase,
-  PlayPopularPlaylistUseCase,
   PlaySongUseCase
 } from '../../../../domain/usecases/song/song.usecases';
 import { Song } from '../../../../domain/entities/song.entity';
@@ -33,8 +31,6 @@ export class HomeComponent implements OnInit {
   // Servicios inyectados
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
-  private readonly playRandomPlaylistUseCase = inject(PlayRandomPlaylistUseCase);
-  private readonly playPopularPlaylistUseCase = inject(PlayPopularPlaylistUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
 
   // Route configs
@@ -53,14 +49,14 @@ export class HomeComponent implements OnInit {
       title: 'Hits del Rock',
       cover: '/assets/playlists/playlist1.jpg',
       artists: ['Queen', 'Led Zeppelin', 'The Beatles'],
-      action: () => this.playPopularPlaylist()
+      action: () => this.loadMostPopularSongs()
     },
     {
       id: 2,
       title: 'Mix Aleatorio',
       cover: '/assets/playlists/playlist2.webp',
       artists: ['Varios Artistas'],
-      action: () => this.playRandomPlaylist()
+      action: () => this.loadRandomSongs()
     },
     {
       id: 3,
@@ -74,7 +70,7 @@ export class HomeComponent implements OnInit {
       title: 'Tendencias',
       cover: '/assets/playlists/playlist4.jpg',
       artists: ['Top Charts'],
-      action: () => this.loadPopularSongs()
+      action: () => this.loadMostPopularSongs()
     },
   ];
 
@@ -86,7 +82,7 @@ export class HomeComponent implements OnInit {
     this.loading.set(true);
 
     // Cargar canciones populares
-    this.getMostPopularUseCase.execute({ page_size: 10 }).subscribe({
+    this.getMostPopularUseCase.execute(1, 10).subscribe({
       next: (songs) => {
         this.popularSongs.set(songs);
       },
@@ -97,7 +93,7 @@ export class HomeComponent implements OnInit {
     });
 
     // Cargar canciones aleatorias
-    this.getRandomSongsUseCase.execute({ page_size: 8 }).subscribe({
+    this.getRandomSongsUseCase.execute(1, 8).subscribe({
       next: (songs) => {
         this.randomSongs.set(songs);
         this.loading.set(false);
@@ -110,31 +106,14 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  // Métodos para acciones de playlist
-  playPopularPlaylist(): void {
-    this.playPopularPlaylistUseCase.execute(20).subscribe({
-      next: (songs) => {
-        console.log(`Reproduciendo playlist popular con ${songs.length} canciones`);
-      },
-      error: (error) => {
-        console.error('Error al reproducir playlist popular:', error);
-      }
-    });
+  // Métodos para reproducir canciones
+  playSong(song: Song): void {
+    console.log(`Reproduciendo: ${song.title} - ${song.artist_name}`);
+    // Implementar lógica de reproducción
   }
 
-  playRandomPlaylist(): void {
-    this.playRandomPlaylistUseCase.execute(20).subscribe({
-      next: (songs) => {
-        console.log(`Reproduciendo playlist aleatoria con ${songs.length} canciones`);
-      },
-      error: (error) => {
-        console.error('Error al reproducir playlist aleatoria:', error);
-      }
-    });
-  }
-
-  loadPopularSongs(): void {
-    this.getMostPopularUseCase.execute({ page_size: 15 }).subscribe({
+  loadMostPopularSongs(): void {
+    this.getMostPopularUseCase.execute(1, 15).subscribe({
       next: (songs) => {
         this.popularSongs.set(songs);
         console.log(`Cargadas ${songs.length} canciones populares`);
@@ -146,7 +125,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadRandomSongs(): void {
-    this.getRandomSongsUseCase.execute({ page_size: 15 }).subscribe({
+    this.getRandomSongsUseCase.execute(1, 15).subscribe({
       next: (songs) => {
         this.randomSongs.set(songs);
         console.log(`Cargadas ${songs.length} canciones aleatorias`);
@@ -162,17 +141,7 @@ export class HomeComponent implements OnInit {
     this.loadHomeData();
   }
 
-  // Método para reproducir una canción específica
-  playSong(song: Song): void {
-    this.playSongUseCase.execute(song.id, true).subscribe({
-      next: () => {
-        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
-      },
-      error: (error) => {
-        console.error('Error al reproducir canción:', error);
-      }
-    });
-  }
+  // Método para reproducir una canción específica - ya existe uno anterior, removiendo duplicado
 
   // Método para formatear el conteo de reproducciones
   formatPlayCount(count: number): string {
@@ -188,7 +157,7 @@ export class HomeComponent implements OnInit {
   get popularSectionConfig() {
     const primaryButton: MusicSectionButton = {
       text: 'Ver todas',
-      action: () => this.loadPopularSongs(),
+      action: () => this.loadMostPopularSongs(),
       ariaLabel: 'Ver todas las canciones populares'
     };
 
@@ -212,7 +181,7 @@ export class HomeComponent implements OnInit {
       },
       {
         icon: 'play_arrow',
-        action: () => this.playRandomPlaylist(),
+        action: () => this.loadRandomSongs(),
         ariaLabel: 'Reproducir playlist aleatoria'
       }
     ];

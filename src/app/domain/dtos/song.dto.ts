@@ -1,40 +1,36 @@
-// DTOs para Songs API
+// DTOs para Songs API basados en el OpenAPI
 export interface SongDto {
   id: string;
   title: string;
-  youtube_video_id: string;
-  artist_name: string;
-  album_title: string;
-  genre_name: string;
-  duration_seconds: number;
-  duration_formatted: string;
-  file_url: string;
-  thumbnail_url: string;
-  youtube_url: string;
-  tags: string[];
+  artist_id: string;
+  artist_name?: string;
+  album_id?: string;
+  album_name?: string;
+  duration_formatted: string; // Formato MM:SS
+  genre_names_display: string; // Géneros como string separado por comas
+  file_url?: string;
+  thumbnail_url?: string;
+  youtube_url?: string;
+  youtube_id?: string;
   play_count: number;
-  youtube_view_count: number;
-  youtube_like_count: number;
-  is_explicit: boolean;
-  audio_downloaded: boolean;
-  created_at: string;
-  published_at: string;
+  youtube_view_count?: number;
+  youtube_like_count?: number;
+  is_explicit?: boolean;
+  audio_downloaded?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  published_at?: string;
 }
 
-export interface SongSearchDto {
+// DTO simplificado para listas (SongList de la API)
+export interface SongListDto {
   id: string;
   title: string;
-  artist_name: string;
-  album_title: string;
+  artist_name?: string;
   duration_formatted: string;
-  thumbnail_url: string;
+  genre_names_display: string;
+  thumbnail_url?: string;
   play_count: number;
-  audio_downloaded: boolean;
-  file_url: string;
-}
-
-export interface ProcessYoutubeDto {
-  video_id: string;
 }
 
 export interface PlayCountResponseDto {
@@ -60,4 +56,17 @@ export interface PaginatedResponse<T> {
   amount_of_pages: number;
   page_size: number;
   results: T[];
+}
+
+// Legacy DTOs for compatibility
+export interface SongSearchDto {
+  name: string;
+  limit?: number;
+}
+
+export interface ProcessYoutubeDto {
+  video_id?: string;
+  youtube_url?: string;
+  title?: string;
+  artist_name?: string;
 }

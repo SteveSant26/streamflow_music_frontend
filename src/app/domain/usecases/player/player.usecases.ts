@@ -45,7 +45,7 @@ export class PlayerUseCase {
     this.currentSong$.next(song);
     this.updatePlaybackState({ 
       isPlaying: true, 
-      duration: song.durationSeconds || 0, 
+      duration: song.duration_seconds || 0, 
       currentTime: 0 
     });
   }
