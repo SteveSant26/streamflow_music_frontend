@@ -1,9 +1,19 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { UserPlaylistService } from '../../../infrastructure/services/user-playlist.service';
-import { Playlist } from '../../entities/playlist.entity';
-import { CreatePlaylistDto, UpdatePlaylistDto, AddSongToPlaylistDto } from '../../dtos/playlist.dto';
-import { mapPlaylistDtoToEntity, mapPaginatedPlaylistResponse } from '../../mappers/playlist.mapper';
+import { PlaylistHttpService } from '../../../infrastructure/services/playlist-http.service';
+import { 
+  Playlist, 
+  PlaylistWithSongs, 
+  PlaylistSong,
+  CreatePlaylistDto,
+  UpdatePlaylistDto,
+  AddSongToPlaylistDto
+} from '../../entities/playlist.entity';
+import { 
+  mapPlaylistDtoToEntity, 
+  mapPlaylistWithSongsDtoToEntity,
+  mapPlaylistSongDtoToEntity
+} from '../../mappers/playlist.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class GetUserPlaylistsUseCase {

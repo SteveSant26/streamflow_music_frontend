@@ -16,9 +16,9 @@ import { IPlaylistRepository } from '../../domain/repositories/i-playlist.reposi
   providedIn: 'root'
 })
 export class PlaylistHttpService implements IPlaylistRepository {
-  private readonly apiUrl = `${environment.api.baseUrl}/api/playlists`;
+  private readonly apiUrl = `${environment.apiUrl}/api/playlists`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // CRUD operations for playlists
   getPlaylists(): Observable<Playlist[]> {
