@@ -65,7 +65,8 @@ export interface SongSearchDto {
 }
 
 export interface ProcessYoutubeDto {
-  youtube_url: string;
+  video_id?: string;
+  youtube_url?: string;
   title?: string;
   artist_name?: string;
 }

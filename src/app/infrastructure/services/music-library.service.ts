@@ -172,4 +172,8 @@ export class MusicLibraryService {
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
+
+  getDefaultPlaylist(): Observable<Song[]> {
+    return this.getAllSongs();
+  }
 }

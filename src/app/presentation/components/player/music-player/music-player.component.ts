@@ -25,14 +25,14 @@ import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
         <!-- Song Info -->
         <div class="song-info" (click)="goToSongDetail(state.currentSong.id)">
           <img 
-            [src]="state.currentSong.thumbnailUrl" 
+            [src]="state.currentSong.thumbnail_url" 
             [alt]="state.currentSong.title"
             class="album-cover"
             (error)="onImageError($event)"
           />
           <div class="song-details">
             <h4 class="song-title">{{ state.currentSong.title }}</h4>
-            <p class="artist-name">{{ state.currentSong.artist }}</p>
+            <p class="artist-name">{{ state.currentSong.artist_name }}</p>
           </div>
         </div>
 

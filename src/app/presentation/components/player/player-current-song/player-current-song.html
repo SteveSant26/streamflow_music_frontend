@@ -7,7 +7,7 @@
   >
     <picture class="w-10 h-10 sm:w-14 sm:h-14 flex-shrink-0">
       <img
-        [src]="song.thumbnailUrl || '/assets/gorillaz2.jpg'"
+        [src]="song.thumbnail_url || '/assets/gorillaz2.jpg'"
         [alt]="song.title"
         class="w-full h-full object-cover rounded"
       />
@@ -21,7 +21,7 @@
       <span
         class="text-subdued text-xs truncate group-hover:text-base transition-colors"
       >
-        {{ song.artist }}
+        {{ song.artist_name }}
       </span>
     </div>
   </button>

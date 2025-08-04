@@ -91,18 +91,18 @@
           <div class="song-info">
             <div class="song-details">
               <img 
-                [src]="song.thumbnailUrl || 'https://picsum.photos/40/40?random=' + i" 
+                [src]="song.thumbnail_url || 'https://picsum.photos/48/48'"
                 [alt]="song.title"
                 class="song-thumbnail"
               />
               <div class="song-text">
                 <div class="song-title">{{ song.title }}</div>
-                <div class="song-artist">{{ song.artist }}</div>
+                <div class="song-artist">{{ song.artist_name }}</div>
               </div>
             </div>
           </div>
           
-          <div class="song-album">{{ song.album }}</div>
+          <div class="song-album">{{ song.album_name }}</div>
           
           <div class="song-duration">
             <button 
@@ -112,7 +112,7 @@
             >
               <mat-icon>add</mat-icon>
             </button>
-            <span class="duration-text">{{ formatSongDuration(song.durationSeconds || 0) }}</span>
+            <span class="duration-text">{{ formatSongDuration(song.duration_seconds || 0) }}</span>
           </div>
         </button>
       </div>

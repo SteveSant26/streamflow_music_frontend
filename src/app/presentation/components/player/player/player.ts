@@ -122,11 +122,11 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
       this.currentMusic.song = {
         id: parseInt(state.currentSong.id) || 1,
         title: state.currentSong.title,
-        artists: [state.currentSong.artist],
+        artists: [state.currentSong.artist_name || 'Unknown Artist'],
         album: 'Unknown Album',
         albumId: 1,
-        duration: state.currentSong.duration, // Already a string
-        image: state.currentSong.thumbnailUrl || '/assets/gorillaz2.jpg',
+        duration: state.currentSong.duration_formatted || '0:00', // Already a string
+        image: state.currentSong.thumbnail_url || '/assets/gorillaz2.jpg',
       };
 
       // Don't manually set the audio source - let the repository handle it
