@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { ROUTES_CONFIG_AUTH } from '@app/config';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '@app/shared/services/language.service';
-import { ThemeToggleComponent } from '../../shared/components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-aside-menu',
@@ -57,8 +56,12 @@ export class AsideMenu {
     return this.availableLanguages;
   }
 
-  changeLanguage(language: 'en' | 'es') {
-    this.languageService.changeLanguage(language);
+  changeLanguage(language: string) {
+    // Validar que el idioma sea válido antes de cambiar
+    if (language === 'en' || language === 'es') {
+      this.languageService.changeLanguage(language);
+      this.currentLanguage = language;
+    }
   }
 
   async logout() {

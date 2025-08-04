@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { AuthSessionUseCase } from './domain/usecases';
 import { LanguageService } from '@app/shared/services';
 import { ThemeService } from './shared/services/theme.service';
-import { MaterialThemeService } from './shared/theme/material-theme.service';
+import { MaterialThemeService } from './shared/services/material-theme.service';
 import { take } from 'rxjs';
 
 @Component({
@@ -33,8 +33,8 @@ export class App implements OnInit {
   }
   
   private initializeMaterialTheme() {
-    // Inicializar el listener del tema del sistema
-    this.materialThemeService.initSystemThemeListener();
+    // El MaterialThemeService se inicializa automáticamente en el constructor
+    // this.materialThemeService.initSystemThemeListener();
   }
 
   private initializeLanguage() {
