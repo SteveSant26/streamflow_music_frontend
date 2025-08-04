@@ -11,7 +11,7 @@ import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-import { ThemeService } from '@app/shared/services/theme.service';
+import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-player-volume-control',
@@ -22,13 +22,13 @@ import { CommonModule } from '@angular/common';
 export class PlayerVolumeControl implements OnInit, OnDestroy {
   private readonly globalPlayerState = inject(GlobalPlayerStateService);
   private readonly cdr = inject(ChangeDetectorRef);
-  private readonly themeService = inject(ThemeService);
+  private readonly materialThemeService = inject(MaterialThemeService);
   private readonly destroy$ = new Subject<void>();
 
   volume = 0.5;
   playerState: PlayerState | null = null;
   previousVolume = 0.5; // Para recordar el volumen anterior al hacer mute
-  isDarkTheme$ = this.themeService.isDarkMode();
+  isDarkTheme$ = this.materialThemeService.isDarkMode();
 
   // Hacer Math disponible en el template
   Math = Math;
