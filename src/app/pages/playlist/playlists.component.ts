@@ -10,7 +10,7 @@ import {
   DeletePlaylistUseCase,
   EnsureDefaultPlaylistUseCase
 } from '../../domain/usecases/playlist/playlist.usecases';
-import { Playlist } from '../../domain/entities/playlist.entity';
+import { LegacyPlaylist as Playlist } from '../../domain/entities/playlist.entity';
 
 @Component({
   selector: 'app-playlists',
