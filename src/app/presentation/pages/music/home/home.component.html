@@ -37,19 +37,6 @@
           </button>
         </div>
 
-        <!-- Navigation to Discover Page -->
-        <div class="flex justify-center">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="navigateToDiscover()"
-            class="flex items-center gap-2"
-          >
-            <mat-icon>explore</mat-icon>
-            Ir a Discover (Albums, Artists, Genres)
-          </button>
-        </div>
-
         <!-- Popular Songs Section -->
         <mat-card 
           [class]="(isDarkTheme$ | async) 
@@ -67,12 +54,12 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            @if (popularLoading()) {
+            @if (isLoadingPopular()) {
               <div class="flex justify-center py-8">
                 <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
               </div>
-            } @else if (popularSongs().length > 0) {
-              <app-musics-table [songs]="popularSongs()"></app-musics-table>
+            } @else if (mostPopularSongs().length > 0) {
+              <app-musics-table [songs]="mostPopularSongs()"></app-musics-table>
             } @else {
               <p 
                 [class]="(isDarkTheme$ | async) 
@@ -86,8 +73,8 @@
           <mat-card-actions>
             <button
               mat-button
-              (click)="loadPopularSongs()"
-              [disabled]="popularLoading()"
+              (click)="refresh()"
+              [disabled]="isLoadingPopular()"
               [class]="(isDarkTheme$ | async) ? 'text-green-400' : 'text-green-600'"
             >
               <mat-icon>refresh</mat-icon>
@@ -113,7 +100,7 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            @if (randomLoading()) {
+            @if (isLoadingRandom()) {
               <div class="flex justify-center py-8">
                 <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
               </div>
@@ -132,8 +119,8 @@
           <mat-card-actions>
             <button
               mat-button
-              (click)="loadRandomSongs()"
-              [disabled]="randomLoading()"
+              (click)="refresh()"
+              [disabled]="isLoadingRandom()"
               [class]="(isDarkTheme$ | async) ? 'text-green-400' : 'text-green-600'"
             >
               <mat-icon>casino</mat-icon>

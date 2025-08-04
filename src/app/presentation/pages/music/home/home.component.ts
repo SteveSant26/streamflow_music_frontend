@@ -56,7 +56,7 @@ export class HomePageComponent implements OnInit {
     this.isLoadingPopular.set(true);
     this.errorPopular.set(null);
 
-    this.getMostPopularSongsUseCase.execute({ limit: 10 }).pipe(
+    this.getMostPopularSongsUseCase.execute(1, 10).pipe(
       finalize(() => this.isLoadingPopular.set(false))
     ).subscribe({
       next: (songs) => this.mostPopularSongs.set(songs),
@@ -71,7 +71,7 @@ export class HomePageComponent implements OnInit {
     this.isLoadingRandom.set(true);
     this.errorRandom.set(null);
 
-    this.getRandomSongsUseCase.execute({ limit: 10 }).pipe(
+    this.getRandomSongsUseCase.execute(1, 10).pipe(
       finalize(() => this.isLoadingRandom.set(false))
     ).subscribe({
       next: (songs) => this.randomSongs.set(songs),
@@ -102,10 +102,5 @@ export class HomePageComponent implements OnInit {
     const currentTheme = this.themeService.getTheme();
     const newTheme = currentTheme.isDark ? 'light' : 'dark';
     this.themeService.setTheme(newTheme);
-  }
-
-  // Propiedad para compatibilidad con el template
-  get popularLoading() {
-    return this.isLoadingPopular();
   }
 }
