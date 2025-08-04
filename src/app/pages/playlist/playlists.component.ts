@@ -41,28 +41,28 @@ import { LegacyPlaylist as Playlist } from '../../domain/entities/playlist.entit
         <mat-card 
           *ngFor="let playlist of playlists()" 
           class="playlist-card"
-          [class.favorites]="playlist.is_default">
+          [class.favorites]="playlist.name === 'Favoritos'">
           
           <mat-card-header>
             <mat-card-title>
               {{ playlist.name }}
               <mat-icon 
-                *ngIf="playlist.is_default" 
+                *ngIf="playlist.name === 'Favoritos'" 
                 class="favorite-icon">
                 favorite
               </mat-icon>
             </mat-card-title>
             <mat-card-subtitle>
-              {{ playlist.total_songs }} canciones
+              {{ playlist.songCount }} canciones
             </mat-card-subtitle>
           </mat-card-header>
 
           <mat-card-content>
             <p *ngIf="playlist.description">{{ playlist.description }}</p>
             <p class="playlist-info">
-              <span>{{ playlist.is_public ? 'Pública' : 'Privada' }}</span>
+              <span>{{ playlist.isPublic ? 'Pública' : 'Privada' }}</span>
               <span>•</span>
-              <span>{{ playlist.created_at | date:'short' }}</span>
+              <span>{{ playlist.createdDate | date:'short' }}</span>
             </p>
           </mat-card-content>
 
@@ -78,7 +78,7 @@ import { LegacyPlaylist as Playlist } from '../../domain/entities/playlist.entit
             <button 
               mat-button
               [routerLink]="['/my-playlist', playlist.id, 'edit']"
-              *ngIf="!playlist.is_default">
+              *ngIf="playlist.name !== 'Favoritos'">
               <mat-icon>edit</mat-icon>
               Editar
             </button>
@@ -87,7 +87,7 @@ import { LegacyPlaylist as Playlist } from '../../domain/entities/playlist.entit
               mat-button 
               color="warn"
               (click)="confirmDelete(playlist)"
-              *ngIf="!playlist.is_default">
+              *ngIf="playlist.name !== 'Favoritos'">
               <mat-icon>delete</mat-icon>
               Eliminar
             </button>

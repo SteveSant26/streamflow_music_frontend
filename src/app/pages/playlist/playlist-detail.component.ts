@@ -10,7 +10,8 @@ import {
   GetPlaylistByIdUseCase,
   RemoveSongFromPlaylistUseCase
 } from '../../domain/usecases/playlist/playlist.usecases';
-import { PlaylistWithSongs, PlaylistSong } from '../../domain/entities/playlist.entity';
+import { LegacyPlaylist as PlaylistWithSongs } from '../../domain/entities/playlist.entity';
+import { Song } from '../../domain/entities/song.entity';
 
 @Component({
   selector: 'app-playlist-detail',
@@ -33,11 +34,11 @@ import { PlaylistWithSongs, PlaylistSong } from '../../domain/entities/playlist.
             {{ playlist()!.description }}
           </p>
           <div class="metadata">
-            <span>{{ playlist()!.total_songs }} canciones</span>
+            <span>{{ playlist()!.songCount }} canciones</span>
             <span>•</span>
-            <span>{{ playlist()!.is_public ? 'Pública' : 'Privada' }}</span>
-            <span *ngIf="playlist()!.is_default">•</span>
-            <span *ngIf="playlist()!.is_default" class="favorites-badge">
+            <span>{{ playlist()!.isPublic ? 'Pública' : 'Privada' }}</span>
+            <span *ngIf="playlist()!.name === 'Favoritos'">•</span>
+            <span *ngIf="playlist()!.name === 'Favoritos'" class="favorites-badge">
               <mat-icon>favorite</mat-icon>
               Favoritos
             </span>
@@ -57,7 +58,7 @@ import { PlaylistWithSongs, PlaylistSong } from '../../domain/entities/playlist.
           <button 
             mat-raised-button 
             [routerLink]="['/my-playlist', playlist()!.id, 'edit']"
-            *ngIf="!playlist()!.is_default">
+            *ngIf="playlist()!.name !== 'Favoritos'">
             <mat-icon>edit</mat-icon>
             Editar
           </button>
@@ -103,7 +104,7 @@ import { PlaylistWithSongs, PlaylistSong } from '../../domain/entities/playlist.
               <ng-container matColumnDef="duration">
                 <th mat-header-cell *matHeaderCellDef> Duración </th>
                 <td mat-cell *matCellDef="let song"> 
-                  {{ formatDuration(song.duration_seconds) }} 
+                  {{ song.duration_formatted }} 
                 </td>
               </ng-container>
 
@@ -111,7 +112,7 @@ import { PlaylistWithSongs, PlaylistSong } from '../../domain/entities/playlist.
               <ng-container matColumnDef="added_at">
                 <th mat-header-cell *matHeaderCellDef> Agregada </th>
                 <td mat-cell *matCellDef="let song"> 
-                  {{ song.added_at | date:'short' }} 
+                  {{ song.created_at | date:'short' }} 
                 </td>
               </ng-container>
 
@@ -132,7 +133,7 @@ import { PlaylistWithSongs, PlaylistSong } from '../../domain/entities/playlist.
                     color="warn"
                     matTooltip="Eliminar de la playlist"
                     (click)="removeSong(song)"
-                    *ngIf="!playlist()!.is_default">
+                    *ngIf="playlist()!.name !== 'Favoritos'">
                     <mat-icon>remove</mat-icon>
                   </button>
                 </td>
@@ -313,16 +314,14 @@ export class PlaylistDetailComponent implements OnInit {
   }
 
   playAllSongs() {
-    // TODO: Integrar con el reproductor de música
     console.log('Playing all songs from playlist');
   }
 
-  playSong(song: PlaylistSong) {
-    // TODO: Integrar con el reproductor de música
+  playSong(song: Song) {
     console.log('Playing song:', song.title);
   }
 
-  removeSong(song: PlaylistSong) {
+  removeSong(song: Song) {
     if (confirm(`¿Quieres eliminar "${song.title}" de esta playlist?`)) {
       this.removeSongFromPlaylistUseCase.execute(this.playlist()!.id, song.id).subscribe({
         next: () => {
