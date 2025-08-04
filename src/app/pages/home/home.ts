@@ -67,6 +67,19 @@ import {
           </button>
         </div>
 
+        <!-- Navigation to Discover Page -->
+        <div class="flex justify-center">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="navigateToDiscover()"
+            class="flex items-center gap-2"
+          >
+            <mat-icon>explore</mat-icon>
+            Ir a Discover (Albums, Artists, Genres)
+          </button>
+        </div>
+
         <!-- Popular Songs Section -->
         <mat-card 
           [class]="(isDarkTheme$ | async) 
@@ -179,6 +192,7 @@ export class HomePage implements OnInit {
   private readonly materialTheme = inject(MaterialThemeService);
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
+  private readonly router = inject(Router);
 
   // Signals for reactive state management
   popularSongs = signal<Song[]>([]);
@@ -234,5 +248,9 @@ export class HomePage implements OnInit {
           this.randomSongs.set([]);
         }
       });
+  }
+
+  navigateToDiscover(): void {
+    this.router.navigate(['/discover']);
   }
 }
