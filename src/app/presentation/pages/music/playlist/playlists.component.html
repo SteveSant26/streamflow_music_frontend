@@ -27,16 +27,16 @@
           </mat-icon>
         </mat-card-title>
         <mat-card-subtitle>
-          {{ playlist.songCount }} canciones
+          {{ playlist.total_songs }} canciones
         </mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
         <p *ngIf="playlist.description">{{ playlist.description }}</p>
         <p class="playlist-info">
-          <span>{{ playlist.isPublic ? 'Pública' : 'Privada' }}</span>
+          <span>{{ playlist.is_public ? 'Pública' : 'Privada' }}</span>
           <span>•</span>
-          <span>{{ playlist.createdDate | date:'short' }}</span>
+          <span>{{ playlist.created_at | date:'short' }}</span>
         </p>
       </mat-card-content>
 
