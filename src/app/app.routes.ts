@@ -30,7 +30,7 @@ export const routes: Routes = [
       {
         path: 'discover',
         loadComponent: () =>
-          import('./pages/discover/discover.component').then(
+          import('./presentation/pages/music/discover/discover.component').then(
             (m) => m.DiscoverPageComponent,
           ),
       },
@@ -42,7 +42,7 @@ export const routes: Routes = [
       {
         path: 'my-playlists',
         loadComponent: () =>
-          import('./pages/playlist/playlists.component').then(
+          import('./presentation/pages/music/playlist/playlists.component').then(
             (m) => m.PlaylistsComponent,
           ),
         canActivate: [authGuard],
@@ -50,7 +50,7 @@ export const routes: Routes = [
       {
         path: 'my-playlist/:id',
         loadComponent: () =>
-          import('./pages/playlist/playlist-detail.component').then(
+          import('./presentation/pages/music/playlist/playlist-detail.component').then(
             (m) => m.PlaylistDetailComponent,
           ),
         canActivate: [authGuard],
