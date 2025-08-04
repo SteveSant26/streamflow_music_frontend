@@ -31,8 +31,6 @@ export class HomeComponent implements OnInit {
   // Servicios inyectados
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
-  private readonly playRandomPlaylistUseCase = inject(PlayRandomPlaylistUseCase);
-  private readonly playPopularPlaylistUseCase = inject(PlayPopularPlaylistUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
 
   // Route configs
@@ -143,17 +141,7 @@ export class HomeComponent implements OnInit {
     this.loadHomeData();
   }
 
-  // Método para reproducir una canción específica
-  playSong(song: Song): void {
-    this.playSongUseCase.execute(song.id, true).subscribe({
-      next: () => {
-        console.log(`Reproduciendo: ${song.title} - ${song.artist}`);
-      },
-      error: (error) => {
-        console.error('Error al reproducir canción:', error);
-      }
-    });
-  }
+  // Método para reproducir una canción específica - ya existe uno anterior, removiendo duplicado
 
   // Método para formatear el conteo de reproducciones
   formatPlayCount(count: number): string {
@@ -169,7 +157,7 @@ export class HomeComponent implements OnInit {
   get popularSectionConfig() {
     const primaryButton: MusicSectionButton = {
       text: 'Ver todas',
-      action: () => this.loadPopularSongs(),
+      action: () => this.loadMostPopularSongs(),
       ariaLabel: 'Ver todas las canciones populares'
     };
 
@@ -193,7 +181,7 @@ export class HomeComponent implements OnInit {
       },
       {
         icon: 'play_arrow',
-        action: () => this.playRandomPlaylist(),
+        action: () => this.loadRandomSongs(),
         ariaLabel: 'Reproducir playlist aleatoria'
       }
     ];
