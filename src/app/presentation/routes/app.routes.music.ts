@@ -16,10 +16,31 @@ export const MUSIC_ROUTES: Routes = [
       ),
   },
   {
+    path: 'discover',
+    loadComponent: () =>
+      import('../pages/music/discover/discover.component').then(
+        (m) => m.DiscoverPageComponent,
+      ),
+  },
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('../pages/music/home/home.component').then(
+        (m) => m.HomePageComponent,
+      ),
+  },
+  {
+    path: 'playlists',
+    loadComponent: () =>
+      import('../pages/music/playlist/playlists.component').then(
+        (m) => m.PlaylistsComponent,
+      ),
+  },
+  {
     path: 'playlist/:id',
     loadComponent: () =>
-      import('../pages/music/playlist/playlist-main/playlist').then(
-        (m) => m.PlaylistComponent,
+      import('../pages/music/playlist/playlist-detail.component').then(
+        (m) => m.PlaylistDetailComponent,
       ),
   },
   {

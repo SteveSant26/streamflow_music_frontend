@@ -1,36 +1,20 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { finalize } from 'rxjs';
 
-interface Playlist {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  songCount: number;
-  createdAt: Date;
-}
+// Domain
+import { LegacyPlaylist as Playlist } from '@app/domain/entities/playlist.entity';
+import { ArtistListItem as Artist } from '@app/domain/entities/artist.entity';
+import { AlbumListItem as Album } from '@app/domain/entities/album.entity';
 
-interface Artist {
-  id: string;
-  name: string;
-  genre: string;
-  image: string;
-  followers: string;
-  isFollowing: boolean;
-}
-
-interface Album {
-  id: string;
-  title: string;
-  artist: string;
-  year: number;
-  image: string;
-  songCount: number;
-}
+// Use Cases
+import { GetUserPlaylistsUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
+import { GetPopularArtistsUseCase } from '@app/domain/usecases/artist.usecases';
+import { GetPopularAlbumsUseCase } from '@app/domain/usecases/album.usecases';
 
 @Component({
   selector: 'app-library',
