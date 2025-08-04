@@ -1,0 +1,91 @@
+<div class="artist-container">
+  <!-- Loading State -->
+  <div *ngIf="artistLoading()" class="loading-container">
+    <mat-progress-spinner diameter="60" mode="indeterminate"></mat-progress-spinner>
+    <p>Cargando artista...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="artistError()" class="error-container">
+    <mat-icon>error</mat-icon>
+    <h2>Error al cargar el artista</h2>
+    <p>{{ artistError() }}</p>
+    <button mat-raised-button color="primary" (click)="refreshData()">
+      <mat-icon>refresh</mat-icon>
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Artist Content -->
+  <div *ngIf="!artistLoading() && !artistError() && artist()" class="artist-content">
+    <!-- Artist Header -->
+    <section class="artist-header">
+      <div class="artist-image">
+        <img 
+          [src]="artist()!.image_url || '/assets/default-artist.png'"
+          [alt]="artist()!.name"
+          class="artist-avatar"
+          (error)="onImageError($event)"
+        />
+      </div>
+      <div class="artist-info">
+        <h1 class="artist-name">{{ artist()!.name }}</h1>
+        <p class="artist-country" *ngIf="artist()!.country">{{ artist()!.country }}</p>
+        <p class="artist-followers">{{ artist()!.followers_count }} seguidores</p>
+        <div class="artist-actions">
+          <button 
+            mat-raised-button 
+            color="primary"
+            (click)="toggleFollow()"
+          >
+            <mat-icon>{{ isFollowing() ? 'favorite' : 'favorite_border' }}</mat-icon>
+            {{ isFollowing() ? 'Siguiendo' : 'Seguir' }}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Biography -->
+    <section class="biography" *ngIf="artist()!.biography">
+      <h2>Biografía</h2>
+      <p>{{ artist()!.biography }}</p>
+    </section>
+
+    <!-- Albums Section -->
+    <section class="albums-section" *ngIf="albums().length > 0">
+      <h2>Álbumes</h2>
+      <div class="albums-grid">
+        <div 
+          *ngFor="let album of albums()" 
+          class="album-card"
+          (click)="navigateToAlbum(album.id)"
+        >
+          <div class="album-image">
+            <img 
+              [src]="album.cover_url || '/assets/default-album.png'"
+              [alt]="album.title"
+              class="album-cover"
+              (error)="onImageError($event)"
+            />
+          </div>
+          <div class="album-info">
+            <h3 class="album-title">{{ album.title }}</h3>
+            <p class="album-tracks">{{ album.total_tracks }} canciones</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Albums Loading -->
+    <section *ngIf="albumsLoading()" class="albums-loading">
+      <h2>Álbumes</h2>
+      <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+    </section>
+
+    <!-- Albums Error -->
+    <section *ngIf="albumsError()" class="albums-error">
+      <h2>Álbumes</h2>
+      <p>{{ albumsError() }}</p>
+    </section>
+  </div>
+</div>
