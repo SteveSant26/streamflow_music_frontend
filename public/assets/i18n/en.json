@@ -205,6 +205,7 @@
     "CREATE_PLAYLIST": "Create Playlist",
     "PODCAST": "Podcasts",
     "LANGUAGE": "Language",
+    "THEME": "Theme",
     "SPANISH": "Spanish",
     "ENGLISH": "English",
     "SUBSCRIPTIONS": "Subscriptions",
@@ -212,6 +213,12 @@
     "LOGOUT": "Log Out",
     "LOGIN": "Log In",
     "REGISTER": "Sign Up"
+  },
+  "THEME": {
+    "TOGGLE": "Toggle theme",
+    "LIGHT": "Light theme",
+    "DARK": "Dark theme",
+    "SYSTEM": "System theme"
   },
   "PROFILE": {
     "TITLE": "My Profile",

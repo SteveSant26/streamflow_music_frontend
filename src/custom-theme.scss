@@ -1,10 +1,12 @@
 
+// ✅ @use debe estar al principio del archivo
+@use '@angular/material' as mat;
+
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
 
 html {
   @include mat.theme((
@@ -31,30 +33,5 @@ body {
   font: var(--mat-sys-body-medium);
 
   // Reset the user agent margin.
-  margin: 0;
-}
-// ✅ Esto debe estar en la primera línea y solo una vez
-@use "@angular/material" as mat;
-
-// ✅ Define el tema utilizando el sistema Material 3 (CSS variables)
-html {
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
-}
-
-// ✅ Reglas personalizadas para body
-body {
-  color-scheme: light;
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
   margin: 0;
 }

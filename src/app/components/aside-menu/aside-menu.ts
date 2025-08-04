@@ -29,16 +29,32 @@ export class AsideMenu {
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
 
+  // Properties para el template
+  protected availableLanguages: { code: string; name: string }[] = [];
+  protected currentLanguage: string = 'es';
+
   isAuthenticated = this.authStatusUseCase.isAuthenticated;
   user = this.authStatusUseCase.user;
 
+  constructor() {
+    // Cargar idiomas disponibles
+    this.languageService.getAvailableLanguages().subscribe(languages => {
+      this.availableLanguages = languages;
+    });
+    
+    // Obtener idioma actual
+    this.languageService.getCurrentLanguage().subscribe(lang => {
+      this.currentLanguage = lang;
+    });
+  }
+
   // Language methods
   getCurrentLanguage() {
-    return this.languageService.getCurrentLanguage();
+    return this.currentLanguage;
   }
 
   getAvailableLanguages() {
-    return this.languageService.getAvailableLanguages();
+    return this.availableLanguages;
   }
 
   changeLanguage(language: 'en' | 'es') {
