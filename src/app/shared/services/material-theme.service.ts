@@ -1,5 +1,7 @@
 import { Injectable, signal, computed, inject, PLATFORM_ID, effect } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Observable } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { ThemeRepository } from '@app/domain/repositories/theme.repository';
 import { ThemeEntity } from '@app/domain/entities/theme.entity';
 import { MATERIAL_THEMES } from '@app/shared/config/material-theme.config';
@@ -38,7 +40,7 @@ export class MaterialThemeService {
     return current.isDark ? 'dark' : 'light';
   });
 
-  readonly isDarkMode = computed(() => {
+  readonly _isDarkMode = computed(() => {
     return this.effectiveTheme() === 'dark';
   });
 
@@ -51,6 +53,15 @@ export class MaterialThemeService {
   readonly primaryColor = computed(() => this.currentThemeConfig().primary);
   readonly surfaceColor = computed(() => this.currentThemeConfig().surface);
   readonly backgroundColor = computed(() => this.currentThemeConfig().background);
+
+  // Métodos para compatibilidad con observables (para templates que usan | async)
+  isDarkMode(): Observable<boolean> {
+    return toObservable(this._isDarkMode);
+  }
+
+  getCurrentTheme(): Observable<string> {
+    return toObservable(this.effectiveTheme);
+  }
 
   /**
    * Establece un nuevo tema
