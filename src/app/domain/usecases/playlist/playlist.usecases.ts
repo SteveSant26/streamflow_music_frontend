@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PlaylistHttpService } from '../../../infrastructure/services/playlist-http.service';
 import { 
   Playlist, 
@@ -9,94 +9,102 @@ import {
   UpdatePlaylistDto,
   AddSongToPlaylistDto
 } from '../../entities/playlist.entity';
-import { 
-  mapPlaylistDtoToEntity, 
-  mapPlaylistWithSongsDtoToEntity,
-  mapPlaylistSongDtoToEntity
-} from '../../mappers/playlist.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class GetUserPlaylistsUseCase {
-  private readonly userPlaylistService = inject(UserPlaylistService);
+  private readonly playlistService = inject(PlaylistHttpService);
 
-  execute(page?: number, pageSize?: number): Observable<Playlist[]> {
-    return this.userPlaylistService
-      .getUserPlaylists(page, pageSize)
-      .pipe(map(response => mapPaginatedPlaylistResponse(response)));
+  execute(): Observable<Playlist[]> {
+    return this.playlistService.getPlaylists();
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class GetPlaylistByIdUseCase {
-  private readonly userPlaylistService = inject(UserPlaylistService);
+  private readonly playlistService = inject(PlaylistHttpService);
 
-  execute(id: string): Observable<Playlist> {
-    return this.userPlaylistService
-      .getPlaylistById(id)
-      .pipe(map(dto => mapPlaylistDtoToEntity(dto)));
+  execute(id: string): Observable<PlaylistWithSongs> {
+    return this.playlistService.getPlaylist(id);
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class CreatePlaylistUseCase {
-  private readonly userPlaylistService = inject(UserPlaylistService);
+  private readonly playlistService = inject(PlaylistHttpService);
 
   execute(data: CreatePlaylistDto): Observable<Playlist> {
-    return this.userPlaylistService
-      .createPlaylist(data)
-      .pipe(map(dto => mapPlaylistDtoToEntity(dto)));
+    return this.playlistService.createPlaylist(data);
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class UpdatePlaylistUseCase {
-  private readonly userPlaylistService = inject(UserPlaylistService);
+  private readonly playlistService = inject(PlaylistHttpService);
 
   execute(id: string, data: UpdatePlaylistDto): Observable<Playlist> {
-    return this.userPlaylistService
-      .updatePlaylist(id, data)
-      .pipe(map(dto => mapPlaylistDtoToEntity(dto)));
+    return this.playlistService.updatePlaylist(id, data);
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class DeletePlaylistUseCase {
-  private readonly userPlaylistService = inject(UserPlaylistService);
+  private readonly playlistService = inject(PlaylistHttpService);
 
   execute(id: string): Observable<void> {
-    return this.userPlaylistService.deletePlaylist(id);
+    return this.playlistService.deletePlaylist(id);
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class AddSongToPlaylistUseCase {
-  private readonly userPlaylistService = inject(UserPlaylistService);
+  private readonly playlistService = inject(PlaylistHttpService);
 
-  execute(playlistId: string, data: AddSongToPlaylistDto): Observable<Playlist> {
-    return this.userPlaylistService
-      .addSongToPlaylist(playlistId, data)
-      .pipe(map(dto => mapPlaylistDtoToEntity(dto)));
+  execute(playlistId: string, data: AddSongToPlaylistDto): Observable<PlaylistSong> {
+    return this.playlistService.addSongToPlaylist(playlistId, data);
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class RemoveSongFromPlaylistUseCase {
-  private readonly userPlaylistService = inject(UserPlaylistService);
+  private readonly playlistService = inject(PlaylistHttpService);
 
-  execute(playlistId: string, songId: string): Observable<Playlist> {
-    return this.userPlaylistService
-      .removeSongFromPlaylist(playlistId, songId)
-      .pipe(map(dto => mapPlaylistDtoToEntity(dto)));
+  execute(playlistId: string, songId: string): Observable<void> {
+    return this.playlistService.removeSongFromPlaylist(playlistId, songId);
   }
 }
 
 @Injectable({ providedIn: 'root' })
-export class GetPublicPlaylistsUseCase {
-  private readonly userPlaylistService = inject(UserPlaylistService);
+export class GetFavoritesPlaylistUseCase {
+  private readonly playlistService = inject(PlaylistHttpService);
 
-  execute(page?: number, pageSize?: number): Observable<Playlist[]> {
-    return this.userPlaylistService
-      .getPublicPlaylists(page, pageSize)
-      .pipe(map(response => mapPaginatedPlaylistResponse(response)));
+  execute(): Observable<PlaylistWithSongs> {
+    return this.playlistService.getFavoritesPlaylist();
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class EnsureDefaultPlaylistUseCase {
+  private readonly playlistService = inject(PlaylistHttpService);
+
+  execute(): Observable<Playlist> {
+    return this.playlistService.ensureDefaultPlaylist();
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class GetPlaylistSongsUseCase {
+  private readonly playlistService = inject(PlaylistHttpService);
+
+  execute(playlistId: string): Observable<PlaylistSong[]> {
+    return this.playlistService.getPlaylistSongs(playlistId);
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class ReorderPlaylistSongsUseCase {
+  private readonly playlistService = inject(PlaylistHttpService);
+
+  execute(playlistId: string, songIds: string[]): Observable<PlaylistSong[]> {
+    return this.playlistService.reorderPlaylistSongs(playlistId, songIds);
   }
 }

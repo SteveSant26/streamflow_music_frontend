@@ -38,6 +38,24 @@ export const routes: Routes = [
       // Music routes (library, search, playlist, artist, song)
       ...MUSIC_ROUTES,
       
+      // Playlist routes
+      {
+        path: 'playlists',
+        loadComponent: () =>
+          import('./pages/playlist/playlists.component').then(
+            (m) => m.PlaylistsComponent,
+          ),
+        canActivate: [authGuard],
+      },
+      {
+        path: 'playlist/:id/detail',
+        loadComponent: () =>
+          import('./pages/playlist/playlist-detail.component').then(
+            (m) => m.PlaylistDetailComponent,
+          ),
+        canActivate: [authGuard],
+      },
+      
       // Rutas de perfil
       {
         path: 'profile',
