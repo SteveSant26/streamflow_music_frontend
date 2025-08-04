@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
 
 @Component({
   selector: 'app-card-play-button',
-  imports: [MatIconModule, TranslateModule],
+  imports: [MatIconModule, TranslateModule, CommonModule],
   templateUrl: './card-play-button.html',
   styleUrl: './card-play-button.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,6 +18,12 @@ export class CardPlayButton {
   // Mock state para el reproductor
   isPlaying = false;
   currentPlaylistId: number | null = null;
+
+  constructor(private readonly materialTheme: MaterialThemeService) {}
+
+  get isDarkTheme$() {
+    return this.materialTheme.isDarkMode();
+  }
 
   get isPlayingPlaylist(): boolean {
     return this.isPlaying && this.currentPlaylistId === this.id;

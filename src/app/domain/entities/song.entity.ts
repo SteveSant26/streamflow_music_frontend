@@ -1,27 +1,41 @@
-// Entidades de dominio para Songs
+// Entidades de dominio para Songs basadas en la nueva API
 export interface Song {
   id: string;
   title: string;
-  artist: string;
-  album: string;
-  genre: string;
-  duration: string;
-  durationSeconds: number;
-  fileUrl: string;
-  thumbnailUrl: string;
-  youtubeUrl: string;
-  tags: string[];
-  playCount: number;
-  youtubeViewCount: number;
-  youtubeLikeCount: number;
-  isExplicit: boolean;
-  audioDownloaded: boolean;
-  createdAt: Date;
-  publishedAt: Date;
+  artist_id: string;
+  artist_name?: string;
+  album_id?: string;
+  album_name?: string;
+  duration_formatted: string; // Formato MM:SS desde la API
+  duration_seconds?: number; // Calculado localmente si es necesario
+  genre_names_display: string; // Géneros como string separado por comas
+  file_url?: string;
+  thumbnail_url?: string;
+  youtube_url?: string;
+  youtube_id?: string;
+  play_count: number;
+  youtube_view_count?: number;
+  youtube_like_count?: number;
+  is_explicit?: boolean;
+  audio_downloaded?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+  published_at?: Date;
   // Additional properties for compatibility
-  albumCover?: string; // Alias for thumbnailUrl
-  audioUrl?: string;   // Alias for fileUrl
+  albumCover?: string; // Alias for thumbnail_url
+  audioUrl?: string;   // Alias for file_url
   lyrics?: string;     // Optional lyrics
+}
+
+// Versión simplificada para listas (SongList de la API)
+export interface SongListItem {
+  id: string;
+  title: string;
+  artist_name?: string;
+  duration_formatted: string;
+  genre_names_display: string;
+  thumbnail_url?: string;
+  play_count: number;
 }
 
 export interface PlaylistItem extends Song {

@@ -8,13 +8,15 @@ import { MusicsTablePlay } from '../musics-table-play/musics-table-play';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
 import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { Song } from '@app/domain/entities/song.entity';
 import { PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
+import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 
 @Component({
   selector: 'app-musics-table',
-  imports: [MusicsTablePlay, MatIcon, TranslateModule],
+  imports: [MusicsTablePlay, MatIcon, TranslateModule, CommonModule],
   templateUrl: './musics-table.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -23,9 +25,13 @@ export class MusicsTable {
 
   private readonly router = inject(Router);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly materialThemeService = inject(MaterialThemeService);
 
   // Estado del reproductor actual
   currentSong: Song | null = null;
+
+  // Tema observables
+  isDarkTheme$ = this.materialThemeService.isDarkMode();
 
   isCurrentSong(song: Song): boolean {
     return this.currentSong?.id === song.id;
@@ -39,7 +45,7 @@ export class MusicsTable {
     this.playSongUseCase.execute(song.id, true).subscribe({
       next: () => {
         this.currentSong = song;
-        console.log(`Reproduciendo: ${song.title} - ${song.artist || 'Artista desconocido'}`);
+        console.log(`Reproduciendo: ${song.title} - ${song.artist_name || 'Artista desconocido'}`);
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);

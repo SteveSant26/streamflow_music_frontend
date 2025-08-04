@@ -1,20 +1,22 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { SongService } from '../../../infrastructure/services/song.service';
-import { PlaylistService } from '../../../infrastructure/services/playlist.service';
-import { Song } from '../../entities/song.entity';
-import { SongSearchParams, PaginationParams } from '../../dtos/song.dto';
+import { Song, SongListItem } from '../../entities/song.entity';
+import { SongSearchParams } from '../../dtos/song.dto';
 import { 
   mapSongDtoToEntity,
-  mapPaginatedSongSearchResponse 
-} from '../../mappers/song.mapper';
+  mapSongListDtoToEntity,
+  mapSongListToSongs
+} from '../../mappers/song.mapper.new';
 
 @Injectable({ providedIn: 'root' })
 export class GetSongByIdUseCase {
   private readonly songService = inject(SongService);
 
   execute(songId: string): Observable<Song> {
-    return this.songService.getSongById(songId).pipe(map(mapSongDtoToEntity));
+    return this.songService.getSongById(songId).pipe(
+      map(mapSongDtoToEntity)
+    );
   }
 }
 
@@ -33,21 +35,34 @@ export class IncrementPlayCountUseCase {
 export class GetMostPopularSongsUseCase {
   private readonly songService = inject(SongService);
 
-  execute(params?: PaginationParams): Observable<Song[]> {
+  execute(page: number = 1, pageSize: number = 10): Observable<Song[]> {
     return this.songService
-      .getMostPopular(params)
-      .pipe(map((response) => mapPaginatedSongSearchResponse(response)));
+      .getMostPopular(page, pageSize)
+      .pipe(map(mapSongListToSongs));
   }
 }
 
 @Injectable({ providedIn: 'root' })
-export class ProcessYoutubeVideoUseCase {
+export class GetRandomSongsUseCase {
   private readonly songService = inject(SongService);
 
-  execute(videoId: string): Observable<Song> {
+  execute(page: number = 1, pageSize: number = 10): Observable<Song[]> {
     return this.songService
-      .processYoutubeVideo(videoId)
-      .pipe(map(mapSongDtoToEntity));
+      .getRandomSongs(page, pageSize)
+      .pipe(map(mapSongListToSongs));
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class SearchSongsUseCase {
+  private readonly songService = inject(SongService);
+
+  execute(searchParams: SongSearchParams): Observable<Song[]> {
+    return this.songService
+      .searchSongs(searchParams)
+      .pipe(map(mapSongListToSongs));
+  }
+}
   }
 }
 
