@@ -57,3 +57,15 @@ export interface PaginatedResponse<T> {
   page_size: number;
   results: T[];
 }
+
+// Legacy DTOs for compatibility
+export interface SongSearchDto {
+  name: string;
+  limit?: number;
+}
+
+export interface ProcessYoutubeDto {
+  youtube_url: string;
+  title?: string;
+  artist_name?: string;
+}

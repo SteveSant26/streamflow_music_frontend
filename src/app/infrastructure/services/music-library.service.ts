@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of, map } from 'rxjs';
 import { Song } from '../../domain/entities/song.entity';
-import { Playlist } from '../../domain/entities/playlist.entity';
-import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MusicLibraryService {
   private songsSubject = new BehaviorSubject<Song[]>([]);
-  private playlistsSubject = new BehaviorSubject<Playlist[]>([]);
+  public songs$ = this.songsSubject.asObservable();
 
   constructor() {
     this.initializeSampleData();
@@ -25,12 +24,11 @@ export class MusicLibraryService {
         album_id: '1',
         album_name: 'Demo Album',
         genre_names_display: 'Demo',
-        duration_formatted: '0:00', // Will be loaded dynamically
+        duration_formatted: '0:00',
         duration_seconds: 0,
         file_url: '/assets/music/1.mp3',
         thumbnail_url: '/assets/gorillaz2.jpg',
         youtube_url: '',
-        // Removed 'tags' property - not part of Song entity
         play_count: 0,
         youtube_view_count: 0,
         youtube_like_count: 0,
@@ -52,7 +50,6 @@ export class MusicLibraryService {
         file_url: '/assets/music/2.mp3',
         thumbnail_url: '/assets/gorillaz2.jpg',
         youtube_url: '',
-        album_id: '2',
         play_count: 0,
         youtube_view_count: 0,
         youtube_like_count: 0,
@@ -84,68 +81,95 @@ export class MusicLibraryService {
       },
     ];
 
-    const samplePlaylist: Playlist = {
-      id: 'default-playlist',
-      name: 'Demo Playlist',
-      description: 'Una playlist de demostración',
-      coverImage: 'https://picsum.photos/300/300?random=1',
-      isPublic: true,
-      createdDate: new Date().toISOString(),
-      songCount: sampleSongs.length,
-      duration: sampleSongs.reduce((total, song) => total + (song.duration_seconds || 0), 0),
-      owner: {
-        id: 'demo-user',
-        username: 'Demo User'
-      },
-      songs: sampleSongs,
-    };
-
     this.songsSubject.next(sampleSongs);
-    this.playlistsSubject.next([samplePlaylist]);
   }
 
-  getSongs(): Observable<Song[]> {
-    return this.songsSubject.asObservable();
+  getAllSongs(): Observable<Song[]> {
+    return this.songs$;
   }
 
-  getPlaylists(): Observable<Playlist[]> {
-    return this.playlistsSubject.asObservable();
+  getSongById(id: string): Observable<Song | undefined> {
+    return this.songs$.pipe(
+      map(songs => songs.find(song => song.id === id))
+    );
   }
 
-  getSongById(id: string): Song | undefined {
-    return this.songsSubject.value.find((song) => song.id === id);
+  getRandomSongs(count: number = 10): Observable<Song[]> {
+    return this.songs$.pipe(
+      map(songs => {
+        const shuffled = [...songs].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, count);
+      })
+    );
   }
 
-  getDefaultPlaylist(): Playlist | undefined {
-    return this.playlistsSubject.value.find(
-      (playlist) => playlist.id === 'default-playlist',
+  searchSongs(query: string): Observable<Song[]> {
+    return this.songs$.pipe(
+      map(songs => 
+        songs.filter(song => 
+          song.title.toLowerCase().includes(query.toLowerCase()) ||
+          (song.artist_name && song.artist_name.toLowerCase().includes(query.toLowerCase())) ||
+          (song.album_name && song.album_name.toLowerCase().includes(query.toLowerCase()))
+        )
+      )
     );
   }
 
   addSong(song: Song): void {
     const currentSongs = this.songsSubject.value;
     this.songsSubject.next([...currentSongs, song]);
+  }
 
-    // Add to default playlist
-    const playlists = this.playlistsSubject.value;
-    const defaultPlaylist = playlists.find((p) => p.id === 'default-playlist');
-    if (defaultPlaylist) {
-      defaultPlaylist.songs.push(song);
-      this.playlistsSubject.next([...playlists]);
+  updateSong(song: Song): void {
+    const currentSongs = this.songsSubject.value;
+    const index = currentSongs.findIndex(s => s.id === song.id);
+    if (index !== -1) {
+      currentSongs[index] = song;
+      this.songsSubject.next([...currentSongs]);
     }
   }
 
-  removeSong(songId: string): void {
-    const currentSongs = this.songsSubject.value.filter(
-      (song) => song.id !== songId,
-    );
-    this.songsSubject.next(currentSongs);
+  deleteSong(id: string): void {
+    const currentSongs = this.songsSubject.value;
+    const filteredSongs = currentSongs.filter(song => song.id !== id);
+    this.songsSubject.next(filteredSongs);
+  }
 
-    // Remove from all playlists
-    const playlists = this.playlistsSubject.value.map((playlist) => ({
-      ...playlist,
-      songs: playlist.songs.filter((song) => song.id !== songId),
-    }));
-    this.playlistsSubject.next(playlists);
+  // Helper method to load audio duration from actual files
+  private async loadAudioDuration(audioUrl: string): Promise<number> {
+    return new Promise((resolve) => {
+      const audio = new Audio(audioUrl);
+      audio.addEventListener('loadedmetadata', () => {
+        resolve(audio.duration);
+      });
+      audio.addEventListener('error', () => {
+        resolve(0); // Fallback if file doesn't exist
+      });
+    });
+  }
+
+  // Method to update durations for all songs
+  async updateSongDurations(): Promise<void> {
+    const songs = this.songsSubject.value;
+    const updatedSongs = await Promise.all(
+      songs.map(async (song) => {
+        if (song.file_url) {
+          const duration = await this.loadAudioDuration(song.file_url);
+          return {
+            ...song,
+            duration_seconds: duration,
+            duration_formatted: this.formatDuration(duration)
+          };
+        }
+        return song;
+      })
+    );
+    this.songsSubject.next(updatedSongs);
+  }
+
+  private formatDuration(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 }

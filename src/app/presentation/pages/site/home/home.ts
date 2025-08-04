@@ -86,7 +86,7 @@ export class HomeComponent implements OnInit {
     this.loading.set(true);
 
     // Cargar canciones populares
-    this.getMostPopularUseCase.execute({ page_size: 10 }).subscribe({
+    this.getMostPopularUseCase.execute(1, 10).subscribe({
       next: (songs) => {
         this.popularSongs.set(songs);
       },
