@@ -17,7 +17,7 @@ export const routes: Routes = [
         (m) => m.CurrentSongComponent,
       ),
   },
-  
+
   // Rutas principales con GlobalLayout
   {
     path: '',
@@ -25,7 +25,7 @@ export const routes: Routes = [
     children: [
       // Site routes (home, explore)
       ...SITE_ROUTES,
-      
+
       // Nueva página de descubrimiento
       {
         path: 'discover',
@@ -34,28 +34,28 @@ export const routes: Routes = [
             (m) => m.DiscoverPageComponent,
           ),
       },
-      
+
       // Music routes (library, search, playlist, artist, song)
       ...MUSIC_ROUTES,
-      
+
       // Playlist routes
       {
         path: 'my-playlists',
         loadComponent: () =>
-          import('./presentation/pages/music/playlist/playlists.component').then(
-            (m) => m.PlaylistsComponent,
-          ),
+          import(
+            './presentation/pages/music/playlist/playlists.component'
+          ).then((m) => m.PlaylistsComponent),
         canActivate: [authGuard],
       },
       {
         path: 'my-playlist/:id',
         loadComponent: () =>
-          import('./presentation/pages/music/playlist/playlist-detail.component').then(
-            (m) => m.PlaylistDetailComponent,
-          ),
+          import(
+            './presentation/pages/music/playlist/playlist-detail.component'
+          ).then((m) => m.PlaylistDetailComponent),
         canActivate: [authGuard],
       },
-      
+
       // Rutas de perfil
       {
         path: 'profile',
@@ -65,7 +65,7 @@ export const routes: Routes = [
           ),
         canActivate: [authGuard],
       },
-      
+
       // Rutas de términos y condiciones
       {
         path: 'terms-and-conditions',
@@ -74,7 +74,7 @@ export const routes: Routes = [
             './presentation/pages/terms-and-condition/terms-and-condition'
           ).then((m) => m.TermsAndCondition),
       },
-      
+
       // Rutas de suscripción
       {
         path: 'subscription',
@@ -82,7 +82,7 @@ export const routes: Routes = [
       },
     ],
   },
-  
+
   // Rutas de autenticación con AuthLayout
   {
     path: '',
@@ -94,7 +94,7 @@ export const routes: Routes = [
       },
     ],
   },
-  
+
   // Ruta por defecto
   {
     path: '**',

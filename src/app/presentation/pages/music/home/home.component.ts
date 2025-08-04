@@ -37,7 +37,7 @@ export class HomePageComponent implements OnInit {
   private readonly router = inject(Router);
 
   // Observable para el tema
-  isDarkTheme$ = this.themeService.isDarkMode$;
+  isDarkTheme$ = this.themeService.isDarkMode();
 
   // Signals para el estado
   mostPopularSongs = signal<Song[]>([]);
@@ -95,5 +95,17 @@ export class HomePageComponent implements OnInit {
   refresh() {
     this.loadMostPopularSongs();
     this.loadRandomSongs();
+  }
+
+  // Método requerido por el template
+  toggleTheme() {
+    const currentTheme = this.themeService.getTheme();
+    const newTheme = currentTheme.isDark ? 'light' : 'dark';
+    this.themeService.setTheme(newTheme);
+  }
+
+  // Propiedad para compatibilidad con el template
+  get popularLoading() {
+    return this.isLoadingPopular();
   }
 }
