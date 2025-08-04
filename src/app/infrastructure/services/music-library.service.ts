@@ -20,14 +20,14 @@ export class MusicLibraryService {
       {
         id: '1',
         title: 'Demo Track 1',
-        artist: 'Test Artist',
-        album: 'Demo Album',
-        genre: 'Demo',
-        duration: '0:00', // Will be loaded dynamically
-        durationSeconds: 0,
-        fileUrl: '/assets/music/1.mp3',
-        thumbnailUrl: '/assets/gorillaz2.jpg',
-        youtubeUrl: '',
+        artist_name: 'Test Artist',
+        album_name: 'Demo Album',
+        genre_names_display: 'Demo',
+        duration_formatted: '0:00', // Will be loaded dynamically
+        duration_seconds: 0,
+        file_url: '/assets/music/1.mp3',
+        thumbnail_url: '/assets/gorillaz2.jpg',
+        youtube_url: '',
         tags: ['demo'],
         playCount: 0,
         youtubeViewCount: 0,
@@ -87,7 +87,7 @@ export class MusicLibraryService {
       isPublic: true,
       createdDate: new Date().toISOString(),
       songCount: sampleSongs.length,
-      duration: sampleSongs.reduce((total, song) => total + (song.durationSeconds || 0), 0),
+      duration: sampleSongs.reduce((total, song) => total + (song.duration_seconds || 0), 0),
       owner: {
         id: 'demo-user',
         username: 'Demo User'

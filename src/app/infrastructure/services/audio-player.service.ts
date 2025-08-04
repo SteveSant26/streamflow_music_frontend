@@ -85,8 +85,8 @@ export class AudioPlayerService {
     if (!this.audioElement) return;
 
     // Solo cargar si es una canción diferente
-    if (this.audioElement.src !== song.fileUrl) {
-      this.audioElement.src = song.fileUrl;
+    if (this.audioElement.src !== song.file_url) {
+      this.audioElement.src = song.file_url || '';
       this.audioElement.load();
       
       // Resetear el flag de play count para esta nueva canción
