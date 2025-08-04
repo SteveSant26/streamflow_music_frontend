@@ -32,8 +32,8 @@ export class MusicsTablePlay {
 
   constructor(private readonly materialTheme: MaterialThemeService) {}
 
-  get isDarkTheme$() {
-    return this.materialTheme.isDarkMode();
+  get isDarkTheme() {
+    return this.materialTheme._isDarkMode();
   }
 
   // Mock state para el reproductor
