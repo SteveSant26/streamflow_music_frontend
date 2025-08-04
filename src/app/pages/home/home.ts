@@ -193,9 +193,9 @@ export class HomePage implements OnInit {
   }
 
   toggleTheme(): void {
-    // Get current theme and toggle between light and dark
-    const currentTheme = this.materialTheme.currentTheme();
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    // Get current effective theme and toggle between light and dark
+    const isDark = this.materialTheme._isDarkMode();
+    const newTheme = isDark ? 'light' : 'dark';
     this.materialTheme.setTheme(newTheme);
   }
 
