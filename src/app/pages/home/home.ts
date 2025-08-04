@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, finalize } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { Song } from '../../domain/entities/song.entity';
 import { MaterialThemeService } from '../../shared/services/material-theme.service';

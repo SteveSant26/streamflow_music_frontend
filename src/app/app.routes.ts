@@ -26,6 +26,15 @@ export const routes: Routes = [
       // Site routes (home, explore)
       ...SITE_ROUTES,
       
+      // Nueva página de descubrimiento
+      {
+        path: 'discover',
+        loadComponent: () =>
+          import('./pages/discover/discover.component').then(
+            (m) => m.DiscoverPageComponent,
+          ),
+      },
+      
       // Music routes (library, search, playlist, artist, song)
       ...MUSIC_ROUTES,
       
