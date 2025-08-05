@@ -162,7 +162,7 @@ export class PlaylistService {
   }
 
   /**
-   * Reproducir/pausar
+   * Reproducir/pausar - SIMPLIFICADO para evitar duplicación
    */
   togglePlayback(): void {
     const state = this.playbackState();
@@ -179,59 +179,17 @@ export class PlaylistService {
       return;
     }
 
-    console.log(`🎵 togglePlayback() - Canción actual: ${currentSong.title}`);
+    console.log(`🎵 PlaylistService.togglePlayback() - Canción: ${currentSong.title}`);
     console.log(`🎵 Estado actual isPlaying: ${state.isPlaying}`);
 
+    // DELEGAR COMPLETAMENTE AL PlayerUseCase - NO duplicar lógica
     if (!state.isPlaying) {
-      // Iniciar reproducción usando PlayerUseCase
       console.log(`🎵 Iniciando reproducción de: ${currentSong.title}`);
-      console.log(`🎵 Datos completos de la canción:`, currentSong);
-      console.log(`🎵 file_url: ${currentSong.file_url}`);
-      console.log(`🎵 audioUrl: ${currentSong.audioUrl}`);
-      console.log(`🎵 youtube_url: ${currentSong.youtube_url}`);
-      console.log(`🎵 youtube_id: ${currentSong.youtube_id}`);
       
-      const audioUrl = currentSong.file_url || currentSong.audioUrl || currentSong.youtube_url;
-      console.log(`🎵 URL de audio seleccionada: ${audioUrl}`);
-      
-      // Si no hay URL de audio directa, intentar extraer de thumbnail
-      let finalAudioUrl = audioUrl;
-      if (!finalAudioUrl && currentSong.thumbnail_url) {
-        const youtubeId = this.extractYouTubeIdFromThumbnail(currentSong.thumbnail_url);
-        if (youtubeId) {
-          finalAudioUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
-          console.log(`🎵 URL extraída del thumbnail: ${finalAudioUrl}`);
-        }
-      }
-      
-      if (!finalAudioUrl) {
-        console.error(`❌ NO HAY URL DE AUDIO DISPONIBLE para la canción: ${currentSong.title}`);
-        console.error(`❌ Datos de la canción:`, currentSong);
-        
-        // SOLUCIÓN TEMPORAL: Si tenemos youtube_id del thumbnail, abrir YouTube en nueva pestaña
-        if (currentSong.thumbnail_url) {
-          const youtubeId = this.extractYouTubeIdFromThumbnail(currentSong.thumbnail_url);
-          if (youtubeId) {
-            const youtubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
-            console.log(`🎵 Abriendo YouTube como fallback: ${youtubeUrl}`);
-            window.open(youtubeUrl, '_blank');
-            
-            // Actualizar estado como si estuviera reproduciéndose
-            const newState = {
-              ...state,
-              currentSong,
-              isPlaying: true
-            };
-            this.playbackState.set(newState);
-            this.playbackStateSubject.next(newState);
-          }
-        }
-        return;
-      }
-      
+      // Solo llamar al PlayerUseCase, él se encarga de todo el audio
       this.playerUseCase.playSong(currentSong);
-      console.log(`✅ Comando de reproducción enviado al PlayerUseCase`);
       
+      // Actualizar SOLO el estado de la playlist
       const newState = {
         ...state,
         currentSong,
@@ -240,10 +198,12 @@ export class PlaylistService {
       this.playbackState.set(newState);
       this.playbackStateSubject.next(newState);
     } else {
-      // Pausar reproducción
       console.log(`⏸️ Pausando reproducción`);
+      
+      // Solo llamar al PlayerUseCase para pausar
       this.playerUseCase.pauseSong();
       
+      // Actualizar estado local
       const newState = {
         ...state,
         isPlaying: false
@@ -251,6 +211,9 @@ export class PlaylistService {
       this.playbackState.set(newState);
       this.playbackStateSubject.next(newState);
     }
+
+    // Iniciar precarga de la siguiente canción
+    this.startPreloadingNext();
   }
 
   /**
@@ -440,6 +403,135 @@ export class PlaylistService {
 
     this.currentPlaylist.set(updatedPlaylist);
     this.currentPlaylistSubject.next(updatedPlaylist);
+  }
+
+  /**
+   * Agregar una canción a la playlist actual
+   */
+  addSongToCurrentPlaylist(song: Song): void {
+    const playlist = this.currentPlaylist();
+    if (!playlist) {
+      // Si no hay playlist, crear una nueva con la canción
+      this.setPlaylist([song], 0, 'Playlist Actual', 'single');
+      this.setPlaylistContext('single');
+      return;
+    }
+
+    // Verificar si la canción ya existe en la playlist
+    const exists = playlist.items.some(item => item.id === song.id);
+    if (exists) {
+      console.log(`🔄 La canción "${song.title}" ya está en la playlist`);
+      return;
+    }
+
+    // Agregar la canción al final de la playlist
+    const newItem: PlaylistItem = {
+      ...song,
+      position: playlist.items.length,
+      addedAt: new Date()
+    };
+
+    const updatedPlaylist = {
+      ...playlist,
+      items: [...playlist.items, newItem]
+    };
+
+    this.currentPlaylist.set(updatedPlaylist);
+    this.currentPlaylistSubject.next(updatedPlaylist);
+
+    console.log(`✅ Canción "${song.title}" agregada a la playlist actual`);
+  }
+
+  /**
+   * Reproducir una canción específica (para casos de single play)
+   */
+  playSingleSong(song: Song): void {
+    console.log(`🎵 Reproducir canción individual: ${song.title}`);
+    
+    // Si no hay playlist o es diferente contexto, crear una nueva
+    const currentPlaylist = this.currentPlaylist();
+    
+    // Crear/actualizar playlist con canciones random si es necesario
+    if (!currentPlaylist || currentPlaylist.contextType !== 'single') {
+      // Si hay playlist existente, mantener las canciones pero cambiar contexto
+      if (currentPlaylist) {
+        // Agregar la canción al inicio de la playlist existente
+        const newItems = [
+          { ...song, position: 0, addedAt: new Date() },
+          ...currentPlaylist.items.map(item => ({ ...item, position: item.position + 1 }))
+        ];
+        
+        const updatedPlaylist = {
+          ...currentPlaylist,
+          items: newItems,
+          currentIndex: 0,
+          contextType: 'single' as const,
+          type: 'expandable' as const // Permitir cargar más random
+        };
+        
+        this.currentPlaylist.set(updatedPlaylist);
+        this.currentPlaylistSubject.next(updatedPlaylist);
+      } else {
+        // Crear nueva playlist con la canción + algunas random
+        this.createRandomPlaylistWithSong(song);
+      }
+    } else {
+      // Si ya es contexto single, solo seleccionar o agregar
+      const songIndex = currentPlaylist.items.findIndex(item => item.id === song.id);
+      if (songIndex >= 0) {
+        // Si la canción ya está, seleccionarla
+        this.selectSong(songIndex);
+      } else {
+        // Si no está, agregarla y seleccionarla
+        this.addSongToCurrentPlaylist(song);
+        this.selectSong(currentPlaylist.items.length); // Última posición
+      }
+    }
+  }
+
+  /**
+   * Crear playlist random que incluya la canción especificada
+   */
+  private async createRandomPlaylistWithSong(primarySong: Song): Promise<void> {
+    try {
+      // Obtener algunas canciones random
+      const randomSongs = await this.musicApiService.getRandomSongs(1, 20);
+      
+      // Crear playlist con la canción principal al inicio
+      const items: PlaylistItem[] = [
+        { ...primarySong, position: 0, addedAt: new Date() },
+        ...randomSongs.slice(0, 19).map((song, index) => ({
+          ...song,
+          position: index + 1,
+          addedAt: new Date()
+        }))
+      ];
+
+      const playlist: Playlist = {
+        id: 'random-playlist',
+        name: 'Reproducción Aleatoria',
+        items,
+        currentIndex: 0,
+        repeatMode: 'none',
+        shuffleEnabled: false,
+        contextType: 'single',
+        type: 'expandable',
+        canLoadMore: true,
+        currentPage: 1
+      };
+
+      this.currentPlaylist.set(playlist);
+      this.currentPlaylistSubject.next(playlist);
+      
+      // Seleccionar la primera canción (la que el usuario quería reproducir)
+      this.selectSong(0);
+      
+    } catch (error) {
+      console.error('Error creando playlist random:', error);
+      // Fallback: solo reproducir la canción sola
+      this.setPlaylist([primarySong], 0, 'Canción Individual', 'single');
+      this.setPlaylistContext('single');
+    }
   }
 
   /**
