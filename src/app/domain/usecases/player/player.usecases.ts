@@ -45,10 +45,13 @@ export class PlayerUseCase {
   private ultraAggressiveInterval: any = null; // ← NUEVO: Verificador cada 500ms
 
   constructor() {
+    // 🚨 INTERCEPTOR EXTREMO: BLOQUEAR CREACIÓN DE AUDIOS DUPLICADOS
+    this.interceptAudioCreation();
+    
     // Iniciar limpieza agresiva periódica cada 2 segundos
     this.startAggressiveCleanup();
     
-    // ✅ NUEVO: Verificador ULTRA AGRESIVO cada 500ms
+    // ✅ NUEVO: Verificador ULTRA AGRESIVO cada 100ms
     this.startUltraAggressiveMonitoring();
   }
 
@@ -75,26 +78,69 @@ export class PlayerUseCase {
   playSong(song: Song): void {
     console.log(`🎵 PlayerUseCase.playSong() recibida:`, song);
     
+    // 🚨 VERIFICACIÓN INSTANTÁNEA ANTES DE CONTINUAR
+    const allAudiosBefore = document.querySelectorAll('audio');
+    console.log(`🔍 ANTES: ${allAudiosBefore.length} audios en el DOM`);
+    
     // MODO ULTRA AGRESIVO: DESTRUIR TODO ANTES DE CONTINUAR
-    console.log('[Player UseCase] � MODO ULTRA AGRESIVO: Destruyendo TODOS los audios');
+    console.log('[Player UseCase] 💀 MODO ULTRA AGRESIVO: Destruyendo TODOS los audios');
     
     // 1. Pausar absolutamente TODOS los audios sin excepción
     const allAudioElements = document.querySelectorAll('audio');
     allAudioElements.forEach((audio, index) => {
       try {
         if (!audio.paused) {
-          console.log(`[Player UseCase] � FORZANDO PAUSA en audio ${index + 1}:`, audio.src);
+          console.log(`[Player UseCase] 💀 FORZANDO PAUSA en audio ${index + 1}:`, audio.src);
           audio.pause();
         }
         audio.currentTime = 0;
         audio.volume = 0;
+        audio.muted = true;
+        
+        // SI NO ES NUESTRO AUDIO, DESTRUIRLO INMEDIATAMENTE
+        if (audio !== this.audioElement) {
+          try {
+            audio.src = '';
+            audio.load();
+            if (audio.parentNode) {
+              audio.parentNode.removeChild(audio);
+              console.log(`💀 DESTRUIDO INMEDIATAMENTE: Audio ${index + 1}`);
+            }
+          } catch (error) {
+            console.error('❌ Error destruyendo audio:', error);
+          }
+        }
       } catch (error) {
         console.error(`[Player UseCase] ❌ Error forzando pausa:`, error);
       }
     });
     
-    // 2. Esperar un momento y luego ejecutar nuestro método ultra agresivo
-    this.pauseAllOtherAudios();
+    // 2. VERIFICACIÓN INSTANTÁNEA DESPUÉS DE LIMPIEZA
+    const allAudiosAfter = document.querySelectorAll('audio');
+    console.log(`🔍 DESPUÉS DE LIMPIEZA: ${allAudiosAfter.length} audios en el DOM`);
+    
+    // 3. BLOQUEO TEMPORAL DE NUEVOS AUDIOS
+    setTimeout(() => {
+      const finalAudios = document.querySelectorAll('audio');
+      if (finalAudios.length > 1) {
+        console.error(`🚨 ALERTA EXTREMA: Se crearon ${finalAudios.length} audios - ELIMINANDO TODOS EXCEPTO EL PRINCIPAL`);
+        finalAudios.forEach((audio, index) => {
+          if (audio !== this.audioElement) {
+            try {
+              audio.pause();
+              audio.src = '';
+              audio.load();
+              if (audio.parentNode) {
+                audio.parentNode.removeChild(audio);
+                console.log(`💀 ELIMINACIÓN FINAL: Audio ${index + 1} removido`);
+              }
+            } catch (error) {
+              console.error('❌ Error en eliminación final:', error);
+            }
+          }
+        });
+      }
+    }, 100);
     
     // Verificar si ya estamos reproduciendo esta canción
     const currentState = this.playbackState$.value;
@@ -120,10 +166,12 @@ export class PlayerUseCase {
     // Reproducir el audio
     this.playAudioUrl(audioUrl);
     
-    // Verificación múltiple con intervalos más agresivos
-    setTimeout(() => this.detectMultiplePlayingAudios(), 200);
-    setTimeout(() => this.detectMultiplePlayingAudios(), 500);
-    setTimeout(() => this.detectMultiplePlayingAudios(), 1000);
+    // Verificación múltiple EXTREMA con intervalos más agresivos
+    setTimeout(() => this.verifyUniqueAudio(), 50);
+    setTimeout(() => this.verifyUniqueAudio(), 100);
+    setTimeout(() => this.verifyUniqueAudio(), 200);
+    setTimeout(() => this.verifyUniqueAudio(), 500);
+    setTimeout(() => this.verifyUniqueAudio(), 1000);
   }
 
   private getAudioUrl(song: Song): string | null {
@@ -320,6 +368,74 @@ export class PlayerUseCase {
       
     } catch (error) {
       console.error('[Player UseCase] ❌ Error en método ultra agresivo:', error);
+    }
+  }
+
+  /**
+   * 🚨 VERIFICACIÓN EXTREMA: Asegura que solo existe UN audio
+   */
+  private verifyUniqueAudio(): void {
+    const allAudios = document.querySelectorAll('audio');
+    const playingAudios = Array.from(allAudios).filter(audio => !audio.paused);
+    
+    console.log(`🔍 VERIFICACIÓN: ${allAudios.length} audios totales, ${playingAudios.length} reproduciéndose`);
+    
+    if (allAudios.length > 1) {
+      console.error(`🚨 EMERGENCIA: ${allAudios.length} audios detectados - ELIMINANDO TODOS EXCEPTO EL PRINCIPAL`);
+      
+      allAudios.forEach((audio, index) => {
+        if (audio !== this.audioElement) {
+          try {
+            console.error(`💀 ELIMINANDO audio intruso ${index + 1}:`, audio.src);
+            audio.pause();
+            audio.currentTime = 0;
+            audio.volume = 0;
+            audio.muted = true;
+            audio.src = '';
+            audio.load();
+            
+            if (audio.parentNode) {
+              audio.parentNode.removeChild(audio);
+              console.log(`🗑️ Audio intruso ${index + 1} REMOVIDO del DOM`);
+            }
+          } catch (error) {
+            console.error(`❌ Error eliminando audio ${index + 1}:`, error);
+          }
+        }
+      });
+    }
+    
+    if (playingAudios.length > 1) {
+      console.error(`🚨 DUPLICACIÓN DETECTADA: ${playingAudios.length} audios reproduciéndose - ACCIÓN INMEDIATA`);
+      
+      playingAudios.forEach((audio, index) => {
+        if (audio !== this.audioElement) {
+          console.error(`💀 ELIMINANDO audio duplicado ${index + 1} inmediatamente`);
+          try {
+            audio.pause();
+            audio.currentTime = 0;
+            audio.src = '';
+            audio.load();
+            
+            if (audio.parentNode) {
+              audio.parentNode.removeChild(audio);
+              console.log(`🗑️ Audio duplicado ${index + 1} REMOVIDO`);
+            }
+          } catch (error) {
+            console.error(`❌ Error eliminando duplicado:`, error);
+          }
+        }
+      });
+    }
+    
+    // VERIFICACIÓN FINAL
+    const finalAudios = document.querySelectorAll('audio');
+    const finalPlaying = Array.from(finalAudios).filter(audio => !audio.paused);
+    
+    if (finalAudios.length === 1 && finalPlaying.length <= 1) {
+      console.log('✅ VERIFICACIÓN EXITOSA: Solo 1 audio en el DOM');
+    } else {
+      console.error(`❌ VERIFICACIÓN FALLIDA: ${finalAudios.length} audios, ${finalPlaying.length} reproduciéndose`);
     }
   }
 
@@ -835,10 +951,67 @@ export class PlayerUseCase {
   }
 
   /**
-   * ✅ NUEVO: Monitoreo ULTRA AGRESIVO cada 100ms para detectar audios múltiples inmediatamente
+   * 🚨 INTERCEPTOR EXTREMO: BLOQUEA LA CREACIÓN DE NUEVOS ELEMENTOS AUDIO
+   * Este método intercepta el constructor nativo de Audio y previene duplicados
    */
+  private interceptAudioCreation(): void {
+    console.log('[Player UseCase] 🚨 INTERCEPTOR EXTREMO: Bloqueando creación de nuevos audios');
+    
+    // Guardar el constructor original
+    const OriginalAudio = (window as any).Audio;
+    let audioCreationCount = 0;
+    const playerInstance = this; // Capturar la instancia correcta
+    
+    // INTERCEPTAR el constructor de Audio
+    (window as any).Audio = function(...args: any[]) {
+      audioCreationCount++;
+      console.warn(`🚨 INTENTO DE CREAR AUDIO #${audioCreationCount} - INTERCEPTADO`);
+      
+      // Si ya tenemos un audio principal, BLOQUEAR la creación
+      if (playerInstance.audioElement && audioCreationCount > 1) {
+        console.error(`❌ BLOQUEADO: Intento de crear audio duplicado #${audioCreationCount}`);
+        
+        // Devolver un audio FALSO que no puede reproducir nada
+        const fakeAudio = {
+          play: () => {
+            console.error('🚫 AUDIO FALSO: Reproducción bloqueada');
+            return Promise.reject('Audio creation blocked');
+          },
+          pause: () => console.log('🚫 AUDIO FALSO: Pausa bloqueada'),
+          load: () => console.log('🚫 AUDIO FALSO: Load bloqueado'),
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          set src(value) { console.error('🚫 AUDIO FALSO: src bloqueado:', value); },
+          get src() { return ''; },
+          set volume(value) {},
+          get volume() { return 0; },
+          set currentTime(value) {},
+          get currentTime() { return 0; },
+          set muted(value) {},
+          get muted() { return true; },
+          get paused() { return true; },
+          get duration() { return 0; },
+          style: { display: 'none' },
+          parentNode: null
+        };
+        
+        return fakeAudio;
+      }
+      
+      // Permitir solo el primer audio (nuestro audio principal)
+      console.log(`✅ PERMITIDO: Creando audio principal #${audioCreationCount}`);
+      return new OriginalAudio(...args);
+    };
+    
+    // Mantener las propiedades del constructor original
+    Object.setPrototypeOf((window as any).Audio, OriginalAudio);
+    Object.defineProperty((window as any).Audio, 'prototype', {
+      value: OriginalAudio.prototype,
+      writable: false
+    });
+  }
   private startUltraAggressiveMonitoring(): void {
-    console.log('[Player UseCase] 🚨 Iniciando monitoreo ULTRA AGRESIVO cada 100ms');
+    console.log('[Player UseCase] 🚨 Iniciando monitoreo ULTRA AGRESIVO cada 50ms');
     
     this.ultraAggressiveInterval = setInterval(() => {
       try {
@@ -904,7 +1077,7 @@ export class PlayerUseCase {
       } catch (error) {
         console.error('[Player UseCase] ❌ Error en monitoreo ultra agresivo:', error);
       }
-    }, 100); // ⚡ CADA 100 MS - SÚPER ULTRA RÁPIDO
+    }, 50); // ⚡ CADA 50 MS - SÚPER ULTRA MEGA RÁPIDO
   }
 
   /**
