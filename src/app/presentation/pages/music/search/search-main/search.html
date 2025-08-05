@@ -2,14 +2,32 @@
   <div class="search-header">
     <h1 class="text-3xl font-bold mb-6">{{ "SEARCH.TITLE" | translate }}</h1>
 
-    <!-- Barra de búsqueda -->
-    <div class="search-bar mb-8">
-      <input
-        type="text"
-        [formControl]="searchControl"
-        [placeholder]="'SEARCH.PLACEHOLDER' | translate"
-        class="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+    <!-- Barra de búsqueda con filtros -->
+    <div class="search-controls mb-8">
+      <div class="search-bar-wrapper">
+        <input
+          type="text"
+          [formControl]="searchControl"
+          [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+          class="search-input"
+        />
+        <button 
+          class="filters-toggle-btn"
+          (click)="toggleFilters()"
+          [class.active]="showFilters()"
+          [attr.aria-label]="'Filtros avanzados'"
+        >
+          <mat-icon>tune</mat-icon>
+          <span class="filters-badge" *ngIf="searchFiltersService.hasActiveFilters()">
+            {{ searchFiltersService.getActiveFiltersCount() }}
+          </span>
+        </button>
+      </div>
+      
+      <!-- Panel de filtros colapsable -->
+      <div class="filters-panel" [class.expanded]="showFilters()">
+        <app-search-filters (filtersChanged)="onFiltersChanged()"></app-search-filters>
+      </div>
     </div>
   </div>
 
