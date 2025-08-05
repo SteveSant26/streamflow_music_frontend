@@ -39,6 +39,14 @@ export class PlayerUseCase {
   
   // Event listeners to track for cleanup
   private eventListeners: Array<{event: string, handler: any}> = [];
+  
+  // Interval para limpiar audios duplicados periódicamente
+  private cleanupInterval: any = null;
+
+  constructor() {
+    // Iniciar limpieza agresiva periódica cada 2 segundos
+    this.startAggressiveCleanup();
+  }
 
   getCurrentSong(): Observable<Song | null> {
     return this.currentSong$.asObservable();
@@ -62,6 +70,27 @@ export class PlayerUseCase {
 
   playSong(song: Song): void {
     console.log(`🎵 PlayerUseCase.playSong() recibida:`, song);
+    
+    // MODO ULTRA AGRESIVO: DESTRUIR TODO ANTES DE CONTINUAR
+    console.log('[Player UseCase] � MODO ULTRA AGRESIVO: Destruyendo TODOS los audios');
+    
+    // 1. Pausar absolutamente TODOS los audios sin excepción
+    const allAudioElements = document.querySelectorAll('audio');
+    allAudioElements.forEach((audio, index) => {
+      try {
+        if (!audio.paused) {
+          console.log(`[Player UseCase] � FORZANDO PAUSA en audio ${index + 1}:`, audio.src);
+          audio.pause();
+        }
+        audio.currentTime = 0;
+        audio.volume = 0;
+      } catch (error) {
+        console.error(`[Player UseCase] ❌ Error forzando pausa:`, error);
+      }
+    });
+    
+    // 2. Esperar un momento y luego ejecutar nuestro método ultra agresivo
+    this.pauseAllOtherAudios();
     
     // Verificar si ya estamos reproduciendo esta canción
     const currentState = this.playbackState$.value;
@@ -87,8 +116,10 @@ export class PlayerUseCase {
     // Reproducir el audio
     this.playAudioUrl(audioUrl);
     
-    // Detectar múltiples audios después de iniciar la reproducción
+    // Verificación múltiple con intervalos más agresivos
+    setTimeout(() => this.detectMultiplePlayingAudios(), 200);
     setTimeout(() => this.detectMultiplePlayingAudios(), 500);
+    setTimeout(() => this.detectMultiplePlayingAudios(), 1000);
   }
 
   private getAudioUrl(song: Song): string | null {
@@ -177,11 +208,17 @@ export class PlayerUseCase {
   pauseSong(): void {
     console.log('[Player UseCase] ⏸️ Pausando canción');
     
+    // SIEMPRE pausar otros audios primero
+    this.pauseAllOtherAudios();
+    
     if (this.audioElement) {
       try {
         this.audioElement.pause();
         this.updatePlaybackState({ isPlaying: false });
         console.log('[Player UseCase] ✅ Audio pausado exitosamente');
+        
+        // Verificar duplicados después de pausar
+        setTimeout(() => this.detectMultiplePlayingAudios(), 200);
       } catch (error) {
         console.error('[Player UseCase] ❌ Error al pausar audio:', error);
       }
@@ -191,40 +228,84 @@ export class PlayerUseCase {
   }
 
   /**
-   * Pausa todos los elementos de audio en el DOM que no sean el nuestro
-   * Esto previene reproducciones múltiples simultáneas
+   * MÉTODO ULTRA AGRESIVO: Destruye TODOS los audios excepto el nuestro
+   * Esto previene reproducciones múltiples de forma definitiva
    */
   private pauseAllOtherAudios(): void {
     try {
       const allAudioElements = document.querySelectorAll('audio');
       let pausedCount = 0;
       let totalAudios = allAudioElements.length;
+      let playingAudios = 0;
       
-      // Primero reportamos cuántos elementos de audio hay en total
-      if (totalAudios > 1) {
-        console.log(`[Player UseCase] 🔍 Detectados ${totalAudios} elementos de audio en el DOM`);
-      }
+      console.log(`[Player UseCase] 🛑 MODO ULTRA AGRESIVO: Encontrados ${totalAudios} elementos de audio`);
       
       allAudioElements.forEach((audio, index) => {
-        // Solo pausa los que no sean nuestro elemento principal y estén reproduciéndose
-        if (audio !== this.audioElement && !audio.paused) {
-          console.log(`[Player UseCase] 🔇 Pausando audio duplicado ${index + 1}:`, audio.src);
-          audio.pause();
-          pausedCount++;
+        try {
+          // Si NO es nuestro elemento principal, DESTRUIRLO COMPLETAMENTE
+          if (audio !== this.audioElement) {
+            
+            // 1. Pausar inmediatamente
+            if (!audio.paused) {
+              console.log(`[Player UseCase] � ELIMINANDO audio duplicado ${index + 1}:`, audio.src);
+              audio.pause();
+              playingAudios++;
+            }
+            
+            // 2. Resetear completamente
+            audio.currentTime = 0;
+            audio.volume = 0;
+            
+            // 3. Remover la fuente
+            audio.src = '';
+            audio.load();
+            
+            // 4. Ocultar el elemento
+            audio.style.display = 'none';
+            
+            // 5. Desconectar todos los event listeners
+            audio.onplay = null;
+            audio.onpause = null;
+            audio.ontimeupdate = null;
+            audio.onended = null;
+            audio.onloadstart = null;
+            audio.oncanplay = null;
+            
+            pausedCount++;
+          }
+        } catch (error) {
+          console.error(`[Player UseCase] ❌ Error destruyendo audio ${index + 1}:`, error);
         }
       });
       
-      if (pausedCount > 0) {
-        console.log(`[Player UseCase] ✅ Se pausaron ${pausedCount} audios duplicados`);
-      }
+      console.log(`[Player UseCase] 💀 DESTRUIDOS ${pausedCount} audios duplicados de ${totalAudios} totales`);
+      
+      // VERIFICACIÓN FINAL - Si aún hay más de 1 audio, remover físicamente del DOM
+      setTimeout(() => {
+        const remainingAudios = document.querySelectorAll('audio');
+        if (remainingAudios.length > 1) {
+          console.log(`[Player UseCase] 🚨 ALERTA: Aún quedan ${remainingAudios.length} audios, REMOVIENDO DEL DOM`);
+          remainingAudios.forEach((audio, index) => {
+            if (audio !== this.audioElement) {
+              try {
+                audio.parentNode?.removeChild(audio);
+                console.log(`[Player UseCase] 🗑️ Audio ${index + 1} REMOVIDO del DOM`);
+              } catch (error) {
+                console.error(`[Player UseCase] ❌ Error removiendo audio del DOM:`, error);
+              }
+            }
+          });
+        }
+      }, 100);
+      
     } catch (error) {
-      console.error('[Player UseCase] ❌ Error al pausar otros audios:', error);
+      console.error('[Player UseCase] ❌ Error en método ultra agresivo:', error);
     }
   }
 
   /**
-   * Detecta si hay múltiples audios reproduciéndose simultáneamente
-   * Solo para propósitos de logging y debugging
+   * DETECTA Y DESTRUYE múltiples audios reproduciéndose simultáneamente
+   * Ahora también ACTÚA para eliminar duplicados, no solo detecta
    */
   private detectMultiplePlayingAudios(): void {
     try {
@@ -232,10 +313,37 @@ export class PlayerUseCase {
       const playingAudios = Array.from(allAudioElements).filter(audio => !audio.paused);
       
       if (playingAudios.length > 1) {
-        console.warn(`[Player UseCase] ⚠️ ALERTA: ${playingAudios.length} audios reproduciéndose simultáneamente`);
+        console.error(`[Player UseCase] 🚨 ALERTA CRÍTICA: ${playingAudios.length} audios reproduciéndose simultáneamente - ACCIÓN INMEDIATA`);
+        
         playingAudios.forEach((audio, index) => {
           console.warn(`[Player UseCase] 🎵 Audio ${index + 1}:`, audio.src);
+          
+          // Si NO es nuestro audio principal, DESTRUIRLO INMEDIATAMENTE
+          if (audio !== this.audioElement) {
+            console.error(`[Player UseCase] 💀 DESTRUYENDO audio duplicado inmediatamente`);
+            try {
+              audio.pause();
+              audio.currentTime = 0;
+              audio.src = '';
+              audio.load();
+              
+              // Intentar remover del DOM
+              if (audio.parentNode) {
+                audio.parentNode.removeChild(audio);
+                console.log(`[Player UseCase] 🗑️ Audio duplicado REMOVIDO del DOM`);
+              }
+            } catch (error) {
+              console.error(`[Player UseCase] ❌ Error destruyendo audio duplicado:`, error);
+            }
+          }
         });
+        
+        // Ejecutar método ultra agresivo nuevamente después de detectar duplicados
+        setTimeout(() => this.pauseAllOtherAudios(), 100);
+      } else if (playingAudios.length === 1) {
+        console.log(`[Player UseCase] ✅ Solo 1 audio reproduciéndose - CORRECTO`);
+      } else {
+        console.log(`[Player UseCase] 🔇 No hay audios reproduciéndose`);
       }
     } catch (error) {
       console.error('[Player UseCase] ❌ Error al detectar múltiples audios:', error);
@@ -273,6 +381,9 @@ export class PlayerUseCase {
   seekTo(time: number): void {
     console.log('[Player UseCase] ⏩ Buscando posición:', time);
     
+    // SIEMPRE pausar otros audios antes de hacer seek
+    this.pauseAllOtherAudios();
+    
     if (this.audioElement) {
       try {
         // Validate time is within bounds
@@ -285,6 +396,9 @@ export class PlayerUseCase {
         });
         
         console.log('[Player UseCase] ✅ Posición actualizada:', validTime);
+        
+        // Verificar duplicados después del seek
+        setTimeout(() => this.detectMultiplePlayingAudios(), 200);
       } catch (error) {
         console.error('[Player UseCase] ❌ Error al buscar posición:', error);
       }
@@ -338,6 +452,9 @@ export class PlayerUseCase {
       currentSong: currentState.currentSong?.title,
       isLoading: currentState.isLoading
     });
+
+    // SIEMPRE pausar otros audios antes de cualquier operación
+    this.pauseAllOtherAudios();
     
     // Si no hay canción actual, no hacer nada
     if (!currentState.currentSong) {
@@ -371,6 +488,9 @@ export class PlayerUseCase {
         this.playSong(currentState.currentSong);
       }
     }
+
+    // Verificar duplicados después de la operación
+    setTimeout(() => this.detectMultiplePlayingAudios(), 300);
   }
 
   stopSong(): void {
@@ -639,6 +759,11 @@ export class PlayerUseCase {
 
   // Seek to percentage
   seekToPercentage(percentage: number): void {
+    console.log('[Player UseCase] 📊 Seeking to percentage:', percentage);
+    
+    // SIEMPRE pausar otros audios antes de hacer seek
+    this.pauseAllOtherAudios();
+    
     if (this.audioElement?.duration) {
       const time = (percentage / 100) * this.audioElement.duration;
       this.seekTo(time);
@@ -667,5 +792,44 @@ export class PlayerUseCase {
         console.log('[Player UseCase] 🛑 Song ended - stopping playback');
         break;
     }
+  }
+
+  /**
+   * MÉTODO ULTRA AGRESIVO: Inicia limpieza periódica de audios duplicados
+   */
+  private startAggressiveCleanup(): void {
+    console.log('[Player UseCase] 🧹 Iniciando limpieza agresiva periódica cada 2 segundos');
+    
+    this.cleanupInterval = setInterval(() => {
+      try {
+        const allAudioElements = document.querySelectorAll('audio');
+        if (allAudioElements.length > 1) {
+          console.log(`[Player UseCase] 🚨 LIMPIEZA PERIÓDICA: Detectados ${allAudioElements.length} audios - iniciando destrucción`);
+          this.pauseAllOtherAudios();
+          this.detectMultiplePlayingAudios();
+        }
+      } catch (error) {
+        console.error('[Player UseCase] ❌ Error en limpieza periódica:', error);
+      }
+    }, 2000); // Cada 2 segundos
+  }
+
+  /**
+   * Detener limpieza periódica (para cuando se destruya el servicio)
+   */
+  private stopAggressiveCleanup(): void {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+      console.log('[Player UseCase] 🛑 Limpieza periódica detenida');
+    }
+  }
+
+  /**
+   * Método de destrucción para limpiar recursos
+   */
+  ngOnDestroy(): void {
+    this.stopAggressiveCleanup();
+    this.removeAudioEventListeners();
   }
 }

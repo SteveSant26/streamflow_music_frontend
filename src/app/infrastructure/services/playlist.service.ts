@@ -138,7 +138,7 @@ export class PlaylistService {
   }
 
   /**
-   * Seleccionar canción por índice y reproducir automáticamente
+   * Seleccionar canción por índice - SOLO actualiza la selección, NO reproduce automáticamente
    */
   selectSong(index: number): void {
     const playlist = this.currentPlaylist();
@@ -153,17 +153,31 @@ export class PlaylistService {
     const newState: PlaybackState = {
       ...this.playbackState(),
       currentSong: song,
-      hasPlayedFirstQuarter: false
+      hasPlayedFirstQuarter: false,
+      isPlaying: false // ← IMPORTANTE: No marcar como reproduciéndose automáticamente
     };
 
     this.playbackState.set(newState);
     this.playbackStateSubject.next(newState);
     
-    // Reproducir automáticamente la nueva canción
-    this.playerUseCase.playSong(song);
+    // ❌ ELIMINADO: Reproducción automática que causaba duplicación
+    // Ahora quien llame a selectSong() debe llamar explícitamente a togglePlayback()
+    console.log(`🎵 Canción seleccionada: ${song.title} (índice ${index}). Llamar togglePlayback() para reproducir.`);
     
     // Iniciar precarga de la siguiente canción
     this.startPreloadingNext();
+  }
+
+  /**
+   * Seleccionar canción por índice Y reproducir automáticamente
+   * Para uso interno en navegación de playlist
+   */
+  private selectAndPlay(index: number): void {
+    this.selectSong(index);
+    // Auto-reproducir después de un breve delay
+    setTimeout(() => {
+      this.togglePlayback();
+    }, 50);
   }
 
   /**
@@ -236,7 +250,7 @@ export class PlaylistService {
         case 'circular':
           // Playlists circulares: volver al inicio
           nextIndex = 0;
-          this.selectSong(nextIndex);
+          this.selectAndPlay(nextIndex);
           break;
           
         case 'expandable':
@@ -244,12 +258,12 @@ export class PlaylistService {
           this.loadMoreSongs().then(() => {
             // Después de cargar, reproducir la siguiente canción
             if (playlist.items.length > playlist.currentIndex + 1) {
-              this.selectSong(playlist.currentIndex + 1);
+              this.selectAndPlay(playlist.currentIndex + 1);
             }
           }).catch(error => {
             console.error('Error cargando más canciones:', error);
             // Si no se puede cargar más, comportamiento circular
-            this.selectSong(0);
+            this.selectAndPlay(0);
           });
           break;
           
@@ -258,14 +272,14 @@ export class PlaylistService {
           // Playlist single: no hacer nada o parar
           if (playlist.repeatMode === 'all') {
             nextIndex = 0;
-            this.selectSong(nextIndex);
+            this.selectAndPlay(nextIndex);
           }
           // Si no está en repeat, simplemente terminar
           return;
       }
     } else {
       // Hay una siguiente canción en la lista actual
-      this.selectSong(nextIndex);
+      this.selectAndPlay(nextIndex);
     }
   }
 

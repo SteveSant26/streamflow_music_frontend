@@ -188,6 +188,10 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   selectSongFromPlaylist(index: number) {
     this.playlistService.selectSong(index);
+    // ✅ CORREGIDO: Iniciar reproducción después de seleccionar
+    setTimeout(() => {
+      this.playlistService.togglePlayback();
+    }, 100);
     // Opcionalmente cerrar el modal después de seleccionar
     // this.showPlaylistPanel = false;
   }

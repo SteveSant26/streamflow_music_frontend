@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Song } from '../../../../../domain/entities/song.entity';
 import { PlayerUseCase } from '../../../../../domain/usecases/player/player.usecases';
+import { PlaySongUseCase } from '../../../../../domain/usecases/song/song.usecases'; // ← AGREGADO
 import { AddSongToPlaylistDialogComponent } from '../../playlist/add-song-to-playlist-dialog/add-song-to-playlist-dialog.component';
 
 @Component({
@@ -164,6 +165,7 @@ export class SongActionButtonComponent {
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
 
   private readonly playerUseCase = inject(PlayerUseCase);
+  private readonly playSongUseCase = inject(PlaySongUseCase); // ← AGREGADO
   private readonly dialog = inject(MatDialog);
 
   isCurrentSongPlaying(): boolean {
@@ -179,9 +181,16 @@ export class SongActionButtonComponent {
       this.playerUseCase.togglePlayPause();
       console.log('Toggled play/pause for current song:', this.song.title);
     } else {
-      // Si es diferente canción, reproducir nueva
-      this.playerUseCase.playSong(this.song);
-      console.log('Song started playing:', this.song.title);
+      // ✅ CORREGIDO: Usar PlaySongUseCase en lugar de llamada directa para evitar duplicación
+      console.log('🎵 Usando PlaySongUseCase.executeSimple() para evitar audios duplicados');
+      this.playSongUseCase.executeSimple(this.song.id).subscribe({
+        next: (song) => {
+          console.log('✅ Song started playing through proper flow:', song.title);
+        },
+        error: (error) => {
+          console.error('❌ Error playing song:', error);
+        }
+      });
     }
   }
 

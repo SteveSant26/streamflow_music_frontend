@@ -209,20 +209,15 @@ export class PlaySongUseCase {
       
       console.log(`🎚️ Tipo de playlist configurado: ${contextType}`);
       
-      // Iniciar reproducción inmediatamente
+      // Iniciar reproducción inmediatamente - SOLO a través del PlaylistService
       console.log(`🎶 Llamando togglePlayback()...`);
       setTimeout(() => {
         this.playlistService.togglePlayback();
         console.log(`🎵 togglePlayback() ejecutado`);
       }, 100);
       
-      // ALTERNATIVA: Usar PlayerUseCase del GlobalPlayerStateService como backup
-      setTimeout(() => {
-        console.log(`🎵 Intentando reproducción directa con PlayerUseCase...`);
-        const playerUseCase = this.globalPlayerService.getPlayerUseCase();
-        playerUseCase.playSong(song);
-        console.log(`🎵 PlayerUseCase.playSong() ejecutado directamente`);
-      }, 200);
+      // ELIMINADO: Llamada duplicada a PlayerUseCase que causaba doble reproducción
+      // NO llamar directamente a playerUseCase.playSong() aquí para evitar duplicación
       
       // Retornar la canción como observable
       return new Observable(subscriber => {
