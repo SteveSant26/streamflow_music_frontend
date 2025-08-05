@@ -463,6 +463,71 @@ export class PlaylistService {
   }
 
   /**
+   * Quitar una canción de la playlist actual por índice
+   */
+  removeSongFromCurrentPlaylist(index: number): void {
+    const playlist = this.currentPlaylist();
+    if (!playlist || index < 0 || index >= playlist.items.length) {
+      console.warn('Índice inválido o playlist vacía');
+      return;
+    }
+
+    const songToRemove = playlist.items[index];
+    const newItems = playlist.items.filter((_, i) => i !== index);
+    
+    // Actualizar posiciones
+    const updatedItems = newItems.map((item, newIndex) => ({
+      ...item,
+      position: newIndex
+    }));
+
+    // Ajustar el índice actual si es necesario
+    let newCurrentIndex = playlist.currentIndex;
+    if (index === playlist.currentIndex) {
+      // Si eliminamos la canción actual, ir a la siguiente (o anterior si era la última)
+      newCurrentIndex = index < updatedItems.length ? index : Math.max(0, index - 1);
+    } else if (index < playlist.currentIndex) {
+      // Si eliminamos una canción antes de la actual, decrementar el índice
+      newCurrentIndex = playlist.currentIndex - 1;
+    }
+
+    const updatedPlaylist = {
+      ...playlist,
+      items: updatedItems,
+      currentIndex: Math.min(newCurrentIndex, updatedItems.length - 1)
+    };
+
+    this.currentPlaylist.set(updatedPlaylist);
+    this.currentPlaylistSubject.next(updatedPlaylist);
+
+    console.log(`✅ Canción "${songToRemove.title}" eliminada de la playlist`);
+
+    // Si no quedan canciones, limpiar el estado
+    if (updatedItems.length === 0) {
+      const newState: PlaybackState = {
+        ...this.playbackState(),
+        currentSong: null,
+        isPlaying: false
+      };
+      this.playbackState.set(newState);
+      this.playbackStateSubject.next(newState);
+    }
+  }
+
+  /**
+   * Quitar una canción de la playlist actual por ID
+   */
+  removeSongFromCurrentPlaylistById(songId: string): void {
+    const playlist = this.currentPlaylist();
+    if (!playlist) return;
+
+    const index = playlist.items.findIndex(item => item.id === songId);
+    if (index >= 0) {
+      this.removeSongFromCurrentPlaylist(index);
+    }
+  }
+
+  /**
    * Reproducir una canción específica (para casos de single play)
    */
   playSingleSong(song: Song): void {

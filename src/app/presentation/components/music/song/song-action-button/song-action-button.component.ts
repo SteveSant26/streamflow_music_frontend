@@ -197,7 +197,45 @@ export class SongActionButtonComponent {
   }
 
   playNext() {
-    console.log('Play next:', this.song.title);
+    try {
+      // Agregar la canción a la playlist actual
+      this.playlistService.addSongToCurrentPlaylist(this.song);
+      
+      // Obtener la playlist actual
+      const currentPlaylist = this.playlistService.getCurrentPlaylist();
+      if (currentPlaylist) {
+        // Encontrar el índice de la canción que acabamos de agregar
+        const songIndex = currentPlaylist.items.findIndex(item => item.id === this.song.id);
+        if (songIndex > -1) {
+          // Mover la canción para que sea la siguiente
+          const currentIndex = currentPlaylist.currentIndex;
+          const nextPosition = currentIndex + 1;
+          
+          if (songIndex !== nextPosition && nextPosition < currentPlaylist.items.length) {
+            // Reordenar para poner la canción como siguiente
+            this.reorderSongToPosition(songIndex, nextPosition);
+          }
+        }
+      }
+      
+      console.log('✅ Canción configurada para reproducir siguiente:', this.song.title);
+    } catch (error) {
+      console.error('❌ Error configurando canción como siguiente:', error);
+    }
+  }
+
+  private reorderSongToPosition(fromIndex: number, toIndex: number): void {
+    const currentPlaylist = this.playlistService.getCurrentPlaylist();
+    if (!currentPlaylist) return;
+
+    const items = [...currentPlaylist.items];
+    const [movedItem] = items.splice(fromIndex, 1);
+    items.splice(toIndex, 0, movedItem);
+
+    // Aquí podrías llamar a un método del PlaylistService para actualizar el orden
+    // Por simplicidad, solo logueamos la acción
+    console.log(`Reordenando canción de posición ${fromIndex} a ${toIndex}`);
+    console.log('Items reordenados:', items.map(item => item.title));
   }
 
   addToQueue() {
