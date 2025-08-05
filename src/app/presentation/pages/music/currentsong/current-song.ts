@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
+import { GlobalPlaylistModalComponent } from '@app/shared/components/global-playlist-modal/global-playlist-modal';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
@@ -35,7 +36,7 @@ interface CurrentSongView {
 @Component({
   selector: 'app-current-song',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, GlobalPlaylistModalComponent],
   templateUrl: './currentsong.html',
   styleUrls: ['./current-song.css'],
 })
