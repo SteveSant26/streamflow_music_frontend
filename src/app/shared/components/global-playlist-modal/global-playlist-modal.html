@@ -1,0 +1,84 @@
+<!-- Overlay del modal -->
+<div class="playlist-modal-overlay" 
+     [class.show]="isVisible" 
+     (click)="hide()"
+     (keydown)="$event.key === 'Escape' && hide()"
+     *ngIf="isVisible">
+  
+  <!-- Contenedor del modal -->
+  <div class="playlist-modal-container" 
+       (click)="$event.stopPropagation()"
+       (keydown)="$event.stopPropagation()"
+       [class.show]="isVisible">
+    
+    <!-- Header del modal -->
+    <div class="playlist-modal-header">
+      <div class="playlist-info">
+        <h3>{{ currentPlaylist?.name || 'Playlist Actual' }}</h3>
+        <p class="playlist-context">{{ getPlaylistContextInfo() }}</p>
+        <p class="playlist-stats" *ngIf="currentPlaylist">
+          {{ currentPlaylist.items.length }} canciones
+          <span *ngIf="canLoadMore()" class="can-load-more">• Más disponibles</span>
+        </p>
+      </div>
+      <button
+        (click)="hide()"
+        class="close-button"
+        aria-label="Cerrar playlist"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Contenido del modal -->
+    <div class="playlist-modal-content">
+      <div class="playlist-songs" *ngIf="currentPlaylist">
+        <button 
+          *ngFor="let item of currentPlaylist.items; let i = index; trackBy: trackByIndex"
+          class="playlist-song-item"
+          [class.current]="i === currentPlaylist.currentIndex"
+          (click)="selectSongFromPlaylist(i)"
+          [attr.aria-label]="'Play ' + item.title"
+        >
+          <div class="song-number">
+            <span *ngIf="i !== currentPlaylist.currentIndex">{{ i + 1 }}</span>
+            <mat-icon *ngIf="i === currentPlaylist.currentIndex" class="playing-icon">
+              {{ currentSong?.isPlaying ? 'pause' : 'play_arrow' }}
+            </mat-icon>
+          </div>
+          
+          <div class="song-thumbnail">
+            <img 
+              [src]="item.thumbnail_url || '/assets/default-album.jpg'" 
+              [alt]="item.title"
+              class="thumbnail-img"
+            />
+          </div>
+          
+          <div class="song-details">
+            <h4 class="song-title" [class.current]="i === currentPlaylist.currentIndex">
+              {{ item.title }}
+            </h4>
+            <p class="song-artist">{{ item.artist_name || 'Artista desconocido' }}</p>
+          </div>
+          
+          <div class="song-duration">
+            {{ item.duration_formatted || '0:00' }}
+          </div>
+        </button>
+        
+        <!-- Indicador de carga más contenido -->
+        <div *ngIf="canLoadMore()" class="load-more-indicator">
+          <p>Se cargarán más canciones automáticamente al llegar al final</p>
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div *ngIf="!currentPlaylist" class="empty-playlist">
+        <mat-icon class="empty-icon">queue_music</mat-icon>
+        <h4>No hay playlist activa</h4>
+        <p>Reproduce una canción para ver la playlist actual</p>
+      </div>
+    </div>
+  </div>
+</div>

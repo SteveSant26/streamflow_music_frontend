@@ -21,6 +21,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
 
 interface Song {
   id: number;
@@ -84,6 +85,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
     private readonly playlistService: PlaylistService,
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
+    private readonly globalPlaylistModal: GlobalPlaylistModalService,
   ) {}
 
   ngOnInit(): void {
@@ -181,16 +183,10 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
   openPlaylistModal(): void {
     console.log('🎵🎵🎵 CLICK DETECTADO EN openPlaylistModal!');
-    console.log('🔍 Router disponible:', !!this.router);
-    console.log('🔍 Intentando navegar a /music/library...');
+    console.log('🔍 Abriendo modal global de playlist...');
     
-    this.router.navigate(['/music/library'])
-      .then(success => {
-        console.log('✅ Navegación a library exitosa:', success);
-      })
-      .catch(error => {
-        console.error('❌ Error en navegación a library:', error);
-      });
+    // Usar el servicio global para mostrar el modal
+    this.globalPlaylistModal.show();
   }
 
   goToCurrentSong(): void {

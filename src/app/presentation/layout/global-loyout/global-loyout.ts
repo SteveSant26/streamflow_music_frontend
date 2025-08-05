@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AsideMenu } from '@app/presentation/components/navigation';
 import { Player } from '@app/presentation/components/player';
+import { GlobalPlaylistModalComponent } from '@app/shared/components/global-playlist-modal/global-playlist-modal';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -11,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
     RouterOutlet,
     AsideMenu,
     Player,
+    GlobalPlaylistModalComponent,
     CommonModule,
     TranslateModule,
   ],
