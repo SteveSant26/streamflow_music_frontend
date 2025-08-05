@@ -202,6 +202,12 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/html', index.toString());
     }
+    
+    // Agregar clase al elemento para animación
+    setTimeout(() => {
+      this.cdr.detectChanges();
+    }, 0);
+    
     console.log('🫳 Drag iniciado en índice:', index);
   }
 
@@ -212,10 +218,15 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  onDragEnter(event: DragEvent): void {
+    event.preventDefault();
+  }
+
   onDrop(event: DragEvent, targetIndex: number): void {
     event.preventDefault();
     
     if (this.draggedIndex === null || this.draggedIndex === targetIndex) {
+      this.draggedIndex = null;
       return;
     }
 
@@ -224,30 +235,65 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
     // Solo permitir reordenamiento manual si no hay ordenamiento aplicado
     if (this.sortBy !== 'none') {
       console.warn('⚠️ No se puede reordenar manualmente con ordenamiento activo');
+      this.draggedIndex = null;
       return;
     }
 
     // Reordenar la playlist
     this.reorderPlaylist(this.draggedIndex, targetIndex);
     this.draggedIndex = null;
+    
+    // Forzar actualización visual
+    this.cdr.detectChanges();
   }
 
   onDragEnd(): void {
     this.draggedIndex = null;
+    this.cdr.detectChanges();
   }
 
   private reorderPlaylist(fromIndex: number, toIndex: number): void {
     if (!this.currentPlaylist?.items) return;
 
     // Crear nueva lista reordenada
-    const items = [...this.currentPlaylist.items];
+    const items = [...this.sortedPlaylist];
     const draggedItem = items.splice(fromIndex, 1)[0];
     items.splice(toIndex, 0, draggedItem);
 
-    // Actualizar la playlist en el servicio
-    // this.playlistService.updatePlaylistOrder(updatedPlaylist);
+    // Actualizar sortedPlaylist inmediatamente para reflejar el cambio visual
+    this.sortedPlaylist = items;
+
+    // Actualizar el índice actual si es necesario
+    let newCurrentIndex = this.currentPlaylist.currentIndex;
+    const originalFromIndex = this.getOriginalIndex(fromIndex);
+    const originalToIndex = this.getOriginalIndex(toIndex);
+
+    if (this.currentPlaylist.currentIndex === originalFromIndex) {
+      newCurrentIndex = originalToIndex;
+    } else if (originalFromIndex < this.currentPlaylist.currentIndex && originalToIndex >= this.currentPlaylist.currentIndex) {
+      newCurrentIndex = this.currentPlaylist.currentIndex - 1;
+    } else if (originalFromIndex > this.currentPlaylist.currentIndex && originalToIndex <= this.currentPlaylist.currentIndex) {
+      newCurrentIndex = this.currentPlaylist.currentIndex + 1;
+    }
+
+    // Crear la playlist actualizada
+    const updatedPlaylist = {
+      ...this.currentPlaylist,
+      items: items,
+      currentIndex: newCurrentIndex
+    };
+
+    // Actualizar el servicio - necesitamos crear este método
+    this.updatePlaylistInService(updatedPlaylist);
     
     console.log('🔄 Playlist reordenada de', fromIndex, 'a', toIndex);
+  }
+
+  private updatePlaylistInService(playlist: Playlist): void {
+    // Forzar actualización del servicio
+    this.playlistService['currentPlaylist'].set(playlist);
+    this.playlistService['currentPlaylistSubject'].next(playlist);
+    console.log('🔄 Playlist actualizada en el servicio');
   }
 
   getPlaylistContextInfo(): string {
@@ -277,5 +323,20 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
 
   trackByIndex(index: number): number {
     return index;
+  }
+
+  isCurrentSong(item: any, displayIndex: number): boolean {
+    if (!this.currentPlaylist || !this.currentSong) {
+      return false;
+    }
+
+    // Comparar por ID de la canción actual
+    return item.id === this.currentSong.id;
+  }
+
+  // Método para agregar canción a la cola
+  addToQueue(song: any): void {
+    console.log('🎵 Agregando canción a la cola:', song.title);
+    this.playlistService.addSongToCurrentPlaylist(song);
   }
 }

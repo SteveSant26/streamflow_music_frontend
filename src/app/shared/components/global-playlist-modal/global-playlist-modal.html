@@ -88,11 +88,12 @@
         <button 
           *ngFor="let item of sortedPlaylist; let i = index; trackBy: trackByIndex"
           class="playlist-song-item"
-          [class.current]="i === currentPlaylist.currentIndex && sortBy === 'none'"
+          [class.current]="isCurrentSong(item, i)"
           [class.dragging]="draggedIndex === i"
           [draggable]="sortBy === 'none'"
           (dragstart)="onDragStart($event, i)"
           (dragover)="onDragOver($event)"
+          (dragenter)="onDragEnter($event)"
           (drop)="onDrop($event, i)"
           (dragend)="onDragEnd()"
           (click)="selectSongFromPlaylist(i)"
@@ -104,8 +105,8 @@
           </div>
           
           <div class="song-number">
-            <span *ngIf="getOriginalIndex(i) !== currentPlaylist.currentIndex">{{ i + 1 }}</span>
-            <mat-icon *ngIf="getOriginalIndex(i) === currentPlaylist.currentIndex" class="playing-icon">
+            <span *ngIf="!isCurrentSong(item, i)">{{ i + 1 }}</span>
+            <mat-icon *ngIf="isCurrentSong(item, i)" class="playing-icon">
               {{ currentSong?.isPlaying ? 'pause' : 'play_arrow' }}
             </mat-icon>
           </div>
@@ -119,14 +120,23 @@
           </div>
           
           <div class="song-details">
-            <h4 class="song-title" [class.current]="i === currentPlaylist.currentIndex">
+            <h4 class="song-title" [class.current]="isCurrentSong(item, i)">
               {{ item.title }}
             </h4>
             <p class="song-artist">{{ item.artist_name || 'Artista desconocido' }}</p>
           </div>
           
-          <div class="song-duration">
-            {{ item.duration_formatted || '0:00' }}
+          <div class="song-actions">
+            <button 
+              class="action-button add-to-queue"
+              (click)="addToQueue(item); $event.stopPropagation()"
+              title="Agregar a la cola"
+              aria-label="Agregar a la cola">
+              <mat-icon>add</mat-icon>
+            </button>
+            <span class="song-duration">
+              {{ item.duration_formatted || '0:00' }}
+            </span>
           </div>
         </button>
         

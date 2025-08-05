@@ -181,7 +181,26 @@
 .playlist-song-item.dragging {
   opacity: 0.5;
   transform: scale(0.95);
-  background: rgba(102, 126, 234, 0.2);
+  background: rgba(102, 126, 234, 0.2) !important;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+
+/* Drop zone visual feedback */
+.playlist-song-item[draggable="true"]:not(.dragging):hover {
+  background: rgba(102, 126, 234, 0.05);
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+.playlist-songs {
+  position: relative;
+}
+
+/* Visual indicator during drag */
+.playlist-song-item[draggable="true"] {
+  transition: all 0.2s ease;
 }
 
 .playlist-song-item[draggable="true"]:hover .drag-handle {
@@ -205,6 +224,41 @@
 
 .drag-handle mat-icon {
   font-size: 18px;
+}
+
+/* Acciones de canciones */
+.song-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0;
+}
+
+.playlist-song-item:hover .action-button {
+  opacity: 1;
+}
+
+.action-button:hover {
+  background: rgba(102, 126, 234, 0.2);
+  transform: scale(1.1);
+}
+
+.action-button mat-icon {
+  font-size: 16px;
 }
 
 /* Información sobre drag/sort */
@@ -350,6 +404,20 @@
 
   .song-duration {
     color: #999;
+  }
+
+  .action-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+  }
+
+  .action-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+
+  .drag-handle {
+    color: #ccc;
   }
 
   .empty-playlist h4 {
