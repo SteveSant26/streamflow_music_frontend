@@ -64,13 +64,12 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
     const clickX = event.clientX - rect.left;
     const width = rect.width;
     const clickPercentage = (clickX / width) * 100;
-    const seekTime = (clickPercentage / 100) * this.duration;
 
-    console.log('PlayerSoundControl: Click seek to', seekTime + 's');
+    console.log('PlayerSoundControl: Click seek to', clickPercentage + '%');
 
     // Use the PlayerUseCase through GlobalPlayerStateService to handle seeking
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
-    playerUseCase.seekToPercentage(seekTime);
+    playerUseCase.seekToPercentage(clickPercentage);
 
     // Force sync after seek
     this.globalPlayerState.forceSyncAllComponents();

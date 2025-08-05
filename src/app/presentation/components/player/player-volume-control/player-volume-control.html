@@ -2,7 +2,8 @@
   <!-- Volume Icon - Clickable to toggle mute/max -->
   <button 
     (click)="toggleVolume()"
-    [class]="(isDarkTheme$ | async) ? 'p-1 rounded-full hover:bg-white/10 transition-colors duration-200 cursor-pointer' : 'p-1 rounded-full hover:bg-gray-200 transition-colors duration-200 cursor-pointer'"
+    [disabled]="playerState?.isLoading"
+    [class]="(isDarkTheme$ | async) ? 'p-1 rounded-full hover:bg-white/10 transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed' : 'p-1 rounded-full hover:bg-gray-200 transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'"
     [attr.aria-label]="volume === 0 ? 'Activar sonido' : 'Silenciar'"
   >
     @if (volume === 0) {
@@ -15,27 +16,29 @@
   </button>
 
   <!-- Volume Slider Container -->
-  <div class="relative w-24">
-    <button [class]="(isDarkTheme$ | async) ? 'w-full h-2 bg-white/20 rounded-full cursor-pointer border-none p-0' : 'w-full h-2 bg-gray-300 rounded-full cursor-pointer border-none p-0'" 
+  <div class="relative w-24 progress-bar-enhanced">
+    <button [class]="(isDarkTheme$ | async) ? 'w-full h-2 bg-white/20 rounded-full cursor-pointer border-none p-0 relative overflow-hidden volume-control' : 'w-full h-2 bg-gray-300 rounded-full cursor-pointer border-none p-0 relative overflow-hidden volume-control'" 
             (click)="onVolumeBarClick($event)"
+            [disabled]="playerState?.isLoading"
             aria-label="Barra de volumen">
       <!-- Volume Fill -->
       <div 
         [class]="(isDarkTheme$ | async) ? 'h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ease-out relative' : 'h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out relative'"
         [style.width.%]="volumePercentage">
         <!-- Volume Thumb -->
-        <div [class]="(isDarkTheme$ | async) ? 'absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg border border-purple-400 opacity-0 hover:opacity-100 transition-opacity duration-200' : 'absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg border border-blue-500 opacity-0 hover:opacity-100 transition-opacity duration-200'"></div>
+        <div [class]="(isDarkTheme$ | async) ? 'absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg border border-purple-400 opacity-0 hover:opacity-100 transition-opacity duration-200 progress-thumb' : 'absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg border border-blue-500 opacity-0 hover:opacity-100 transition-opacity duration-200 progress-thumb'"></div>
       </div>
     </button>
     <!-- Hidden range input for accessibility -->
     <input
       type="range"
       min="0"
-      max="1"
-      step="0.01"
-      [value]="volume"
+      max="100"
+      step="1"
+      [value]="volumePercentage"
       (input)="onVolumeChange($event)"
-      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      [disabled]="playerState?.isLoading"
+      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer volume-control"
       aria-label="Control de volumen"
     />
   </div>
