@@ -81,9 +81,60 @@ export interface PlayCountResponseDto {
 }
 
 export interface SongSearchParams {
-  q: string;
+  // Búsqueda general
+  search?: string;
+  title?: string;
+  
+  // Filtros de artista/álbum
+  artist_name?: string;
+  artist_id?: string;
+  album_title?: string;
+  album_id?: string;
+  genre_name?: string;
+  
+  // Filtros de contenido
+  source_type?: 'youtube' | 'upload' | 'spotify' | 'soundcloud';
+  audio_quality?: 'standard' | 'high' | 'lossless';
+  
+  // Rangos de duración
+  min_duration?: number;
+  max_duration?: number;
+  duration_range?: 'short' | 'medium' | 'long';
+  
+  // Rangos de conteos
+  min_play_count?: number;
+  max_play_count?: number;
+  min_favorite_count?: number;
+  max_favorite_count?: number;
+  min_download_count?: number;
+  max_download_count?: number;
+  
+  // Filtros booleanos
+  has_lyrics?: boolean;
+  has_file_url?: boolean;
+  has_thumbnail?: boolean;
+  popular?: boolean;
+  recent?: boolean;
+  trending?: boolean;
+  
+  // Filtros de fecha
+  created_after?: string;
+  created_before?: string;
+  last_played_after?: string;
+  last_played_before?: string;
+  release_after?: string;
+  release_before?: string;
+  
+  // YouTube y paginación
   include_youtube?: boolean;
-  limit?: number;
+  min_results?: number;
+  
+  // Ordenamiento
+  ordering?: string;
+  
+  // Paginación
+  page?: number;
+  page_size?: number;
 }
 
 export interface PaginationParams {
