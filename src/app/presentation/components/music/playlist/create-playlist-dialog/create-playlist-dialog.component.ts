@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { signal } from '@angular/core';
 
 import { CreatePlaylistUseCase } from '../../../../../domain/usecases/playlist/playlist.usecases';
 import { CreatePlaylistDto } from '../../../../../domain/entities/playlist.entity';
@@ -213,7 +212,8 @@ export class CreatePlaylistDialogComponent {
         error: (error) => {
           this.isLoading.set(false);
           console.error('Error creating playlist:', error);
-          // TODO: Show error message using a toast service
+          // Show error to user through form validation
+          this.playlistForm.setErrors({ 'createError': 'Error creating playlist. Please try again.' });
         }
       });
     }

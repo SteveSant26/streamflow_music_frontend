@@ -11,6 +11,7 @@ import {
   EnsureDefaultPlaylistUseCase
 } from '../../../../domain/usecases/playlist/playlist.usecases';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
+import { CreatePlaylistDialogComponent } from '../../../components/music/playlist/create-playlist-dialog/create-playlist-dialog.component';
 
 @Component({
   selector: 'app-playlists',
@@ -66,8 +67,18 @@ export class PlaylistsComponent implements OnInit {
   }
 
   createPlaylist() {
-    // TODO: Abrir diálogo para crear playlist
-    console.log('Creating new playlist...');
+    const dialogRef = this.dialog.open(CreatePlaylistDialogComponent, {
+      width: '500px',
+      disableClose: false,
+      autoFocus: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Reload playlists to show the new one
+        this.loadPlaylists();
+      }
+    });
   }
 
   confirmDelete(playlist: Playlist) {

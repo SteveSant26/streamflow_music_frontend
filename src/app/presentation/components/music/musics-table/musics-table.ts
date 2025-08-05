@@ -13,11 +13,11 @@ import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { Song } from '@app/domain/entities/song.entity';
 import { PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
-import { AddToPlaylistButtonComponent } from '@app/presentation/components/add-to-playlist-button/add-to-playlist-button.component';
+import { SongActionButtonComponent } from '../song/song-action-button/song-action-button.component';
 
 @Component({
   selector: 'app-musics-table',
-  imports: [MusicsTablePlay, MatIcon, TranslateModule, CommonModule, AddToPlaylistButtonComponent],
+  imports: [MusicsTablePlay, MatIcon, TranslateModule, CommonModule, SongActionButtonComponent],
   templateUrl: './musics-table.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

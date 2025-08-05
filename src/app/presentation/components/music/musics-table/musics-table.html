@@ -51,11 +51,10 @@
 
         <!-- Duration and Playlist Button -->
         <div class="flex items-center gap-2">
-          <app-add-to-playlist-button 
+          <app-song-action-button 
             [song]="song"
             size="small"
-            variant="icon"
-          ></app-add-to-playlist-button>
+          ></app-song-action-button>
           <span class="text-subdued text-xs">{{ formatPlayCount(song.play_count) }}</span>
         </div>
       </div>
@@ -128,11 +127,10 @@
         <td class="px-4 py-2 rounded-tr-lg rounded-br-lg">
           <div class="flex items-center justify-between">
             <span>{{ formatPlayCount(song.play_count) }} reproducciones</span>
-            <app-add-to-playlist-button 
+            <app-song-action-button 
               [song]="song"
               size="small"
-              variant="icon"
-            ></app-add-to-playlist-button>
+            ></app-song-action-button>
           </div>
         </td>
       </tr>

@@ -393,14 +393,14 @@ export class AddSongToPlaylistDialogComponent implements OnInit {
       error: (error) => {
         console.error('Error adding song to playlist:', error);
         this.addingToPlaylist.set(null);
-        // TODO: Show error message using a toast service
+        // Show error to user
+        this.error.set(true);
       }
     });
   }
 
   createNewPlaylist() {
-    // TODO: Open create playlist dialog
-    // For now, create a simple playlist with the song's title
+    // Create a simple playlist with the song's title and add the song to it
     const playlistData: CreatePlaylistDto = {
       name: `Playlist de ${this.data.song.title}`,
       description: `Playlist creada para ${this.data.song.title}`,
