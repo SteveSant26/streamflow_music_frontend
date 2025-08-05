@@ -196,9 +196,9 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   goToCurrentSong(): void {
     console.log('🎵🎵🎵 CLICK DETECTADO EN goToCurrentSong!');
     console.log('🔍 Router disponible:', !!this.router);
-    console.log('🔍 Intentando navegar a /music/current-song...');
+    console.log('🔍 Intentando navegar a /current-song...');
     
-    this.router.navigate(['/music/current-song'])
+    this.router.navigate(['/current-song'])
       .then(success => {
         console.log('✅ Navegación exitosa:', success);
       })

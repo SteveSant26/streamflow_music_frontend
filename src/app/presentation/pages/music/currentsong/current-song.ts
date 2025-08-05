@@ -57,10 +57,13 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly materialThemeService: MaterialThemeService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
-  ) {}
+  ) {
+    // Initialize theme in constructor to avoid injection context issues
+    this.isDarkTheme$ = this.materialThemeService.isDarkMode();
+  }
 
   ngOnInit() {
-    this.isDarkTheme$ = this.materialThemeService.isDarkMode();
+    // Fix: Move isDarkTheme$ initialization to constructor or use inject()
     this.setupPlayerStateSubscription();
     this.setupPlaylistSubscription(); // Nueva suscripción
     this.initializePlayer();
@@ -89,13 +92,22 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   private setupPlayerStateSubscription(): void {
-    this.globalPlayerState
-      .getPlayerState$()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((playerState: PlayerState) => {
-        this.updateCurrentSongView(playerState);
-        this.cdr.detectChanges();
-      });
+    try {
+      this.globalPlayerState
+        .getPlayerState$()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (playerState: PlayerState) => {
+            this.updateCurrentSongView(playerState);
+            this.cdr.detectChanges();
+          },
+          error: (error) => {
+            console.error('Error in player state subscription:', error);
+          }
+        });
+    } catch (error) {
+      console.error('Error setting up player state subscription:', error);
+    }
   }
 
   private setupPlaylistSubscription(): void {
@@ -122,7 +134,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         id: playerState.currentSong.id,
         title: playerState.currentSong.title,
         artist: playerState.currentSong.artist_name || 'Unknown Artist',
-        album: playerState.currentSong.artist_name || 'Unknown Artist', // Usando artist como album por ahora
+        album: playerState.currentSong.album?.title || 'Unknown Album', // Fixed: Use album title
         duration: this.formatTime(playerState.duration),
         currentTime: this.formatTime(playerState.currentTime),
         progress: playerState.progress,
