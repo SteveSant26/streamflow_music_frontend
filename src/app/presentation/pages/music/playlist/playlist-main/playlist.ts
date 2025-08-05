@@ -163,7 +163,7 @@ export class PlaylistComponent implements OnInit {
   }
 
   addToQueue(song: Song) {
-    this.playlistService.addToPlaylist(song);
+    this.playlistService.addSongToCurrentPlaylist(song);
     console.log('Agregado a la cola:', song.title);
   }
 

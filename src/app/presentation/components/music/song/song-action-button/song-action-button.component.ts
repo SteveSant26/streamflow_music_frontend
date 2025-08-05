@@ -9,7 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Song } from '../../../../../domain/entities/song.entity';
 import { PlayerUseCase } from '../../../../../domain/usecases/player/player.usecases';
-import { PlaySongUseCase } from '../../../../../domain/usecases/song/song.usecases'; // ← AGREGADO
+import { PlaySongUseCase } from '../../../../../domain/usecases/song/song.usecases';
+import { PlaylistService } from '../../../../../infrastructure/services/playlist.service';
 import { AddSongToPlaylistDialogComponent } from '../../playlist/add-song-to-playlist-dialog/add-song-to-playlist-dialog.component';
 
 @Component({
@@ -165,7 +166,8 @@ export class SongActionButtonComponent {
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
 
   private readonly playerUseCase = inject(PlayerUseCase);
-  private readonly playSongUseCase = inject(PlaySongUseCase); // ← AGREGADO
+  private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly playlistService = inject(PlaylistService);
   private readonly dialog = inject(MatDialog);
 
   isCurrentSongPlaying(): boolean {
@@ -199,7 +201,15 @@ export class SongActionButtonComponent {
   }
 
   addToQueue() {
-    console.log('Add to queue:', this.song.title);
+    try {
+      this.playlistService.addSongToCurrentPlaylist(this.song);
+      console.log('✅ Canción agregada a la cola:', this.song.title);
+      
+      // Opcional: Mostrar algún feedback visual al usuario
+      // Podrías usar un snackbar o toast aquí
+    } catch (error) {
+      console.error('❌ Error agregando canción a la cola:', error);
+    }
   }
 
   addToPlaylist() {
