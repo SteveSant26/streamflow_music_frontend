@@ -158,6 +158,16 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
       // Set initial volume
       audioElement.volume = this.volume;
+      
+      // Sync volume with player state
+      this.globalPlayerState
+        .getPlayerState$()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((state) => {
+          if (audioElement.volume !== state.volume) {
+            audioElement.volume = state.volume;
+          }
+        });
     }
   }
 

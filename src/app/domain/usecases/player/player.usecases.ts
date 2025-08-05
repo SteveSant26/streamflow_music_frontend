@@ -257,10 +257,34 @@ export class PlayerUseCase {
 
   togglePlayPause(): void {
     const currentState = this.playbackState$.value;
+    console.log('[Player UseCase] 🎵 togglePlayPause() - Estado actual:', {
+      isPlaying: currentState.isPlaying,
+      currentSong: currentState.currentSong?.title,
+      isLoading: currentState.isLoading
+    });
+    
+    // Si no hay canción actual, no hacer nada
+    if (!currentState.currentSong) {
+      console.warn('[Player UseCase] ⚠️ No hay canción actual para reproducir');
+      return;
+    }
+    
+    // Si está cargando, no permitir toggle
+    if (currentState.isLoading) {
+      console.warn('[Player UseCase] ⚠️ Audio está cargando, esperando...');
+      return;
+    }
+    
     if (currentState.isPlaying) {
       this.pauseSong();
     } else {
-      this.resumeSong();
+      // Si hay canción pero no está reproduciéndose, intentar reanudar o reproducir desde el inicio
+      if (this.audioElement && this.audioElement.src) {
+        this.resumeSong();
+      } else {
+        // Si no hay src, reproducir la canción actual desde el inicio
+        this.playSong(currentState.currentSong);
+      }
     }
   }
 
@@ -328,18 +352,21 @@ export class PlayerUseCase {
       this.updatePlaybackState({ isLoading: false });
     });
 
-    // Time update event
+    // Time update event - solo actualizar si no está cargando
     this.audioElement.addEventListener('timeupdate', () => {
-      if (this.audioElement) {
+      if (this.audioElement && !this.playbackState$.value.isLoading) {
         const currentTime = this.audioElement.currentTime;
         const duration = this.audioElement.duration || 0;
         const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
-        this.updatePlaybackState({
-          currentTime,
-          duration,
-          progress
-        });
+        // Solo actualizar si tenemos datos válidos
+        if (duration > 0 && !isNaN(currentTime) && !isNaN(duration)) {
+          this.updatePlaybackState({
+            currentTime,
+            duration,
+            progress
+          });
+        }
       }
     });
 
@@ -354,9 +381,15 @@ export class PlayerUseCase {
       }
     });
 
-    // Play event
+    // Play event (iniciado, pero puede estar pausado por buffering)
     this.audioElement.addEventListener('play', () => {
-      console.log('[Player UseCase] ▶️ Audio play event');
+      console.log('[Player UseCase] ▶️ Audio play event (starting)');
+      // No cambiar isPlaying aquí, esperar al evento 'playing'
+    });
+
+    // Playing event (realmente está sonando)
+    this.audioElement.addEventListener('playing', () => {
+      console.log('[Player UseCase] ▶️ Audio playing (really playing now)');
       this.updatePlaybackState({ isPlaying: true, isLoading: false });
     });
 

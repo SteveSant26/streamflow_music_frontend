@@ -19,6 +19,41 @@ import { CommonModule } from '@angular/common';
   imports: [TranslateModule, CommonModule],
   templateUrl: './player-sound-control.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+    .progress-bar-enhanced {
+      position: relative;
+    }
+    
+    .progress-control:hover .progress-thumb {
+      opacity: 1 !important;
+    }
+    
+    .loading-shimmer {
+      animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .pulse-gentle {
+      animation: pulse-gentle 2s infinite;
+    }
+    
+    @keyframes pulse-gentle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .progress-control {
+      transition: height 0.2s ease-in-out;
+    }
+    
+    .group:hover .progress-control {
+      height: 1rem !important;
+    }
+  `]
 })
 export class PlayerSoundControl implements OnInit, OnDestroy {
   @Input() audioElement: ElementRef<HTMLAudioElement> | null = null;

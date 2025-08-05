@@ -1,4 +1,4 @@
-<div class="flex items-center gap-3 w-full max-w-md">
+<div class="flex items-center gap-3 w-full max-w-md group">
   <!-- Current Time -->
   <span [class]="(isDarkTheme$ | async) ? 'text-white text-xs font-medium min-w-[35px]' : 'text-gray-800 text-xs font-medium min-w-[35px]'"> 
     {{ formatTime(currentTime) }} 
@@ -6,10 +6,14 @@
 
   <!-- Progress Bar Container -->
   <div class="flex-1 relative progress-bar-enhanced">
-    <button [class]="(isDarkTheme$ | async) ? 'w-full h-2 bg-white/20 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control' : 'w-full h-2 bg-gray-300 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control'" 
-            (click)="onProgressClick($event)"
-            [disabled]="playerState?.isLoading"
-            aria-label="Barra de progreso">
+    <button 
+      [class]="(isDarkTheme$ | async) 
+        ? 'w-full h-3 bg-white/20 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-4 transition-all duration-200' 
+        : 'w-full h-3 bg-gray-300 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-4 transition-all duration-200'" 
+      (click)="onProgressClick($event)"
+      [disabled]="playerState?.isLoading"
+      aria-label="Barra de progreso">
+      
       <!-- Loading indicator -->
       <div *ngIf="playerState?.isLoading" 
            class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent loading-shimmer">
@@ -17,13 +21,21 @@
       
       <!-- Progress Fill -->
       <div 
-        [class]="(isDarkTheme$ | async) ? 'h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ease-out relative' : 'h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out relative'"
+        [class]="(isDarkTheme$ | async) 
+          ? 'h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ease-out relative min-w-1' 
+          : 'h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out relative min-w-1'"
         [style.width.%]="progressPercentage"
         [class.pulse-gentle]="playerState?.isLoading">
+        
         <!-- Progress Thumb -->
-        <div [class]="(isDarkTheme$ | async) ? 'absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-purple-400 opacity-0 hover:opacity-100 transition-opacity duration-200 progress-thumb' : 'absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-blue-500 opacity-0 hover:opacity-100 transition-opacity duration-200 progress-thumb'"></div>
+        <div 
+          [class]="(isDarkTheme$ | async) 
+            ? 'absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 progress-thumb' 
+            : 'absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 progress-thumb'">
+        </div>
       </div>
     </button>
+    
     <!-- Hidden range input for accessibility -->
     <input
       type="range"
