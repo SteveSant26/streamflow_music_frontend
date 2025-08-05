@@ -51,7 +51,16 @@ import { CommonModule } from '@angular/common';
     }
     
     .group:hover .progress-control {
-      height: 1rem !important;
+      height: 1.25rem !important;
+    }
+    
+    .progress-bar-enhanced:hover .progress-thumb {
+      opacity: 1 !important;
+      transform: scale(1.1) !important;
+    }
+    
+    .progress-thumb {
+      transition: all 0.2s ease-in-out;
     }
   `]
 })

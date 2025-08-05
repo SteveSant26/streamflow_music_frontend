@@ -49,7 +49,9 @@ export class PlayerCurrentSong implements OnInit, OnDestroy {
 
   navigateToCurrentSong() {
     if (this.song) {
-      this.router.navigate([ROUTES_CONFIG_MUSIC.CURRENT_SONG.path]);
+      // Navegar directamente a la página de la canción específica
+      const songId = this.song.id;
+      this.router.navigate(['/music/song', songId]);
     }
   }
 }

@@ -182,7 +182,12 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   openPlaylistModal(): void {
     // Navigate to the current song page where the playlist modal is available
     if (this.playerState?.currentSong) {
-      this.router.navigate(['/music/current-song']);
+      // Si hay una canción, navegar a la página de la canción actual
+      const songId = this.playerState.currentSong.id;
+      this.router.navigate(['/music/song', songId]);
+    } else {
+      // Si no hay canción, navegar a la biblioteca de música
+      this.router.navigate(['/music/library']);
     }
   }
 

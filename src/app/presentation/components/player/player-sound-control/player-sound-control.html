@@ -8,8 +8,8 @@
   <div class="flex-1 relative progress-bar-enhanced">
     <button 
       [class]="(isDarkTheme$ | async) 
-        ? 'w-full h-3 bg-white/20 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-4 transition-all duration-200' 
-        : 'w-full h-3 bg-gray-300 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-4 transition-all duration-200'" 
+        ? 'w-full h-4 bg-white/20 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-5 transition-all duration-200' 
+        : 'w-full h-4 bg-gray-300 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-5 transition-all duration-200'" 
       (click)="onProgressClick($event)"
       [disabled]="playerState?.isLoading"
       aria-label="Barra de progreso">

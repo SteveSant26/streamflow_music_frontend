@@ -36,6 +36,9 @@ export class PlayerUseCase {
 
   // Audio element reference - will be set by GlobalPlayerStateService
   private audioElement: HTMLAudioElement | null = null;
+  
+  // Event listeners to track for cleanup
+  private eventListeners: Array<{event: string, handler: any}> = [];
 
   getCurrentSong(): Observable<Song | null> {
     return this.currentSong$.asObservable();
@@ -47,6 +50,11 @@ export class PlayerUseCase {
 
   // Set audio element reference
   setAudioElement(audio: HTMLAudioElement): void {
+    // Remove existing listeners to prevent duplicates
+    if (this.audioElement) {
+      this.removeAudioEventListeners();
+    }
+    
     this.audioElement = audio;
     this.setupAudioEventListeners();
     console.log('[Player UseCase] 🔊 Audio element connected successfully');
@@ -334,26 +342,32 @@ export class PlayerUseCase {
 
     console.log('[Player UseCase] 🎧 Configurando event listeners de audio');
 
+    // Helper function to add tracked listeners
+    const addListener = (event: string, handler: any) => {
+      this.audioElement!.addEventListener(event, handler);
+      this.eventListeners.push({event, handler});
+    };
+
     // Loading started
-    this.audioElement.addEventListener('loadstart', () => {
+    addListener('loadstart', () => {
       console.log('[Player UseCase] 🔄 Loading started');
       this.updatePlaybackState({ isLoading: true });
     });
 
     // Can start playing (metadata loaded)
-    this.audioElement.addEventListener('canplay', () => {
+    addListener('canplay', () => {
       console.log('[Player UseCase] ✅ Can start playing');
       this.updatePlaybackState({ isLoading: false });
     });
 
     // Enough data loaded to play through
-    this.audioElement.addEventListener('canplaythrough', () => {
+    addListener('canplaythrough', () => {
       console.log('[Player UseCase] ✅ Can play through');
       this.updatePlaybackState({ isLoading: false });
     });
 
     // Time update event - solo actualizar si no está cargando
-    this.audioElement.addEventListener('timeupdate', () => {
+    addListener('timeupdate', () => {
       if (this.audioElement && !this.playbackState$.value.isLoading) {
         const currentTime = this.audioElement.currentTime;
         const duration = this.audioElement.duration || 0;
@@ -371,7 +385,7 @@ export class PlayerUseCase {
     });
 
     // Loaded metadata event
-    this.audioElement.addEventListener('loadedmetadata', () => {
+    addListener('loadedmetadata', () => {
       if (this.audioElement) {
         console.log('[Player UseCase] 📊 Metadata loaded, duration:', this.audioElement.duration);
         this.updatePlaybackState({
@@ -382,25 +396,25 @@ export class PlayerUseCase {
     });
 
     // Play event (iniciado, pero puede estar pausado por buffering)
-    this.audioElement.addEventListener('play', () => {
+    addListener('play', () => {
       console.log('[Player UseCase] ▶️ Audio play event (starting)');
       // No cambiar isPlaying aquí, esperar al evento 'playing'
     });
 
-    // Playing event (realmente está sonando)
-    this.audioElement.addEventListener('playing', () => {
+    // Playing event (realmente está sonando) - UN SOLO LISTENER
+    addListener('playing', () => {
       console.log('[Player UseCase] ▶️ Audio playing (really playing now)');
       this.updatePlaybackState({ isPlaying: true, isLoading: false });
     });
 
     // Pause event
-    this.audioElement.addEventListener('pause', () => {
+    addListener('pause', () => {
       console.log('[Player UseCase] ⏸️ Audio pause event');
       this.updatePlaybackState({ isPlaying: false });
     });
 
     // Ended event
-    this.audioElement.addEventListener('ended', () => {
+    addListener('ended', () => {
       console.log('[Player UseCase] 🔚 Audio ended');
       this.updatePlaybackState({ 
         isPlaying: false,
@@ -412,7 +426,7 @@ export class PlayerUseCase {
     });
 
     // Volume change event
-    this.audioElement.addEventListener('volumechange', () => {
+    addListener('volumechange', () => {
       if (this.audioElement) {
         this.updatePlaybackState({
           volume: this.audioElement.volume,
@@ -422,31 +436,25 @@ export class PlayerUseCase {
     });
 
     // Waiting event (buffering)
-    this.audioElement.addEventListener('waiting', () => {
+    addListener('waiting', () => {
       console.log('[Player UseCase] ⏳ Audio waiting/buffering');
       this.updatePlaybackState({ isLoading: true });
     });
 
-    // Playing event (resumed from buffering)
-    this.audioElement.addEventListener('playing', () => {
-      console.log('[Player UseCase] ▶️ Audio playing (resumed from buffering)');
-      this.updatePlaybackState({ isLoading: false, isPlaying: true });
-    });
-
     // Seeking started
-    this.audioElement.addEventListener('seeking', () => {
+    addListener('seeking', () => {
       console.log('[Player UseCase] 🔍 Seeking started');
       this.updatePlaybackState({ isLoading: true });
     });
 
     // Seeking finished
-    this.audioElement.addEventListener('seeked', () => {
+    addListener('seeked', () => {
       console.log('[Player UseCase] ✅ Seeking finished');
       this.updatePlaybackState({ isLoading: false });
     });
 
     // Error event
-    this.audioElement.addEventListener('error', (e) => {
+    addListener('error', (e: Event) => {
       console.error('[Player UseCase] ❌ Audio error:', e);
       this.updatePlaybackState({ 
         isPlaying: false, 
@@ -455,6 +463,19 @@ export class PlayerUseCase {
     });
 
     console.log('[Player UseCase] ✅ Event listeners configurados exitosamente');
+  }
+
+  private removeAudioEventListeners(): void {
+    if (!this.audioElement || this.eventListeners.length === 0) return;
+
+    console.log('[Player UseCase] 🧹 Removiendo event listeners existentes');
+    
+    this.eventListeners.forEach(({event, handler}) => {
+      this.audioElement!.removeEventListener(event, handler);
+    });
+    
+    this.eventListeners = [];
+    console.log('[Player UseCase] ✅ Event listeners removidos exitosamente');
   }
 
   // Observable for song end events
