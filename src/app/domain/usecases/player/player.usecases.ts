@@ -78,70 +78,6 @@ export class PlayerUseCase {
   playSong(song: Song): void {
     console.log(`🎵 PlayerUseCase.playSong() recibida:`, song);
     
-    // 🚨 VERIFICACIÓN INSTANTÁNEA ANTES DE CONTINUAR
-    const allAudiosBefore = document.querySelectorAll('audio');
-    console.log(`🔍 ANTES: ${allAudiosBefore.length} audios en el DOM`);
-    
-    // MODO ULTRA AGRESIVO: DESTRUIR TODO ANTES DE CONTINUAR
-    console.log('[Player UseCase] 💀 MODO ULTRA AGRESIVO: Destruyendo TODOS los audios');
-    
-    // 1. Pausar absolutamente TODOS los audios sin excepción
-    const allAudioElements = document.querySelectorAll('audio');
-    allAudioElements.forEach((audio, index) => {
-      try {
-        if (!audio.paused) {
-          console.log(`[Player UseCase] 💀 FORZANDO PAUSA en audio ${index + 1}:`, audio.src);
-          audio.pause();
-        }
-        audio.currentTime = 0;
-        audio.volume = 0;
-        audio.muted = true;
-        
-        // SI NO ES NUESTRO AUDIO, DESTRUIRLO INMEDIATAMENTE
-        if (audio !== this.audioElement) {
-          try {
-            audio.src = '';
-            audio.load();
-            if (audio.parentNode) {
-              audio.parentNode.removeChild(audio);
-              console.log(`💀 DESTRUIDO INMEDIATAMENTE: Audio ${index + 1}`);
-            }
-          } catch (error) {
-            console.error('❌ Error destruyendo audio:', error);
-          }
-        }
-      } catch (error) {
-        console.error(`[Player UseCase] ❌ Error forzando pausa:`, error);
-      }
-    });
-    
-    // 2. VERIFICACIÓN INSTANTÁNEA DESPUÉS DE LIMPIEZA
-    const allAudiosAfter = document.querySelectorAll('audio');
-    console.log(`🔍 DESPUÉS DE LIMPIEZA: ${allAudiosAfter.length} audios en el DOM`);
-    
-    // 3. BLOQUEO TEMPORAL DE NUEVOS AUDIOS
-    setTimeout(() => {
-      const finalAudios = document.querySelectorAll('audio');
-      if (finalAudios.length > 1) {
-        console.error(`🚨 ALERTA EXTREMA: Se crearon ${finalAudios.length} audios - ELIMINANDO TODOS EXCEPTO EL PRINCIPAL`);
-        finalAudios.forEach((audio, index) => {
-          if (audio !== this.audioElement) {
-            try {
-              audio.pause();
-              audio.src = '';
-              audio.load();
-              if (audio.parentNode) {
-                audio.parentNode.removeChild(audio);
-                console.log(`💀 ELIMINACIÓN FINAL: Audio ${index + 1} removido`);
-              }
-            } catch (error) {
-              console.error('❌ Error en eliminación final:', error);
-            }
-          }
-        });
-      }
-    }, 100);
-    
     // Verificar si ya estamos reproduciendo esta canción
     const currentState = this.playbackState$.value;
     if (currentState.currentSong?.id === song.id && currentState.isPlaying) {
@@ -165,13 +101,6 @@ export class PlayerUseCase {
     
     // Reproducir el audio
     this.playAudioUrl(audioUrl);
-    
-    // Verificación múltiple EXTREMA con intervalos más agresivos
-    setTimeout(() => this.verifyUniqueAudio(), 50);
-    setTimeout(() => this.verifyUniqueAudio(), 100);
-    setTimeout(() => this.verifyUniqueAudio(), 200);
-    setTimeout(() => this.verifyUniqueAudio(), 500);
-    setTimeout(() => this.verifyUniqueAudio(), 1000);
   }
 
   private getAudioUrl(song: Song): string | null {
@@ -208,9 +137,6 @@ export class PlayerUseCase {
       });
       return;
     }
-
-    // Pausa todos los otros audios antes de reproducir
-    this.pauseAllOtherAudios();
 
     console.log('[Player UseCase] 🎯 Reproduciendo URL:', audioUrl);
     
@@ -260,17 +186,11 @@ export class PlayerUseCase {
   pauseSong(): void {
     console.log('[Player UseCase] ⏸️ Pausando canción');
     
-    // SIEMPRE pausar otros audios primero
-    this.pauseAllOtherAudios();
-    
     if (this.audioElement) {
       try {
         this.audioElement.pause();
         this.updatePlaybackState({ isPlaying: false });
         console.log('[Player UseCase] ✅ Audio pausado exitosamente');
-        
-        // Verificar duplicados después de pausar
-        setTimeout(() => this.detectMultiplePlayingAudios(), 200);
       } catch (error) {
         console.error('[Player UseCase] ❌ Error al pausar audio:', error);
       }
@@ -497,9 +417,6 @@ export class PlayerUseCase {
     });
     
     if (this.audioElement) {
-      // Pausa todos los otros audios antes de reanudar
-      this.pauseAllOtherAudios();
-      
       try {
         console.log('[Player UseCase] 🎯 Llamando audio.play()...');
         const playPromise = this.audioElement.play();
@@ -534,9 +451,6 @@ export class PlayerUseCase {
   seekTo(time: number): void {
     console.log('[Player UseCase] ⏩ Buscando posición:', time);
     
-    // SIEMPRE pausar otros audios antes de hacer seek
-    this.pauseAllOtherAudios();
-    
     if (this.audioElement) {
       try {
         // Validate time is within bounds
@@ -549,9 +463,6 @@ export class PlayerUseCase {
         });
         
         console.log('[Player UseCase] ✅ Posición actualizada:', validTime);
-        
-        // Verificar duplicados después del seek
-        setTimeout(() => this.detectMultiplePlayingAudios(), 200);
       } catch (error) {
         console.error('[Player UseCase] ❌ Error al buscar posición:', error);
       }
@@ -617,9 +528,6 @@ export class PlayerUseCase {
       audioElementSrc: this.audioElement?.src,
       audioPaused: this.audioElement?.paused
     });
-
-    // SIEMPRE pausar otros audios antes de cualquier operación
-    this.pauseAllOtherAudios();
     
     // Si no hay canción actual, no hacer nada
     if (!currentState.currentSong) {
@@ -665,9 +573,6 @@ export class PlayerUseCase {
         this.playSong(currentState.currentSong);
       }
     }
-
-    // Verificar duplicados después de la operación
-    setTimeout(() => this.detectMultiplePlayingAudios(), 300);
   }
 
   stopSong(): void {
@@ -937,9 +842,6 @@ export class PlayerUseCase {
   // Seek to percentage
   seekToPercentage(percentage: number): void {
     console.log('[Player UseCase] 📊 Seeking to percentage:', percentage);
-    
-    // SIEMPRE pausar otros audios antes de hacer seek
-    this.pauseAllOtherAudios();
     
     if (this.audioElement?.duration) {
       const time = (percentage / 100) * this.audioElement.duration;
