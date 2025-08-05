@@ -58,7 +58,7 @@ export class SearchComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly searchSongsPaginatedUseCase = inject(SearchSongsPaginatedUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
-  private readonly searchFiltersService = inject(SearchFiltersService);
+  readonly searchFiltersService = inject(SearchFiltersService);
 
   // Control de formulario para la búsqueda
   searchControl = new FormControl('');
