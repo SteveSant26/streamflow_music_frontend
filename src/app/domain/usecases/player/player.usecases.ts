@@ -488,26 +488,43 @@ export class PlayerUseCase {
 
   resumeSong(): void {
     console.log('[Player UseCase] ▶️ Reanudando canción');
+    console.log('[Player UseCase] 🔍 Estado del audio element:', {
+      hasAudioElement: !!this.audioElement,
+      audioSrc: this.audioElement?.src,
+      audioPaused: this.audioElement?.paused,
+      audioCurrentTime: this.audioElement?.currentTime,
+      audioDuration: this.audioElement?.duration
+    });
     
     if (this.audioElement) {
       // Pausa todos los otros audios antes de reanudar
       this.pauseAllOtherAudios();
       
       try {
+        console.log('[Player UseCase] 🎯 Llamando audio.play()...');
         const playPromise = this.audioElement.play();
         
         if (playPromise !== undefined) {
           playPromise
             .then(() => {
-              this.updatePlaybackState({ isPlaying: true });
               console.log('[Player UseCase] ✅ Audio reanudado exitosamente');
+              this.updatePlaybackState({ isPlaying: true });
             })
             .catch(error => {
               console.error('[Player UseCase] ❌ Error al reanudar audio:', error);
+              console.error('[Player UseCase] 📊 Detalles del error:', {
+                errorName: error.name,
+                errorMessage: error.message,
+                audioReadyState: this.audioElement?.readyState,
+                audioNetworkState: this.audioElement?.networkState
+              });
             });
+        } else {
+          console.warn('[Player UseCase] ⚠️ playPromise is undefined - audio.play() no devolvió Promise');
+          this.updatePlaybackState({ isPlaying: true });
         }
       } catch (error) {
-        console.error('[Player UseCase] ❌ Error al reanudar audio:', error);
+        console.error('[Player UseCase] ❌ Error al llamar audio.play():', error);
       }
     } else {
       console.warn('[Player UseCase] ⚠️ Audio element not available for resume');
@@ -545,16 +562,25 @@ export class PlayerUseCase {
 
   setVolume(volume: number): void {
     console.log('[Player UseCase] 🔊 Configurando volumen:', volume);
+    console.log('[Player UseCase] 🔍 Estado del audio element:', {
+      hasAudioElement: !!this.audioElement,
+      currentVolume: this.audioElement?.volume,
+      isMuted: this.audioElement?.muted
+    });
     
     if (this.audioElement) {
       try {
         // Normalize volume to 0-1 range
         const normalizedVolume = Math.max(0, Math.min(1, volume));
+        console.log('[Player UseCase] 🎯 Configurando volumen normalizado:', normalizedVolume);
+        
         this.audioElement.volume = normalizedVolume;
+        
+        console.log('[Player UseCase] ✅ Volumen configurado en audio element:', this.audioElement.volume);
         
         this.updatePlaybackState({ volume: normalizedVolume });
         
-        console.log('[Player UseCase] ✅ Volumen actualizado:', normalizedVolume);
+        console.log('[Player UseCase] ✅ Volumen actualizado en estado:', normalizedVolume);
       } catch (error) {
         console.error('[Player UseCase] ❌ Error al configurar volumen:', error);
       }
@@ -586,7 +612,10 @@ export class PlayerUseCase {
     console.log('[Player UseCase] 🎵 togglePlayPause() - Estado actual:', {
       isPlaying: currentState.isPlaying,
       currentSong: currentState.currentSong?.title,
-      isLoading: currentState.isLoading
+      isLoading: currentState.isLoading,
+      hasAudioElement: !!this.audioElement,
+      audioElementSrc: this.audioElement?.src,
+      audioPaused: this.audioElement?.paused
     });
 
     // SIEMPRE pausar otros audios antes de cualquier operación
@@ -604,23 +633,35 @@ export class PlayerUseCase {
       return;
     }
     
+    console.log(`[Player UseCase] 🔄 DECISIÓN: isPlaying=${currentState.isPlaying} -> ${currentState.isPlaying ? 'PAUSAR' : 'REPRODUCIR'}`);
+    
     if (currentState.isPlaying) {
+      console.log('[Player UseCase] ⏸️ EJECUTANDO: pauseSong()');
       this.pauseSong();
     } else {
+      console.log('[Player UseCase] ▶️ EJECUTANDO: Lógica de reproducción');
       // Si hay canción pero no está reproduciéndose, intentar reanudar
       if (this.audioElement) {
         // Verificar si el audio tiene la fuente correcta
         const expectedUrl = this.getAudioUrl(currentState.currentSong);
+        console.log('[Player UseCase] 🔍 Verificando URL:', {
+          currentSrc: this.audioElement.src,
+          expectedUrl: expectedUrl,
+          urlsMatch: this.audioElement.src === expectedUrl
+        });
+        
         if (this.audioElement.src !== expectedUrl) {
           // Si la fuente no coincide, reproducir desde el inicio
-          console.log('[Player UseCase] 🔄 Fuente incorrecta, reproduciendo desde inicio');
+          console.log('[Player UseCase] 🔄 Fuente incorrecta, ejecutando playSong()');
           this.playSong(currentState.currentSong);
         } else {
           // Si la fuente es correcta, reanudar
+          console.log('[Player UseCase] ▶️ Fuente correcta, ejecutando resumeSong()');
           this.resumeSong();
         }
       } else {
         // Si no hay audio element, reproducir desde el inicio
+        console.log('[Player UseCase] ❌ No hay audio element, ejecutando playSong()');
         this.playSong(currentState.currentSong);
       }
     }
@@ -951,11 +992,11 @@ export class PlayerUseCase {
   }
 
   /**
-   * 🚨 INTERCEPTOR EXTREMO: BLOQUEA LA CREACIÓN DE NUEVOS ELEMENTOS AUDIO
+   * 🚨 INTERCEPTOR CORREGIDO: PERMITE SOLO 1 AUDIO REAL
    * Este método intercepta el constructor nativo de Audio y previene duplicados
    */
   private interceptAudioCreation(): void {
-    console.log('[Player UseCase] 🚨 INTERCEPTOR EXTREMO: Bloqueando creación de nuevos audios');
+    console.log('[Player UseCase] 🚨 INTERCEPTOR CORREGIDO: Bloqueando creación de nuevos audios');
     
     // Guardar el constructor original
     const OriginalAudio = (window as any).Audio;
@@ -965,42 +1006,47 @@ export class PlayerUseCase {
     // INTERCEPTAR el constructor de Audio
     (window as any).Audio = function(...args: any[]) {
       audioCreationCount++;
-      console.warn(`🚨 INTENTO DE CREAR AUDIO #${audioCreationCount} - INTERCEPTADO`);
+      console.warn(`🚨 INTENTO DE CREAR AUDIO #${audioCreationCount}`);
       
-      // Si ya tenemos un audio principal, BLOQUEAR la creación
-      if (playerInstance.audioElement && audioCreationCount > 1) {
-        console.error(`❌ BLOQUEADO: Intento de crear audio duplicado #${audioCreationCount}`);
-        
-        // Devolver un audio FALSO que no puede reproducir nada
-        const fakeAudio = {
-          play: () => {
-            console.error('🚫 AUDIO FALSO: Reproducción bloqueada');
-            return Promise.reject('Audio creation blocked');
-          },
-          pause: () => console.log('🚫 AUDIO FALSO: Pausa bloqueada'),
-          load: () => console.log('🚫 AUDIO FALSO: Load bloqueado'),
-          addEventListener: () => {},
-          removeEventListener: () => {},
-          set src(value) { console.error('🚫 AUDIO FALSO: src bloqueado:', value); },
-          get src() { return ''; },
-          set volume(value) {},
-          get volume() { return 0; },
-          set currentTime(value) {},
-          get currentTime() { return 0; },
-          set muted(value) {},
-          get muted() { return true; },
-          get paused() { return true; },
-          get duration() { return 0; },
-          style: { display: 'none' },
-          parentNode: null
-        };
-        
-        return fakeAudio;
+      // PERMITIR SOLO EL PRIMER AUDIO (nuestro audio principal)
+      if (audioCreationCount === 1) {
+        console.log(`✅ PERMITIDO: Creando audio principal #${audioCreationCount}`);
+        return new OriginalAudio(...args);
       }
       
-      // Permitir solo el primer audio (nuestro audio principal)
-      console.log(`✅ PERMITIDO: Creando audio principal #${audioCreationCount}`);
-      return new OriginalAudio(...args);
+      // BLOQUEAR cualquier audio adicional
+      console.error(`❌ BLOQUEADO: Intento de crear audio duplicado #${audioCreationCount}`);
+      
+      // Devolver un audio FALSO que no puede reproducir nada
+      const fakeAudio = {
+        play: () => {
+          console.error('🚫 AUDIO FALSO: Reproducción bloqueada');
+          return Promise.reject('Audio creation blocked - duplicate detected');
+        },
+        pause: () => console.log('🚫 AUDIO FALSO: Pausa bloqueada'),
+        load: () => console.log('🚫 AUDIO FALSO: Load bloqueado'),
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        set src(value) { console.error('🚫 AUDIO FALSO: src bloqueado:', value); },
+        get src() { return ''; },
+        set volume(value) { console.log('🚫 AUDIO FALSO: volume bloqueado'); },
+        get volume() { return 0; },
+        set currentTime(value) { console.log('🚫 AUDIO FALSO: currentTime bloqueado'); },
+        get currentTime() { return 0; },
+        set muted(value) { console.log('🚫 AUDIO FALSO: muted bloqueado'); },
+        get muted() { return true; },
+        get paused() { return true; },
+        get duration() { return 0; },
+        get readyState() { return 0; },
+        get networkState() { return 0; },
+        style: { display: 'none' },
+        parentNode: null,
+        remove: () => {},
+        setAttribute: () => {},
+        getAttribute: () => null
+      };
+      
+      return fakeAudio;
     };
     
     // Mantener las propiedades del constructor original
@@ -1011,73 +1057,50 @@ export class PlayerUseCase {
     });
   }
   private startUltraAggressiveMonitoring(): void {
-    console.log('[Player UseCase] 🚨 Iniciando monitoreo ULTRA AGRESIVO cada 50ms');
+    console.log('[Player UseCase] 🚨 Iniciando monitoreo OPTIMIZADO cada 1 segundo');
     
     this.ultraAggressiveInterval = setInterval(() => {
       try {
         const allAudioElements = document.querySelectorAll('audio');
         
-        // PASO 1: Eliminar TODOS los audios excepto nuestro elemento principal
-        let removedCount = 0;
-        allAudioElements.forEach((audio, index) => {
-          if (audio !== this.audioElement) {
-            try {
-              // DESTRUIR COMPLETAMENTE
-              audio.pause();
-              audio.currentTime = 0;
-              audio.volume = 0;
-              audio.muted = true;
-              audio.src = '';
-              audio.load();
-              
-              // REMOVER DEL DOM INMEDIATAMENTE
-              if (audio.parentNode) {
-                audio.parentNode.removeChild(audio);
-                removedCount++;
-                console.log(`💀 ULTRA KILL: Audio ${index + 1} REMOVIDO del DOM`);
-              }
-            } catch (error) {
-              console.error(`❌ Error en ULTRA KILL:`, error);
-            }
-          }
-        });
-        
-        // PASO 2: Verificar si quedan audios reproduciéndose
-        const remainingPlayingAudios = Array.from(document.querySelectorAll('audio')).filter(audio => !audio.paused);
-        
-        if (remainingPlayingAudios.length > 1) {
-          console.error(`🚨🚨🚨 ALERTA ULTRA CRÍTICA: ${remainingPlayingAudios.length} AUDIOS REPRODUCIÉNDOSE SIMULTÁNEAMENTE`);
+        // Solo actuar si hay MÁS de 1 audio
+        if (allAudioElements.length > 1) {
+          console.log(`🚨 DETECTADOS ${allAudioElements.length} audios - iniciando limpieza`);
           
-          // DESTRUIR INMEDIATAMENTE todos excepto el primero
-          remainingPlayingAudios.forEach((audio, index) => {
-            if (index > 0 || audio !== this.audioElement) {
-              console.error(`💀 EMERGENCY KILL: Destruyendo audio ${index + 1} inmediatamente`);
+          // ELIMINAR TODOS los audios excepto nuestro elemento principal
+          let removedCount = 0;
+          allAudioElements.forEach((audio, index) => {
+            if (audio !== this.audioElement) {
               try {
+                // DESTRUIR COMPLETAMENTE
                 audio.pause();
                 audio.currentTime = 0;
                 audio.volume = 0;
+                audio.muted = true;
                 audio.src = '';
                 audio.load();
                 
-                // Remover del DOM si es posible
-                if (audio.parentNode && audio !== this.audioElement) {
+                // REMOVER DEL DOM INMEDIATAMENTE
+                if (audio.parentNode) {
                   audio.parentNode.removeChild(audio);
+                  removedCount++;
+                  console.log(`💀 Audio intruso ${index + 1} REMOVIDO del DOM`);
                 }
               } catch (error) {
-                console.error(`❌ Error en EMERGENCY KILL:`, error);
+                console.error(`❌ Error eliminando audio ${index + 1}:`, error);
               }
             }
           });
-        }
-        
-        if (removedCount > 0) {
-          console.log(`🗑️ ULTRA MONITORING: Removidos ${removedCount} audios intrusos`);
+          
+          if (removedCount > 0) {
+            console.log(`🗑️ LIMPIEZA: Removidos ${removedCount} audios intrusos`);
+          }
         }
         
       } catch (error) {
-        console.error('[Player UseCase] ❌ Error en monitoreo ultra agresivo:', error);
+        console.error('[Player UseCase] ❌ Error en monitoreo optimizado:', error);
       }
-    }, 50); // ⚡ CADA 50 MS - SÚPER ULTRA MEGA RÁPIDO
+    }, 1000); // ⚡ CADA 1 SEGUNDO - MÁS RAZONABLE
   }
 
   /**

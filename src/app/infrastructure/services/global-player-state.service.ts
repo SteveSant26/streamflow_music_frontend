@@ -39,27 +39,9 @@ export class GlobalPlayerStateService {
         }
         this.lastKnownIsPlaying = state.isPlaying;
 
-        // CRITICAL: Detect if audio element was lost/recreated and state reset
-        if (
-          this.audioElement &&
-          state.currentSong &&
-          state.currentTime === 0 &&
-          state.duration === 0 &&
-          this.lastKnownCurrentTime > 5
-        ) {
-          console.log('🚨 DETECTED AUDIO ELEMENT RECREATION - RESTORING STATE');
-          setTimeout(() => this.emergencyStateRestore(), 100);
-        }
-
-        // Detect complete state loss (no current song when we had one)
-        if (!state.currentSong && this.preservedState?.src) {
-          console.log('🚨 DETECTED COMPLETE STATE LOSS - EMERGENCY RESTORE');
-          setTimeout(() => this.emergencyStateRestore(), 100);
-        }
+        // 🚨 DESACTIVADO: Las detecciones automáticas causan bucles infinitos
+        // Solo guardamos el estado, NO hacemos restauraciones automáticas
       });
-
-      // Monitor for audio element changes every second
-      setInterval(() => this.monitorAudioElement(), 1000);
     }
   }
 
@@ -385,81 +367,21 @@ export class GlobalPlayerStateService {
   }
 
   /**
-   * Monitor audio element for unexpected changes
+   * Monitor audio element - DESACTIVADO para prevenir bucles
    */
   private monitorAudioElement(): void {
-    if (!this.audioElement || !this.lastKnownState?.currentSong) return;
-
-    // Check if audio element lost its source
-    if (!this.audioElement.src && this.preservedState?.src) {
-      console.log('🚨 Audio element lost source - restoring');
-      this.emergencyStateRestore();
-    }
-
-    // Check if currentTime was reset unexpectedly
-    if (this.audioElement.currentTime === 0 && this.lastKnownCurrentTime > 5) {
-      console.log('🚨 CurrentTime was reset - restoring');
-      this.emergencyStateRestore();
-    }
+    // Esta función está desactivada porque causaba bucles infinitos
+    // El PlayerUseCase maneja la estabilidad del audio por sí mismo
+    console.log('� Audio monitoring desactivado - PlayerUseCase maneja estabilidad');
   }
 
   /**
-   * Emergency state restoration when audio element is corrupted
+   * Emergency state restoration - DESACTIVADO para prevenir bucles
    */
   private emergencyStateRestore(): void {
-    console.log('🚨 EMERGENCY STATE RESTORE INITIATED');
-
-    if (!this.preservedState && !this.lastKnownState) {
-      console.log('No preserved state available for emergency restore');
-      return;
-    }
-
-    try {
-      // Use preserved state if available, otherwise use last known state
-      const stateToRestore = this.preservedState || {
-        currentTime: this.lastKnownCurrentTime,
-        isPlaying: this.lastKnownIsPlaying,
-        volume: this.lastKnownState?.volume || 1,
-        src: this.lastKnownState?.currentSong?.file_url || '',
-      };
-
-      if (this.audioElement && stateToRestore.src) {
-        console.log('🔄 Emergency restoring:', stateToRestore);
-
-        this.audioElement.src = stateToRestore.src;
-        this.audioElement.volume = stateToRestore.volume;
-
-        const handleLoadedMetadata = () => {
-          if (this.audioElement && stateToRestore) {
-            this.audioElement.currentTime = stateToRestore.currentTime;
-
-            if (stateToRestore.isPlaying) {
-              this.audioElement.play().catch((error) => {
-                console.error(
-                  'Error resuming music after emergency restore:',
-                  error,
-                );
-              });
-            }
-          }
-          this.audioElement?.removeEventListener(
-            'loadedmetadata',
-            handleLoadedMetadata,
-          );
-        };
-
-        this.audioElement.addEventListener(
-          'loadedmetadata',
-          handleLoadedMetadata,
-        );
-        this.audioElement.load();
-
-        // Force state sync
-        this.playerUseCase.forceStateSync();
-      }
-    } catch (error) {
-      console.error('Emergency state restore failed:', error);
-    }
+    console.log('🚨 EMERGENCY STATE RESTORE DESACTIVADO - Previniendo bucles infinitos');
+    // Esta función está desactivada porque causaba bucles infinitos
+    // El PlayerUseCase maneja la estabilidad del audio por sí mismo
   }
 
   /**
