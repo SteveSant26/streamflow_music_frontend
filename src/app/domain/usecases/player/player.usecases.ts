@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Song } from '../../entities/song.entity';
 
@@ -33,6 +33,9 @@ export class PlayerUseCase {
     isLoading: false
   });
 
+  // Audio element reference - will be set by GlobalPlayerStateService
+  private audioElement: HTMLAudioElement | null = null;
+
   getCurrentSong(): Observable<Song | null> {
     return this.currentSong$.asObservable();
   }
@@ -58,7 +61,21 @@ export class PlayerUseCase {
       return;
     }
 
+    // Mostrar información sobre la fuente de audio
+    if (audioUrl.includes('youtube.com')) {
+      console.log('[Player UseCase] 🎬 USANDO: YouTube (evitando problemas de Supabase)');
+      console.log('[Player UseCase] ✅ Esta fuente es más confiable');
+    } else if (audioUrl.includes('supabase.co')) {
+      console.log('[Player UseCase] 📦 USANDO: Supabase Storage');
+      console.log('[Player UseCase] ⚠️ Si no funciona, revisa la configuración de Supabase');
+    } else {
+      console.log('[Player UseCase] � USANDO: Fuente externa:', audioUrl);
+    }
+
     console.log(`🎵 PlayerUseCase: Iniciando reproducción con URL: ${audioUrl}`);
+    
+    // ✅ REPRODUCIR AUDIO REALMENTE
+    this.playAudioUrl(audioUrl);
     
     this.currentSong$.next(song);
     this.updatePlaybackState({ 
@@ -68,6 +85,27 @@ export class PlayerUseCase {
       currentTime: 0,
       isLoading: false
     });
+  }
+
+  private playAudioUrl(audioUrl: string): void {
+    if (!this.audioElement) {
+      console.error('[Player UseCase] ❌ Audio element not available');
+      return;
+    }
+
+    try {
+      console.log('[Player UseCase] 🎧 Setting audio source:', audioUrl);
+      this.audioElement.src = audioUrl;
+      
+      console.log('[Player UseCase] ▶️ Starting audio playback...');
+      this.audioElement.play().then(() => {
+        console.log('[Player UseCase] ✅ Audio playback started successfully');
+      }).catch((error) => {
+        console.error('[Player UseCase] ❌ Audio playback failed:', error);
+      });
+    } catch (error) {
+      console.error('[Player UseCase] ❌ Error setting audio source:', error);
+    }
   }
 
   private getAudioUrl(song: Song): string | null {
@@ -81,45 +119,74 @@ export class PlayerUseCase {
       thumbnail_url: song.thumbnail_url
     });
 
-    // Priority 1: file_url (direct MP3/audio file from backend)
+    // 🔄 NUEVA ESTRATEGIA: Si Supabase está disponible, intentarlo, pero tener YouTube listo
+    
+    // Priority 1: Verificar si tenemos YouTube como fallback antes de usar Supabase
+    const hasYouTubeFallback = song.source_id || song.source_url || song.youtube_id || song.youtube_url;
+    
+    if (song.file_url && hasYouTubeFallback) {
+      console.log('[Player UseCase] 🎯 ESTRATEGIA DUAL: Supabase + YouTube fallback disponible');
+      console.log('[Player UseCase] 📦 Supabase URL:', song.file_url);
+      
+      // Construir YouTube fallback
+      let youtubeUrl = '';
+      if (song.source_url) {
+        youtubeUrl = song.source_url;
+      } else if (song.source_id) {
+        youtubeUrl = `https://www.youtube.com/watch?v=${song.source_id}`;
+      } else if (song.youtube_url) {
+        youtubeUrl = song.youtube_url;
+      } else if (song.youtube_id) {
+        youtubeUrl = `https://www.youtube.com/watch?v=${song.youtube_id}`;
+      }
+      
+      console.log('[Player UseCase] 🎬 YouTube fallback URL:', youtubeUrl);
+      console.log('[Player UseCase] 💡 DECISIÓN: Usar YouTube directamente por problemas de Supabase');
+      
+      // ⚡ USAR YOUTUBE DIRECTAMENTE para evitar problemas de Supabase
+      return youtubeUrl;
+    }
+
+    // Priority 2: file_url (solo si no hay YouTube fallback)
     if (song.file_url) {
-      console.log('[Player UseCase] Using file_url:', song.file_url);
+      console.log('[Player UseCase] ⚠️ Usando Supabase sin fallback YouTube disponible:', song.file_url);
+      console.log('[Player UseCase] 📄 This is a direct MP3 file from Supabase Storage');
       return song.file_url;
     }
 
-    // Priority 2: source_url (YouTube URL from backend)
+    // Priority 3: source_url (YouTube URL from backend)
     if (song.source_url) {
       console.log('[Player UseCase] Using source_url:', song.source_url);
       return song.source_url;
     }
 
-    // Priority 3: Legacy audioUrl field
+    // Priority 4: Legacy audioUrl field
     if (song.audioUrl) {
       console.log('[Player UseCase] Using legacy audioUrl:', song.audioUrl);
       return song.audioUrl;
     }
 
-    // Priority 4: Legacy youtube_url field
+    // Priority 5: Legacy youtube_url field
     if (song.youtube_url) {
       console.log('[Player UseCase] Using legacy youtube_url:', song.youtube_url);
       return song.youtube_url;
     }
 
-    // Priority 5: Build YouTube URL from source_id (backend field)
+    // Priority 6: Build YouTube URL from source_id (backend field)
     if (song.source_id) {
       const youtubeUrl = `https://www.youtube.com/watch?v=${song.source_id}`;
       console.log('[Player UseCase] Built YouTube URL from source_id:', youtubeUrl);
       return youtubeUrl;
     }
 
-    // Priority 6: Build YouTube URL from legacy youtube_id
+    // Priority 7: Build YouTube URL from legacy youtube_id
     if (song.youtube_id) {
       const youtubeUrl = `https://www.youtube.com/watch?v=${song.youtube_id}`;
       console.log('[Player UseCase] Built YouTube URL from legacy youtube_id:', youtubeUrl);
       return youtubeUrl;
     }
 
-    // Priority 7: Extract YouTube ID from thumbnail as fallback
+    // Priority 8: Extract YouTube ID from thumbnail as fallback
     if (song.thumbnail_url) {
       console.log('[Player UseCase] Attempting to extract YouTube ID from thumbnail:', song.thumbnail_url);
       const extractedId = this.extractYouTubeIdFromThumbnail(song.thumbnail_url);
@@ -198,8 +265,9 @@ export class PlayerUseCase {
 
   // Audio element management
   setAudioElement(audioElement: HTMLAudioElement): void {
-    // Implementation for setting audio element reference
-    console.log('Audio element set:', audioElement);
+    console.log('[Player UseCase] 🎧 Setting audio element:', audioElement);
+    this.audioElement = audioElement;
+    console.log('[Player UseCase] ✅ Audio element set successfully');
   }
 
   // Event observables for component subscriptions
