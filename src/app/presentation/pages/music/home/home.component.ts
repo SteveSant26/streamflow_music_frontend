@@ -13,8 +13,10 @@ import { MaterialThemeService } from '../../../../shared/services/material-theme
 import { MusicsTable } from '../../../components/music/musics-table/musics-table';
 import { 
   GetMostPopularSongsUseCase,
-  GetRandomSongsUseCase 
+  GetRandomSongsUseCase,
+  PlaySongUseCase 
 } from '../../../../domain/usecases/song/song.usecases';
+import { GlobalPlayerStateService } from '../../../../infrastructure/services/global-player-state.service';
 
 @Component({
   selector: 'app-home',
@@ -34,6 +36,8 @@ export class HomePageComponent implements OnInit {
   private readonly themeService = inject(MaterialThemeService);
   private readonly getMostPopularSongsUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
+  private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly globalPlayerStateService = inject(GlobalPlayerStateService);
   private readonly router = inject(Router);
 
   // Observable para el tema
@@ -88,8 +92,21 @@ export class HomePageComponent implements OnInit {
   }
 
   onPlaySong(song: Song) {
-    // Aquí puedes implementar la lógica para reproducir la canción
-    console.log('Playing song:', song);
+    // Test the music player functionality
+    console.log('🎵 Testing song playback:', song);
+    
+    // Ensure player is initialized
+    this.globalPlayerStateService.ensureInitialized();
+    
+    // Play the song
+    this.playSongUseCase.executeSimple(song.id).subscribe({
+      next: () => {
+        console.log('✅ Song playback started successfully');
+      },
+      error: (error) => {
+        console.error('❌ Error playing song:', error);
+      }
+    });
   }
 
   refresh() {
