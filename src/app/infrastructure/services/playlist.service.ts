@@ -370,7 +370,7 @@ export class PlaylistService {
       }
     }
 
-    this.selectSong(prevIndex);
+    this.selectAndPlay(prevIndex);
   }
 
   /**
