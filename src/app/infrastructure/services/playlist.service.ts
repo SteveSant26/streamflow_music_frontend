@@ -2,11 +2,13 @@ import { Injectable, signal, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Song, Playlist, PlaylistItem, PlaybackState } from '../../domain/entities/song.entity';
 import { PlayerUseCase } from '../../domain/usecases';
+import { GetRandomSongsUseCase } from '../../domain/usecases/song/song.usecases';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistService {
   // Inject PlayerUseCase para manejar la reproducción real
   private readonly playerUseCase = inject(PlayerUseCase);
+  private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
 
   // Signals para el estado reactivo
   private readonly currentPlaylist = signal<Playlist | null>(null);
