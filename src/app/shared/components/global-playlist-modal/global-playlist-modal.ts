@@ -170,7 +170,7 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  private getOriginalIndex(sortedIndex: number): number {
+  getOriginalIndex(sortedIndex: number): number {
     if (!this.currentPlaylist?.items || this.sortBy === 'none') {
       return sortedIndex;
     }

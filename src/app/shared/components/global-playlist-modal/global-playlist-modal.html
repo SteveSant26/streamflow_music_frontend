@@ -75,16 +75,37 @@
     <!-- Contenido del modal -->
     <div class="playlist-modal-content">
       <div class="playlist-songs" *ngIf="currentPlaylist">
+        <!-- Información sobre drag & drop -->
+        <div class="drag-info" *ngIf="sortBy === 'none'">
+          <mat-icon>drag_indicator</mat-icon>
+          <span>Arrastra las canciones para reordenar manualmente</span>
+        </div>
+        <div class="sort-info" *ngIf="sortBy !== 'none'">
+          <mat-icon>sort</mat-icon>
+          <span>Lista ordenada por {{ sortBy === 'name' ? 'nombre' : sortBy === 'artist' ? 'artista' : 'duración' }}</span>
+        </div>
+
         <button 
-          *ngFor="let item of currentPlaylist.items; let i = index; trackBy: trackByIndex"
+          *ngFor="let item of sortedPlaylist; let i = index; trackBy: trackByIndex"
           class="playlist-song-item"
-          [class.current]="i === currentPlaylist.currentIndex"
+          [class.current]="i === currentPlaylist.currentIndex && sortBy === 'none'"
+          [class.dragging]="draggedIndex === i"
+          [draggable]="sortBy === 'none'"
+          (dragstart)="onDragStart($event, i)"
+          (dragover)="onDragOver($event)"
+          (drop)="onDrop($event, i)"
+          (dragend)="onDragEnd()"
           (click)="selectSongFromPlaylist(i)"
           [attr.aria-label]="'Play ' + item.title"
         >
+          <!-- Indicador de drag -->
+          <div class="drag-handle" *ngIf="sortBy === 'none'">
+            <mat-icon>drag_indicator</mat-icon>
+          </div>
+          
           <div class="song-number">
-            <span *ngIf="i !== currentPlaylist.currentIndex">{{ i + 1 }}</span>
-            <mat-icon *ngIf="i === currentPlaylist.currentIndex" class="playing-icon">
+            <span *ngIf="getOriginalIndex(i) !== currentPlaylist.currentIndex">{{ i + 1 }}</span>
+            <mat-icon *ngIf="getOriginalIndex(i) === currentPlaylist.currentIndex" class="playing-icon">
               {{ currentSong?.isPlaying ? 'pause' : 'play_arrow' }}
             </mat-icon>
           </div>
