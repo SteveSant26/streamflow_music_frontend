@@ -49,9 +49,8 @@ export class PlayerCurrentSong implements OnInit, OnDestroy {
 
   navigateToCurrentSong() {
     if (this.song) {
-      // Navegar directamente a la página de la canción específica
-      const songId = this.song.id;
-      this.router.navigate(['/music/song', songId]);
+      // Navegar a la página de current song donde se puede ver la playlist
+      this.router.navigate(['/music/current-song']);
     }
   }
 }

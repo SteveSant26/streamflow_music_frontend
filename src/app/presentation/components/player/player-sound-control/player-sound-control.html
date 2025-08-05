@@ -1,11 +1,11 @@
-<div class="flex items-center gap-3 w-full max-w-md group">
+<div class="flex items-center gap-3 w-full max-w-lg group">
   <!-- Current Time -->
-  <span [class]="(isDarkTheme$ | async) ? 'text-white text-sm font-medium min-w-[40px]' : 'text-gray-800 text-sm font-medium min-w-[40px]'"> 
+  <span [class]="(isDarkTheme$ | async) ? 'text-white text-sm font-medium min-w-[45px]' : 'text-gray-800 text-sm font-medium min-w-[45px]'"> 
     {{ formatTime(currentTime) }} 
   </span>
 
-  <!-- Progress Bar Container -->
-  <div class="flex-1 relative progress-bar-enhanced">
+  <!-- Progress Bar Container - más ancho -->
+  <div class="flex-1 relative progress-bar-enhanced mx-2">
     <button 
       [class]="(isDarkTheme$ | async) 
         ? 'w-full h-6 bg-white/30 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-7 transition-all duration-200' 
@@ -50,7 +50,7 @@
   </div>
 
   <!-- Total Duration -->
-  <span [class]="(isDarkTheme$ | async) ? 'text-white text-sm font-medium min-w-[40px]' : 'text-gray-800 text-sm font-medium min-w-[40px]'"> 
+  <span [class]="(isDarkTheme$ | async) ? 'text-white text-sm font-medium min-w-[45px]' : 'text-gray-800 text-sm font-medium min-w-[45px]'"> 
     {{ formatTime(duration) }} 
   </span>
 </div>
