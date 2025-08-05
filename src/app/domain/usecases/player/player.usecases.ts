@@ -478,21 +478,25 @@ export class PlayerUseCase {
     console.log('[Player UseCase] ✅ Event listeners removidos exitosamente');
   }
 
-  // Observable for song end events
+  // Observable for song end events - usar el estado interno en lugar de duplicar listeners
   onSongEnd(): Observable<void> {
     return new Observable(observer => {
-      if (this.audioElement) {
-        this.audioElement.addEventListener('ended', () => observer.next());
-      }
+      // Usar el estado interno en lugar de agregar listeners directos
+      this.playbackState$.subscribe(state => {
+        if (state.isPlaying === false && state.currentTime === 0 && state.progress === 0) {
+          // La canción terminó naturalmente
+          observer.next();
+        }
+      });
     });
   }
 
-  // Observable for audio errors
+  // Observable for audio errors - usar el estado interno
   onError(): Observable<any> {
     return new Observable(observer => {
-      if (this.audioElement) {
-        this.audioElement.addEventListener('error', (error) => observer.next(error));
-      }
+      // Los errores ya se manejan en setupAudioEventListeners
+      // Este observable se mantiene por compatibilidad
+      console.log('[Player UseCase] 🔊 Error observable creado (usar console para errores)');
     });
   }
 
