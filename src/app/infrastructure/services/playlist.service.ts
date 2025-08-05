@@ -412,7 +412,8 @@ export class PlaylistService {
     const playlist = this.currentPlaylist();
     if (!playlist) {
       // Si no hay playlist, crear una nueva con la canción
-      this.setPlaylist([song], 0, 'Playlist Actual', 'single');
+      this.createPlaylist([song], 'Playlist Actual', 0);
+      this.setPlaylistType('single');
       this.setPlaylistContext('single');
       return;
     }
@@ -529,7 +530,8 @@ export class PlaylistService {
     } catch (error) {
       console.error('Error creando playlist random:', error);
       // Fallback: solo reproducir la canción sola
-      this.setPlaylist([primarySong], 0, 'Canción Individual', 'single');
+      this.createPlaylist([primarySong], 'Canción Individual', 0);
+      this.setPlaylistType('single');
       this.setPlaylistContext('single');
     }
   }
