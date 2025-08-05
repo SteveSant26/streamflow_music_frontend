@@ -86,6 +86,9 @@ export class PlayerUseCase {
     
     // Reproducir el audio
     this.playAudioUrl(audioUrl);
+    
+    // Detectar múltiples audios después de iniciar la reproducción
+    setTimeout(() => this.detectMultiplePlayingAudios(), 500);
   }
 
   private getAudioUrl(song: Song): string | null {
@@ -122,6 +125,9 @@ export class PlayerUseCase {
       });
       return;
     }
+
+    // Pausa todos los otros audios antes de reproducir
+    this.pauseAllOtherAudios();
 
     console.log('[Player UseCase] 🎯 Reproduciendo URL:', audioUrl);
     
@@ -184,10 +190,65 @@ export class PlayerUseCase {
     }
   }
 
+  /**
+   * Pausa todos los elementos de audio en el DOM que no sean el nuestro
+   * Esto previene reproducciones múltiples simultáneas
+   */
+  private pauseAllOtherAudios(): void {
+    try {
+      const allAudioElements = document.querySelectorAll('audio');
+      let pausedCount = 0;
+      let totalAudios = allAudioElements.length;
+      
+      // Primero reportamos cuántos elementos de audio hay en total
+      if (totalAudios > 1) {
+        console.log(`[Player UseCase] 🔍 Detectados ${totalAudios} elementos de audio en el DOM`);
+      }
+      
+      allAudioElements.forEach((audio, index) => {
+        // Solo pausa los que no sean nuestro elemento principal y estén reproduciéndose
+        if (audio !== this.audioElement && !audio.paused) {
+          console.log(`[Player UseCase] 🔇 Pausando audio duplicado ${index + 1}:`, audio.src);
+          audio.pause();
+          pausedCount++;
+        }
+      });
+      
+      if (pausedCount > 0) {
+        console.log(`[Player UseCase] ✅ Se pausaron ${pausedCount} audios duplicados`);
+      }
+    } catch (error) {
+      console.error('[Player UseCase] ❌ Error al pausar otros audios:', error);
+    }
+  }
+
+  /**
+   * Detecta si hay múltiples audios reproduciéndose simultáneamente
+   * Solo para propósitos de logging y debugging
+   */
+  private detectMultiplePlayingAudios(): void {
+    try {
+      const allAudioElements = document.querySelectorAll('audio');
+      const playingAudios = Array.from(allAudioElements).filter(audio => !audio.paused);
+      
+      if (playingAudios.length > 1) {
+        console.warn(`[Player UseCase] ⚠️ ALERTA: ${playingAudios.length} audios reproduciéndose simultáneamente`);
+        playingAudios.forEach((audio, index) => {
+          console.warn(`[Player UseCase] 🎵 Audio ${index + 1}:`, audio.src);
+        });
+      }
+    } catch (error) {
+      console.error('[Player UseCase] ❌ Error al detectar múltiples audios:', error);
+    }
+  }
+
   resumeSong(): void {
     console.log('[Player UseCase] ▶️ Reanudando canción');
     
     if (this.audioElement) {
+      // Pausa todos los otros audios antes de reanudar
+      this.pauseAllOtherAudios();
+      
       try {
         const playPromise = this.audioElement.play();
         
