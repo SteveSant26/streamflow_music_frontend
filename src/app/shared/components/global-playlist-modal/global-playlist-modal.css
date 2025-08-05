@@ -64,7 +64,7 @@
 }
 
 .playlist-stats {
-  margin: 0;
+  margin: 0 0 16px 0;
   opacity: 0.8;
   font-size: 0.85rem;
 }
@@ -72,6 +72,52 @@
 .can-load-more {
   color: #4ade80;
   font-weight: 500;
+}
+
+/* Controles de ordenamiento */
+.sort-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.sort-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-right: 4px;
+}
+
+.sort-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sort-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.sort-button.active {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+}
+
+.sort-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 .close-button {
