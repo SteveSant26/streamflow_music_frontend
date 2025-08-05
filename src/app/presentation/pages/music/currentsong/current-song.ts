@@ -28,6 +28,7 @@ interface CurrentSongView {
   cover: string;
   gradient: string;
   isPlaying: boolean;
+  isLoading: boolean;
   lyrics?: string;
 }
 
@@ -129,6 +130,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         cover: playerState.currentSong.thumbnail_url || '/assets/gorillaz2.jpg',
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         isPlaying: playerState.isPlaying,
+        isLoading: playerState.isLoading,
         lyrics: '🎵 Lyrics not available yet 🎵',
       };
     } else {

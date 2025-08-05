@@ -1,12 +1,13 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Song } from '../../entities/song.entity';
+import { PlayerState } from '../../entities/player-state.entity';
 
 export interface PlaybackState {
   currentSong: Song | null;
   isPlaying: boolean;
   currentTime: number;
-  duration: number; // Will convert from string to number
+  duration: number;
   progress: number; // 0 to 100 percentage
   volume: number;
   isMuted: boolean;
@@ -44,205 +45,250 @@ export class PlayerUseCase {
     return this.playbackState$.asObservable();
   }
 
+  // Set audio element reference
+  setAudioElement(audio: HTMLAudioElement): void {
+    this.audioElement = audio;
+    this.setupAudioEventListeners();
+    console.log('[Player UseCase] 🔊 Audio element connected successfully');
+  }
+
   playSong(song: Song): void {
     console.log(`🎵 PlayerUseCase.playSong() recibida:`, song);
     
     // Determinar la URL de audio a usar
     const audioUrl = this.getAudioUrl(song);
-    console.log(`🎵 URL de audio determinada: ${audioUrl}`);
-    
     if (!audioUrl) {
-      console.error(`❌ PlayerUseCase: No se puede reproducir - Sin URL de audio válida`);
-      console.error(`❌ Datos de la canción:`, song);
-      this.updatePlaybackState({ 
-        isLoading: false,
-        isPlaying: false 
-      });
+      console.error('[Player UseCase] ❌ No hay URL de audio disponible');
       return;
     }
 
-    // Mostrar información sobre la fuente de audio
-    if (audioUrl.includes('youtube.com')) {
-      console.log('[Player UseCase] 🎬 USANDO: YouTube (evitando problemas de Supabase)');
-      console.log('[Player UseCase] ✅ Esta fuente es más confiable');
-    } else if (audioUrl.includes('supabase.co')) {
-      console.log('[Player UseCase] 📦 USANDO: Supabase Storage');
-      console.log('[Player UseCase] ⚠️ Si no funciona, revisa la configuración de Supabase');
-    } else {
-      console.log('[Player UseCase] � USANDO: Fuente externa:', audioUrl);
+    // Actualizar el estado de loading
+    this.updatePlaybackState({ isLoading: true });
+    
+    // Actualizar la canción actual
+    this.currentSong$.next(song);
+    this.updatePlaybackState({ currentSong: song });
+    
+    // Reproducir el audio
+    this.playAudioUrl(audioUrl);
+  }
+
+  private getAudioUrl(song: Song): string | null {
+    console.log('[Player UseCase] 🔗 URLs disponibles:', {
+      file_url: song.file_url,
+      source_url: song.source_url,
+      youtube_url: song.youtube_url
+    });
+
+    // Prioridad 1: file_url (Supabase Storage - MP3 directo)
+    if (song.file_url) {
+      return song.file_url;
+    }
+    
+    // Prioridad 2: source_url (URL externa)
+    if (song.source_url) {
+      return song.source_url;
     }
 
-    console.log(`🎵 PlayerUseCase: Iniciando reproducción con URL: ${audioUrl}`);
-    
-    // ✅ REPRODUCIR AUDIO REALMENTE
-    this.playAudioUrl(audioUrl);
-    
-    this.currentSong$.next(song);
-    this.updatePlaybackState({ 
-      currentSong: song,
-      isPlaying: true, 
-      duration: song.duration_seconds || 0, 
-      currentTime: 0,
-      isLoading: false
-    });
+    // Prioridad 3: youtube_url (como último recurso, aunque no funcione bien)
+    if (song.youtube_url) {
+      return song.youtube_url;
+    }
+
+    return null;
   }
 
   private playAudioUrl(audioUrl: string): void {
     if (!this.audioElement) {
       console.error('[Player UseCase] ❌ Audio element not available');
+      this.updatePlaybackState({ 
+        isPlaying: false, 
+        isLoading: false 
+      });
       return;
     }
 
+    console.log('[Player UseCase] 🎯 Reproduciendo URL:', audioUrl);
+    
     try {
-      console.log('[Player UseCase] 🎧 Setting audio source:', audioUrl);
-      this.audioElement.src = audioUrl;
-      
-      console.log('[Player UseCase] ▶️ Starting audio playback...');
-      this.audioElement.play().then(() => {
-        console.log('[Player UseCase] ✅ Audio playback started successfully');
-      }).catch((error) => {
-        console.error('[Player UseCase] ❌ Audio playback failed:', error);
+      // Reset previous state
+      this.updatePlaybackState({ 
+        isLoading: true,
+        isPlaying: false,
+        currentTime: 0,
+        duration: 0,
+        progress: 0
       });
+
+      // Set the source and load
+      this.audioElement.src = audioUrl;
+      this.audioElement.load();
+      
+      // Attempt to play
+      const playPromise = this.audioElement.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log('[Player UseCase] ✅ Audio reproducido exitosamente');
+            this.updatePlaybackState({ 
+              isPlaying: true, 
+              isLoading: false 
+            });
+          })
+          .catch(error => {
+            console.error('[Player UseCase] ❌ Error al reproducir audio:', error);
+            this.updatePlaybackState({ 
+              isPlaying: false, 
+              isLoading: false 
+            });
+          });
+      }
     } catch (error) {
       console.error('[Player UseCase] ❌ Error setting audio source:', error);
-    }
-  }
-
-  private getAudioUrl(song: Song): string | null {
-    console.log('[Player UseCase] Getting audio URL for song:', song.title);
-    console.log('[Player UseCase] Song object details:', {
-      file_url: song.file_url,
-      source_url: song.source_url,   // Backend field
-      youtube_url: song.youtube_url, // Legacy field
-      source_id: song.source_id,     // Backend field (YouTube ID)
-      youtube_id: song.youtube_id,   // Legacy field
-      thumbnail_url: song.thumbnail_url
-    });
-
-    // 🔄 NUEVA ESTRATEGIA: Si Supabase está disponible, intentarlo, pero tener YouTube listo
-    
-    // Priority 1: Verificar si tenemos YouTube como fallback antes de usar Supabase
-    const hasYouTubeFallback = song.source_id || song.source_url || song.youtube_id || song.youtube_url;
-    
-    if (song.file_url && hasYouTubeFallback) {
-      console.log('[Player UseCase] 🎯 ESTRATEGIA DUAL: Supabase + YouTube fallback disponible');
-      console.log('[Player UseCase] 📦 Supabase URL:', song.file_url);
-      
-      // Construir YouTube fallback
-      let youtubeUrl = '';
-      if (song.source_url) {
-        youtubeUrl = song.source_url;
-      } else if (song.source_id) {
-        youtubeUrl = `https://www.youtube.com/watch?v=${song.source_id}`;
-      } else if (song.youtube_url) {
-        youtubeUrl = song.youtube_url;
-      } else if (song.youtube_id) {
-        youtubeUrl = `https://www.youtube.com/watch?v=${song.youtube_id}`;
-      }
-      
-      console.log('[Player UseCase] 🎬 YouTube fallback URL:', youtubeUrl);
-      console.log('[Player UseCase] 💡 DECISIÓN: Usar YouTube directamente por problemas de Supabase');
-      
-      // ⚡ USAR YOUTUBE DIRECTAMENTE para evitar problemas de Supabase
-      return youtubeUrl;
-    }
-
-    // Priority 2: file_url (solo si no hay YouTube fallback)
-    if (song.file_url) {
-      console.log('[Player UseCase] ⚠️ Usando Supabase sin fallback YouTube disponible:', song.file_url);
-      console.log('[Player UseCase] 📄 This is a direct MP3 file from Supabase Storage');
-      return song.file_url;
-    }
-
-    // Priority 3: source_url (YouTube URL from backend)
-    if (song.source_url) {
-      console.log('[Player UseCase] Using source_url:', song.source_url);
-      return song.source_url;
-    }
-
-    // Priority 4: Legacy audioUrl field
-    if (song.audioUrl) {
-      console.log('[Player UseCase] Using legacy audioUrl:', song.audioUrl);
-      return song.audioUrl;
-    }
-
-    // Priority 5: Legacy youtube_url field
-    if (song.youtube_url) {
-      console.log('[Player UseCase] Using legacy youtube_url:', song.youtube_url);
-      return song.youtube_url;
-    }
-
-    // Priority 6: Build YouTube URL from source_id (backend field)
-    if (song.source_id) {
-      const youtubeUrl = `https://www.youtube.com/watch?v=${song.source_id}`;
-      console.log('[Player UseCase] Built YouTube URL from source_id:', youtubeUrl);
-      return youtubeUrl;
-    }
-
-    // Priority 7: Build YouTube URL from legacy youtube_id
-    if (song.youtube_id) {
-      const youtubeUrl = `https://www.youtube.com/watch?v=${song.youtube_id}`;
-      console.log('[Player UseCase] Built YouTube URL from legacy youtube_id:', youtubeUrl);
-      return youtubeUrl;
-    }
-
-    // Priority 8: Extract YouTube ID from thumbnail as fallback
-    if (song.thumbnail_url) {
-      console.log('[Player UseCase] Attempting to extract YouTube ID from thumbnail:', song.thumbnail_url);
-      const extractedId = this.extractYouTubeIdFromThumbnail(song.thumbnail_url);
-      if (extractedId) {
-        const youtubeUrl = `https://www.youtube.com/watch?v=${extractedId}`;
-        console.log('[Player UseCase] Extracted YouTube URL from thumbnail:', youtubeUrl);
-        return youtubeUrl;
-      }
-    }
-    
-    console.error(`❌ No se encontró ninguna URL de audio válida para: ${song.title}`);
-    return null;
-  }
-
-  private extractYouTubeIdFromThumbnail(thumbnailUrl: string): string | null {
-    try {
-      console.log(`🔍 Analizando thumbnail_url: ${thumbnailUrl}`);
-      
-      // Patrón para extraer ID de URLs como:
-      // https://...supabase.co/storage/v1/object/public/music-files/thumbnails/lyMPVoKKciw_1fadeeae.jpg?
-      // https://...supabase.co/storage/v1/object/public/music-files/thumbnails/RFE6v8FpfWs_b280f592.jpg?
-      const match = thumbnailUrl.match(/thumbnails\/([a-zA-Z0-9_-]+)_[a-fA-F0-9]+\.jpg/);
-      
-      if (match && match[1]) {
-        const extractedId = match[1];
-        console.log(`✅ YouTube ID extraído: ${extractedId}`);
-        return extractedId;
-      }
-      
-      console.log(`❌ No se pudo extraer YouTube ID del thumbnail`);
-      return null;
-    } catch (error) {
-      console.error(`❌ Error extrayendo YouTube ID:`, error);
-      return null;
+      this.updatePlaybackState({ 
+        isPlaying: false, 
+        isLoading: false 
+      });
     }
   }
 
   pauseSong(): void {
-    this.updatePlaybackState({ isPlaying: false });
+    console.log('[Player UseCase] ⏸️ Pausando canción');
+    
+    if (this.audioElement) {
+      try {
+        this.audioElement.pause();
+        this.updatePlaybackState({ isPlaying: false });
+        console.log('[Player UseCase] ✅ Audio pausado exitosamente');
+      } catch (error) {
+        console.error('[Player UseCase] ❌ Error al pausar audio:', error);
+      }
+    } else {
+      console.warn('[Player UseCase] ⚠️ Audio element not available for pause');
+    }
   }
 
   resumeSong(): void {
-    this.updatePlaybackState({ isPlaying: true });
+    console.log('[Player UseCase] ▶️ Reanudando canción');
+    
+    if (this.audioElement) {
+      try {
+        const playPromise = this.audioElement.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              this.updatePlaybackState({ isPlaying: true });
+              console.log('[Player UseCase] ✅ Audio reanudado exitosamente');
+            })
+            .catch(error => {
+              console.error('[Player UseCase] ❌ Error al reanudar audio:', error);
+            });
+        }
+      } catch (error) {
+        console.error('[Player UseCase] ❌ Error al reanudar audio:', error);
+      }
+    } else {
+      console.warn('[Player UseCase] ⚠️ Audio element not available for resume');
+    }
   }
 
   seekTo(time: number): void {
-    this.updatePlaybackState({ currentTime: time });
+    console.log('[Player UseCase] ⏩ Buscando posición:', time);
+    
+    if (this.audioElement) {
+      try {
+        // Validate time is within bounds
+        const validTime = Math.max(0, Math.min(time, this.audioElement.duration || 0));
+        this.audioElement.currentTime = validTime;
+        
+        this.updatePlaybackState({ 
+          currentTime: validTime,
+          progress: (validTime / (this.audioElement.duration || 1)) * 100
+        });
+        
+        console.log('[Player UseCase] ✅ Posición actualizada:', validTime);
+      } catch (error) {
+        console.error('[Player UseCase] ❌ Error al buscar posición:', error);
+      }
+    } else {
+      console.warn('[Player UseCase] ⚠️ Audio element not available for seek');
+    }
   }
 
   setVolume(volume: number): void {
-    this.updatePlaybackState({ volume: Math.max(0, Math.min(1, volume)) });
+    console.log('[Player UseCase] 🔊 Configurando volumen:', volume);
+    
+    if (this.audioElement) {
+      try {
+        // Normalize volume to 0-1 range
+        const normalizedVolume = Math.max(0, Math.min(1, volume));
+        this.audioElement.volume = normalizedVolume;
+        
+        this.updatePlaybackState({ volume: normalizedVolume });
+        
+        console.log('[Player UseCase] ✅ Volumen actualizado:', normalizedVolume);
+      } catch (error) {
+        console.error('[Player UseCase] ❌ Error al configurar volumen:', error);
+      }
+    } else {
+      console.warn('[Player UseCase] ⚠️ Audio element not available for volume control');
+    }
   }
 
   toggleMute(): void {
+    console.log('[Player UseCase] 🔇 Alternando mute');
+    
+    if (this.audioElement) {
+      try {
+        this.audioElement.muted = !this.audioElement.muted;
+        
+        this.updatePlaybackState({ isMuted: this.audioElement.muted });
+        
+        console.log('[Player UseCase] ✅ Mute actualizado:', this.audioElement.muted);
+      } catch (error) {
+        console.error('[Player UseCase] ❌ Error al alternar mute:', error);
+      }
+    } else {
+      console.warn('[Player UseCase] ⚠️ Audio element not available for mute toggle');
+    }
+  }
+
+  togglePlayPause(): void {
     const currentState = this.playbackState$.value;
-    this.updatePlaybackState({ isMuted: !currentState.isMuted });
+    if (currentState.isPlaying) {
+      this.pauseSong();
+    } else {
+      this.resumeSong();
+    }
+  }
+
+  stopSong(): void {
+    console.log('[Player UseCase] ⏹️ Deteniendo canción');
+    
+    if (this.audioElement) {
+      this.audioElement.pause();
+      this.audioElement.currentTime = 0;
+    }
+
+    this.updatePlaybackState({
+      isPlaying: false,
+      currentTime: 0,
+      progress: 0
+    });
+    
+    this.currentSong$.next(null);
+  }
+
+  nextSong(): void {
+    // TODO: Implementar lógica de siguiente canción
+    console.log('[Player UseCase] ⏭️ Siguiente canción (no implementado)');
+  }
+
+  previousSong(): void {
+    // TODO: Implementar lógica de canción anterior
+    console.log('[Player UseCase] ⏮️ Canción anterior (no implementado)');
   }
 
   setRepeatMode(mode: 'none' | 'one' | 'all'): void {
@@ -254,87 +300,237 @@ export class PlayerUseCase {
     this.updatePlaybackState({ isShuffleEnabled: !currentState.isShuffleEnabled });
   }
 
-  updateCurrentTime(time: number): void {
-    this.updatePlaybackState({ currentTime: time });
-  }
-
-  private updatePlaybackState(updates: Partial<PlaybackState>): void {
+  private updatePlaybackState(state: Partial<PlaybackState>): void {
     const currentState = this.playbackState$.value;
-    this.playbackState$.next({ ...currentState, ...updates });
+    this.playbackState$.next({ ...currentState, ...state });
   }
 
-  // Audio element management
-  setAudioElement(audioElement: HTMLAudioElement): void {
-    console.log('[Player UseCase] 🎧 Setting audio element:', audioElement);
-    this.audioElement = audioElement;
-    console.log('[Player UseCase] ✅ Audio element set successfully');
+  private setupAudioEventListeners(): void {
+    if (!this.audioElement) return;
+
+    console.log('[Player UseCase] 🎧 Configurando event listeners de audio');
+
+    // Loading started
+    this.audioElement.addEventListener('loadstart', () => {
+      console.log('[Player UseCase] 🔄 Loading started');
+      this.updatePlaybackState({ isLoading: true });
+    });
+
+    // Can start playing (metadata loaded)
+    this.audioElement.addEventListener('canplay', () => {
+      console.log('[Player UseCase] ✅ Can start playing');
+      this.updatePlaybackState({ isLoading: false });
+    });
+
+    // Enough data loaded to play through
+    this.audioElement.addEventListener('canplaythrough', () => {
+      console.log('[Player UseCase] ✅ Can play through');
+      this.updatePlaybackState({ isLoading: false });
+    });
+
+    // Time update event
+    this.audioElement.addEventListener('timeupdate', () => {
+      if (this.audioElement) {
+        const currentTime = this.audioElement.currentTime;
+        const duration = this.audioElement.duration || 0;
+        const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+        this.updatePlaybackState({
+          currentTime,
+          duration,
+          progress
+        });
+      }
+    });
+
+    // Loaded metadata event
+    this.audioElement.addEventListener('loadedmetadata', () => {
+      if (this.audioElement) {
+        console.log('[Player UseCase] 📊 Metadata loaded, duration:', this.audioElement.duration);
+        this.updatePlaybackState({
+          duration: this.audioElement.duration || 0,
+          isLoading: false
+        });
+      }
+    });
+
+    // Play event
+    this.audioElement.addEventListener('play', () => {
+      console.log('[Player UseCase] ▶️ Audio play event');
+      this.updatePlaybackState({ isPlaying: true, isLoading: false });
+    });
+
+    // Pause event
+    this.audioElement.addEventListener('pause', () => {
+      console.log('[Player UseCase] ⏸️ Audio pause event');
+      this.updatePlaybackState({ isPlaying: false });
+    });
+
+    // Ended event
+    this.audioElement.addEventListener('ended', () => {
+      console.log('[Player UseCase] 🔚 Audio ended');
+      this.updatePlaybackState({ 
+        isPlaying: false,
+        currentTime: 0,
+        progress: 0
+      });
+      // Handle next song based on repeat mode
+      this.handleSongEnd();
+    });
+
+    // Volume change event
+    this.audioElement.addEventListener('volumechange', () => {
+      if (this.audioElement) {
+        this.updatePlaybackState({
+          volume: this.audioElement.volume,
+          isMuted: this.audioElement.muted
+        });
+      }
+    });
+
+    // Waiting event (buffering)
+    this.audioElement.addEventListener('waiting', () => {
+      console.log('[Player UseCase] ⏳ Audio waiting/buffering');
+      this.updatePlaybackState({ isLoading: true });
+    });
+
+    // Playing event (resumed from buffering)
+    this.audioElement.addEventListener('playing', () => {
+      console.log('[Player UseCase] ▶️ Audio playing (resumed from buffering)');
+      this.updatePlaybackState({ isLoading: false, isPlaying: true });
+    });
+
+    // Seeking started
+    this.audioElement.addEventListener('seeking', () => {
+      console.log('[Player UseCase] 🔍 Seeking started');
+      this.updatePlaybackState({ isLoading: true });
+    });
+
+    // Seeking finished
+    this.audioElement.addEventListener('seeked', () => {
+      console.log('[Player UseCase] ✅ Seeking finished');
+      this.updatePlaybackState({ isLoading: false });
+    });
+
+    // Error event
+    this.audioElement.addEventListener('error', (e) => {
+      console.error('[Player UseCase] ❌ Audio error:', e);
+      this.updatePlaybackState({ 
+        isPlaying: false, 
+        isLoading: false 
+      });
+    });
+
+    console.log('[Player UseCase] ✅ Event listeners configurados exitosamente');
   }
 
-  // Event observables for component subscriptions
+  // Observable for song end events
   onSongEnd(): Observable<void> {
-    // Implementation for song end events
     return new Observable(observer => {
-      // Placeholder implementation
-      observer.next();
+      if (this.audioElement) {
+        this.audioElement.addEventListener('ended', () => observer.next());
+      }
     });
   }
 
+  // Observable for audio errors
   onError(): Observable<any> {
-    // Implementation for error events
     return new Observable(observer => {
-      // Placeholder implementation - would emit errors from audio playback
-      observer.error('Audio playback error');
+      if (this.audioElement) {
+        this.audioElement.addEventListener('error', (error) => observer.next(error));
+      }
     });
   }
 
-  // Additional methods needed by services
+  // Get current player state
   getPlayerState(): Observable<PlaybackState> {
-    return this.playbackState$.asObservable();
+    return this.getPlaybackState();
   }
 
-  getCurrentPlayerState(): PlaybackState {
-    return this.playbackState$.value;
+  // Alias method for compatibility
+  getCurrentPlayerState(): PlayerState {
+    const state = this.playbackState$.value;
+    return {
+      currentSong: state.currentSong,
+      isPlaying: state.isPlaying,
+      volume: state.volume,
+      currentTime: state.currentTime,
+      duration: state.duration,
+      progress: state.progress,
+      isLoading: state.isLoading,
+      isMuted: state.isMuted,
+      repeatMode: state.repeatMode,
+      isShuffleEnabled: state.isShuffleEnabled
+    };
   }
 
-  loadPlaylist(playlist: Song[]): void {
-    // Implementation for loading playlist
-    console.log('Loading playlist:', playlist);
-  }
-
+  // Force state synchronization
   forceStateSync(): void {
-    // Implementation for forcing state synchronization
-    console.log('Forcing state sync');
+    if (this.audioElement) {
+      this.updatePlaybackState({
+        currentTime: this.audioElement.currentTime,
+        duration: this.audioElement.duration || 0,
+        progress: (this.audioElement.currentTime / (this.audioElement.duration || 1)) * 100,
+        volume: this.audioElement.volume,
+        isMuted: this.audioElement.muted,
+        isPlaying: !this.audioElement.paused
+      });
+    }
   }
 
+  // Emergency state recovery
   emergencyStateRecovery(): void {
-    // Implementation for emergency state recovery
-    console.log('Emergency state recovery');
+    console.log('[Player UseCase] 🚑 Emergency state recovery');
+    this.forceStateSync();
   }
 
+  // Preserve current state
   preserveCurrentState(): void {
-    // Implementation for preserving current state
-    console.log('Preserving current state');
+    console.log('[Player UseCase] 💾 Preserving current state');
+    this.forceStateSync();
   }
 
-  // Player control methods needed by components
-  togglePlayPause(): void {
-    const currentState = this.playbackState$.value;
-    this.updatePlaybackState({ isPlaying: !currentState.isPlaying });
-  }
-
+  // Play previous song
   async playPrevious(): Promise<void> {
-    // Implementation for playing previous song
-    console.log('Playing previous song');
+    console.log('[Player UseCase] ⏮️ Play previous (implementation needed)');
+    // TODO: Implement playlist navigation
   }
 
+  // Play next song
   async playNext(): Promise<void> {
-    // Implementation for playing next song
-    console.log('Playing next song');
+    console.log('[Player UseCase] ⏭️ Play next (implementation needed)');
+    // TODO: Implement playlist navigation
   }
 
+  // Seek to percentage
   seekToPercentage(percentage: number): void {
+    if (this.audioElement?.duration) {
+      const time = (percentage / 100) * this.audioElement.duration;
+      this.seekTo(time);
+    }
+  }
+
+  // Handle song end based on repeat mode
+  private handleSongEnd(): void {
     const currentState = this.playbackState$.value;
-    const newTime = (percentage / 100) * currentState.duration;
-    this.updatePlaybackState({ currentTime: newTime });
+    
+    switch (currentState.repeatMode) {
+      case 'one':
+        // Repeat current song
+        if (this.audioElement) {
+          this.audioElement.currentTime = 0;
+          this.audioElement.play().catch(console.error);
+        }
+        break;
+      case 'all':
+        // Play next song (implement when playlist navigation is ready)
+        console.log('[Player UseCase] 🔄 Repeat all - next song (not implemented)');
+        break;
+      case 'none':
+      default:
+        // Stop playback
+        console.log('[Player UseCase] 🛑 Song ended - stopping playback');
+        break;
+    }
   }
 }
