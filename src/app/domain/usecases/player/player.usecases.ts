@@ -152,7 +152,14 @@ export class PlayerUseCase {
 
       // Set the source and load
       this.audioElement.src = audioUrl;
+      
+      // Asegurar configuración básica del audio
+      this.audioElement.volume = this.playbackState$.value.volume || 1;
+      this.audioElement.muted = this.playbackState$.value.isMuted || false;
+      
       this.audioElement.load();
+      
+      console.log('[Player UseCase] 🔊 Audio configurado - Volume:', this.audioElement.volume, 'Muted:', this.audioElement.muted);
       
       // Attempt to play
       const playPromise = this.audioElement.play();
