@@ -48,19 +48,37 @@ import { CommonModule } from '@angular/common';
     
     .progress-control {
       transition: height 0.2s ease-in-out;
+      border: none !important;
+      outline: none !important;
+    }
+    
+    .progress-control:focus {
+      outline: none !important;
+      border: none !important;
     }
     
     .group:hover .progress-control {
-      height: 1.25rem !important;
+      height: 1.75rem !important;
     }
     
     .progress-bar-enhanced:hover .progress-thumb {
       opacity: 1 !important;
-      transform: scale(1.1) !important;
+      transform: scale(1.2) translate(50%, -50%) !important;
     }
     
     .progress-thumb {
       transition: all 0.2s ease-in-out;
+      z-index: 10;
+    }
+    
+    /* Asegurar que la barra sea visible */
+    .progress-control {
+      min-height: 1.5rem;
+      background-color: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .progress-control:hover {
+      background-color: rgba(255, 255, 255, 0.3) !important;
     }
   `]
 })
@@ -97,9 +115,6 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
     // Use the PlayerUseCase through GlobalPlayerStateService to handle seeking
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.seekToPercentage(seekPercentage);
-
-    // Force sync after seek
-    this.globalPlayerState.forceSyncAllComponents();
   }
 
   onProgressClick(event: MouseEvent): void {
@@ -114,9 +129,6 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
     // Use the PlayerUseCase through GlobalPlayerStateService to handle seeking
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.seekToPercentage(clickPercentage);
-
-    // Force sync after seek
-    this.globalPlayerState.forceSyncAllComponents();
   }
 
   ngOnInit(): void {

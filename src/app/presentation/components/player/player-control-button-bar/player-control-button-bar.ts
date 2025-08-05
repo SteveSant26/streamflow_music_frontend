@@ -49,9 +49,6 @@ export class PlayerControlButtonBar implements OnInit, OnDestroy {
     // Use ONLY the centralized method
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.togglePlayPause();
-
-    // Force sync immediately after action
-    this.globalPlayerState.forceSyncAllComponents();
   }
 
   onPreviousClick(): void {

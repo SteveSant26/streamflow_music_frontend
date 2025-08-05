@@ -26,11 +26,22 @@
     
     <!-- Playlist Button -->
     <button 
-      class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+      class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
       title="Mostrar playlist"
       (click)="openPlaylistModal()"
       *ngIf="playerState?.currentSong">
       <mat-icon class="text-gray-600 dark:text-gray-300">queue_music</mat-icon>
+    </button>
+  </div>
+  
+  <!-- Mobile Playlist Button - visible only on mobile -->
+  <div class="flex sm:hidden place-content-center items-center order-4">
+    <button 
+      class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
+      title="Mostrar playlist"
+      (click)="openPlaylistModal()"
+      *ngIf="playerState?.currentSong">
+      <mat-icon class="text-gray-600 dark:text-gray-300 text-lg">queue_music</mat-icon>
     </button>
   </div>
 </div>

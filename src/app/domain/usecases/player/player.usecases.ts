@@ -286,11 +286,20 @@ export class PlayerUseCase {
     if (currentState.isPlaying) {
       this.pauseSong();
     } else {
-      // Si hay canción pero no está reproduciéndose, intentar reanudar o reproducir desde el inicio
-      if (this.audioElement && this.audioElement.src) {
-        this.resumeSong();
+      // Si hay canción pero no está reproduciéndose, intentar reanudar
+      if (this.audioElement) {
+        // Verificar si el audio tiene la fuente correcta
+        const expectedUrl = this.getAudioUrl(currentState.currentSong);
+        if (this.audioElement.src !== expectedUrl) {
+          // Si la fuente no coincide, reproducir desde el inicio
+          console.log('[Player UseCase] 🔄 Fuente incorrecta, reproduciendo desde inicio');
+          this.playSong(currentState.currentSong);
+        } else {
+          // Si la fuente es correcta, reanudar
+          this.resumeSong();
+        }
       } else {
-        // Si no hay src, reproducir la canción actual desde el inicio
+        // Si no hay audio element, reproducir desde el inicio
         this.playSong(currentState.currentSong);
       }
     }
