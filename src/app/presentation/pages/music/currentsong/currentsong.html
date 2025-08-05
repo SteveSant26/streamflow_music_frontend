@@ -20,7 +20,6 @@
           (click)="togglePlaylistPanel()"
           class="playlist-button"
           aria-label="Ver playlist"
-          [class.active]="showPlaylistPanel"
         >
           <mat-icon>queue_music</mat-icon>
         </button>
@@ -244,71 +243,10 @@
       </div>
     </div>
   </div>
-
-  <!-- Panel de playlist deslizante -->
-  <div class="playlist-panel" [class.show]="showPlaylistPanel" *ngIf="currentPlaylist">
-    <div class="playlist-header">
-      <div class="playlist-info">
-        <h3>{{ currentPlaylist.name }}</h3>
-        <p class="playlist-context">{{ getPlaylistContextInfo() }}</p>
-        <p class="playlist-stats">
-          {{ currentPlaylist.items.length }} canciones
-          <span *ngIf="canLoadMore()" class="can-load-more">• Más disponibles</span>
-        </p>
-      </div>
-      <button
-        (click)="togglePlaylistPanel()"
-        class="close-playlist-button"
-        aria-label="Cerrar playlist"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-
-    <div class="playlist-content">
-      <div class="playlist-songs">
-        <button 
-          *ngFor="let item of currentPlaylist.items; let i = index; trackBy: trackByIndex"
-          class="playlist-song-item"
-          [class.current]="i === currentPlaylist.currentIndex"
-          (click)="selectSongFromPlaylist(i)"
-          [attr.aria-label]="'Play ' + item.title"
-        >
-          <div class="song-number">
-            <span *ngIf="i !== currentPlaylist.currentIndex">{{ i + 1 }}</span>
-            <mat-icon *ngIf="i === currentPlaylist.currentIndex" class="playing-icon">
-              {{ currentSong.isPlaying ? 'pause' : 'play_arrow' }}
-            </mat-icon>
-          </div>
-          
-          <div class="song-thumbnail">
-            <img 
-              [src]="item.thumbnail_url || '/assets/default-album.jpg'" 
-              [alt]="item.title"
-              class="thumbnail-img"
-            />
-          </div>
-          
-          <div class="song-details">
-            <h4 class="song-title" [class.current]="i === currentPlaylist.currentIndex">
-              {{ item.title }}
-            </h4>
-            <p class="song-artist">{{ item.artist_name || 'Artista desconocido' }}</p>
-          </div>
-          
-          <div class="song-duration">
-            {{ item.duration_formatted || '0:00' }}
-          </div>
-        </button>
-        
-        <!-- Indicador de carga más contenido -->
-        <div *ngIf="canLoadMore()" class="load-more-indicator">
-          <p>Se cargarán más canciones automáticamente al llegar al final</p>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
+
+<!-- Componente global de playlist modal -->
+<app-global-playlist-modal></app-global-playlist-modal>
 
 <!-- Vista de carga si no hay canción -->
 <div *ngIf="!currentSong" class="loading-container">
