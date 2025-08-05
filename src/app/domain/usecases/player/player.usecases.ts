@@ -42,12 +42,93 @@ export class PlayerUseCase {
   }
 
   playSong(song: Song): void {
+    console.log(`🎵 PlayerUseCase.playSong() recibida:`, song);
+    
+    // Determinar la URL de audio a usar
+    const audioUrl = this.getAudioUrl(song);
+    console.log(`🎵 URL de audio determinada: ${audioUrl}`);
+    
+    if (!audioUrl) {
+      console.error(`❌ PlayerUseCase: No se puede reproducir - Sin URL de audio válida`);
+      console.error(`❌ Datos de la canción:`, song);
+      this.updatePlaybackState({ 
+        isLoading: false,
+        isPlaying: false 
+      });
+      return;
+    }
+
+    console.log(`🎵 PlayerUseCase: Iniciando reproducción con URL: ${audioUrl}`);
+    
     this.currentSong$.next(song);
     this.updatePlaybackState({ 
+      currentSong: song,
       isPlaying: true, 
       duration: song.duration_seconds || 0, 
-      currentTime: 0 
+      currentTime: 0,
+      isLoading: false
     });
+  }
+
+  private getAudioUrl(song: Song): string | null {
+    // Prioridad: file_url -> audioUrl -> youtube_url -> youtube_id construido -> extraer de thumbnail
+    if (song.file_url) {
+      console.log(`🎵 Usando file_url: ${song.file_url}`);
+      return song.file_url;
+    }
+    
+    if (song.audioUrl) {
+      console.log(`🎵 Usando audioUrl: ${song.audioUrl}`);
+      return song.audioUrl;
+    }
+    
+    if (song.youtube_url) {
+      console.log(`🎵 Usando youtube_url: ${song.youtube_url}`);
+      return song.youtube_url;
+    }
+    
+    if (song.youtube_id) {
+      const youtubeUrl = `https://www.youtube.com/watch?v=${song.youtube_id}`;
+      console.log(`🎵 Construyendo URL de YouTube: ${youtubeUrl}`);
+      return youtubeUrl;
+    }
+    
+    // NUEVO: Extraer YouTube ID del thumbnail_url
+    if (song.thumbnail_url) {
+      const youtubeId = this.extractYouTubeIdFromThumbnail(song.thumbnail_url);
+      if (youtubeId) {
+        const youtubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
+        console.log(`🎵 YouTube ID extraído del thumbnail: ${youtubeId}`);
+        console.log(`🎵 URL de YouTube construida: ${youtubeUrl}`);
+        return youtubeUrl;
+      }
+    }
+    
+    console.error(`❌ No se encontró ninguna URL de audio válida para: ${song.title}`);
+    return null;
+  }
+
+  private extractYouTubeIdFromThumbnail(thumbnailUrl: string): string | null {
+    try {
+      console.log(`🔍 Analizando thumbnail_url: ${thumbnailUrl}`);
+      
+      // Patrón para extraer ID de URLs como:
+      // https://...supabase.co/storage/v1/object/public/music-files/thumbnails/lyMPVoKKciw_1fadeeae.jpg?
+      // https://...supabase.co/storage/v1/object/public/music-files/thumbnails/RFE6v8FpfWs_b280f592.jpg?
+      const match = thumbnailUrl.match(/thumbnails\/([a-zA-Z0-9_-]+)_[a-fA-F0-9]+\.jpg/);
+      
+      if (match && match[1]) {
+        const extractedId = match[1];
+        console.log(`✅ YouTube ID extraído: ${extractedId}`);
+        return extractedId;
+      }
+      
+      console.log(`❌ No se pudo extraer YouTube ID del thumbnail`);
+      return null;
+    } catch (error) {
+      console.error(`❌ Error extrayendo YouTube ID:`, error);
+      return null;
+    }
   }
 
   pauseSong(): void {

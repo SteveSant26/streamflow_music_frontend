@@ -1,9 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Song, Playlist, PlaylistItem, PlaybackState } from '../../domain/entities/song.entity';
+import { PlayerUseCase } from '../../domain/usecases';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistService {
+  // Inject PlayerUseCase para manejar la reproducción real
+  private readonly playerUseCase = inject(PlayerUseCase);
+
   // Signals para el estado reactivo
   private readonly currentPlaylist = signal<Playlist | null>(null);
   private readonly playbackState = signal<PlaybackState>({
@@ -162,13 +166,91 @@ export class PlaylistService {
    */
   togglePlayback(): void {
     const state = this.playbackState();
-    const newState = {
-      ...state,
-      isPlaying: !state.isPlaying
-    };
+    const playlist = this.currentPlaylist();
+    
+    if (!playlist?.items?.length) {
+      console.warn('No hay playlist o está vacía');
+      return;
+    }
 
-    this.playbackState.set(newState);
-    this.playbackStateSubject.next(newState);
+    const currentSong = playlist.items[playlist.currentIndex];
+    if (!currentSong) {
+      console.warn('No hay canción actual en la playlist');
+      return;
+    }
+
+    console.log(`🎵 togglePlayback() - Canción actual: ${currentSong.title}`);
+    console.log(`🎵 Estado actual isPlaying: ${state.isPlaying}`);
+
+    if (!state.isPlaying) {
+      // Iniciar reproducción usando PlayerUseCase
+      console.log(`🎵 Iniciando reproducción de: ${currentSong.title}`);
+      console.log(`🎵 Datos completos de la canción:`, currentSong);
+      console.log(`🎵 file_url: ${currentSong.file_url}`);
+      console.log(`🎵 audioUrl: ${currentSong.audioUrl}`);
+      console.log(`🎵 youtube_url: ${currentSong.youtube_url}`);
+      console.log(`🎵 youtube_id: ${currentSong.youtube_id}`);
+      
+      const audioUrl = currentSong.file_url || currentSong.audioUrl || currentSong.youtube_url;
+      console.log(`🎵 URL de audio seleccionada: ${audioUrl}`);
+      
+      // Si no hay URL de audio directa, intentar extraer de thumbnail
+      let finalAudioUrl = audioUrl;
+      if (!finalAudioUrl && currentSong.thumbnail_url) {
+        const youtubeId = this.extractYouTubeIdFromThumbnail(currentSong.thumbnail_url);
+        if (youtubeId) {
+          finalAudioUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
+          console.log(`🎵 URL extraída del thumbnail: ${finalAudioUrl}`);
+        }
+      }
+      
+      if (!finalAudioUrl) {
+        console.error(`❌ NO HAY URL DE AUDIO DISPONIBLE para la canción: ${currentSong.title}`);
+        console.error(`❌ Datos de la canción:`, currentSong);
+        
+        // SOLUCIÓN TEMPORAL: Si tenemos youtube_id del thumbnail, abrir YouTube en nueva pestaña
+        if (currentSong.thumbnail_url) {
+          const youtubeId = this.extractYouTubeIdFromThumbnail(currentSong.thumbnail_url);
+          if (youtubeId) {
+            const youtubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
+            console.log(`🎵 Abriendo YouTube como fallback: ${youtubeUrl}`);
+            window.open(youtubeUrl, '_blank');
+            
+            // Actualizar estado como si estuviera reproduciéndose
+            const newState = {
+              ...state,
+              currentSong,
+              isPlaying: true
+            };
+            this.playbackState.set(newState);
+            this.playbackStateSubject.next(newState);
+          }
+        }
+        return;
+      }
+      
+      this.playerUseCase.playSong(currentSong);
+      console.log(`✅ Comando de reproducción enviado al PlayerUseCase`);
+      
+      const newState = {
+        ...state,
+        currentSong,
+        isPlaying: true
+      };
+      this.playbackState.set(newState);
+      this.playbackStateSubject.next(newState);
+    } else {
+      // Pausar reproducción
+      console.log(`⏸️ Pausando reproducción`);
+      this.playerUseCase.pauseSong();
+      
+      const newState = {
+        ...state,
+        isPlaying: false
+      };
+      this.playbackState.set(newState);
+      this.playbackStateSubject.next(newState);
+    }
   }
 
   /**

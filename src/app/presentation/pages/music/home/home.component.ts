@@ -92,21 +92,44 @@ export class HomePageComponent implements OnInit {
   }
 
   onPlaySong(song: Song) {
-    // Test the music player functionality
-    console.log('🎵 Testing song playback:', song);
+    // Determinar de qué lista viene la canción y usar ese contexto
+    const popularSongs = this.mostPopularSongs();
+    const randomSongs = this.randomSongs();
     
-    // Ensure player is initialized
-    this.globalPlayerStateService.ensureInitialized();
-    
-    // Play the song
-    this.playSongUseCase.executeSimple(song.id).subscribe({
-      next: () => {
-        console.log('✅ Song playback started successfully');
-      },
-      error: (error) => {
-        console.error('❌ Error playing song:', error);
-      }
-    });
+    if (popularSongs.find(s => s.id === song.id)) {
+      // La canción está en la lista de populares
+      console.log('🎵 Reproduciendo desde canciones populares');
+      this.playSongUseCase.executeFromContext(song.id, popularSongs, 'Canciones Populares', 'popular').subscribe({
+        next: () => {
+          console.log('✅ Reproducción iniciada desde contexto popular');
+        },
+        error: (error) => {
+          console.error('❌ Error reproduciendo desde populares:', error);
+        }
+      });
+    } else if (randomSongs.find(s => s.id === song.id)) {
+      // La canción está en la lista de aleatorias  
+      console.log('🎵 Reproduciendo desde canciones aleatorias');
+      this.playSongUseCase.executeFromContext(song.id, randomSongs, 'Canciones Aleatorias', 'random').subscribe({
+        next: () => {
+          console.log('✅ Reproducción iniciada desde contexto aleatorio');
+        },
+        error: (error) => {
+          console.error('❌ Error reproduciendo desde aleatorias:', error);
+        }
+      });
+    } else {
+      // Fallback al método simple
+      console.log('🎵 Reproduciendo con contexto simple (fallback)');
+      this.playSongUseCase.executeSimple(song.id).subscribe({
+        next: () => {
+          console.log('✅ Reproducción iniciada (fallback)');
+        },
+        error: (error) => {
+          console.error('❌ Error en reproducción fallback:', error);
+        }
+      });
+    }
   }
 
   refresh() {
@@ -124,14 +147,27 @@ export class HomePageComponent implements OnInit {
   testPlayMusic() {
     console.log('🧪 Testing music player...');
     
-    // Get first available song from most popular or random
-    const songs = this.mostPopularSongs() || this.randomSongs();
-    if (songs.length > 0) {
-      const firstSong = songs[0];
-      console.log('🎵 Attempting to play:', firstSong);
+    // Asegurar que el reproductor esté inicializado
+    this.globalPlayerStateService.ensureInitialized();
+    
+    // Intentar con canciones populares primero
+    const popularSongs = this.mostPopularSongs();
+    if (popularSongs.length > 0) {
+      const firstSong = popularSongs[0];
+      console.log('🎵 Probando con canción popular:', firstSong);
       this.onPlaySong(firstSong);
-    } else {
-      console.log('❌ No songs available to test with');
+      return;
     }
+
+    // Fallback a canciones aleatorias
+    const randomSongs = this.randomSongs();
+    if (randomSongs.length > 0) {
+      const firstSong = randomSongs[0];
+      console.log('🎵 Probando con canción aleatoria:', firstSong);
+      this.onPlaySong(firstSong);
+      return;
+    }
+
+    console.log('❌ No hay canciones disponibles para probar');
   }
 }

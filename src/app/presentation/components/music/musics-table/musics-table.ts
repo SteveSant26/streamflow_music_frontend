@@ -23,6 +23,8 @@ import { AddToPlaylistButtonComponent } from '@app/presentation/components/add-t
 })
 export class MusicsTable {
   @Input() songs: Song[] = [];
+  @Input() contextType: 'popular' | 'random' | 'search' | 'album' | 'artist' = 'random';
+  @Input() contextName?: string;
 
   private readonly router = inject(Router);
   private readonly playSongUseCase = inject(PlaySongUseCase);
@@ -43,15 +45,34 @@ export class MusicsTable {
   }
 
   playSong(song: Song): void {
-    this.playSongUseCase.executeSimple(song.id).subscribe({
+    // Usar el contexto de canciones que ya tenemos en lugar de crear una playlist vacía
+    const contextName = this.contextName || (this.contextType === 'popular' ? 'Canciones Populares' : 'Lista de Canciones');
+    
+    this.playSongUseCase.executeFromContext(song.id, this.songs, contextName, this.contextType).subscribe({
       next: () => {
         this.currentSong = song;
-        console.log(`Reproduciendo: ${song.title} - ${song.artist_name || 'Artista desconocido'}`);
+        console.log(`🎵 Reproduciendo: ${song.title} - ${song.artist_name || 'Artista desconocido'}`);
+        console.log(`🎧 Contexto: ${contextName} (${this.songs.length} canciones, tipo: ${this.contextType})`);
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);
+        // Fallback al método simple
+        this.playSongUseCase.executeSimple(song.id).subscribe({
+          next: () => {
+            this.currentSong = song;
+            console.log(`🎵 Reproduciendo (fallback): ${song.title}`);
+          },
+          error: (fallbackError) => {
+            console.error('Error en fallback:', fallbackError);
+          }
+        });
       }
     });
+  }
+
+  private determineContextType(): 'popular' | 'random' | 'search' | 'album' | 'artist' {
+    // Ahora usamos el @Input() directamente
+    return this.contextType;
   }
 
   formatPlayCount(plays: number): string {

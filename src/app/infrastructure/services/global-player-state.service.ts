@@ -100,15 +100,9 @@ export class GlobalPlayerStateService {
         this.playerUseCase.setAudioElement(this.audioElement);
       }
 
-      // Load default playlist if no playlist is loaded
-      const currentState = this.getPlayerState();
-      if (!currentState.currentSong) {
-        this.musicLibraryService.getAllSongs().subscribe(songs => {
-          if (songs && songs.length > 0) {
-            this.playerUseCase.loadPlaylist(songs);
-          }
-        });
-      }
+      // No cargamos una playlist por defecto
+      // Las playlists se crearán cuando el usuario reproduzca música
+      console.log('🎧 Reproductor listo para recibir música del contexto');
 
       this.isInitialized = true;
       console.log('Global player state initialized');

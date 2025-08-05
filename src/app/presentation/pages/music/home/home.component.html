@@ -70,7 +70,11 @@
                 <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
               </div>
             } @else if (mostPopularSongs().length > 0) {
-              <app-musics-table [songs]="mostPopularSongs()"></app-musics-table>
+              <app-musics-table 
+                [songs]="mostPopularSongs()" 
+                [contextType]="'popular'"
+                [contextName]="'Canciones Populares'">
+              </app-musics-table>
             } @else {
               <p 
                 [class]="(isDarkTheme$ | async) 
@@ -116,7 +120,11 @@
                 <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
               </div>
             } @else if (randomSongs().length > 0) {
-              <app-musics-table [songs]="randomSongs()"></app-musics-table>
+              <app-musics-table 
+                [songs]="randomSongs()" 
+                [contextType]="'random'"
+                [contextName]="'Canciones Aleatorias'">
+              </app-musics-table>
             } @else {
               <p 
                 [class]="(isDarkTheme$ | async) 
