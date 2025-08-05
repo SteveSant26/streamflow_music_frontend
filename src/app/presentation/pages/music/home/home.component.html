@@ -22,8 +22,8 @@
           </p>
         </div>
 
-        <!-- Theme Toggle -->
-        <div class="flex justify-center">
+        <!-- Theme Toggle and Test Button -->
+        <div class="flex justify-center gap-4">
           <button
             mat-raised-button
             [color]="(isDarkTheme$ | async) ? 'accent' : 'primary'"
@@ -34,6 +34,17 @@
               {{ (isDarkTheme$ | async) ? 'light_mode' : 'dark_mode' }}
             </mat-icon>
             {{ (isDarkTheme$ | async) ? 'Modo Claro' : 'Modo Oscuro' }}
+          </button>
+          
+          <!-- Test Play Button -->
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="testPlayMusic()"
+            class="flex items-center gap-2"
+          >
+            <mat-icon>play_arrow</mat-icon>
+            Test Music Player
           </button>
         </div>
 

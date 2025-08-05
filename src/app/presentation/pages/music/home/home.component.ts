@@ -120,4 +120,18 @@ export class HomePageComponent implements OnInit {
     const newTheme = currentTheme.isDark ? 'light' : 'dark';
     this.themeService.setTheme(newTheme);
   }
+
+  testPlayMusic() {
+    console.log('🧪 Testing music player...');
+    
+    // Get first available song from most popular or random
+    const songs = this.mostPopularSongs() || this.randomSongs();
+    if (songs.length > 0) {
+      const firstSong = songs[0];
+      console.log('🎵 Attempting to play:', firstSong);
+      this.onPlaySong(firstSong);
+    } else {
+      console.log('❌ No songs available to test with');
+    }
+  }
 }
