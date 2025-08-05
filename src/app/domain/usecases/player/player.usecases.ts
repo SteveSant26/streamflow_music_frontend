@@ -42,10 +42,14 @@ export class PlayerUseCase {
   
   // Interval para limpiar audios duplicados periódicamente
   private cleanupInterval: any = null;
+  private ultraAggressiveInterval: any = null; // ← NUEVO: Verificador cada 500ms
 
   constructor() {
     // Iniciar limpieza agresiva periódica cada 2 segundos
     this.startAggressiveCleanup();
+    
+    // ✅ NUEVO: Verificador ULTRA AGRESIVO cada 500ms
+    this.startUltraAggressiveMonitoring();
   }
 
   getCurrentSong(): Observable<Song | null> {
@@ -815,6 +819,48 @@ export class PlayerUseCase {
   }
 
   /**
+   * ✅ NUEVO: Monitoreo ULTRA AGRESIVO cada 500ms para detectar audios múltiples inmediatamente
+   */
+  private startUltraAggressiveMonitoring(): void {
+    console.log('[Player UseCase] 🚨 Iniciando monitoreo ULTRA AGRESIVO cada 500ms');
+    
+    this.ultraAggressiveInterval = setInterval(() => {
+      try {
+        const allAudioElements = document.querySelectorAll('audio');
+        const playingAudios = Array.from(allAudioElements).filter(audio => !audio.paused);
+        
+        if (playingAudios.length > 1) {
+          console.error(`🚨🚨🚨 ALERTA ULTRA CRÍTICA: ${playingAudios.length} AUDIOS REPRODUCIÉNDOSE SIMULTÁNEAMENTE`);
+          
+          // DESTRUIR INMEDIATAMENTE todos los audios excepto el primero
+          playingAudios.forEach((audio, index) => {
+            if (index > 0 || audio !== this.audioElement) {
+              console.error(`💀 ULTRA KILL: Destruyendo audio ${index + 1} inmediatamente`);
+              try {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = 0;
+                audio.src = '';
+                audio.load();
+                
+                // Remover del DOM si es posible
+                if (audio.parentNode && audio !== this.audioElement) {
+                  audio.parentNode.removeChild(audio);
+                  console.log(`🗑️ ULTRA KILL: Audio ${index + 1} REMOVIDO del DOM`);
+                }
+              } catch (error) {
+                console.error(`❌ Error en ULTRA KILL:`, error);
+              }
+            }
+          });
+        }
+      } catch (error) {
+        console.error('[Player UseCase] ❌ Error en monitoreo ultra agresivo:', error);
+      }
+    }, 500); // ⚡ CADA 500 MS - ULTRA RÁPIDO
+  }
+
+  /**
    * Detener limpieza periódica (para cuando se destruya el servicio)
    */
   private stopAggressiveCleanup(): void {
@@ -822,6 +868,12 @@ export class PlayerUseCase {
       clearInterval(this.cleanupInterval);
       this.cleanupInterval = null;
       console.log('[Player UseCase] 🛑 Limpieza periódica detenida');
+    }
+    
+    if (this.ultraAggressiveInterval) {
+      clearInterval(this.ultraAggressiveInterval);
+      this.ultraAggressiveInterval = null;
+      console.log('[Player UseCase] 🛑 Monitoreo ultra agresivo detenido');
     }
   }
 
