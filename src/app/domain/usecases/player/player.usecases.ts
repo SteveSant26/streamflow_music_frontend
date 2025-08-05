@@ -63,6 +63,13 @@ export class PlayerUseCase {
   playSong(song: Song): void {
     console.log(`🎵 PlayerUseCase.playSong() recibida:`, song);
     
+    // Verificar si ya estamos reproduciendo esta canción
+    const currentState = this.playbackState$.value;
+    if (currentState.currentSong?.id === song.id && currentState.isPlaying) {
+      console.log('[Player UseCase] ⚠️ La canción ya se está reproduciendo, ignorando...');
+      return;
+    }
+    
     // Determinar la URL de audio a usar
     const audioUrl = this.getAudioUrl(song);
     if (!audioUrl) {

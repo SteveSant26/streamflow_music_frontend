@@ -190,6 +190,13 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  goToCurrentSong(): void {
+    // Navigate directly to current song page
+    if (this.playerState?.currentSong) {
+      this.router.navigate(['/music/current-song']);
+    }
+  }
+
   private formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);

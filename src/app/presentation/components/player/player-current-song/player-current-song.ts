@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { Song } from '@app/domain/entities/song.entity';

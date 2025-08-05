@@ -24,28 +24,22 @@ import { AddSongToPlaylistDialogComponent } from '../../playlist/add-song-to-pla
   ],
   template: `
     <div class="song-actions">
-      <!-- Quick play button -->
-      <button 
-        mat-icon-button 
-        [matTooltip]="'Reproducir ' + song.title"
-        (click)="playSong()"
-        class="play-btn">
-        <mat-icon>play_arrow</mat-icon>
-      </button>
-
-      <!-- Actions menu -->
+      <!-- Actions menu with current playing indicator -->
       <button 
         mat-icon-button 
         [matMenuTriggerFor]="actionsMenu"
-        matTooltip="Más opciones"
-        class="more-btn">
-        <mat-icon>more_vert</mat-icon>
+        [matTooltip]="isCurrentSongPlaying() ? 'Canción reproduciéndose' : 'Opciones de reproducción'"
+        [class]="isCurrentSongPlaying() ? 'currently-playing' : 'play-btn'">
+        <mat-icon [class.text-green-500]="isCurrentSongPlaying()" 
+                  [class.animate-pulse]="isCurrentSongPlaying()">
+          {{ isCurrentSongPlaying() ? 'volume_up' : 'play_arrow' }}
+        </mat-icon>
       </button>
 
       <mat-menu #actionsMenu="matMenu" class="song-actions-menu">
         <button mat-menu-item (click)="playSong()">
-          <mat-icon>play_arrow</mat-icon>
-          <span>Reproducir ahora</span>
+          <mat-icon>{{ isCurrentSongPlaying() ? 'pause' : 'play_arrow' }}</mat-icon>
+          <span>{{ isCurrentSongPlaying() ? 'Pausar' : 'Reproducir ahora' }}</span>
         </button>
         
         <button mat-menu-item (click)="playNext()">
@@ -172,9 +166,23 @@ export class SongActionButtonComponent {
   private readonly playerUseCase = inject(PlayerUseCase);
   private readonly dialog = inject(MatDialog);
 
+  isCurrentSongPlaying(): boolean {
+    const currentState = this.playerUseCase.getCurrentPlayerState();
+    return currentState.currentSong?.id === this.song.id && currentState.isPlaying;
+  }
+
   playSong() {
-    this.playerUseCase.playSong(this.song);
-    console.log('Song started playing:', this.song.title);
+    const currentState = this.playerUseCase.getCurrentPlayerState();
+    
+    // Si es la misma canción, toggle play/pause
+    if (currentState.currentSong?.id === this.song.id) {
+      this.playerUseCase.togglePlayPause();
+      console.log('Toggled play/pause for current song:', this.song.title);
+    } else {
+      // Si es diferente canción, reproducir nueva
+      this.playerUseCase.playSong(this.song);
+      console.log('Song started playing:', this.song.title);
+    }
   }
 
   playNext() {

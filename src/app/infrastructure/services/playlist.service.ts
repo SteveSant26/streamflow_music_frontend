@@ -138,7 +138,7 @@ export class PlaylistService {
   }
 
   /**
-   * Seleccionar canción por índice
+   * Seleccionar canción por índice y reproducir automáticamente
    */
   selectSong(index: number): void {
     const playlist = this.currentPlaylist();
@@ -158,6 +158,9 @@ export class PlaylistService {
 
     this.playbackState.set(newState);
     this.playbackStateSubject.next(newState);
+    
+    // Reproducir automáticamente la nueva canción
+    this.playerUseCase.playSong(song);
     
     // Iniciar precarga de la siguiente canción
     this.startPreloadingNext();
