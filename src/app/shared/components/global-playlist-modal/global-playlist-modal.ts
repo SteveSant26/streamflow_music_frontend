@@ -25,6 +25,13 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
   isVisible = false;
   currentPlaylist: Playlist | null = null;
   currentSong: any = null;
+  
+  // Nuevas propiedades para ordenamiento y drag & drop
+  sortBy: 'none' | 'name' | 'artist' | 'duration' = 'none';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  sortedPlaylist: any[] = [];
+  draggedIndex: number | null = null;
+  
   private readonly destroy$ = new Subject<void>();
 
   private readonly globalPlayerState = inject(GlobalPlayerStateService);
@@ -79,12 +86,62 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (playlist: Playlist | null) => {
           this.currentPlaylist = playlist;
+          this.updateSortedPlaylist();
           this.cdr.detectChanges();
         },
         error: (error) => {
           console.error('Error in playlist subscription:', error);
         }
       });
+  }
+
+  private updateSortedPlaylist(): void {
+    if (!this.currentPlaylist?.items) {
+      this.sortedPlaylist = [];
+      return;
+    }
+
+    let items = [...this.currentPlaylist.items];
+
+    // Aplicar ordenamiento si está configurado
+    if (this.sortBy !== 'none') {
+      items = this.sortPlaylistItems(items);
+    }
+
+    this.sortedPlaylist = items;
+  }
+
+  private sortPlaylistItems(items: any[]): any[] {
+    return items.sort((a, b) => {
+      let compareValue = 0;
+
+      switch (this.sortBy) {
+        case 'name':
+          compareValue = a.title.localeCompare(b.title);
+          break;
+        case 'artist': {
+          const artistA = a.artist_name || 'Unknown';
+          const artistB = b.artist_name || 'Unknown';
+          compareValue = artistA.localeCompare(artistB);
+          break;
+        }
+        case 'duration': {
+          const durationA = this.parseDuration(a.duration_formatted || '0:00');
+          const durationB = this.parseDuration(b.duration_formatted || '0:00');
+          compareValue = durationA - durationB;
+          break;
+        }
+      }
+
+      return this.sortOrder === 'asc' ? compareValue : -compareValue;
+    });
+  }
+
+  private parseDuration(duration: string): number {
+    const parts = duration.split(':');
+    const minutes = parseInt(parts[0] || '0', 10);
+    const seconds = parseInt(parts[1] || '0', 10);
+    return minutes * 60 + seconds;
   }
 
   show(): void {

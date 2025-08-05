@@ -72,7 +72,34 @@ export class PlayerUseCase {
     
     this.audioElement = audio;
     this.setupAudioEventListeners();
+    
+    // 💾 Cargar volumen guardado desde localStorage
+    this.loadSavedVolume();
+    
     console.log('[Player UseCase] 🔊 Audio element connected successfully');
+  }
+
+  // 💾 Método para cargar volumen guardado
+  private loadSavedVolume(): void {
+    try {
+      const savedVolume = localStorage.getItem('streamflow_volume');
+      if (savedVolume && this.audioElement) {
+        const volume = parseFloat(savedVolume);
+        if (!isNaN(volume) && volume >= 0 && volume <= 1) {
+          this.audioElement.volume = volume;
+          this.updatePlaybackState({ volume });
+          console.log('[Player UseCase] 💾 Volumen cargado desde localStorage:', volume);
+        }
+      } else if (this.audioElement) {
+        // Volumen por defecto si no hay guardado
+        const defaultVolume = 0.7;
+        this.audioElement.volume = defaultVolume;
+        this.updatePlaybackState({ volume: defaultVolume });
+        console.log('[Player UseCase] 🔊 Configurado volumen por defecto:', defaultVolume);
+      }
+    } catch (error) {
+      console.warn('[Player UseCase] ⚠️ Error cargando volumen de localStorage:', error);
+    }
   }
 
   playSong(song: Song): void {
@@ -493,6 +520,14 @@ export class PlayerUseCase {
         console.log('[Player UseCase] 🎯 Configurando volumen normalizado:', normalizedVolume);
         
         this.audioElement.volume = normalizedVolume;
+        
+        // 💾 Guardar volumen en localStorage
+        try {
+          localStorage.setItem('streamflow_volume', normalizedVolume.toString());
+          console.log('[Player UseCase] 💾 Volumen guardado en localStorage:', normalizedVolume);
+        } catch (storageError) {
+          console.warn('[Player UseCase] ⚠️ No se pudo guardar volumen en localStorage:', storageError);
+        }
         
         console.log('[Player UseCase] ✅ Volumen configurado en audio element:', this.audioElement.volume);
         
