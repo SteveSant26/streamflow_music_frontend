@@ -41,8 +41,9 @@ export class MusicLibraryService {
     }
     
     return this.searchSongsUseCase.execute({
-      q: query.trim(),
-      limit: 50
+      search: query.trim(),
+      include_youtube: true,
+      page_size: 50
     });
   }
 

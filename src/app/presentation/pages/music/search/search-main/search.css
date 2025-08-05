@@ -2,6 +2,151 @@
   padding: 1.5rem;
 }
 
+/* Controles de búsqueda mejorados */
+.search-controls {
+  position: relative;
+}
+
+.search-bar-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: 2px solid var(--border-color, #e5e7eb);
+  background: var(--surface-color, #ffffff);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.filters-toggle-btn {
+  position: relative;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 2px solid var(--border-color, #e5e7eb);
+  background: var(--surface-color, #ffffff);
+  color: var(--text-color, #374151);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  height: 56px;
+}
+
+.filters-toggle-btn:hover {
+  border-color: var(--primary-color, #3b82f6);
+  background: var(--primary-color, #3b82f6);
+  color: white;
+}
+
+.filters-toggle-btn.active {
+  background: var(--primary-color, #3b82f6);
+  border-color: var(--primary-color, #3b82f6);
+  color: white;
+}
+
+.filters-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--accent-color, #ef4444);
+  color: white;
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* Panel de filtros */
+.filters-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--surface-variant, #f8fafc);
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.filters-panel.expanded {
+  max-height: 1000px;
+  padding: 1rem;
+}
+
+/* Resultados mejorados */
+.search-results {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.results-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.results-container {
+  position: relative;
+}
+
+.load-more-indicator {
+  padding: 1rem 0;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  margin-top: 1rem;
+}
+
+.end-results {
+  padding: 1rem 0;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  margin-top: 1rem;
+}
+
+/* Estados de carga */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Scroll suave */
+.search-results::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-results::-webkit-scrollbar-track {
+  background: var(--surface-variant, #f1f5f9);
+  border-radius: 3px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background: var(--border-color, #cbd5e1);
+  border-radius: 3px;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary, #64748b);
+}
+
+/* Géneros sugeridos */
 .search-bar input {
   transition: all 0.3s ease;
 }
