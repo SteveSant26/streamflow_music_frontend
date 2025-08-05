@@ -20,6 +20,48 @@
           {{ currentPlaylist.items.length }} canciones
           <span *ngIf="canLoadMore()" class="can-load-more">• Más disponibles</span>
         </p>
+        
+        <!-- Controles de ordenamiento -->
+        <div class="sort-controls">
+          <span class="sort-label">Ordenar por:</span>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy === 'none'"
+            (click)="setSortBy('none')"
+            title="Orden original">
+            Original
+          </button>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy === 'name'"
+            (click)="setSortBy('name')"
+            title="Ordenar por nombre">
+            Nombre
+            <mat-icon *ngIf="sortBy === 'name'" class="sort-icon">
+              {{ sortOrder === 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+            </mat-icon>
+          </button>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy === 'artist'"
+            (click)="setSortBy('artist')"
+            title="Ordenar por artista">
+            Artista
+            <mat-icon *ngIf="sortBy === 'artist'" class="sort-icon">
+              {{ sortOrder === 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+            </mat-icon>
+          </button>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy === 'duration'"
+            (click)="setSortBy('duration')"
+            title="Ordenar por duración">
+            Duración
+            <mat-icon *ngIf="sortBy === 'duration'" class="sort-icon">
+              {{ sortOrder === 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+            </mat-icon>
+          </button>
+        </div>
       </div>
       <button
         (click)="hide()"
