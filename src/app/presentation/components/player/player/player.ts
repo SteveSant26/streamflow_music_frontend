@@ -181,12 +181,30 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
   openPlaylistModal(): void {
     console.log('🎵🎵🎵 CLICK DETECTADO EN openPlaylistModal!');
-    this.router.navigate(['/music/current-song']);
+    console.log('🔍 Router disponible:', !!this.router);
+    console.log('🔍 Intentando navegar a /music/library...');
+    
+    this.router.navigate(['/music/library'])
+      .then(success => {
+        console.log('✅ Navegación a library exitosa:', success);
+      })
+      .catch(error => {
+        console.error('❌ Error en navegación a library:', error);
+      });
   }
 
   goToCurrentSong(): void {
     console.log('🎵🎵🎵 CLICK DETECTADO EN goToCurrentSong!');
-    this.router.navigate(['/music/current-song']);
+    console.log('🔍 Router disponible:', !!this.router);
+    console.log('🔍 Intentando navegar a /music/current-song...');
+    
+    this.router.navigate(['/music/current-song'])
+      .then(success => {
+        console.log('✅ Navegación exitosa:', success);
+      })
+      .catch(error => {
+        console.error('❌ Error en navegación:', error);
+      });
   }
 
   private formatTime(seconds: number): string {
