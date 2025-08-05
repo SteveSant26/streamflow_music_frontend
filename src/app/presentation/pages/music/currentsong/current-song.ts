@@ -111,21 +111,38 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   private setupPlaylistSubscription(): void {
-    this.playlistService.currentPlaylist$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((playlist: Playlist | null) => {
-        this.currentPlaylist = playlist;
-        this.cdr.detectChanges();
-      });
+    try {
+      this.playlistService.currentPlaylist$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (playlist: Playlist | null) => {
+            this.currentPlaylist = playlist;
+            this.cdr.detectChanges();
+          },
+          error: (error) => {
+            console.error('Error in playlist subscription:', error);
+          }
+        });
+    } catch (error) {
+      console.error('Error setting up playlist subscription:', error);
+    }
   }
 
   private initializePlayer(): void {
-    // Ensure global player state is initialized
-    this.globalPlayerState.ensureInitialized();
+    try {
+      // Ensure global player state is initialized
+      this.globalPlayerState.ensureInitialized();
 
-    // Force a state update to ensure we have the latest player state
-    const currentState = this.globalPlayerState.getPlayerState();
-    this.updateCurrentSongView(currentState);
+      // Force a state update to ensure we have the latest player state
+      const currentState = this.globalPlayerState.getPlayerState();
+      if (currentState) {
+        this.updateCurrentSongView(currentState);
+      }
+    } catch (error) {
+      console.error('Error initializing player:', error);
+      // Set a default state if initialization fails
+      this.currentSong = null;
+    }
   }
 
   private updateCurrentSongView(playerState: PlayerState): void {
