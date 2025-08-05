@@ -67,6 +67,43 @@ export class SearchSongsUseCase {
 }
 
 @Injectable({ providedIn: 'root' })
+export class SearchSongsPaginatedUseCase {
+  private readonly songService = inject(SongService);
+
+  execute(searchParams: SongSearchParams): Observable<{
+    songs: Song[];
+    pagination: {
+      count: number;
+      next: string | null;
+      previous: string | null;
+      currentPage: number;
+      totalPages: number;
+      pageSize: number;
+      hasNext: boolean;
+      hasPrevious: boolean;
+    };
+  }> {
+    return this.songService
+      .searchSongs(searchParams)
+      .pipe(
+        map((response) => ({
+          songs: mapSongListToSongs(response.results),
+          pagination: {
+            count: response.count,
+            next: response.next,
+            previous: response.previous,
+            currentPage: response.current_page || searchParams.page || 1,
+            totalPages: response.amount_of_pages || Math.ceil(response.count / (searchParams.page_size || 20)),
+            pageSize: response.page_size || searchParams.page_size || 20,
+            hasNext: !!response.next,
+            hasPrevious: !!response.previous,
+          }
+        }))
+      );
+  }
+}
+
+@Injectable({ providedIn: 'root' })
 export class PlaySongUseCase {
   private readonly getSongUseCase = inject(GetSongByIdUseCase);
   private readonly playlistService = inject(PlaylistService);
