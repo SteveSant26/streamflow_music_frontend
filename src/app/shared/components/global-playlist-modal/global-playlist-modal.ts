@@ -203,6 +203,13 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
       event.dataTransfer.setData('text/html', index.toString());
     }
     
+    // Add dragging class for visual feedback
+    const target = event.target as HTMLElement;
+    const songItem = target.closest('.playlist-song-item') as HTMLElement;
+    if (songItem) {
+      songItem.classList.add('dragging');
+    }
+    
     // Agregar clase al elemento para animación
     setTimeout(() => {
       this.cdr.detectChanges();

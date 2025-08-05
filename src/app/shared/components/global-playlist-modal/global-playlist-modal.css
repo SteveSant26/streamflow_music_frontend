@@ -194,10 +194,6 @@
   border-bottom: 2px solid transparent;
 }
 
-.playlist-songs {
-  position: relative;
-}
-
 /* Visual indicator during drag */
 .playlist-song-item[draggable="true"] {
   transition: all 0.2s ease;
