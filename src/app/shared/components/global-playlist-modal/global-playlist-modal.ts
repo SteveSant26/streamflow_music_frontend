@@ -254,9 +254,15 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
-  onDragEnd(): void {
+  onDragEnd(event: DragEvent): void {
+    // Remove dragging class from all elements
+    const draggingElements = document.querySelectorAll('.playlist-song-item.dragging');
+    draggingElements.forEach(el => el.classList.remove('dragging'));
+    
     this.draggedIndex = null;
     this.cdr.detectChanges();
+    
+    console.log('🏁 Drag ended - cleaning up visual states');
   }
 
   private reorderPlaylist(fromIndex: number, toIndex: number): void {

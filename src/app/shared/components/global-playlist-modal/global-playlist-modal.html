@@ -95,7 +95,7 @@
           (dragover)="onDragOver($event)"
           (dragenter)="onDragEnter($event)"
           (drop)="onDrop($event, i)"
-          (dragend)="onDragEnd()"
+          (dragend)="onDragEnd($event)"
           (click)="selectSongFromPlaylist(i)"
           [attr.aria-label]="'Play ' + item.title"
         >
