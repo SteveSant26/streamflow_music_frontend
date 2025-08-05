@@ -244,24 +244,7 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
     const draggedItem = items.splice(fromIndex, 1)[0];
     items.splice(toIndex, 0, draggedItem);
 
-    // Actualizar el índice actual si es necesario
-    let newCurrentIndex = this.currentPlaylist.currentIndex;
-    if (this.currentPlaylist.currentIndex === fromIndex) {
-      newCurrentIndex = toIndex;
-    } else if (fromIndex < this.currentPlaylist.currentIndex && toIndex >= this.currentPlaylist.currentIndex) {
-      newCurrentIndex = this.currentPlaylist.currentIndex - 1;
-    } else if (fromIndex > this.currentPlaylist.currentIndex && toIndex <= this.currentPlaylist.currentIndex) {
-      newCurrentIndex = this.currentPlaylist.currentIndex + 1;
-    }
-
     // Actualizar la playlist en el servicio
-    const updatedPlaylist = {
-      ...this.currentPlaylist,
-      items,
-      currentIndex: newCurrentIndex
-    };
-
-    // Aquí necesitarías un método en PlaylistService para actualizar la playlist
     // this.playlistService.updatePlaylistOrder(updatedPlaylist);
     
     console.log('🔄 Playlist reordenada de', fromIndex, 'a', toIndex);

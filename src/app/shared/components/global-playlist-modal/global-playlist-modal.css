@@ -156,7 +156,7 @@
 /* Items de canciones */
 .playlist-song-item {
   display: grid;
-  grid-template-columns: 40px 60px 1fr auto;
+  grid-template-columns: auto 40px 60px 1fr auto;
   gap: 16px;
   padding: 12px 24px;
   border: none;
@@ -166,6 +166,7 @@
   cursor: pointer;
   transition: all 0.2s;
   text-align: left;
+  position: relative;
 }
 
 .playlist-song-item:hover {
@@ -175,6 +176,53 @@
 .playlist-song-item.current {
   background: rgba(102, 126, 234, 0.1);
   border-left: 4px solid #667eea;
+}
+
+.playlist-song-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+  background: rgba(102, 126, 234, 0.2);
+}
+
+.playlist-song-item[draggable="true"]:hover .drag-handle {
+  opacity: 1;
+}
+
+/* Handle de drag */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  color: #666;
+  cursor: grab;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-handle mat-icon {
+  font-size: 18px;
+}
+
+/* Información sobre drag/sort */
+.drag-info, .sort-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: rgba(102, 126, 234, 0.05);
+  border-left: 3px solid #667eea;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: #667eea;
+}
+
+.drag-info mat-icon, .sort-info mat-icon {
+  font-size: 18px;
+  opacity: 0.7;
 }
 
 .song-number {
@@ -326,10 +374,26 @@
     padding: 20px;
   }
 
+  .sort-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .sort-button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
   .playlist-song-item {
-    grid-template-columns: 30px 48px 1fr auto;
+    grid-template-columns: auto 30px 48px 1fr auto;
     gap: 12px;
     padding: 10px 20px;
+  }
+
+  .drag-info, .sort-info {
+    padding: 10px 20px;
+    font-size: 0.8rem;
   }
 
   .song-thumbnail {
