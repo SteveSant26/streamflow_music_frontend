@@ -71,35 +71,61 @@ export class PlayerUseCase {
   }
 
   private getAudioUrl(song: Song): string | null {
-    // Prioridad: file_url -> audioUrl -> youtube_url -> youtube_id construido -> extraer de thumbnail
+    console.log('[Player UseCase] Getting audio URL for song:', song.title);
+    console.log('[Player UseCase] Song object details:', {
+      file_url: song.file_url,
+      source_url: song.source_url,   // Backend field
+      youtube_url: song.youtube_url, // Legacy field
+      source_id: song.source_id,     // Backend field (YouTube ID)
+      youtube_id: song.youtube_id,   // Legacy field
+      thumbnail_url: song.thumbnail_url
+    });
+
+    // Priority 1: file_url (direct MP3/audio file from backend)
     if (song.file_url) {
-      console.log(`🎵 Usando file_url: ${song.file_url}`);
+      console.log('[Player UseCase] Using file_url:', song.file_url);
       return song.file_url;
     }
-    
+
+    // Priority 2: source_url (YouTube URL from backend)
+    if (song.source_url) {
+      console.log('[Player UseCase] Using source_url:', song.source_url);
+      return song.source_url;
+    }
+
+    // Priority 3: Legacy audioUrl field
     if (song.audioUrl) {
-      console.log(`🎵 Usando audioUrl: ${song.audioUrl}`);
+      console.log('[Player UseCase] Using legacy audioUrl:', song.audioUrl);
       return song.audioUrl;
     }
-    
+
+    // Priority 4: Legacy youtube_url field
     if (song.youtube_url) {
-      console.log(`🎵 Usando youtube_url: ${song.youtube_url}`);
+      console.log('[Player UseCase] Using legacy youtube_url:', song.youtube_url);
       return song.youtube_url;
     }
-    
-    if (song.youtube_id) {
-      const youtubeUrl = `https://www.youtube.com/watch?v=${song.youtube_id}`;
-      console.log(`🎵 Construyendo URL de YouTube: ${youtubeUrl}`);
+
+    // Priority 5: Build YouTube URL from source_id (backend field)
+    if (song.source_id) {
+      const youtubeUrl = `https://www.youtube.com/watch?v=${song.source_id}`;
+      console.log('[Player UseCase] Built YouTube URL from source_id:', youtubeUrl);
       return youtubeUrl;
     }
-    
-    // NUEVO: Extraer YouTube ID del thumbnail_url
+
+    // Priority 6: Build YouTube URL from legacy youtube_id
+    if (song.youtube_id) {
+      const youtubeUrl = `https://www.youtube.com/watch?v=${song.youtube_id}`;
+      console.log('[Player UseCase] Built YouTube URL from legacy youtube_id:', youtubeUrl);
+      return youtubeUrl;
+    }
+
+    // Priority 7: Extract YouTube ID from thumbnail as fallback
     if (song.thumbnail_url) {
-      const youtubeId = this.extractYouTubeIdFromThumbnail(song.thumbnail_url);
-      if (youtubeId) {
-        const youtubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
-        console.log(`🎵 YouTube ID extraído del thumbnail: ${youtubeId}`);
-        console.log(`🎵 URL de YouTube construida: ${youtubeUrl}`);
+      console.log('[Player UseCase] Attempting to extract YouTube ID from thumbnail:', song.thumbnail_url);
+      const extractedId = this.extractYouTubeIdFromThumbnail(song.thumbnail_url);
+      if (extractedId) {
+        const youtubeUrl = `https://www.youtube.com/watch?v=${extractedId}`;
+        console.log('[Player UseCase] Extracted YouTube URL from thumbnail:', youtubeUrl);
         return youtubeUrl;
       }
     }

@@ -5,19 +5,23 @@ import type { Album } from './album.entity';
 export interface Song {
   id: string;
   title: string;
-  artist_id: string;
+  artist_id?: string;  // Made optional to match DTO
   artist_name?: string;
   artist?: Artist; // Información completa del artista
   album_id?: string;
-  album_name?: string;
+  album_name?: string;  // Legacy field
+  album_title?: string; // Backend uses this field
   album?: Album; // Información completa del álbum
-  duration_formatted: string; // Formato MM:SS desde la API
+  duration_formatted?: string; // Made optional to match DTO
   duration_seconds?: number; // Calculado localmente si es necesario
-  genre_names_display: string; // Géneros como string separado por comas
+  genre_names_display?: string; // Made optional to match DTO
   file_url?: string;
   thumbnail_url?: string;
-  youtube_url?: string;
-  youtube_id?: string;
+  source_type?: string;  // Backend field
+  source_id?: string;    // Backend field (YouTube ID)
+  source_url?: string;   // Backend field (YouTube URL)
+  youtube_url?: string;  // Legacy field
+  youtube_id?: string;   // Legacy field
   play_count: number;
   youtube_view_count?: number;
   youtube_like_count?: number;
