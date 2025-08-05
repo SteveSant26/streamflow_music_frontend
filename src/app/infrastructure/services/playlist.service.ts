@@ -619,26 +619,16 @@ export class PlaylistService {
     const nextSong = playlist.items[nextIndex];
     if (!nextSong) return;
 
-    // Crear un elemento de audio temporal para precargar
-    const preloadAudio = new Audio();
+    // ❌ PRECARGA DESHABILITADA: Los audios de precarga estaban causando duplicación
+    console.log(`🎵 Precargando siguiente canción: ${nextSong.title}`);
+    console.log('⚠️ PRECARGA DESHABILITADA para evitar audios duplicados');
     
-    // Configurar URLs de fallback
-    const audioUrl = nextSong.file_url || nextSong.audioUrl || nextSong.youtube_url;
-    
-    if (audioUrl) {
-      preloadAudio.preload = 'metadata'; // Solo precargar metadatos por rendimiento
-      preloadAudio.src = audioUrl;
-      
-      console.log(`🎵 Precargando siguiente canción: ${nextSong.title}`);
-      
-      // Cargar metadatos sin reproducir
-      preloadAudio.load();
-      
-      // Limpiar referencia después de un tiempo para evitar acumulación
-      setTimeout(() => {
-        preloadAudio.src = '';
-      }, 30000); // 30 segundos
-    }
+    // TODO: Implementar precarga que no interfiera con el audio principal
+    // const preloadAudio = new Audio();
+    // preloadAudio.volume = 0; // Volumen 0 SIEMPRE
+    // preloadAudio.muted = true; // SIEMPRE silenciado
+    // preloadAudio.preload = 'none'; // NO precargar nada
+    // preloadAudio.style.display = 'none'; // Oculto completamente
   }
 
   /**

@@ -259,6 +259,7 @@ export class PlayerUseCase {
             // 2. Resetear completamente
             audio.currentTime = 0;
             audio.volume = 0;
+            audio.muted = true; // ⚡ NUEVO: ASEGURAR QUE ESTÉ SILENCIADO
             
             // 3. Remover la fuente
             audio.src = '';
@@ -275,6 +276,16 @@ export class PlayerUseCase {
             audio.onloadstart = null;
             audio.oncanplay = null;
             
+            // 6. ⚡ NUEVO: REMOVER INMEDIATAMENTE DEL DOM
+            try {
+              if (audio.parentNode) {
+                audio.parentNode.removeChild(audio);
+                console.log(`[Player UseCase] 🗑️ Audio ${index + 1} REMOVIDO del DOM inmediatamente`);
+              }
+            } catch (domError) {
+              console.error(`[Player UseCase] ❌ Error removiendo del DOM:`, domError);
+            }
+            
             pausedCount++;
           }
         } catch (error) {
@@ -284,23 +295,28 @@ export class PlayerUseCase {
       
       console.log(`[Player UseCase] 💀 DESTRUIDOS ${pausedCount} audios duplicados de ${totalAudios} totales`);
       
-      // VERIFICACIÓN FINAL - Si aún hay más de 1 audio, remover físicamente del DOM
+      // VERIFICACIÓN FINAL INMEDIATA - Asegurar que no queden audios intrusos
       setTimeout(() => {
         const remainingAudios = document.querySelectorAll('audio');
         if (remainingAudios.length > 1) {
-          console.log(`[Player UseCase] 🚨 ALERTA: Aún quedan ${remainingAudios.length} audios, REMOVIENDO DEL DOM`);
+          console.error(`[Player UseCase] 🚨 ALERTA: Aún quedan ${remainingAudios.length} audios, SEGUNDA RONDA DE ELIMINACIÓN`);
           remainingAudios.forEach((audio, index) => {
             if (audio !== this.audioElement) {
               try {
-                audio.parentNode?.removeChild(audio);
-                console.log(`[Player UseCase] 🗑️ Audio ${index + 1} REMOVIDO del DOM`);
+                audio.pause();
+                audio.src = '';
+                audio.load();
+                if (audio.parentNode) {
+                  audio.parentNode.removeChild(audio);
+                  console.log(`[Player UseCase] 🗑️ SEGUNDA RONDA: Audio ${index + 1} REMOVIDO`);
+                }
               } catch (error) {
-                console.error(`[Player UseCase] ❌ Error removiendo audio del DOM:`, error);
+                console.error(`[Player UseCase] ❌ Error en segunda ronda:`, error);
               }
             }
           });
         }
-      }, 100);
+      }, 50); // ⚡ VERIFICACIÓN SÚPER RÁPIDA
       
     } catch (error) {
       console.error('[Player UseCase] ❌ Error en método ultra agresivo:', error);
@@ -819,23 +835,50 @@ export class PlayerUseCase {
   }
 
   /**
-   * ✅ NUEVO: Monitoreo ULTRA AGRESIVO cada 500ms para detectar audios múltiples inmediatamente
+   * ✅ NUEVO: Monitoreo ULTRA AGRESIVO cada 100ms para detectar audios múltiples inmediatamente
    */
   private startUltraAggressiveMonitoring(): void {
-    console.log('[Player UseCase] 🚨 Iniciando monitoreo ULTRA AGRESIVO cada 500ms');
+    console.log('[Player UseCase] 🚨 Iniciando monitoreo ULTRA AGRESIVO cada 100ms');
     
     this.ultraAggressiveInterval = setInterval(() => {
       try {
         const allAudioElements = document.querySelectorAll('audio');
-        const playingAudios = Array.from(allAudioElements).filter(audio => !audio.paused);
         
-        if (playingAudios.length > 1) {
-          console.error(`🚨🚨🚨 ALERTA ULTRA CRÍTICA: ${playingAudios.length} AUDIOS REPRODUCIÉNDOSE SIMULTÁNEAMENTE`);
+        // PASO 1: Eliminar TODOS los audios excepto nuestro elemento principal
+        let removedCount = 0;
+        allAudioElements.forEach((audio, index) => {
+          if (audio !== this.audioElement) {
+            try {
+              // DESTRUIR COMPLETAMENTE
+              audio.pause();
+              audio.currentTime = 0;
+              audio.volume = 0;
+              audio.muted = true;
+              audio.src = '';
+              audio.load();
+              
+              // REMOVER DEL DOM INMEDIATAMENTE
+              if (audio.parentNode) {
+                audio.parentNode.removeChild(audio);
+                removedCount++;
+                console.log(`💀 ULTRA KILL: Audio ${index + 1} REMOVIDO del DOM`);
+              }
+            } catch (error) {
+              console.error(`❌ Error en ULTRA KILL:`, error);
+            }
+          }
+        });
+        
+        // PASO 2: Verificar si quedan audios reproduciéndose
+        const remainingPlayingAudios = Array.from(document.querySelectorAll('audio')).filter(audio => !audio.paused);
+        
+        if (remainingPlayingAudios.length > 1) {
+          console.error(`🚨🚨🚨 ALERTA ULTRA CRÍTICA: ${remainingPlayingAudios.length} AUDIOS REPRODUCIÉNDOSE SIMULTÁNEAMENTE`);
           
-          // DESTRUIR INMEDIATAMENTE todos los audios excepto el primero
-          playingAudios.forEach((audio, index) => {
+          // DESTRUIR INMEDIATAMENTE todos excepto el primero
+          remainingPlayingAudios.forEach((audio, index) => {
             if (index > 0 || audio !== this.audioElement) {
-              console.error(`💀 ULTRA KILL: Destruyendo audio ${index + 1} inmediatamente`);
+              console.error(`💀 EMERGENCY KILL: Destruyendo audio ${index + 1} inmediatamente`);
               try {
                 audio.pause();
                 audio.currentTime = 0;
@@ -846,18 +889,22 @@ export class PlayerUseCase {
                 // Remover del DOM si es posible
                 if (audio.parentNode && audio !== this.audioElement) {
                   audio.parentNode.removeChild(audio);
-                  console.log(`🗑️ ULTRA KILL: Audio ${index + 1} REMOVIDO del DOM`);
                 }
               } catch (error) {
-                console.error(`❌ Error en ULTRA KILL:`, error);
+                console.error(`❌ Error en EMERGENCY KILL:`, error);
               }
             }
           });
         }
+        
+        if (removedCount > 0) {
+          console.log(`🗑️ ULTRA MONITORING: Removidos ${removedCount} audios intrusos`);
+        }
+        
       } catch (error) {
         console.error('[Player UseCase] ❌ Error en monitoreo ultra agresivo:', error);
       }
-    }, 500); // ⚡ CADA 500 MS - ULTRA RÁPIDO
+    }, 100); // ⚡ CADA 100 MS - SÚPER ULTRA RÁPIDO
   }
 
   /**
