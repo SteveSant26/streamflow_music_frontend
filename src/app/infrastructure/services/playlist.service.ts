@@ -495,47 +495,47 @@ export class PlaylistService {
   /**
    * Crear playlist random que incluya la canción especificada
    */
-  private async createRandomPlaylistWithSong(primarySong: Song): Promise<void> {
-    try {
-      // Obtener algunas canciones random
-      const randomSongs = await this.musicApiService.getRandomSongs(1, 20);
-      
-      // Crear playlist con la canción principal al inicio
-      const items: PlaylistItem[] = [
-        { ...primarySong, position: 0, addedAt: new Date() },
-        ...randomSongs.slice(0, 19).map((song, index) => ({
-          ...song,
-          position: index + 1,
-          addedAt: new Date()
-        }))
-      ];
+  private createRandomPlaylistWithSong(primarySong: Song): void {
+    // Usar el usecase para obtener canciones random
+    this.getRandomSongsUseCase.execute(1, 20).subscribe({
+      next: (randomSongs: Song[]) => {
+        // Crear playlist con la canción principal al inicio
+        const items: PlaylistItem[] = [
+          { ...primarySong, position: 0, addedAt: new Date() },
+          ...randomSongs.slice(0, 19).map((song: Song, index: number) => ({
+            ...song,
+            position: index + 1,
+            addedAt: new Date()
+          }))
+        ];
 
-      const playlist: Playlist = {
-        id: 'random-playlist',
-        name: 'Reproducción Aleatoria',
-        items,
-        currentIndex: 0,
-        repeatMode: 'none',
-        shuffleEnabled: false,
-        contextType: 'single',
-        type: 'expandable',
-        canLoadMore: true,
-        currentPage: 1
-      };
+        const playlist: Playlist = {
+          id: 'random-playlist',
+          name: 'Reproducción Aleatoria',
+          items,
+          currentIndex: 0,
+          repeatMode: 'none',
+          isShuffled: false,
+          contextType: 'single',
+          type: 'expandable',
+          canLoadMore: true,
+          currentPage: 1
+        };
 
-      this.currentPlaylist.set(playlist);
-      this.currentPlaylistSubject.next(playlist);
-      
-      // Seleccionar la primera canción (la que el usuario quería reproducir)
-      this.selectSong(0);
-      
-    } catch (error) {
-      console.error('Error creando playlist random:', error);
-      // Fallback: solo reproducir la canción sola
-      this.createPlaylist([primarySong], 'Canción Individual', 0);
-      this.setPlaylistType('single');
-      this.setPlaylistContext('single');
-    }
+        this.currentPlaylist.set(playlist);
+        this.currentPlaylistSubject.next(playlist);
+        
+        // Seleccionar la primera canción (la que el usuario quería reproducir)
+        this.selectSong(0);
+      },
+      error: (error) => {
+        console.error('Error creando playlist random:', error);
+        // Fallback: solo reproducir la canción sola
+        this.createPlaylist([primarySong], 'Canción Individual', 0);
+        this.setPlaylistType('single');
+        this.setPlaylistContext('single');
+      }
+    });
   }
 
   /**
