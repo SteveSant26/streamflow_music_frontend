@@ -565,4 +565,30 @@ export class PlaylistService {
       this.preloadNextSong();
     }, 2000); // 2 segundos de delay
   }
+
+  /**
+   * Extraer YouTube ID del thumbnail URL
+   */
+  private extractYouTubeIdFromThumbnail(thumbnailUrl: string): string | null {
+    try {
+      console.log(`🔍 Analizando thumbnail_url: ${thumbnailUrl}`);
+      
+      // Patrón para extraer ID de URLs como:
+      // https://...supabase.co/storage/v1/object/public/music-files/thumbnails/lyMPVoKKciw_1fadeeae.jpg?
+      // https://...supabase.co/storage/v1/object/public/music-files/thumbnails/RFE6v8FpfWs_b280f592.jpg?
+      const match = thumbnailUrl.match(/thumbnails\/([a-zA-Z0-9_-]+)_[a-fA-F0-9]+\.jpg/);
+      
+      if (match && match[1]) {
+        const extractedId = match[1];
+        console.log(`✅ YouTube ID extraído: ${extractedId}`);
+        return extractedId;
+      }
+      
+      console.log(`❌ No se pudo extraer YouTube ID del thumbnail`);
+      return null;
+    } catch (error) {
+      console.error(`❌ Error extrayendo YouTube ID:`, error);
+      return null;
+    }
+  }
 }
