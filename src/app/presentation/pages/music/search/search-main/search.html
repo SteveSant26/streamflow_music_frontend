@@ -55,7 +55,7 @@
   <!-- Estado de carga inicial -->
   <div class="loading-state" *ngIf="isSearching() && !hasSearched()">
     <div class="flex items-center justify-center py-12">
-      <mat-spinner diameter="32"></mat-spinner>
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       <span class="ml-3 text-gray-600">{{ "SEARCH.SEARCHING" | translate }}</span>
     </div>
   </div>
@@ -100,7 +100,7 @@
       <!-- Indicador de carga más resultados -->
       <div class="load-more-indicator" *ngIf="isLoadingMore()">
         <div class="flex items-center justify-center py-6">
-          <mat-spinner diameter="24"></mat-spinner>
+          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
           <span class="ml-3 text-gray-600 text-sm">Cargando más resultados...</span>
         </div>
       </div>

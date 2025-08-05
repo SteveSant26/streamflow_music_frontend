@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -274,15 +274,19 @@ import { SearchFiltersService, FilterGroup, SearchFilter } from '@app/infrastruc
 export class SearchFiltersComponent {
   private readonly searchFiltersService = inject(SearchFiltersService);
 
+  @Output() filtersChanged = new EventEmitter<void>();
+
   filterGroups = this.searchFiltersService.getFilterGroups();
 
   updateFilter(groupId: string, filterId: string, event: Event) {
     const target = event.target as HTMLInputElement;
     this.searchFiltersService.updateFilter(groupId, filterId, target.value);
+    this.filtersChanged.emit();
   }
 
   updateFilterValue(groupId: string, filterId: string, value: any) {
     this.searchFiltersService.updateFilter(groupId, filterId, value);
+    this.filtersChanged.emit();
   }
 
   toggleGroup(groupId: string, expanded: boolean) {

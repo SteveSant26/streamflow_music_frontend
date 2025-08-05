@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, of, catchError, finalize } from 'rxjs';
@@ -42,8 +40,6 @@ interface PaginationInfo {
     TranslateModule, 
     MatIconModule, 
     MatButtonModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
     ReactiveFormsModule, 
     MusicsTable,
     SearchFiltersComponent,
