@@ -73,7 +73,7 @@ export class PlayButtonComponent {
       this.playlistService.togglePlayback();
     } else {
       // Si es una canción diferente, reproducirla
-      this.playSongUseCase.execute(this.song.id, true).subscribe({
+      this.playSongUseCase.executeSimple(this.song.id).subscribe({
         next: (song) => {
           console.log(`Reproduciendo: ${song.title}`);
           // Crear una nueva playlist con esta canción

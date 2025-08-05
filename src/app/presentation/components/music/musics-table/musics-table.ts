@@ -43,7 +43,7 @@ export class MusicsTable {
   }
 
   playSong(song: Song): void {
-    this.playSongUseCase.execute(song.id, true).subscribe({
+    this.playSongUseCase.executeSimple(song.id).subscribe({
       next: () => {
         this.currentSong = song;
         console.log(`Reproduciendo: ${song.title} - ${song.artist_name || 'Artista desconocido'}`);

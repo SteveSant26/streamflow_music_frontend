@@ -55,6 +55,13 @@ export interface Playlist {
   currentIndex: number;
   isShuffled: boolean;
   repeatMode: 'none' | 'one' | 'all';
+  // Nuevos campos para contexto inteligente
+  type?: 'circular' | 'expandable' | 'single';
+  contextType?: 'user_playlist' | 'album' | 'artist' | 'search' | 'random' | 'popular' | 'single';
+  searchQuery?: string;
+  currentPage?: number;
+  canLoadMore?: boolean;
+  totalItems?: number;
 }
 
 export interface PlaybackState {

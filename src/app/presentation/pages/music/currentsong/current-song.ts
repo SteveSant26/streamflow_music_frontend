@@ -10,7 +10,9 @@ import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
+import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
+import { Playlist } from '../../../../domain/entities/song.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 
@@ -39,6 +41,8 @@ interface CurrentSongView {
 export class CurrentSongComponent implements OnInit, OnDestroy {
   currentSong: CurrentSongView | null = null;
   showLyricsPanel = false;
+  showPlaylistPanel = false; // Nueva propiedad para el modal de playlist
+  currentPlaylist: Playlist | null = null; // Playlist actual
   Math = Math; // Expose Math for template use
   private readonly destroy$ = new Subject<void>();
   private previousVolume = 0.5; // Para recordar el volumen anterior al hacer mute
@@ -48,6 +52,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
     private readonly globalPlayerState: GlobalPlayerStateService,
+    private readonly playlistService: PlaylistService,
     private readonly materialThemeService: MaterialThemeService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
@@ -56,6 +61,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isDarkTheme$ = this.materialThemeService.isDarkMode();
     this.setupPlayerStateSubscription();
+    this.setupPlaylistSubscription(); // Nueva suscripción
     this.initializePlayer();
 
     // Evitar scroll en el body solo en el navegador
@@ -87,6 +93,15 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((playerState: PlayerState) => {
         this.updateCurrentSongView(playerState);
+        this.cdr.detectChanges();
+      });
+  }
+
+  private setupPlaylistSubscription(): void {
+    this.playlistService.currentPlaylist$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((playlist: Playlist | null) => {
+        this.currentPlaylist = playlist;
         this.cdr.detectChanges();
       });
   }
@@ -159,6 +174,49 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       'Panel de letras:',
       this.showLyricsPanel ? 'Abierto' : 'Cerrado',
     );
+  }
+
+  togglePlaylistPanel() {
+    this.showPlaylistPanel = !this.showPlaylistPanel;
+    console.log(
+      'Panel de playlist:',
+      this.showPlaylistPanel ? 'Abierto' : 'Cerrado',
+    );
+  }
+
+  selectSongFromPlaylist(index: number) {
+    this.playlistService.selectSong(index);
+    // Opcionalmente cerrar el modal después de seleccionar
+    // this.showPlaylistPanel = false;
+  }
+
+  getPlaylistContextInfo(): string {
+    if (!this.currentPlaylist) return '';
+    
+    switch (this.currentPlaylist.contextType) {
+      case 'search':
+        return `Búsqueda: ${this.currentPlaylist.searchQuery || 'Sin query'}`;
+      case 'random':
+        return 'Canciones Aleatorias';
+      case 'popular':
+        return 'Canciones Populares';
+      case 'album':
+        return `Álbum`;
+      case 'artist':
+        return `Artista`;
+      case 'user_playlist':
+        return 'Mi Playlist';
+      default:
+        return 'Playlist';
+    }
+  }
+
+  canLoadMore(): boolean {
+    return this.currentPlaylist?.canLoadMore === true;
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 
   goBack() {

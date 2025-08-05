@@ -142,7 +142,7 @@ export class SearchComponent {
   }
 
   playSong(song: Song): void {
-    this.playSongUseCase.execute(song.id, true).subscribe({
+    this.playSongUseCase.executeSimple(song.id).subscribe({
       next: () => {
         console.log(`Reproduciendo: ${song.title} - ${song.artist_name}`);
       },

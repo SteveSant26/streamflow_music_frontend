@@ -25,7 +25,7 @@ export class PlaylistService {
   readonly currentPlaylist$ = this.currentPlaylistSubject.asObservable();
 
   /**
-   * Crear nueva playlist desde lista de canciones
+   * Crear nueva playlist desde lista de canciones con contexto inteligente
    */
   createPlaylist(songs: Song[], name: string = 'Queue', startIndex: number = 0): void {
     const items: PlaylistItem[] = songs.map((song, index) => ({
@@ -40,16 +40,70 @@ export class PlaylistService {
       items,
       currentIndex: startIndex,
       isShuffled: false,
-      repeatMode: 'none'
+      repeatMode: 'none',
+      type: 'single', // Default, se puede cambiar con setPlaylistType
+      contextType: 'single',
+      canLoadMore: false,
+      currentPage: 1
     };
 
     this.currentPlaylist.set(playlist);
     this.currentPlaylistSubject.next(playlist);
 
-    // Auto-seleccionar la primera canción
-    if (items.length > 0) {
+    // Auto-seleccionar la canción especificada
+    if (items.length > 0 && startIndex >= 0 && startIndex < items.length) {
       this.selectSong(startIndex);
     }
+  }
+
+  /**
+   * Establecer el tipo de playlist para comportamiento inteligente
+   */
+  setPlaylistType(type: 'circular' | 'expandable' | 'single'): void {
+    const playlist = this.currentPlaylist();
+    if (!playlist) return;
+
+    const updatedPlaylist = {
+      ...playlist,
+      type
+    };
+
+    this.currentPlaylist.set(updatedPlaylist);
+    this.currentPlaylistSubject.next(updatedPlaylist);
+  }
+
+  /**
+   * Establecer el contexto de la playlist
+   */
+  setPlaylistContext(contextType: 'user_playlist' | 'album' | 'artist' | 'search' | 'random' | 'popular' | 'single', additionalData?: any): void {
+    const playlist = this.currentPlaylist();
+    if (!playlist) return;
+
+    const updatedPlaylist = {
+      ...playlist,
+      contextType,
+      ...additionalData
+    };
+
+    this.currentPlaylist.set(updatedPlaylist);
+    this.currentPlaylistSubject.next(updatedPlaylist);
+  }
+
+  /**
+   * Establecer query de búsqueda para playlists expandibles
+   */
+  setSearchQuery(query: string): void {
+    const playlist = this.currentPlaylist();
+    if (!playlist) return;
+
+    const updatedPlaylist = {
+      ...playlist,
+      searchQuery: query,
+      canLoadMore: true
+    };
+
+    this.currentPlaylist.set(updatedPlaylist);
+    this.currentPlaylistSubject.next(updatedPlaylist);
   }
 
   /**
@@ -115,7 +169,7 @@ export class PlaylistService {
   }
 
   /**
-   * Siguiente canción
+   * Siguiente canción con lógica inteligente
    */
   nextSong(): void {
     const playlist = this.currentPlaylist();
@@ -123,16 +177,112 @@ export class PlaylistService {
 
     let nextIndex = playlist.currentIndex + 1;
 
-    // Manejar repeat mode
+    // Si llegamos al final de la playlist
     if (nextIndex >= playlist.items.length) {
-      if (playlist.repeatMode === 'all') {
-        nextIndex = 0;
-      } else {
-        return; // No hay siguiente canción
+      switch (playlist.type) {
+        case 'circular':
+          // Playlists circulares: volver al inicio
+          nextIndex = 0;
+          this.selectSong(nextIndex);
+          break;
+          
+        case 'expandable':
+          // Playlists expandibles: cargar más contenido
+          this.loadMoreSongs().then(() => {
+            // Después de cargar, reproducir la siguiente canción
+            if (playlist.items.length > playlist.currentIndex + 1) {
+              this.selectSong(playlist.currentIndex + 1);
+            }
+          }).catch(error => {
+            console.error('Error cargando más canciones:', error);
+            // Si no se puede cargar más, comportamiento circular
+            this.selectSong(0);
+          });
+          break;
+          
+        case 'single':
+        default:
+          // Playlist single: no hacer nada o parar
+          if (playlist.repeatMode === 'all') {
+            nextIndex = 0;
+            this.selectSong(nextIndex);
+          }
+          // Si no está en repeat, simplemente terminar
+          return;
       }
+    } else {
+      // Hay una siguiente canción en la lista actual
+      this.selectSong(nextIndex);
+    }
+  }
+
+  /**
+   * Cargar más canciones según el contexto
+   */
+  private async loadMoreSongs(): Promise<void> {
+    const playlist = this.currentPlaylist();
+    if (!playlist?.canLoadMore) {
+      throw new Error('No se pueden cargar más canciones');
     }
 
-    this.selectSong(nextIndex);
+    try {
+      let newSongs: Song[] = [];
+      const nextPage = (playlist.currentPage || 1) + 1;
+
+      switch (playlist.contextType) {
+        case 'search':
+          if (playlist.searchQuery) {
+            console.log(`Cargando más resultados de búsqueda para: ${playlist.searchQuery}, página: ${nextPage}`);
+            // TODO: Implementar llamada al servicio de búsqueda
+            // newSongs = await this.searchService.searchSongs(playlist.searchQuery, nextPage);
+          }
+          break;
+          
+        case 'random':
+          console.log(`Cargando más canciones aleatorias, página: ${nextPage}`);
+          // TODO: Implementar llamada al servicio de canciones aleatorias
+          // newSongs = await this.songService.getRandomSongs(nextPage);
+          break;
+          
+        case 'popular':
+          console.log(`Cargando más canciones populares, página: ${nextPage}`);
+          // TODO: Implementar llamada al servicio de canciones populares
+          // newSongs = await this.songService.getMostPopular(nextPage);
+          break;
+      }
+
+      if (newSongs.length > 0) {
+        // Agregar las nuevas canciones a la playlist
+        const newItems: PlaylistItem[] = newSongs.map((song, index) => ({
+          ...song,
+          position: playlist.items.length + index,
+          addedAt: new Date()
+        }));
+
+        const updatedPlaylist = {
+          ...playlist,
+          items: [...playlist.items, ...newItems],
+          currentPage: nextPage,
+          canLoadMore: newSongs.length >= 10 // Asumiendo 10 canciones por página
+        };
+
+        this.currentPlaylist.set(updatedPlaylist);
+        this.currentPlaylistSubject.next(updatedPlaylist);
+      } else {
+        // No hay más canciones disponibles
+        const updatedPlaylist = {
+          ...playlist,
+          canLoadMore: false
+        };
+
+        this.currentPlaylist.set(updatedPlaylist);
+        this.currentPlaylistSubject.next(updatedPlaylist);
+        throw new Error('No hay más canciones disponibles');
+      }
+    } catch (error) {
+      console.error('Error al cargar más canciones:', error);
+      throw error;
+    }
   }
 
   /**

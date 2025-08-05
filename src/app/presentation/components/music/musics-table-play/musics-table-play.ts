@@ -57,7 +57,7 @@ export class MusicsTablePlay {
   }
 
   setNewCurrentMusic(song: Song): void {
-    this.playSongUseCase.execute(song.id, true).subscribe({
+    this.playSongUseCase.executeSimple(song.id, true).subscribe({
       next: (loadedSong) => {
         this.currentMusic = {
           song: loadedSong,

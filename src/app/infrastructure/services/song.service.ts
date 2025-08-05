@@ -19,11 +19,11 @@ export class SongService {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * Get a specific song by ID using the ViewSet
-   * GET /api/songs/list/{id}/
+   * Get a specific song by ID using the detail endpoint
+   * GET /api/songs/detail/{id}/
    */
   getSongById(songId: string): Observable<SongDto> {
-    return this.http.get<SongDto>(`${this.baseUrl}/list/${songId}/`);
+    return this.http.get<SongDto>(`${this.baseUrl}/detail/${songId}/`);
   }
 
   /**

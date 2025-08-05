@@ -4,6 +4,7 @@ import { SongService } from '../../../infrastructure/services/song.service';
 import { PlaylistService } from '../../../infrastructure/services/playlist.service';
 import { Song } from '../../entities/song.entity';
 import { SongSearchParams } from '../../dtos/song.dto';
+import { PlaylistContext } from '../../entities/playlist-context.entity';
 import { 
   mapSongDtoToEntity,
   mapSongListToSongs
@@ -69,41 +70,105 @@ export class PlaySongUseCase {
   private readonly getSongUseCase = inject(GetSongByIdUseCase);
   private readonly playlistService = inject(PlaylistService);
 
-  execute(songId: string, createNewPlaylist: boolean = true): Observable<Song> {
+  execute(songId: string, context: PlaylistContext): Observable<Song> {
     return this.getSongUseCase.execute(songId).pipe(
       tap((song) => {
         console.log(`Preparando reproducción: ${song.title} by ${song.artist_name}`);
+        console.log(`Contexto de playlist:`, context);
         
-        if (!song.file_url && !song.audioUrl && !song.youtube_url) {
+        // Verificar si hay URL de audio disponible
+        const hasAudioUrl = !!(song.file_url || song.audioUrl || song.youtube_url);
+        if (!hasAudioUrl) {
           console.warn('No hay URL de audio disponible para esta canción');
-          throw new Error('No hay URL de audio disponible para esta canción');
         }
         
-        if (createNewPlaylist) {
-          console.log('Creando nueva playlist con esta canción');
-          // Crear nueva playlist y comenzar reproducción
-          this.playlistService.createPlaylist([song], `Playing: ${song.title}`);
-        } else {
-          console.log('Agregando canción a la playlist actual');
-          // Agregar a playlist actual y seleccionarla
-          this.playlistService.addToPlaylist(song);
-          
-          // Encontrar el índice de la canción recién agregada y seleccionarla
-          const currentPlaylist = this.playlistService.getCurrentPlaylist();
-          if (currentPlaylist) {
-            const songIndex = currentPlaylist.items.findIndex((item: any) => item.id === song.id);
-            if (songIndex !== -1) {
-              this.playlistService.selectSong(songIndex);
-            }
+        // Crear playlist basada en el contexto
+        this.createContextualPlaylist(song, context);
+        
+        // Iniciar reproducción
+        setTimeout(() => {
+          const currentState = this.playlistService.getCurrentState();
+          if (!currentState.isPlaying || currentState.currentSong?.id !== song.id) {
+            this.playlistService.togglePlayback();
           }
-        }
-        
-        // Iniciar reproducción si no está ya reproduciendo
-        const currentState = this.playlistService.getCurrentState();
-        if (!currentState.isPlaying) {
-          this.playlistService.togglePlayback();
-        }
+        }, 100);
       })
     );
+  }
+
+  // Método de compatibilidad para llamadas existentes
+  executeSimple(songId: string, createNewPlaylist: boolean = true): Observable<Song> {
+    return this.getSongUseCase.execute(songId).pipe(
+      tap((song) => {
+        if (createNewPlaylist) {
+          this.playlistService.createPlaylist([song], `Playing: ${song.title}`);
+          this.playlistService.setPlaylistType('single');
+        } else {
+          this.playlistService.addToPlaylist(song);
+        }
+        
+        setTimeout(() => {
+          this.playlistService.togglePlayback();
+        }, 100);
+      })
+    );
+  }
+
+  private createContextualPlaylist(selectedSong: Song, context: PlaylistContext): void {
+    const startIndex = context.songs.findIndex(s => s.id === selectedSong.id);
+    
+    switch (context.type) {
+      case 'user_playlist':
+        this.playlistService.createPlaylist(context.songs, context.name || 'Mi Playlist', startIndex);
+        this.playlistService.setPlaylistType('circular'); // Vuelve al inicio al final
+        this.playlistService.setPlaylistContext('user_playlist');
+        break;
+
+      case 'album':
+        this.playlistService.createPlaylist(context.songs, `Álbum: ${context.name}`, startIndex);
+        this.playlistService.setPlaylistType('circular');
+        this.playlistService.setPlaylistContext('album');
+        break;
+
+      case 'artist':
+        this.playlistService.createPlaylist(context.songs, `Artista: ${context.name}`, startIndex);
+        this.playlistService.setPlaylistType('circular');
+        this.playlistService.setPlaylistContext('artist');
+        break;
+
+      case 'search':
+        this.playlistService.createPlaylist(context.songs, `Búsqueda: ${context.query}`, startIndex);
+        this.playlistService.setPlaylistType('expandable'); // Carga más al final
+        this.playlistService.setPlaylistContext('search', { 
+          searchQuery: context.query,
+          canLoadMore: context.hasMore !== false,
+          currentPage: context.page || 1
+        });
+        break;
+
+      case 'random':
+        this.playlistService.createPlaylist(context.songs, 'Canciones Aleatorias', startIndex);
+        this.playlistService.setPlaylistType('expandable'); // Carga más random al final
+        this.playlistService.setPlaylistContext('random', {
+          canLoadMore: true,
+          currentPage: context.page || 1
+        });
+        break;
+
+      case 'popular':
+        this.playlistService.createPlaylist(context.songs, 'Canciones Populares', startIndex);
+        this.playlistService.setPlaylistType('expandable'); // Carga más populares
+        this.playlistService.setPlaylistContext('popular', {
+          canLoadMore: true,
+          currentPage: context.page || 1
+        });
+        break;
+
+      default:
+        // Fallback: crear playlist simple
+        this.playlistService.createPlaylist([selectedSong], `Playing: ${selectedSong.title}`);
+        this.playlistService.setPlaylistType('single');
+        this.playlistService.setPlaylistContext('single');
+    }
   }
 }
