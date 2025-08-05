@@ -22,32 +22,6 @@
           </p>
         </div>
 
-        <!-- Theme Toggle and Test Button -->
-        <div class="flex justify-center gap-4">
-          <button
-            mat-raised-button
-            [color]="(isDarkTheme$ | async) ? 'accent' : 'primary'"
-            (click)="toggleTheme()"
-            class="flex items-center gap-2"
-          >
-            <mat-icon>
-              {{ (isDarkTheme$ | async) ? 'light_mode' : 'dark_mode' }}
-            </mat-icon>
-            {{ (isDarkTheme$ | async) ? 'Modo Claro' : 'Modo Oscuro' }}
-          </button>
-          
-          <!-- Test Play Button -->
-          <button
-            mat-raised-button
-            color="warn"
-            (click)="testPlayMusic()"
-            class="flex items-center gap-2"
-          >
-            <mat-icon>play_arrow</mat-icon>
-            Test Music Player
-          </button>
-        </div>
-
         <!-- Popular Songs Section -->
         <mat-card 
           [class]="(isDarkTheme$ | async) 
