@@ -24,7 +24,7 @@
   <div class="hidden sm:flex place-content-center items-center gap-2 order-3">
     <app-player-volume-control> </app-player-volume-control>
     
-    <!-- Current Song Button -->
+    <!-- Current Song Button - Navegar a página de current music -->
     <button 
       class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
       title="Ver canción actual"
@@ -33,10 +33,10 @@
       <mat-icon class="text-gray-600 dark:text-gray-300">music_note</mat-icon>
     </button>
     
-    <!-- Playlist Button -->
+    <!-- Playlist Button - Funcionalidad personalizada -->
     <button 
       class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
-      title="Mostrar playlist"
+      title="Ver playlist"
       (click)="openPlaylistModal()"
       *ngIf="playerState?.currentSong">
       <mat-icon class="text-gray-600 dark:text-gray-300">queue_music</mat-icon>
@@ -54,7 +54,7 @@
     </button>
     <button 
       class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
-      title="Mostrar playlist"
+      title="Ver playlist"
       (click)="openPlaylistModal()"
       *ngIf="playerState?.currentSong">
       <mat-icon class="text-gray-600 dark:text-gray-300 text-lg">queue_music</mat-icon>
