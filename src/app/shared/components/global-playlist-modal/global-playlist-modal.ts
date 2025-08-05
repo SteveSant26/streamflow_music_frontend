@@ -158,12 +158,113 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
 
   selectSongFromPlaylist(index: number): void {
     console.log('🎵 Seleccionando canción desde playlist global:', index);
-    this.playlistService.selectSong(index);
+    
+    // Si está ordenado, encontrar el índice original
+    const originalIndex = this.sortBy === 'none' ? index : this.getOriginalIndex(index);
+    
+    this.playlistService.selectSong(originalIndex);
     
     // Iniciar reproducción después de seleccionar
     setTimeout(() => {
       this.playlistService.togglePlayback();
     }, 100);
+  }
+
+  private getOriginalIndex(sortedIndex: number): number {
+    if (!this.currentPlaylist?.items || this.sortBy === 'none') {
+      return sortedIndex;
+    }
+
+    const sortedItem = this.sortedPlaylist[sortedIndex];
+    return this.currentPlaylist.items.findIndex(item => 
+      item.id === sortedItem.id && item.title === sortedItem.title
+    );
+  }
+
+  // Métodos de ordenamiento
+  setSortBy(sortBy: 'none' | 'name' | 'artist' | 'duration'): void {
+    if (this.sortBy === sortBy) {
+      // Si ya está ordenado por este campo, cambiar orden
+      this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortBy = sortBy;
+      this.sortOrder = 'asc';
+    }
+    
+    this.updateSortedPlaylist();
+    console.log('📊 Ordenamiento cambiado:', { sortBy: this.sortBy, sortOrder: this.sortOrder });
+  }
+
+  // Métodos de Drag & Drop
+  onDragStart(event: DragEvent, index: number): void {
+    this.draggedIndex = index;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/html', index.toString());
+    }
+    console.log('🫳 Drag iniciado en índice:', index);
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  onDrop(event: DragEvent, targetIndex: number): void {
+    event.preventDefault();
+    
+    if (this.draggedIndex === null || this.draggedIndex === targetIndex) {
+      return;
+    }
+
+    console.log('🫴 Drop detectado desde', this.draggedIndex, 'hacia', targetIndex);
+
+    // Solo permitir reordenamiento manual si no hay ordenamiento aplicado
+    if (this.sortBy !== 'none') {
+      console.warn('⚠️ No se puede reordenar manualmente con ordenamiento activo');
+      return;
+    }
+
+    // Reordenar la playlist
+    this.reorderPlaylist(this.draggedIndex, targetIndex);
+    this.draggedIndex = null;
+  }
+
+  onDragEnd(): void {
+    this.draggedIndex = null;
+  }
+
+  private reorderPlaylist(fromIndex: number, toIndex: number): void {
+    if (!this.currentPlaylist?.items) return;
+
+    // Crear nueva lista reordenada
+    const items = [...this.currentPlaylist.items];
+    const draggedItem = items.splice(fromIndex, 1)[0];
+    items.splice(toIndex, 0, draggedItem);
+
+    // Actualizar el índice actual si es necesario
+    let newCurrentIndex = this.currentPlaylist.currentIndex;
+    if (this.currentPlaylist.currentIndex === fromIndex) {
+      newCurrentIndex = toIndex;
+    } else if (fromIndex < this.currentPlaylist.currentIndex && toIndex >= this.currentPlaylist.currentIndex) {
+      newCurrentIndex = this.currentPlaylist.currentIndex - 1;
+    } else if (fromIndex > this.currentPlaylist.currentIndex && toIndex <= this.currentPlaylist.currentIndex) {
+      newCurrentIndex = this.currentPlaylist.currentIndex + 1;
+    }
+
+    // Actualizar la playlist en el servicio
+    const updatedPlaylist = {
+      ...this.currentPlaylist,
+      items,
+      currentIndex: newCurrentIndex
+    };
+
+    // Aquí necesitarías un método en PlaylistService para actualizar la playlist
+    // this.playlistService.updatePlaylistOrder(updatedPlaylist);
+    
+    console.log('🔄 Playlist reordenada de', fromIndex, 'a', toIndex);
   }
 
   getPlaylistContextInfo(): string {
