@@ -12,7 +12,7 @@ import { Song } from '@app/domain/entities/song.entity';
   template: `
     <button
       mat-icon-button
-      [title]="'Reproducir ' + (song?.title || 'canción')"
+      [title]="'Reproducir ' + (song.title || 'canción')"
       (click)="playSmartly()"
       class="text-white bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
       [disabled]="!song"
@@ -52,12 +52,12 @@ export class SmartPlayButtonComponent {
 
     if (this.contextSongs.length > 1) {
       // Si hay un contexto con múltiples canciones, crear playlist con ese contexto
-      this.playlistService.setPlaylist(
+      this.playlistService.createPlaylist(
         this.contextSongs, 
-        this.startIndex, 
         this.getPlaylistName(), 
-        this.getPlaylistType()
+        this.startIndex
       );
+      this.playlistService.setPlaylistType(this.getPlaylistType());
       this.playlistService.setPlaylistContext(this.context);
     } else {
       // Si es una canción individual, usar playSingleSong para agregar canciones random
