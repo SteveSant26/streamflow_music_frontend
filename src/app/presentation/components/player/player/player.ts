@@ -15,8 +15,12 @@ import { PlayerVolumeControl } from '../player-volume-control/player-volume-cont
 import { PlayerUseCase } from '@app/domain/usecases';
 import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
+import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 interface Song {
   id: number;
@@ -49,6 +53,8 @@ interface CurrentMusic {
     PlayerSoundControl,
     PlayerVolumeControl,
     TranslateModule,
+    CommonModule,
+    MatIconModule,
   ],
   templateUrl: './player.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,6 +81,8 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly playerUseCase: PlayerUseCase,
     private readonly globalPlayerState: GlobalPlayerStateService,
+    private readonly playlistService: PlaylistService,
+    private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
   ) {}
 
@@ -123,10 +131,10 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
         id: parseInt(state.currentSong.id) || 1,
         title: state.currentSong.title,
         artists: [state.currentSong.artist_name || 'Unknown Artist'],
-        album: 'Unknown Album',
-        albumId: 1,
-        duration: state.currentSong.duration_formatted || '0:00', // Already a string
-        image: state.currentSong.thumbnail_url || '/assets/gorillaz2.jpg',
+        album: state.currentSong.album?.title || 'Unknown Album',
+        albumId: state.currentSong.album?.id ? parseInt(state.currentSong.album.id) : 1,
+        duration: state.currentSong.duration_formatted || '0:00',
+        image: state.currentSong.album?.cover_url || state.currentSong.thumbnail_url || '/assets/default-album.png',
       };
 
       // Don't manually set the audio source - let the repository handle it
@@ -159,6 +167,13 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  openPlaylistModal(): void {
+    // Navigate to the current song page where the playlist modal is available
+    if (this.playerState?.currentSong) {
+      this.router.navigate(['/music/current-song']);
+    }
   }
 
   private formatTime(seconds: number): string {

@@ -152,6 +152,9 @@ export class PlaylistService {
 
     this.playbackState.set(newState);
     this.playbackStateSubject.next(newState);
+    
+    // Iniciar precarga de la siguiente canción
+    this.startPreloadingNext();
   }
 
   /**
@@ -406,5 +409,78 @@ export class PlaylistService {
 
     this.playbackState.set(newState);
     this.playbackStateSubject.next(newState);
+  }
+
+  /**
+   * Precargar la siguiente canción para reproducción más rápida
+   */
+  preloadNextSong(): void {
+    const playlist = this.currentPlaylist();
+    if (!playlist) return;
+
+    const nextIndex = this.getNextSongIndex();
+    if (nextIndex === -1) return;
+
+    const nextSong = playlist.items[nextIndex];
+    if (!nextSong) return;
+
+    // Crear un elemento de audio temporal para precargar
+    const preloadAudio = new Audio();
+    
+    // Configurar URLs de fallback
+    const audioUrl = nextSong.file_url || nextSong.audioUrl || nextSong.youtube_url;
+    
+    if (audioUrl) {
+      preloadAudio.preload = 'metadata'; // Solo precargar metadatos por rendimiento
+      preloadAudio.src = audioUrl;
+      
+      console.log(`🎵 Precargando siguiente canción: ${nextSong.title}`);
+      
+      // Cargar metadatos sin reproducir
+      preloadAudio.load();
+      
+      // Limpiar referencia después de un tiempo para evitar acumulación
+      setTimeout(() => {
+        preloadAudio.src = '';
+      }, 30000); // 30 segundos
+    }
+  }
+
+  /**
+   * Obtener índice de la siguiente canción
+   */
+  private getNextSongIndex(): number {
+    const playlist = this.currentPlaylist();
+    if (!playlist) return -1;
+
+    let nextIndex = playlist.currentIndex + 1;
+
+    // Si llegamos al final de la playlist
+    if (nextIndex >= playlist.items.length) {
+      switch (playlist.type) {
+        case 'circular':
+          return 0; // Volver al inicio
+        case 'expandable':
+          return playlist.items.length; // Siguiente posición (se cargará más contenido)
+        case 'single':
+        default:
+          if (playlist.repeatMode === 'all') {
+            return 0;
+          }
+          return -1; // No hay siguiente
+      }
+    }
+
+    return nextIndex;
+  }
+
+  /**
+   * Iniciar precarga automática cuando se selecciona una canción
+   */
+  private startPreloadingNext(): void {
+    // Precargar después de un pequeño delay para no interferir con la reproducción actual
+    setTimeout(() => {
+      this.preloadNextSong();
+    }, 2000); // 2 segundos de delay
   }
 }

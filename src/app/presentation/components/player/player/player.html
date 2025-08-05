@@ -20,8 +20,17 @@
     </div>
   </div>
 
-  <!-- Volume - hidden on mobile, visible on sm+ -->
-  <div class="hidden sm:grid place-content-center order-3">
+  <!-- Volume and Playlist - hidden on mobile, visible on sm+ -->
+  <div class="hidden sm:flex place-content-center items-center gap-2 order-3">
     <app-player-volume-control> </app-player-volume-control>
+    
+    <!-- Playlist Button -->
+    <button 
+      class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+      title="Mostrar playlist"
+      (click)="openPlaylistModal()"
+      *ngIf="playerState?.currentSong">
+      <mat-icon class="text-gray-600 dark:text-gray-300">queue_music</mat-icon>
+    </button>
   </div>
 </div>
