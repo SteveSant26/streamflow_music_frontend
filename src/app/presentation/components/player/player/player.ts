@@ -57,7 +57,7 @@ interface CurrentMusic {
     MatIconModule,
   ],
   templateUrl: './player.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class Player implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('audioElement', { static: false })
@@ -95,15 +95,9 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
       .getPlayerState$()
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => {
-        console.log('🔄 Player component state update:', {
-          hasCurrentSong: !!state.currentSong,
-          currentSong: state.currentSong?.title,
-          isPlaying: state.isPlaying
-        });
-        
         this.playerState = state;
         this.updateLegacyState(state);
-        this.cdr.detectChanges(); // Force change detection for OnPush
+        // Removed cdr.detectChanges() to prevent infinite loop
       });
 
     this.playerUseCase
@@ -186,42 +180,13 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openPlaylistModal(): void {
-    console.log('🎵 openPlaylistModal() ejecutado');
-    
-    // Navigate to the current song page where the playlist modal is available
-    if (this.playerState?.currentSong) {
-      console.log('✅ Navegando a current-song desde playlist button');
-      // Usar la ruta correcta definida en routes-config
-      this.router.navigate(['/music/current-song']).then(success => {
-        console.log('🚀 Navegación resultado:', success);
-      }).catch(error => {
-        console.error('❌ Error en navegación:', error);
-      });
-    } else {
-      console.log('⚠️ No hay canción actual, navegando a library');
-      // Si no hay canción, navegar a la biblioteca de música
-      this.router.navigate(['/music/library']).then(success => {
-        console.log('🚀 Navegación a library resultado:', success);
-      }).catch(error => {
-        console.error('❌ Error en navegación a library:', error);
-      });
-    }
+    console.log('🎵🎵🎵 CLICK DETECTADO EN openPlaylistModal!');
+    this.router.navigate(['/music/current-song']);
   }
 
   goToCurrentSong(): void {
-    console.log('🎵 goToCurrentSong() ejecutado');
-    
-    // Navigate directly to current song page
-    if (this.playerState?.currentSong) {
-      console.log('✅ Navegando a current-song desde music note button');
-      this.router.navigate(['/music/current-song']).then(success => {
-        console.log('🚀 Navegación resultado:', success);
-      }).catch(error => {
-        console.error('❌ Error en navegación:', error);
-      });
-    } else {
-      console.log('⚠️ No hay canción actual para mostrar');
-    }
+    console.log('🎵🎵🎵 CLICK DETECTADO EN goToCurrentSong!');
+    this.router.navigate(['/music/current-song']);
   }
 
   private formatTime(seconds: number): string {
