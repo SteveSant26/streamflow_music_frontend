@@ -125,6 +125,33 @@
       </div>
     </div>
 
+    <!-- View Mode Selector -->
+    <div class="view-mode-selector">
+      <h4>Vista de Música</h4>
+      <div class="view-mode-toggle-container">
+        <div class="view-toggle bg-gray-100 rounded-lg p-1 flex">
+          <button
+            (click)="viewModeService.setViewMode('list')"
+            [class.active]="viewModeService.viewMode() === 'list'"
+            class="view-btn px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2"
+            title="Vista de lista moderna"
+          >
+            <mat-icon class="w-4 h-4">view_list</mat-icon>
+            <span class="hidden sm:inline">Lista</span>
+          </button>
+          <button
+            (click)="viewModeService.setViewMode('table')"
+            [class.active]="viewModeService.viewMode() === 'table'"
+            class="view-btn px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2"
+            title="Vista de tabla tradicional"
+          >
+            <mat-icon class="w-4 h-4">table_chart</mat-icon>
+            <span class="hidden sm:inline">Tabla</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="space-y-2">
       @for (playlist of playlists; track playlist.id) {
         <app-side-menu-card [playlist]="playlist" />
