@@ -13,6 +13,8 @@ import {
 } from '../../../../domain/usecases/playlist/playlist.usecases';
 import { PlaylistWithSongs } from '../../../../domain/entities/playlist.entity';
 import { Song } from '../../../../domain/entities/song.entity';
+import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
+import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
 
 @Component({
   selector: 'app-playlist-detail',
@@ -34,6 +36,8 @@ export class PlaylistDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly getPlaylistByIdUseCase = inject(GetPlaylistByIdUseCase);
   private readonly removeSongFromPlaylistUseCase = inject(RemoveSongFromPlaylistUseCase);
+  private readonly audioPlayerService = inject(AudioPlayerService);
+  private readonly playlistService = inject(PlaylistService);
 
   playlist = signal<PlaylistWithSongs | null>(null);
   loading = signal(false);
@@ -70,11 +74,44 @@ export class PlaylistDetailComponent implements OnInit {
   }
 
   playAllSongs() {
-    console.log('Playing all songs from playlist');
+    const playlist = this.playlist();
+    if (playlist && playlist.songs.length > 0) {
+      // Convertir PlaylistSong[] a Song[] para el reproductor
+      const songs: Song[] = playlist.songs.map(song => ({
+        id: song.id,
+        title: song.title,
+        artist_name: song.artist_name,
+        album_name: song.album_name,
+        duration_seconds: song.duration_seconds,
+        thumbnail_url: song.thumbnail_url,
+        play_count: 0
+      }));
+      
+      // Crear playlist en el reproductor
+      this.playlistService.createPlaylist(songs, playlist.name, 0);
+      console.log(`Reproduciendo ${songs.length} canciones de "${playlist.name}"`);
+    }
   }
 
   playSong(song: Song) {
-    console.log('Playing song:', song.title);
+    const playlist = this.playlist();
+    if (playlist) {
+      const songIndex = playlist.songs.findIndex(s => s.id === song.id);
+      
+      // Convertir PlaylistSong[] a Song[]
+      const songs: Song[] = playlist.songs.map(s => ({
+        id: s.id,
+        title: s.title,
+        artist_name: s.artist_name,
+        album_name: s.album_name,
+        duration_seconds: s.duration_seconds,
+        thumbnail_url: s.thumbnail_url,
+        play_count: 0
+      }));
+      
+      this.playlistService.createPlaylist(songs, playlist.name, songIndex);
+      console.log(`Reproduciendo "${song.title}" desde la playlist`);
+    }
   }
 
   removeSong(song: Song) {
