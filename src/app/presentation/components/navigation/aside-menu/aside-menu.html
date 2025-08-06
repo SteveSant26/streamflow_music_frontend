@@ -44,23 +44,31 @@
       }
     </ul>
 
-    <div
-      class="flex items-center justify-between mb-4 hover:bg-black/5 transition-colors duration-300"
-    >
-      <a
-        routerLink="/my-playlists"
-        class="text-black font-semibold flex items-center gap-2 mt-4 mb-2 hover:bg-black/5 transition-colors duration-300 cursor-pointer"
+    @if (user()) {
+      <div
+        class="flex items-center justify-between mb-4 hover:bg-black/5 transition-colors duration-300"
       >
-        <mat-icon>library_music</mat-icon>
-        {{ "SIDEBAR.MY_PLAYLISTS" | translate }}
-      </a>
-      <button 
-        (click)="openCreatePlaylistDialog()"
-        class="text-black hover:text-black transition-colors mt-4 mb-2"
-        title="Crear nueva playlist">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
+        <a
+          routerLink="/my-playlists"
+          class="text-black font-semibold flex items-center gap-2 mt-4 mb-2 hover:bg-black/5 transition-colors duration-300 cursor-pointer"
+        >
+          <mat-icon>library_music</mat-icon>
+          {{ "SIDEBAR.MY_PLAYLISTS" | translate }}
+        </a>
+        <button 
+          (click)="openCreatePlaylistDialog()"
+          class="text-black hover:text-black transition-colors mt-4 mb-2"
+          title="Crear nueva playlist">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <div class="space-y-2 mb-4">
+        @for (playlist of playlists(); track playlist.id) {
+          <app-side-menu-card [playlist]="playlist" />
+        }
+      </div>
+    }
 
     <!-- Language Selector -->
     <div class="language-selector">
@@ -153,12 +161,6 @@
           </button>
         </div>
       </div>
-    </div>
-
-    <div class="space-y-2">
-      @for (playlist of playlists(); track playlist.id) {
-        <app-side-menu-card [playlist]="playlist" />
-      }
     </div>
   </div>
 </nav>
