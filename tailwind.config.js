@@ -1,5 +1,8 @@
+import { preset } from '@tailwindcss/postc ss'
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
+  presets: [preset],
   content: [
     "./src/**/*.{html,ts}",
   ],
@@ -16,5 +19,4 @@ module.exports = {
     },
   },
   plugins: [],
-  darkMode: 'class'
 }

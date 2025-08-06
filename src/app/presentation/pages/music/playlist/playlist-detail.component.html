@@ -6,9 +6,9 @@
         {{ playlist()!.description }}
       </p>
       <div class="metadata">
-        <span>{{ playlist()!.songCount }} canciones</span>
+        <span>{{ playlist()!.total_songs }} canciones</span>
         <span>•</span>
-        <span>{{ playlist()!.isPublic ? 'Pública' : 'Privada' }}</span>
+        <span>{{ playlist()!.is_public ? 'Pública' : 'Privada' }}</span>
         <span *ngIf="playlist()!.name === 'Favoritos'">•</span>
         <span *ngIf="playlist()!.name === 'Favoritos'" class="favorites-badge">
           <mat-icon>favorite</mat-icon>

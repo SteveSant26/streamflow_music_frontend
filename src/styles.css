@@ -1,6 +1,3 @@
-/* Importación de Tailwind CSS */
-@import "tailwindcss";
-
 /* Importación de temas Material UI personalizados */
 @import "./app/shared/theme/material-theme.css";
 
