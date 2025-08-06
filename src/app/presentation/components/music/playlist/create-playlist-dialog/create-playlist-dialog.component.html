@@ -1,0 +1,71 @@
+<div class="create-playlist-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>playlist_add</mat-icon>
+    Crear Nueva Playlist
+  </h2>
+  
+  <form [formGroup]="playlistForm" (ngSubmit)="onSubmit()" mat-dialog-content>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nombre de la playlist</mat-label>
+      <input 
+        matInput 
+        formControlName="name"
+        placeholder="Mi nueva playlist..."
+        maxlength="100"
+        required>
+      <mat-hint align="end">{{playlistForm.get('name')?.value?.length || 0}}/100</mat-hint>
+      <mat-error *ngIf="playlistForm.get('name')?.hasError('required')">
+        El nombre es requerido
+      </mat-error>
+      <mat-error *ngIf="playlistForm.get('name')?.hasError('minlength')">
+        El nombre debe tener al menos 2 caracteres
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Descripción (opcional)</mat-label>
+      <textarea 
+        matInput 
+        formControlName="description"
+        placeholder="Describe tu playlist..."
+        rows="3"
+        maxlength="500"></textarea>
+      <mat-hint align="end">{{playlistForm.get('description')?.value?.length || 0}}/500</mat-hint>
+    </mat-form-field>
+
+    <div class="privacy-section">
+      <mat-checkbox formControlName="is_public" class="privacy-checkbox">
+        <span class="checkbox-label">
+          <mat-icon>{{playlistForm.get('is_public')?.value ? 'public' : 'lock'}}</mat-icon>
+          {{playlistForm.get('is_public')?.value ? 'Playlist pública' : 'Playlist privada'}}
+        </span>
+      </mat-checkbox>
+      <p class="privacy-description">
+        {{playlistForm.get('is_public')?.value 
+          ? 'Cualquier usuario podrá ver y reproducir esta playlist.' 
+          : 'Solo tú podrás ver y reproducir esta playlist.'}}
+      </p>
+    </div>
+  </form>
+
+  <div mat-dialog-actions class="actions">
+    <button 
+      mat-button 
+      type="button"
+      (click)="onCancel()"
+      [disabled]="isLoading()">
+      Cancelar
+    </button>
+    
+    <button 
+      mat-raised-button 
+      color="primary"
+      type="submit"
+      (click)="onSubmit()"
+      [disabled]="playlistForm.invalid || isLoading()">
+      <mat-spinner diameter="20" *ngIf="isLoading()"></mat-spinner>
+      <mat-icon *ngIf="!isLoading()">add</mat-icon>
+      {{isLoading() ? 'Creando...' : 'Crear Playlist'}}
+    </button>
+  </div>
+</div>

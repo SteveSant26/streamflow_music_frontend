@@ -1,32 +1,64 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, of, catchError, finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // Domain
 import { Song } from '@app/domain/entities/song.entity';
-import { SearchSongsUseCase, PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
+import { SearchSongsPaginatedUseCase, PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
+import { SongSearchParams } from '@app/domain/dtos/song.dto';
 
 // Components
 import { MusicsTable } from '@app/presentation/components/music';
+import { SearchFiltersComponent } from '@app/presentation/components/music/search-filters/search-filters.component';
+
+// Services and Directives
+import { SearchFiltersService } from '@app/infrastructure/services/search-filters.service';
+import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
+import { InfiniteScrollDirective } from '@app/shared/directives/infinite-scroll.directive';
+import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
+
+interface PaginationInfo {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, TranslateModule, MatIconModule, ReactiveFormsModule, MusicsTable],
+  imports: [
+    CommonModule, 
+    TranslateModule, 
+    MatIconModule, 
+    MatButtonModule,
+    ReactiveFormsModule, 
+    MusicsTable,
+    SearchFiltersComponent,
+    InfiniteScrollDirective,
+    ImageFallbackDirective
+  ],
   templateUrl: './search.html',
   styleUrl: './search.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   // Inyección de dependencias
   private readonly router = inject(Router);
-  private readonly searchSongsUseCase = inject(SearchSongsUseCase);
+  private readonly searchSongsPaginatedUseCase = inject(SearchSongsPaginatedUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  readonly searchFiltersService = inject(SearchFiltersService);
+  readonly viewModeService = inject(ViewModeService);
 
   // Control de formulario para la búsqueda
   searchControl = new FormControl('');
@@ -34,11 +66,133 @@ export class SearchComponent {
   // Signals para el estado de la búsqueda
   searchResults = signal<Song[]>([]);
   isSearching = signal(false);
+  isLoadingMore = signal(false);
   hasSearched = signal(false);
+  showFilters = signal(false);
+  includeYouTube = signal(false); // Por defecto en false
+  pagination = signal<PaginationInfo>({
+    count: 0,
+    next: null,
+    previous: null,
+    currentPage: 1,
+    totalPages: 0,
+    pageSize: 20,
+    hasNext: false,
+    hasPrevious: false,
+  });
 
   // Computed para verificar si hay resultados
   hasResults = computed(() => this.searchResults().length > 0);
   searchQuery = computed(() => this.searchControl.value || '');
+  hasMoreResults = computed(() => this.pagination().hasNext);
+  isLoading = computed(() => this.isSearching() || this.isLoadingMore());
+
+  ngOnInit() {
+    // Solo escuchar cambios para limpiar resultados si el campo se vacía
+    this.searchControl.valueChanges
+      .pipe(
+        takeUntilDestroyed(),
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe((query) => {
+        if (!query || query.trim().length === 0) {
+          this.resetSearch();
+        }
+      });
+  }
+
+  private resetSearch() {
+    this.searchResults.set([]);
+    this.hasSearched.set(false);
+    this.pagination.set({
+      count: 0,
+      next: null,
+      previous: null,
+      currentPage: 1,
+      totalPages: 0,
+      pageSize: 20,
+      hasNext: false,
+      hasPrevious: false,
+    });
+  }
+
+  private performSearch(query: string, isNewSearch = false) {
+    if (isNewSearch) {
+      this.isSearching.set(true);
+      this.searchResults.set([]);
+    } else {
+      this.isLoadingMore.set(true);
+    }
+
+    const currentPage = isNewSearch ? 1 : this.pagination().currentPage + 1;
+    
+    // Construir parámetros de búsqueda combinando query y filtros
+    const searchParams: SongSearchParams = {
+      ...this.searchFiltersService.buildSearchParams(),
+      search: query,
+      page: currentPage,
+      page_size: 20,
+      include_youtube: this.includeYouTube(), // Usar el signal
+    };
+
+    this.searchSongsPaginatedUseCase.execute(searchParams)
+      .pipe(
+        catchError((error) => {
+          console.error('Error en búsqueda:', error);
+          return of({ songs: [], pagination: this.pagination() });
+        }),
+        finalize(() => {
+          this.isSearching.set(false);
+          this.isLoadingMore.set(false);
+        })
+      )
+      .subscribe(({ songs, pagination }) => {
+        if (isNewSearch) {
+          this.searchResults.set(songs);
+        } else {
+          this.searchResults.update(current => [...current, ...songs]);
+        }
+        
+        this.pagination.set(pagination);
+        this.hasSearched.set(true);
+      });
+  }
+
+  onLoadMore() {
+    const query = this.searchControl.value;
+    if (query && this.hasMoreResults() && !this.isLoading()) {
+      this.performSearch(query, false);
+    }
+  }
+
+  onFiltersChanged() {
+    const query = this.searchControl.value;
+    if (query && query.trim().length >= 2) {
+      this.performSearch(query, true);
+    }
+  }
+
+  toggleFilters() {
+    this.showFilters.update(current => !current);
+  }
+
+  toggleYouTube() {
+    this.includeYouTube.update(current => !current);
+  }
+
+  performManualSearch() {
+    const query = this.searchControl.value?.trim();
+    if (!query || query.length < 2) {
+      return;
+    }
+    this.performSearch(query, true);
+  }
+
+  onGenreClick(genreName: string) {
+    this.searchFiltersService.updateFilter('content', 'genre_name', genreName);
+    this.searchControl.setValue(genreName);
+  }
 
   genres = [
     {
@@ -91,50 +245,8 @@ export class SearchComponent {
     },
   ];
 
-  constructor() {
-    // Configurar el observable de búsqueda con debounce
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap((query) => {
-          if (!query || query.trim().length < 2) {
-            this.searchResults.set([]);
-            this.hasSearched.set(false);
-            this.isSearching.set(false);
-            return of([]);
-          }
-
-          this.isSearching.set(true);
-          return this.searchSongsUseCase.execute({ 
-            q: query.trim(),
-            include_youtube: false,
-            limit: 50
-          });
-        }),
-        takeUntilDestroyed()
-      )
-      .subscribe({
-        next: (songs) => {
-          this.searchResults.set(songs);
-          this.hasSearched.set(true);
-          this.isSearching.set(false);
-        },
-        error: (error) => {
-          console.error('Error en la búsqueda:', error);
-          this.searchResults.set([]);
-          this.hasSearched.set(true);
-          this.isSearching.set(false);
-        }
-      });
-  }
-
   onSearch(query: string) {
     this.searchControl.setValue(query.trim());
-  }
-
-  onGenreClick(genre: string) {
-    this.searchControl.setValue(genre);
   }
 
   clearSearch() {
@@ -142,7 +254,7 @@ export class SearchComponent {
   }
 
   playSong(song: Song): void {
-    this.playSongUseCase.execute(song.id, true).subscribe({
+    this.playSongUseCase.executeSimple(song.id).subscribe({
       next: () => {
         console.log(`Reproduciendo: ${song.title} - ${song.artist_name}`);
       },
@@ -150,5 +262,40 @@ export class SearchComponent {
         console.error('Error al reproducir canción:', error);
       }
     });
+  }
+
+  playAllSongs(): void {
+    const songs = this.searchResults();
+    if (songs.length === 0) return;
+
+    // Reproducir la primera canción de la lista
+    const firstSong = songs[0];
+    this.playSongUseCase.executeSimple(firstSong.id).subscribe({
+      next: () => {
+        console.log(`Reproduciendo lista de búsqueda: ${songs.length} canciones`);
+        console.log(`Iniciando con: ${firstSong.title} - ${firstSong.artist_name}`);
+      },
+      error: (error) => {
+        console.error('Error al reproducir lista:', error);
+      }
+    });
+  }
+
+  addToPlaylist(song: Song): void {
+    // Implementar funcionalidad de agregar a playlist
+    console.log(`Agregando "${song.title}" a playlist`);
+    // Aquí irá la lógica para mostrar modal de playlists o agregar a favoritos
+  }
+
+  addToFavorites(song: Song): void {
+    // Implementar funcionalidad de favoritos
+    console.log(`Agregando "${song.title}" a favoritos`);
+    // Aquí irá la lógica para agregar/quitar de favoritos
+  }
+
+  showMoreOptions(song: Song): void {
+    // Implementar menú de más opciones
+    console.log(`Mostrando más opciones para "${song.title}"`);
+    // Aquí irá la lógica para mostrar menú contextual con más opciones
   }
 }

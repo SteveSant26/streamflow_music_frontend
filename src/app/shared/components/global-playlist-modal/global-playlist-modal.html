@@ -1,0 +1,157 @@
+<!-- Overlay del modal -->
+<div class="playlist-modal-overlay" 
+     [class.show]="isVisible" 
+     (click)="hide()"
+     (keydown)="$event.key === 'Escape' && hide()"
+     *ngIf="isVisible">
+  
+  <!-- Contenedor del modal -->
+  <div class="playlist-modal-container" 
+       (click)="$event.stopPropagation()"
+       (keydown)="$event.stopPropagation()"
+       [class.show]="isVisible">
+    
+    <!-- Header del modal -->
+    <div class="playlist-modal-header">
+      <div class="playlist-info">
+        <h3>{{ currentPlaylist?.name || 'Playlist Actual' }}</h3>
+        <p class="playlist-context">{{ getPlaylistContextInfo() }}</p>
+        <p class="playlist-stats" *ngIf="currentPlaylist">
+          {{ currentPlaylist.items.length }} canciones
+          <span *ngIf="canLoadMore()" class="can-load-more">• Más disponibles</span>
+        </p>
+        
+        <!-- Controles de ordenamiento -->
+        <div class="sort-controls">
+          <span class="sort-label">Ordenar por:</span>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy === 'none'"
+            (click)="setSortBy('none')"
+            title="Orden original">
+            Original
+          </button>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy === 'name'"
+            (click)="setSortBy('name')"
+            title="Ordenar por nombre">
+            Nombre
+            <mat-icon *ngIf="sortBy === 'name'" class="sort-icon">
+              {{ sortOrder === 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+            </mat-icon>
+          </button>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy === 'artist'"
+            (click)="setSortBy('artist')"
+            title="Ordenar por artista">
+            Artista
+            <mat-icon *ngIf="sortBy === 'artist'" class="sort-icon">
+              {{ sortOrder === 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+            </mat-icon>
+          </button>
+          <button 
+            class="sort-button" 
+            [class.active]="sortBy === 'duration'"
+            (click)="setSortBy('duration')"
+            title="Ordenar por duración">
+            Duración
+            <mat-icon *ngIf="sortBy === 'duration'" class="sort-icon">
+              {{ sortOrder === 'asc' ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+      <button
+        (click)="hide()"
+        class="close-button"
+        aria-label="Cerrar playlist"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Contenido del modal -->
+    <div class="playlist-modal-content">
+      <div class="playlist-songs" *ngIf="currentPlaylist">
+        <!-- Información sobre drag & drop -->
+        <div class="drag-info" *ngIf="sortBy === 'none'">
+          <mat-icon>drag_indicator</mat-icon>
+          <span>Arrastra las canciones para reordenar manualmente</span>
+        </div>
+        <div class="sort-info" *ngIf="sortBy !== 'none'">
+          <mat-icon>sort</mat-icon>
+          <span>Lista ordenada por {{ sortBy === 'name' ? 'nombre' : sortBy === 'artist' ? 'artista' : 'duración' }}</span>
+        </div>
+
+        <button 
+          *ngFor="let item of sortedPlaylist; let i = index; trackBy: trackByIndex"
+          class="playlist-song-item"
+          [class.current]="isCurrentSong(item, i)"
+          [class.dragging]="draggedIndex === i"
+          [draggable]="sortBy === 'none'"
+          (dragstart)="onDragStart($event, i)"
+          (dragover)="onDragOver($event)"
+          (dragenter)="onDragEnter($event)"
+          (drop)="onDrop($event, i)"
+          (dragend)="onDragEnd($event)"
+          (click)="selectSongFromPlaylist(i)"
+          [attr.aria-label]="'Play ' + item.title"
+        >
+          <!-- Indicador de drag -->
+          <div class="drag-handle" *ngIf="sortBy === 'none'">
+            <mat-icon>drag_indicator</mat-icon>
+          </div>
+          
+          <div class="song-number">
+            <span *ngIf="!isCurrentSong(item, i)">{{ i + 1 }}</span>
+            <mat-icon *ngIf="isCurrentSong(item, i)" class="playing-icon">
+              {{ currentSong?.isPlaying ? 'pause' : 'play_arrow' }}
+            </mat-icon>
+          </div>
+          
+          <div class="song-thumbnail">
+            <img 
+              [src]="item.thumbnail_url || '/assets/default-album.jpg'" 
+              [alt]="item.title"
+              class="thumbnail-img"
+            />
+          </div>
+          
+          <div class="song-details">
+            <h4 class="song-title" [class.current]="isCurrentSong(item, i)">
+              {{ item.title }}
+            </h4>
+            <p class="song-artist">{{ item.artist_name || 'Artista desconocido' }}</p>
+          </div>
+          
+          <div class="song-actions">
+            <button 
+              class="action-button add-to-queue"
+              (click)="addToQueue(item); $event.stopPropagation()"
+              title="Agregar a la cola"
+              aria-label="Agregar a la cola">
+              <mat-icon>add</mat-icon>
+            </button>
+            <span class="song-duration">
+              {{ item.duration_formatted || '0:00' }}
+            </span>
+          </div>
+        </button>
+        
+        <!-- Indicador de carga más contenido -->
+        <div *ngIf="canLoadMore()" class="load-more-indicator">
+          <p>Se cargarán más canciones automáticamente al llegar al final</p>
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div *ngIf="!currentPlaylist" class="empty-playlist">
+        <mat-icon class="empty-icon">queue_music</mat-icon>
+        <h4>No hay playlist activa</h4>
+        <p>Reproduce una canción para ver la playlist actual</p>
+      </div>
+    </div>
+  </div>
+</div>

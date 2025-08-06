@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
+import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
@@ -20,6 +21,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class PlayerControlButtonBar implements OnInit, OnDestroy {
   private readonly globalPlayerState = inject(GlobalPlayerStateService);
+  private readonly playlistService = inject(PlaylistService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
 
@@ -49,22 +51,15 @@ export class PlayerControlButtonBar implements OnInit, OnDestroy {
     // Use ONLY the centralized method
     const playerUseCase = this.globalPlayerState.getPlayerUseCase();
     playerUseCase.togglePlayPause();
-
-    // Force sync immediately after action
-    this.globalPlayerState.forceSyncAllComponents();
   }
 
   onPreviousClick(): void {
-    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
-    playerUseCase.playPrevious().catch((error: any) => {
-      console.error('Error playing previous song:', error);
-    });
+    console.log('PlayerControlButtonBar: onPreviousClick called');
+    this.playlistService.previousSong();
   }
 
   onNextClick(): void {
-    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
-    playerUseCase.playNext().catch((error: any) => {
-      console.error('Error playing next song:', error);
-    });
+    console.log('PlayerControlButtonBar: onNextClick called');
+    this.playlistService.nextSong();
   }
 }

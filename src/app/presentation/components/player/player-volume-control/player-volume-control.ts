@@ -35,7 +35,8 @@ export class PlayerVolumeControl implements OnInit, OnDestroy {
 
   onVolumeChange(event: Event): void {
     const target = event.target as HTMLInputElement;
-    const newVolume = parseFloat(target.value);
+    const volumePercentage = parseFloat(target.value);
+    const newVolume = volumePercentage / 100; // Convert percentage to 0-1 range
 
     // Guardar el volumen anterior si no es 0
     if (newVolume > 0) {

@@ -13,20 +13,32 @@
       </button>
       <h1 class="current-song-title">Reproduciendo ahora</h1>
 
-      <!-- Botón de letras en la esquina superior derecha -->
-      <button
-        (click)="toggleLyricsPanel()"
-        class="lyrics-button"
-        aria-label="Ver letras"
-        [class.active]="showLyricsPanel"
-      >
-        <mat-icon>lyrics</mat-icon>
-      </button>
+      <!-- Botones en la esquina superior derecha -->
+      <div class="header-actions">
+        <!-- Botón de playlist -->
+        <button
+          (click)="togglePlaylistPanel()"
+          class="playlist-button"
+          aria-label="Ver playlist"
+        >
+          <mat-icon>queue_music</mat-icon>
+        </button>
+
+        <!-- Botón de letras -->
+        <button
+          (click)="toggleLyricsPanel()"
+          class="lyrics-button"
+          aria-label="Ver letras"
+          [class.active]="showLyricsPanel"
+        >
+          <mat-icon>lyrics</mat-icon>
+        </button>
+      </div>
     </div>
 
     <!-- Imagen de la canción -->
     <div class="song-artwork-container">
-      <div class="song-artwork-wrapper">
+      <div class="song-artwork-wrapper" [class.loading]="currentSong.isLoading">
         <img
           [src]="currentSong.cover"
           [alt]="currentSong.title"
@@ -35,7 +47,11 @@
           (error)="onImageError($event)"
           crossorigin="anonymous"
         />
-        <!-- Efecto de vinilo giratorio cuando está reproduciendo -->
+        <!-- Indicador de buffering -->
+        <div *ngIf="currentSong.isLoading" class="buffering-indicator">
+          <div class="buffering-spinner"></div>
+          Cargando...
+        </div>
       </div>
     </div>
 
@@ -43,7 +59,7 @@
     <div class="flexible-spacer"></div>
 
     <!-- Información de la canción -->
-    <div class="song-info">
+    <div class="song-info" [class.loading]="currentSong.isLoading">
       <h2 class="song-title">{{ currentSong.title }}</h2>
       <p class="song-artist">{{ currentSong.artist }}</p>
       <p class="song-album">{{ currentSong.album }}</p>
@@ -51,18 +67,24 @@
 
     <!-- Barra de progreso -->
     <div class="progress-section">
+      <!-- Indicador de carga superior -->
+      <div *ngIf="currentSong.isLoading" class="loading-indicator">
+        <div class="loading-bar"></div>
+      </div>
+      
       <div class="time-display">
         <span class="current-time">{{ currentSong.currentTime }}</span>
         <span class="total-time">{{ currentSong.duration }}</span>
       </div>
-      <div class="progress-bar-container">
+      <div class="progress-bar-container" [class.loading]="currentSong.isLoading">
         <button class="w-full h-2 bg-white/30 rounded-full cursor-pointer relative border-none p-0" 
                 (click)="onProgressClick($event)"
                 (keydown)="onProgressKeydown($event)"
+                [disabled]="currentSong.isLoading"
                 aria-label="Barra de progreso">
           <!-- Progress Fill -->
           <div 
-            class="h-full bg-gradient-to-r from-white to-gray-200 rounded-full transition-all duration-300 ease-out relative shadow-lg"
+            class="h-full bg-gradient-to-r from-white to-gray-200 rounded-full transition-all duration-300 ease-out relative shadow-lg progress-bar-fill"
             [style.width.%]="currentSong.progress">
             <!-- Progress Thumb -->
             <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-xl border-2 border-white/50 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
@@ -72,10 +94,11 @@
     </div>
 
     <!-- Controles de reproducción -->
-    <div class="player-controls">
+    <div class="player-controls" [class.loading]="currentSong.isLoading">
       <button
         (click)="skipPrevious()"
         class="control-button secondary"
+        [disabled]="currentSong.isLoading"
         aria-label="Canción anterior"
       >
         <mat-icon>skip_previous</mat-icon>
@@ -84,15 +107,19 @@
       <button
         (click)="togglePlayPause()"
         class="control-button primary"
+        [disabled]="currentSong.isLoading"
         [attr.aria-label]="currentSong.isPlaying ? 'Pausar' : 'Reproducir'"
       >
-        <mat-icon *ngIf="currentSong.isPlaying">pause</mat-icon>
-        <mat-icon *ngIf="!currentSong.isPlaying">play_arrow</mat-icon>
+        <!-- Mostrar spinner cuando está cargando -->
+        <div *ngIf="currentSong.isLoading" class="buffering-spinner"></div>
+        <mat-icon *ngIf="!currentSong.isLoading && currentSong.isPlaying">pause</mat-icon>
+        <mat-icon *ngIf="!currentSong.isLoading && !currentSong.isPlaying">play_arrow</mat-icon>
       </button>
 
       <button
         (click)="skipNext()"
         class="control-button secondary"
+        [disabled]="currentSong.isLoading"
         aria-label="Siguiente canción"
       >
         <mat-icon>skip_next</mat-icon>
@@ -100,11 +127,12 @@
     </div>
 
     <!-- Control de volumen -->
-    <div class="volume-section">
+    <div class="volume-section" [class.loading]="currentSong.isLoading">
       <div class="volume-container">
         <button 
           (click)="toggleVolume()"
           class="p-2 rounded-full hover:bg-white/10 transition-colors duration-200 cursor-pointer"
+          [disabled]="currentSong.isLoading"
           [attr.aria-label]="currentSong.volume === 0 ? 'Activar sonido' : 'Silenciar'"
         >
           <mat-icon class="volume-icon">
@@ -116,6 +144,7 @@
           <button class="w-full h-2 bg-white/30 rounded-full cursor-pointer border-none p-0" 
                   (click)="onVolumeBarClick($event)"
                   (keydown)="onVolumeKeydown($event)"
+                  [disabled]="currentSong.isLoading"
                   aria-label="Barra de volumen">
             <!-- Volume Fill -->
             <div 
@@ -132,6 +161,7 @@
             max="100"
             [value]="currentSong.volume * 100"
             (input)="onVolumeChange($event)"
+            [disabled]="currentSong.isLoading"
             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             aria-label="Control de volumen"
           />
@@ -215,10 +245,17 @@
   </div>
 </div>
 
+<!-- Componente global de playlist modal -->
+<app-global-playlist-modal></app-global-playlist-modal>
+
 <!-- Vista de carga si no hay canción -->
 <div *ngIf="!currentSong" class="loading-container">
   <div class="loading-content">
     <div class="loading-spinner"></div>
-    <p>Cargando canción...</p>
+    <h2>Cargando reproductor...</h2>
+    <p>Preparando tu música</p>
+    <div class="loading-indicator">
+      <div class="loading-bar"></div>
+    </div>
   </div>
 </div>

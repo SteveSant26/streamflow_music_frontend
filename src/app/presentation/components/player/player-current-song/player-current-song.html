@@ -1,27 +1,43 @@
 @if (song) {
   <button
-    class="flex items-center gap-2 sm:gap-3 cursor-pointer hover-bg-elevated rounded-lg p-1 sm:p-2 transition-colors group w-full text-left border-none bg-transparent"
+    class="flex items-center gap-2 sm:gap-3 cursor-pointer hover-bg-elevated rounded-lg p-1 sm:p-2 transition-all duration-200 group w-full text-left border-none bg-transparent hover:scale-[1.02] hover:shadow-sm"
     (click)="navigateToCurrentSong()"
     type="button"
     aria-label="Ver canción actual en pantalla completa"
+    title="Haz clic para ver la canción completa"
   >
-    <picture class="w-10 h-10 sm:w-14 sm:h-14 flex-shrink-0">
+    <picture class="w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0 relative">
       <img
-        [src]="song.thumbnail_url || '/assets/gorillaz2.jpg'"
+        [src]="song.thumbnail_url || song.album?.cover_url || '/assets/gorillaz2.jpg'"
         [alt]="song.title"
-        class="w-full h-full object-cover rounded"
+        class="w-full h-full object-cover rounded-lg shadow-sm"
       />
+      <!-- Indicador de "clickeable" -->
+      <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-white drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+        </svg>
+      </div>
     </picture>
-    <div class="flex flex-col min-w-0">
+    <div class="flex flex-col min-w-0 flex-1">
       <h4
-        class="text-base font-medium truncate group-hover:text-accent transition-colors"
+        class="text-sm sm:text-base font-semibold truncate group-hover:text-accent transition-colors"
       >
         {{ song.title }}
       </h4>
       <span
-        class="text-subdued text-xs truncate group-hover:text-base transition-colors"
+        class="text-subdued text-xs sm:text-sm truncate group-hover:text-base transition-colors"
       >
-        {{ song.artist_name }}
+        {{ song.artist_name || 'Artista Desconocido' }}
+      </span>
+      <span
+        class="text-xs text-subdued truncate"
+      >
+        {{ song.album?.title || song.album_title || 'Álbum Desconocido' }}
+      </span>
+      <!-- Indicador visual de que es clickeable -->
+      <span class="text-xs text-accent opacity-0 group-hover:opacity-100 transition-opacity font-medium">
+        Ver canción completa →
       </span>
     </div>
   </button>

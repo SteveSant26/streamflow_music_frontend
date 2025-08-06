@@ -1,0 +1,109 @@
+<div class="add-song-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>playlist_add</mat-icon>
+    Agregar a Playlist
+  </h2>
+  
+  <div mat-dialog-content class="dialog-content">
+    <!-- Song info -->
+    <div class="song-info">
+      <img 
+        [src]="data.song.thumbnail_url || '/assets/placeholders/song.jpg'" 
+        [alt]="data.song.title"
+        class="song-thumbnail"
+        (error)="onImageError($event)">
+      <div class="song-details">
+        <h3>{{data.song.title}}</h3>
+        <p>{{data.song.artist_name}}</p>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Loading state -->
+    <div *ngIf="isLoading()" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando playlists...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error()" class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>Error al cargar las playlists</p>
+      <button mat-button color="primary" (click)="loadPlaylists()">
+        <mat-icon>refresh</mat-icon>
+        Reintentar
+      </button>
+    </div>
+
+    <!-- Playlists list -->
+    <div *ngIf="!isLoading() && !error()" class="playlists-container">
+      <h3 class="section-title">Selecciona una playlist:</h3>
+      
+      <!-- Empty state -->
+      <div *ngIf="playlists().length === 0" class="empty-state">
+        <mat-icon>queue_music</mat-icon>
+        <p>No tienes playlists aún</p>
+        <button mat-raised-button color="primary" (click)="createNewPlaylist()">
+          <mat-icon>add</mat-icon>
+          Crear Primera Playlist
+        </button>
+      </div>
+
+      <!-- Playlists list -->
+      <mat-list *ngIf="playlists().length > 0" class="playlists-list">
+        <mat-list-item 
+          *ngFor="let playlist of playlists()" 
+          class="playlist-item"
+          [class.adding]="addingToPlaylist() === playlist.id"
+          (click)="addToPlaylist(playlist)">
+          
+          <div class="playlist-content">
+            <div class="playlist-icon">
+              <mat-icon *ngIf="playlist.name === 'Favoritos'">favorite</mat-icon>
+              <mat-icon *ngIf="playlist.name !== 'Favoritos'">queue_music</mat-icon>
+            </div>
+            
+            <div class="playlist-info">
+              <h4>{{playlist.name}}</h4>
+              <p>{{playlist.total_songs}} canciones • {{playlist.is_public ? 'Pública' : 'Privada'}}</p>
+            </div>
+            
+            <div class="playlist-actions">
+              <mat-spinner 
+                diameter="24" 
+                *ngIf="addingToPlaylist() === playlist.id">
+              </mat-spinner>
+              <mat-icon 
+                *ngIf="addingToPlaylist() !== playlist.id"
+                class="add-icon">
+                add
+              </mat-icon>
+            </div>
+          </div>
+        </mat-list-item>
+      </mat-list>
+
+      <mat-divider *ngIf="playlists().length > 0"></mat-divider>
+
+      <!-- Create new playlist option -->
+      <button 
+        mat-stroked-button 
+        class="create-new-btn"
+        (click)="createNewPlaylist()"
+        [disabled]="addingToPlaylist() !== null">
+        <mat-icon>add</mat-icon>
+        Crear Nueva Playlist
+      </button>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <button 
+      mat-button 
+      (click)="onCancel()"
+      [disabled]="addingToPlaylist() !== null">
+      Cancelar
+    </button>
+  </div>
+</div>

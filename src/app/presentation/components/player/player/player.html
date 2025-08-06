@@ -1,8 +1,8 @@
 <div
   class="flex flex-row justify-between items-center w-full px-1 z-50 gap-2 sm:gap-0"
 >
-  <!-- Song info - fixed width on mobile and desktop -->
-  <div class="sm:w-[200px] order-1 sm:order-1">
+  <!-- Song info - más ancho para mejor visualización -->
+  <div class="w-[250px] sm:w-[300px] order-1 sm:order-1">
     <app-player-current-song> </app-player-current-song>
   </div>
 
@@ -20,8 +20,44 @@
     </div>
   </div>
 
-  <!-- Volume - hidden on mobile, visible on sm+ -->
-  <div class="hidden sm:grid place-content-center order-3">
+  <!-- Volume and Playlist - hidden on mobile, visible on sm+ -->
+  <div class="hidden sm:flex place-content-center items-center gap-2 order-3">
     <app-player-volume-control> </app-player-volume-control>
+    
+    <!-- Current Song Button - Navegar a página de current music -->
+    <button 
+      class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
+      title="Ver canción actual"
+      (click)="goToCurrentSong()"
+      *ngIf="playerState?.currentSong">
+      <mat-icon class="text-gray-600 dark:text-gray-300">music_note</mat-icon>
+    </button>
+    
+    <!-- Playlist Button - Funcionalidad personalizada -->
+    <button 
+      class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
+      title="Ver playlist"
+      (click)="openPlaylistModal()"
+      *ngIf="playerState?.currentSong">
+      <mat-icon class="text-gray-600 dark:text-gray-300">queue_music</mat-icon>
+    </button>
+  </div>
+  
+  <!-- Mobile Playlist Button - visible only on mobile -->
+  <div class="flex sm:hidden place-content-center items-center gap-2 order-4">
+    <button 
+      class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
+      title="Ver canción actual"
+      (click)="goToCurrentSong()"
+      *ngIf="playerState?.currentSong">
+      <mat-icon class="text-gray-600 dark:text-gray-300 text-lg">music_note</mat-icon>
+    </button>
+    <button 
+      class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-600"
+      title="Ver playlist"
+      (click)="openPlaylistModal()"
+      *ngIf="playerState?.currentSong">
+      <mat-icon class="text-gray-600 dark:text-gray-300 text-lg">queue_music</mat-icon>
+    </button>
   </div>
 </div>

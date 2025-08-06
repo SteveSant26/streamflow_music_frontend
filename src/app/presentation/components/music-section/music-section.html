@@ -42,6 +42,7 @@
   </div>
   
   <!-- Content based on type -->
+  <!-- DEBUG: MusicSection type = {{ type }} -->
   @if (!loading && songs.length > 0) {
     <!-- Grid layout for songs -->
     @if (type === 'grid') {
@@ -52,9 +53,10 @@
             (click)="onSongClick(song)"
           >
             <img 
-              [src]="song.thumbnail_url || '/assets/gorillaz2.jpg'" 
+              [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
               [alt]="song.title"
               class="w-full aspect-square object-cover rounded-md mb-3"
+              appImageFallback="assets/images/default-album-small.svg"
             />
             <h3 class="text-white font-medium text-sm truncate">{{ song.title }}</h3>
             <p class="text-gray-400 text-xs truncate">{{ song.artist_name }}</p>

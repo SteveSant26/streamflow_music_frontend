@@ -109,12 +109,16 @@ export class SongDescriptionComponent implements OnInit {
     
     if (state.currentSong?.id === currentSong.id) {
       // Si es la misma canción, toggle play/pause
-      this.audioPlayerService.play();
+      this.playlistService.togglePlayback();
     } else {
       // Si es una canción diferente, reproducirla
-      this.playSongUseCase.execute(currentSong.id, true).subscribe({
-        next: () => {
-          console.log(`Reproduciendo: ${currentSong.title}`);
+      this.playSongUseCase.executeSimple(currentSong.id).subscribe({
+        next: (song) => {
+          console.log(`Reproduciendo: ${song.title}`);
+          // Crear una nueva playlist con esta canción
+          this.playlistService.createPlaylist([song], 'Current Song', 0);
+          // Iniciar reproducción
+          this.playlistService.togglePlayback();
         },
         error: (error) => {
           console.error('Error al reproducir canción:', error);
@@ -177,7 +181,7 @@ export class SongDescriptionComponent implements OnInit {
   }
 
   playSimilarSong(song: Song): void {
-    this.playSongUseCase.execute(song.id, true).subscribe({
+    this.playSongUseCase.executeSimple(song.id).subscribe({
       next: () => {
         this.router.navigate([ROUTES_CONFIG_MUSIC.SONG.getLinkWithId(song.id)]);
       },

@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { LoginSessionUseCase, SocialLoginUseCase } from '@app/domain/usecases';
 import { LoginCredentials } from '../../../../domain/repositories/i-auth.repository';
 import { MatIcon } from '@angular/material/icon';
-import { ROUTES_CONFIG_AUTH } from '@app/config';
+import { ROUTES_CONFIG_AUTH, ROUTES_CONFIG_SITE } from '@app/config';
 import {
   AuthError,
   ValidationError,
@@ -29,6 +29,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class LoginComponent {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
+  protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
 
   private readonly socialLoginUseCase = inject(SocialLoginUseCase);
   private readonly loginSessionUseCase = inject(LoginSessionUseCase);
@@ -63,7 +64,7 @@ export class LoginComponent {
       const result = await this.loginSessionUseCase.execute(this.credentials);
       console.log('Login successful:', result);
 
-      this.router.navigate(['/home']);
+      this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
     } catch (error) {
       this.handleError(error);
     } finally {

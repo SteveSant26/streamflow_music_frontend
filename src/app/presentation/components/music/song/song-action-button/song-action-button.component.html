@@ -1,0 +1,54 @@
+<div class="song-actions">
+  <!-- Actions menu with current playing indicator -->
+  <button 
+    mat-icon-button 
+    [matMenuTriggerFor]="actionsMenu"
+    [matTooltip]="isCurrentSongPlaying() ? 'Canción reproduciéndose' : 'Opciones de reproducción'"
+    [class]="isCurrentSongPlaying() ? 'currently-playing' : 'play-btn'">
+    <mat-icon [class.text-green-500]="isCurrentSongPlaying()" 
+              [class.animate-pulse]="isCurrentSongPlaying()">
+      {{ isCurrentSongPlaying() ? 'volume_up' : 'play_arrow' }}
+    </mat-icon>
+  </button>
+
+  <mat-menu #actionsMenu="matMenu" class="song-actions-menu">
+    <button mat-menu-item (click)="playSong()">
+      <mat-icon>{{ isCurrentSongPlaying() ? 'pause' : 'play_arrow' }}</mat-icon>
+      <span>{{ isCurrentSongPlaying() ? 'Pausar' : 'Reproducir ahora' }}</span>
+    </button>
+    
+    <button mat-menu-item (click)="playNext()">
+      <mat-icon>skip_next</mat-icon>
+      <span>Reproducir siguiente</span>
+    </button>
+    
+    <button mat-menu-item (click)="addToQueue()">
+      <mat-icon>queue</mat-icon>
+      <span>Agregar a cola</span>
+    </button>
+    
+    <mat-divider></mat-divider>
+    
+    <button mat-menu-item (click)="addToPlaylist()">
+      <mat-icon>playlist_add</mat-icon>
+      <span>Agregar a playlist</span>
+    </button>
+    
+    <button mat-menu-item (click)="addToFavorites()">
+      <mat-icon>favorite_border</mat-icon>
+      <span>Agregar a favoritos</span>
+    </button>
+    
+    <mat-divider></mat-divider>
+    
+    <button mat-menu-item (click)="shareSong()">
+      <mat-icon>share</mat-icon>
+      <span>Compartir</span>
+    </button>
+    
+    <button mat-menu-item (click)="viewInfo()">
+      <mat-icon>info</mat-icon>
+      <span>Ver información</span>
+    </button>
+  </mat-menu>
+</div>

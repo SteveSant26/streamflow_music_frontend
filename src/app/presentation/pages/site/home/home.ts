@@ -1,8 +1,11 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { Card, Greeting } from '@app/presentation/components/ui';
-import { PlayListItemCard } from '@app/presentation/components/music';
-import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
+import { PlayListItemCard, MusicsTable } from '@app/presentation/components/music';
+import { MusicSectionButton } from '@app/presentation/components/music-section/music-section';
+import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { 
@@ -20,8 +23,10 @@ import { Song } from '../../../../domain/entities/song.entity';
     Card,
     Greeting,
     PlayListItemCard,
-    MusicSectionComponent,
     TranslateModule,
+    MatIconModule,
+    MatButtonModule,
+    MusicsTable,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
@@ -32,6 +37,8 @@ export class HomeComponent implements OnInit {
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  readonly viewModeService = inject(ViewModeService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   // Route configs
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
@@ -41,6 +48,15 @@ export class HomeComponent implements OnInit {
   readonly popularSongs = signal<Song[]>([]);
   readonly randomSongs = signal<Song[]>([]);
   readonly loading = signal(true);
+
+  // Signal computed para el tipo de vista
+  readonly currentViewType = computed(() => {
+    const currentMode = this.viewModeService.viewMode();
+    const resultType = currentMode === 'list' ? 'grid' : 'table';
+    console.log('🎯 COMPUTED currentViewType: viewMode =', currentMode, '→ resultType =', resultType);
+    console.log('🎯 COMPUTED Should show:', resultType === 'grid' ? 'GRID/CARDS' : 'TABLE');
+    return resultType;
+  });
 
   // Datos mock para las playlists (mantenemos algunos como ejemplo)
   featuredPlaylists = [
@@ -76,6 +92,36 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadHomeData();
+    
+    // Effect para debuggear cambios de view mode
+    effect(() => {
+      const currentMode = this.viewModeService.viewMode();
+      console.log('🏠 Home Effect: View mode changed to:', currentMode);
+      console.log('🏠 Home Effect: Should show', currentMode === 'list' ? 'GRID/CARDS' : 'TABLE');
+      console.log('🏠 Force change detection...');
+      this.cdr.markForCheck(); // Forzar detección de cambios
+    });
+  }
+
+  // Método para debug - llamar desde el template
+  debugViewMode(): string {
+    const mode = this.viewModeService.viewMode();
+    console.log('🔍 Debug from template - current mode:', mode);
+    return mode;
+  }
+
+  // Método para resetear el viewMode (para debug)
+  resetViewMode(): void {
+    console.log('🔄 Resetting view mode to list');
+    this.viewModeService.setViewMode('list');
+  }
+
+  // Método para cambiar manualmente el viewMode (para debug)
+  toggleViewModeManually(): void {
+    const current = this.viewModeService.viewMode();
+    const newMode = current === 'list' ? 'table' : 'list';
+    console.log('🔄 Manual toggle from', current, 'to', newMode);
+    this.viewModeService.setViewMode(newMode);
   }
 
   private loadHomeData(): void {
@@ -153,26 +199,41 @@ export class HomeComponent implements OnInit {
     return count.toString();
   }
 
-  // Configuraciones para las secciones de música
-  get popularSectionConfig() {
+  // Getter para debugging - ver qué tipo se está usando
+  getCurrentViewType(): 'grid' | 'table' {
+    const currentMode = this.viewModeService.viewMode();
+    const resultType = currentMode === 'list' ? 'grid' : 'table';
+    console.log('🎯 Home getCurrentViewType: viewMode =', currentMode, '→ resultType =', resultType);
+    console.log('🎯 Should show:', resultType === 'grid' ? 'GRID/CARDS' : 'TABLE');
+    return resultType;
+  }
+
+  // Configuraciones para las secciones de música (usando computed para reactividad)
+  readonly popularSectionConfig = computed(() => {
     const primaryButton: MusicSectionButton = {
       text: 'Ver todas',
       action: () => this.loadMostPopularSongs(),
       ariaLabel: 'Ver todas las canciones populares'
     };
 
+    // Usar el servicio global para determinar el tipo de vista
+    const currentViewMode = this.viewModeService.viewMode();
+    const viewType: 'grid' | 'table' = currentViewMode === 'list' ? 'grid' : 'table';
+    
+    console.log('🏠 Popular Section - Current view mode:', currentViewMode, 'Using type:', viewType);
+
     return {
       title: '🔥 Más Populares',
-      type: 'grid' as const,
+      type: viewType,
       primaryButton,
       songs: this.popularSongs(),
       loading: this.loading(),
       emptyMessage: 'No se pudieron cargar las canciones populares',
       loadingMessage: 'Cargando canciones populares...'
     };
-  }
+  });
 
-  get randomSectionConfig() {
+  readonly randomSectionConfig = computed(() => {
     const actionButtons: MusicSectionButton[] = [
       {
         icon: 'refresh',
@@ -186,9 +247,15 @@ export class HomeComponent implements OnInit {
       }
     ];
 
+    // Usar el servicio global para determinar el tipo de vista
+    const currentViewMode = this.viewModeService.viewMode();
+    const viewType: 'grid' | 'table' = currentViewMode === 'list' ? 'grid' : 'table';
+    
+    console.log('🏠 Random Section - Current view mode:', currentViewMode, 'Using type:', viewType);
+
     return {
       title: '🎲 Descubre Música Nueva',
-      type: 'table' as const,
+      type: viewType,
       actionButtons,
       songs: this.randomSongs(),
       loading: this.loading(),
@@ -196,5 +263,24 @@ export class HomeComponent implements OnInit {
       emptyMessage: 'No se pudieron cargar las canciones',
       loadingMessage: 'Cargando música...'
     };
+  });
+
+  // Métodos para los botones de acción (igual que Search)
+  addToPlaylist(song: Song): void {
+    // Implementar funcionalidad de agregar a playlist
+    console.log(`Agregando "${song.title}" a playlist`);
+    // Aquí irá la lógica para mostrar modal de playlists o agregar a favoritos
+  }
+
+  addToFavorites(song: Song): void {
+    // Implementar funcionalidad de favoritos
+    console.log(`Agregando "${song.title}" a favoritos`);
+    // Aquí irá la lógica para agregar/quitar de favoritos
+  }
+
+  showMoreOptions(song: Song): void {
+    // Implementar menú de más opciones
+    console.log(`Mostrando más opciones para "${song.title}"`);
+    // Aquí irá la lógica para mostrar menú contextual con más opciones
   }
 }

@@ -15,8 +15,14 @@ import { PlayerVolumeControl } from '../player-volume-control/player-volume-cont
 import { PlayerUseCase } from '@app/domain/usecases';
 import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
+import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { ROUTES_CONFIG_MUSIC } from '@app/config';
+import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
 
 interface Song {
   id: number;
@@ -49,9 +55,11 @@ interface CurrentMusic {
     PlayerSoundControl,
     PlayerVolumeControl,
     TranslateModule,
+    CommonModule,
+    MatIconModule,
   ],
   templateUrl: './player.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class Player implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('audioElement', { static: false })
@@ -75,7 +83,10 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly playerUseCase: PlayerUseCase,
     private readonly globalPlayerState: GlobalPlayerStateService,
+    private readonly playlistService: PlaylistService,
+    private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
+    private readonly globalPlaylistModal: GlobalPlaylistModalService,
   ) {}
 
   ngOnInit(): void {
@@ -89,7 +100,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((state) => {
         this.playerState = state;
         this.updateLegacyState(state);
-        this.cdr.detectChanges(); // Force change detection for OnPush
+        // Removed cdr.detectChanges() to prevent infinite loop
       });
 
     this.playerUseCase
@@ -123,10 +134,10 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
         id: parseInt(state.currentSong.id) || 1,
         title: state.currentSong.title,
         artists: [state.currentSong.artist_name || 'Unknown Artist'],
-        album: 'Unknown Album',
-        albumId: 1,
-        duration: state.currentSong.duration_formatted || '0:00', // Already a string
-        image: state.currentSong.thumbnail_url || '/assets/gorillaz2.jpg',
+        album: state.currentSong.album?.title || 'Unknown Album',
+        albumId: state.currentSong.album?.id ? parseInt(state.currentSong.album.id) : 1,
+        duration: state.currentSong.duration_formatted || '0:00',
+        image: state.currentSong.album?.cover_url || state.currentSong.thumbnail_url || '/assets/default-album.png',
       };
 
       // Don't manually set the audio source - let the repository handle it
@@ -150,6 +161,16 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
       // Set initial volume
       audioElement.volume = this.volume;
+      
+      // Sync volume with player state
+      this.globalPlayerState
+        .getPlayerState$()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((state) => {
+          if (audioElement.volume !== state.volume) {
+            audioElement.volume = state.volume;
+          }
+        });
     }
   }
 
@@ -159,6 +180,28 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
 
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  openPlaylistModal(): void {
+    console.log('🎵🎵🎵 CLICK DETECTADO EN openPlaylistModal!');
+    console.log('🔍 Abriendo modal global de playlist...');
+    
+    // Usar el servicio global para mostrar el modal
+    this.globalPlaylistModal.show();
+  }
+
+  goToCurrentSong(): void {
+    console.log('🎵🎵🎵 CLICK DETECTADO EN goToCurrentSong!');
+    console.log('🔍 Router disponible:', !!this.router);
+    console.log('🔍 Intentando navegar a /current-song...');
+    
+    this.router.navigate([ROUTES_CONFIG_MUSIC.CURRENT_SONG.link])
+      .then(success => {
+        console.log('✅ Navegación exitosa:', success);
+      })
+      .catch(error => {
+        console.error('❌ Error en navegación:', error);
+      });
   }
 
   private formatTime(seconds: number): string {

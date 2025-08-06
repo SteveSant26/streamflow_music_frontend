@@ -1,0 +1,105 @@
+.playlist-detail-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  color: white;
+}
+
+.playlist-info h1 {
+  margin: 0 0 8px 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.description {
+  margin: 8px 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.metadata {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.metadata span {
+  margin: 0 4px;
+}
+
+.favorites-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #ff6b9d;
+}
+
+.playlist-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.songs-card {
+  margin-top: 24px;
+}
+
+.songs-table {
+  width: 100%;
+}
+
+.song-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.song-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.song-artist {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.no-songs {
+  text-align: center;
+  padding: 64px 24px;
+}
+
+.large-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.loading {
+  text-align: center;
+  padding: 64px;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .playlist-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .playlist-info h1 {
+    font-size: 2rem;
+  }
+}

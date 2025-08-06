@@ -6,6 +6,7 @@ import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStateService, LanguageService } from '@app/shared/services';
 import { LogoutUseCase } from '@app/domain/usecases';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
+import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { 
@@ -43,6 +44,7 @@ export class AsideMenu {
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
   private readonly materialThemeService = inject(MaterialThemeService);
+  readonly viewModeService = inject(ViewModeService);
 
   isAuthenticated = this.authStateService.isAuthenticated;
   user = this.authStateService.user;

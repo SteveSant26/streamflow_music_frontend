@@ -1,0 +1,125 @@
+    <div 
+      [class]="(isDarkTheme$ | async) 
+        ? 'min-h-screen bg-gray-900 text-white p-6' 
+        : 'min-h-screen bg-gray-50 text-gray-900 p-6'"
+    >
+      <div class="max-w-7xl mx-auto space-y-8">
+        <!-- Header -->
+        <div class="text-center space-y-4">
+          <h1 
+            [class]="(isDarkTheme$ | async) 
+              ? 'text-4xl font-bold text-white' 
+              : 'text-4xl font-bold text-gray-900'"
+          >
+            {{ 'HOME.TITLE' | translate }}
+          </h1>
+          <p 
+            [class]="(isDarkTheme$ | async) 
+              ? 'text-lg text-gray-300' 
+              : 'text-lg text-gray-600'"
+          >
+            {{ 'HOME.SUBTITLE' | translate }}
+          </p>
+        </div>
+
+        <!-- Popular Songs Section -->
+        <mat-card 
+          [class]="(isDarkTheme$ | async) 
+            ? 'bg-gray-800 border border-gray-700' 
+            : 'bg-white border border-gray-200'"
+        >
+          <mat-card-header>
+            <mat-card-title 
+              [class]="(isDarkTheme$ | async) 
+                ? 'text-white flex items-center gap-2' 
+                : 'text-gray-900 flex items-center gap-2'"
+            >
+              <mat-icon>trending_up</mat-icon>
+              {{ 'HOME.POPULAR_SONGS' | translate }}
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (isLoadingPopular()) {
+              <div class="flex justify-center py-8">
+                <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+              </div>
+            } @else if (mostPopularSongs().length > 0) {
+              <app-musics-table 
+                [songs]="mostPopularSongs()" 
+                [contextType]="'popular'"
+                [contextName]="'Canciones Populares'">
+              </app-musics-table>
+            } @else {
+              <p 
+                [class]="(isDarkTheme$ | async) 
+                  ? 'text-gray-300 text-center py-8' 
+                  : 'text-gray-600 text-center py-8'"
+              >
+                {{ 'HOME.NO_POPULAR_SONGS' | translate }}
+              </p>
+            }
+          </mat-card-content>
+          <mat-card-actions>
+            <button
+              mat-button
+              (click)="refresh()"
+              [disabled]="isLoadingPopular()"
+              [class]="(isDarkTheme$ | async) ? 'text-green-400' : 'text-green-600'"
+            >
+              <mat-icon>refresh</mat-icon>
+              {{ 'HOME.REFRESH' | translate }}
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <!-- Random Songs Section -->
+        <mat-card 
+          [class]="(isDarkTheme$ | async) 
+            ? 'bg-gray-800 border border-gray-700' 
+            : 'bg-white border border-gray-200'"
+        >
+          <mat-card-header>
+            <mat-card-title 
+              [class]="(isDarkTheme$ | async) 
+                ? 'text-white flex items-center gap-2' 
+                : 'text-gray-900 flex items-center gap-2'"
+            >
+              <mat-icon>shuffle</mat-icon>
+              {{ 'HOME.RANDOM_SONGS' | translate }}
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (isLoadingRandom()) {
+              <div class="flex justify-center py-8">
+                <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+              </div>
+            } @else if (randomSongs().length > 0) {
+              <app-musics-table 
+                [songs]="randomSongs()" 
+                [contextType]="'random'"
+                [contextName]="'Canciones Aleatorias'">
+              </app-musics-table>
+            } @else {
+              <p 
+                [class]="(isDarkTheme$ | async) 
+                  ? 'text-gray-300 text-center py-8' 
+                  : 'text-gray-600 text-center py-8'"
+              >
+                {{ 'HOME.NO_RANDOM_SONGS' | translate }}
+              </p>
+            }
+          </mat-card-content>
+          <mat-card-actions>
+            <button
+              mat-button
+              (click)="refresh()"
+              [disabled]="isLoadingRandom()"
+              [class]="(isDarkTheme$ | async) ? 'text-green-400' : 'text-green-600'"
+            >
+              <mat-icon>casino</mat-icon>
+              {{ 'HOME.GET_RANDOM' | translate }}
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>

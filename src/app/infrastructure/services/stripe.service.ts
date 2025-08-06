@@ -207,7 +207,7 @@ export class StripeService {
 
   // Utility methods
   formatCardBrand(brand: string): string {
-    const brandMap: { [key: string]: string } = {
+    const brandMap: Record<string, string> = {
       visa: 'Visa',
       mastercard: 'Mastercard',
       amex: 'American Express',

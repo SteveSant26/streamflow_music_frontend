@@ -120,3 +120,77 @@ select:focus {
   transition-timing-function: cubic-bezier(0.3, 0, 0, 1);
   transition-duration: 300ms;
 }
+
+/* Progress bar and volume control enhancements */
+.progress-bar-enhanced {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-enhanced:hover .progress-thumb {
+  opacity: 1 !important;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.progress-thumb {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Loading shimmer animation for progress bars */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.loading-shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+/* Smooth transitions for volume and progress */
+.volume-control,
+.progress-control {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.volume-control:disabled,
+.progress-control:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Better focus styles for accessibility */
+.progress-control:focus-visible,
+.volume-control:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Hover effects for interactive elements */
+.control-button:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+}
+
+.control-button:active {
+  transform: scale(0.95);
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}

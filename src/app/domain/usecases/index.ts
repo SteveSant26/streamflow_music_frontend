@@ -22,5 +22,17 @@ export * from './player/player.usecases';
 // Song Use Cases
 export * from './song/song.usecases';
 
+// Artist Use Cases
+export * from './artist.usecases';
+
+// Album Use Cases
+export * from './album.usecases';
+
+// Genre Use Cases
+export * from './genre.usecases';
+
+// Playlist Use Cases
+export * from './playlist/playlist.usecases';
+
 // API Use Cases
 export * from './api/api.usecase';

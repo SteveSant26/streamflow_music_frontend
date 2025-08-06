@@ -131,7 +131,7 @@ export class TermsAndCondition {
   }
 
   getColorClasses(color: string): string {
-    const colorMap: { [key: string]: string } = {
+    const colorMap: Record<string, string> = {
       blue: 'text-blue-600',
       green: 'text-green-600',
       purple: 'text-purple-600',
@@ -144,7 +144,7 @@ export class TermsAndCondition {
   }
 
   getBgColorClasses(color: string): string {
-    const bgColorMap: { [key: string]: string } = {
+    const bgColorMap: Record<string, string> = {
       blue: 'bg-blue-50 border-blue-400',
       green: 'bg-green-50 border-green-400',
       purple: 'bg-purple-50 border-purple-400',

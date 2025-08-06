@@ -84,13 +84,24 @@ export class AudioPlayerService {
   private loadSong(song: Song): void {
     if (!this.audioElement) return;
 
+    // Obtener la URL del archivo de audio
+    const audioUrl = song.file_url || song.audioUrl || song.youtube_url;
+    
+    if (!audioUrl) {
+      console.error('No hay URL de audio disponible para la canción:', song.title);
+      this.hasError.set(true);
+      return;
+    }
+
     // Solo cargar si es una canción diferente
-    if (this.audioElement.src !== song.file_url) {
-      this.audioElement.src = song.file_url || '';
+    if (this.audioElement.src !== audioUrl) {
+      console.log(`Cargando audio: ${song.title} - ${audioUrl}`);
+      this.audioElement.src = audioUrl;
       this.audioElement.load();
       
       // Resetear el flag de play count para esta nueva canción
       this.playedSongs.delete(song.id);
+      this.hasError.set(false);
     }
   }
 

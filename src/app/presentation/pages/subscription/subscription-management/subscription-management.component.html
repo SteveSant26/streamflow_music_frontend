@@ -1,0 +1,140 @@
+<div class="subscription-management-container">
+  <div class="page-header">
+    <h1>Gestionar Suscripción</h1>
+    <button
+      class="billing-portal-btn"
+      (click)="openBillingPortal()"
+      [disabled]="loading()"
+    >
+      Portal de Facturación
+    </button>
+  </div>
+
+  <div class="content-grid" *ngIf="!loading(); else loadingTemplate">
+    <!-- Información de la suscripción -->
+    <div class="subscription-info-card" *ngIf="subscription()">
+      <h2>Tu Plan</h2>
+      <div class="plan-details">
+        <div class="plan-name">
+          {{ currentPlan()?.name || 'Plan Premium' }}
+        </div>
+        <div class="plan-price">
+          {{ formatPrice(currentPlan()?.price || 0) }}/{{
+            currentPlan()?.interval === 'month' ? 'mes' : 'año'
+          }}
+        </div>
+        <div class="plan-status" [class]="subscription()?.status">
+          {{ getStatusText(subscription()?.status || '') }}
+        </div>
+      </div>
+
+      <div class="subscription-dates">
+        <div class="date-info" *ngIf="subscription()?.currentPeriodEnd">
+          <label>Próxima facturación:</label>
+          <span>{{ formatDate(subscription()!.currentPeriodEnd) }}</span>
+        </div>
+        <div
+          class="date-info"
+          *ngIf="subscription()?.trialEnd && isOnTrial()"
+        >
+          <label>Fin del período de prueba:</label>
+          <span>{{ formatDate(subscription()!.trialEnd!) }}</span>
+        </div>
+        <div class="date-info" *ngIf="subscription()?.canceledAt">
+          <label>Cancelada el:</label>
+          <span>{{ formatDate(subscription()!.canceledAt!) }}</span>
+        </div>
+      </div>
+
+      <div class="subscription-actions">
+        <button
+          class="change-plan-btn"
+          (click)="changePlan()"
+          [disabled]="subscription()?.status !== 'active'"
+        >
+          Cambiar Plan
+        </button>
+        <button
+          class="cancel-btn"
+          (click)="cancelSubscription()"
+          [disabled]="
+            subscription()?.status !== 'active' ||
+            subscription()?.canceledAt
+          "
+          *ngIf="!subscription()?.canceledAt"
+        >
+          Cancelar Suscripción
+        </button>
+      </div>
+    </div>
+
+    <!-- Métodos de pago -->
+    <div class="payment-methods-card">
+      <h2>Métodos de Pago</h2>
+      <div
+        class="payment-methods-list"
+        *ngIf="paymentMethods().length > 0; else noPaymentMethods"
+      >
+        <div
+          *ngFor="let method of paymentMethods()"
+          class="payment-method-item"
+          [class.default]="method.isDefault"
+        >
+          <div class="card-info">
+            <div class="card-brand">
+              {{ formatCardBrand(method.card?.brand || '') }}
+            </div>
+            <div class="card-number">
+              **** **** **** {{ method.card?.last4 }}
+            </div>
+            <div class="card-expiry">
+              {{ method.card?.expMonth }}/{{ method.card?.expYear }}
+            </div>
+          </div>
+          <div class="method-actions">
+            <span class="default-badge" *ngIf="method.isDefault"
+              >Por defecto</span
+            >
+            <button class="manage-btn" (click)="openBillingPortal()">
+              Gestionar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noPaymentMethods>
+        <div class="no-payment-methods">
+          <p>No tienes métodos de pago guardados</p>
+          <button class="add-payment-btn" (click)="openBillingPortal()">
+            Agregar método de pago
+          </button>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Estado de facturación -->
+    <div class="billing-info-card" *ngIf="upcomingInvoice()">
+      <h2>Próxima Factura</h2>
+      <div class="invoice-info">
+        <div class="amount">
+          {{ formatPrice(upcomingInvoice()?.amount || 0) }}
+        </div>
+        <div class="due-date">
+          Vence: {{ formatDate(upcomingInvoice()!.createdAt) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Cargando información de la suscripción...</p>
+    </div>
+  </ng-template>
+
+  <div class="error-state" *ngIf="error()">
+    <p>{{ error() }}</p>
+    <button (click)="loadData()">Reintentar</button>
+  </div>
+</div>

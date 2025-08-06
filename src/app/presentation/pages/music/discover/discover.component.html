@@ -1,0 +1,84 @@
+<div class="discover-container" [class.dark-theme]="isDarkTheme()">
+  <!-- Header -->
+  <div class="discover-header">
+    <h1>Descubrir Música</h1>
+    <button mat-icon-button (click)="toggleTheme()">
+      <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </div>
+
+  <!-- Albums Populares -->
+  <section class="discover-section">
+    <h2>Álbumes Populares</h2>
+    <div class="loading-container" *ngIf="isLoadingAlbums()">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <div class="error-message" *ngIf="albumsError()">
+      Error al cargar álbumes: {{ albumsError() }}
+    </div>
+    <div class="albums-grid" *ngIf="!isLoadingAlbums() && !albumsError()">
+      <mat-card *ngFor="let album of popularAlbums()" class="album-card">
+        <img mat-card-image [src]="album.cover_url || '/assets/default-album.png'" 
+             [alt]="album.title" class="album-cover">
+        <mat-card-content>
+          <h3>{{ album.title }}</h3>
+          <p>{{ album.artist_name }}</p>
+          <p class="album-info">{{ album.total_tracks }} canciones</p>
+          <p class="release-date">{{ album.release_date | date:'MMM yyyy' }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary">
+            <mat-icon>play_arrow</mat-icon>
+            Reproducir
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Artistas Populares -->
+  <section class="discover-section">
+    <h2>Artistas Populares</h2>
+    <div class="loading-container" *ngIf="isLoadingArtists()">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <div class="error-message" *ngIf="artistsError()">
+      Error al cargar artistas: {{ artistsError() }}
+    </div>
+    <div class="artists-grid" *ngIf="!isLoadingArtists() && !artistsError()">
+      <mat-card *ngFor="let artist of popularArtists()" class="artist-card">
+        <img mat-card-image [src]="artist.image_url || '/assets/default-artist.png'" 
+             [alt]="artist.name" class="artist-image">
+        <mat-card-content>
+          <h3>{{ artist.name }}
+            <mat-icon *ngIf="artist.is_verified" class="verified-icon">verified</mat-icon>
+          </h3>
+          <p class="artist-info">{{ artist.followers_count | number }} seguidores</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary">Ver Perfil</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Géneros Populares -->
+  <section class="discover-section">
+    <h2>Géneros Populares</h2>
+    <div class="loading-container" *ngIf="isLoadingGenres()">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <div class="error-message" *ngIf="genresError()">
+      Error al cargar géneros: {{ genresError() }}
+    </div>
+    <div class="genres-container" *ngIf="!isLoadingGenres() && !genresError()">
+      <mat-chip-set>
+        <mat-chip *ngFor="let genre of popularGenres()" 
+                 [style.background-color]="genre.color || '#e0e0e0'"
+                 class="genre-chip">
+          {{ genre.name }}
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+  </section>
+</div>

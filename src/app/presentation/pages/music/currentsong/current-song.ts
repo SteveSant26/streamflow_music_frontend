@@ -8,8 +8,12 @@ import {
 } from '@angular/core';
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { ROUTES_CONFIG_SITE } from '@app/config';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
+import { PlaylistService } from '@app/infrastructure/services/playlist.service';
+import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
+import { GlobalPlaylistModalComponent } from '@app/shared/components/global-playlist-modal/global-playlist-modal';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
@@ -26,13 +30,14 @@ interface CurrentSongView {
   cover: string;
   gradient: string;
   isPlaying: boolean;
+  isLoading: boolean;
   lyrics?: string;
 }
 
 @Component({
   selector: 'app-current-song',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, GlobalPlaylistModalComponent],
   templateUrl: './currentsong.html',
   styleUrls: ['./current-song.css'],
 })
@@ -48,13 +53,18 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
     private readonly globalPlayerState: GlobalPlayerStateService,
+    private readonly playlistService: PlaylistService,
+    private readonly globalPlaylistModalService: GlobalPlaylistModalService,
     private readonly materialThemeService: MaterialThemeService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
-  ) {}
+  ) {
+    // Initialize theme in constructor to avoid injection context issues
+    this.isDarkTheme$ = this.materialThemeService.isDarkMode();
+  }
 
   ngOnInit() {
-    this.isDarkTheme$ = this.materialThemeService.isDarkMode();
+    // Fix: Move isDarkTheme$ initialization to constructor or use inject()
     this.setupPlayerStateSubscription();
     this.initializePlayer();
 
@@ -82,22 +92,39 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   private setupPlayerStateSubscription(): void {
-    this.globalPlayerState
-      .getPlayerState$()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((playerState: PlayerState) => {
-        this.updateCurrentSongView(playerState);
-        this.cdr.detectChanges();
-      });
+    try {
+      this.globalPlayerState
+        .getPlayerState$()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (playerState: PlayerState) => {
+            this.updateCurrentSongView(playerState);
+            this.cdr.detectChanges();
+          },
+          error: (error) => {
+            console.error('Error in player state subscription:', error);
+          }
+        });
+    } catch (error) {
+      console.error('Error setting up player state subscription:', error);
+    }
   }
 
   private initializePlayer(): void {
-    // Ensure global player state is initialized
-    this.globalPlayerState.ensureInitialized();
+    try {
+      // Ensure global player state is initialized
+      this.globalPlayerState.ensureInitialized();
 
-    // Force a state update to ensure we have the latest player state
-    const currentState = this.globalPlayerState.getPlayerState();
-    this.updateCurrentSongView(currentState);
+      // Force a state update to ensure we have the latest player state
+      const currentState = this.globalPlayerState.getPlayerState();
+      if (currentState) {
+        this.updateCurrentSongView(currentState);
+      }
+    } catch (error) {
+      console.error('Error initializing player:', error);
+      // Set a default state if initialization fails
+      this.currentSong = null;
+    }
   }
 
   private updateCurrentSongView(playerState: PlayerState): void {
@@ -106,7 +133,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         id: playerState.currentSong.id,
         title: playerState.currentSong.title,
         artist: playerState.currentSong.artist_name || 'Unknown Artist',
-        album: playerState.currentSong.artist_name || 'Unknown Artist', // Usando artist como album por ahora
+        album: playerState.currentSong.album?.title || 'Unknown Album', // Fixed: Use album title
         duration: this.formatTime(playerState.duration),
         currentTime: this.formatTime(playerState.currentTime),
         progress: playerState.progress,
@@ -114,6 +141,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         cover: playerState.currentSong.thumbnail_url || '/assets/gorillaz2.jpg',
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         isPlaying: playerState.isPlaying,
+        isLoading: playerState.isLoading,
         lyrics: '🎵 Lyrics not available yet 🎵',
       };
     } else {
@@ -161,11 +189,34 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     );
   }
 
+  togglePlaylistPanel() {
+    this.globalPlaylistModalService.toggle();
+    console.log(
+      'Modal de playlist global:',
+      this.globalPlaylistModalService.isVisible ? 'Abierto' : 'Cerrado',
+    );
+  }
+
+  selectSongFromPlaylist(index: number) {
+    this.playlistService.selectSong(index);
+    // ✅ CORREGIDO: Iniciar reproducción después de seleccionar
+    setTimeout(() => {
+      this.playlistService.togglePlayback();
+    }, 100);
+    // Cerrar el modal después de seleccionar
+    this.globalPlaylistModalService.hide();
+  }
+
+  removeSongFromPlaylist(index: number) {
+    this.playlistService.removeSongFromCurrentPlaylist(index);
+    console.log('Canción eliminada de la playlist en índice:', index);
+  }
+
   goBack() {
     // CRITICAL: Preserve state before navigation
     this.globalPlayerState.preserveStateForNavigation();
 
-    this.router.navigate(['/home']);
+    this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
   }
 
   skipPrevious() {

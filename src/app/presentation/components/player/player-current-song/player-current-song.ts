@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
+import { ROUTES_CONFIG_MUSIC } from '@app/config';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { Song } from '@app/domain/entities/song.entity';
@@ -49,7 +49,8 @@ export class PlayerCurrentSong implements OnInit, OnDestroy {
 
   navigateToCurrentSong() {
     if (this.song) {
-      this.router.navigate([ROUTES_CONFIG_MUSIC.CURRENT_SONG.path]);
+      // Navegar a la página de current song donde se puede ver la playlist
+      this.router.navigate([ROUTES_CONFIG_MUSIC.CURRENT_SONG.link]);
     }
   }
 }

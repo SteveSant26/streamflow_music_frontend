@@ -1,0 +1,475 @@
+/* Overlay del modal */
+.playlist-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.playlist-modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Contenedor del modal */
+.playlist-modal-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 90vw;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.8) translateY(20px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+}
+
+.playlist-modal-container.show {
+  transform: scale(1) translateY(0);
+}
+
+/* Header del modal */
+.playlist-modal-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.playlist-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.playlist-context {
+  margin: 0 0 4px 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.playlist-stats {
+  margin: 0 0 16px 0;
+  opacity: 0.8;
+  font-size: 0.85rem;
+}
+
+.can-load-more {
+  color: #4ade80;
+  font-weight: 500;
+}
+
+/* Controles de ordenamiento */
+.sort-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.sort-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-right: 4px;
+}
+
+.sort-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sort-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.sort-button.active {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+}
+
+.sort-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.close-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: white;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Contenido del modal */
+.playlist-modal-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-songs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+/* Items de canciones */
+.playlist-song-item {
+  display: grid;
+  grid-template-columns: auto 40px 60px 1fr auto;
+  gap: 16px;
+  padding: 12px 24px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  position: relative;
+}
+
+.playlist-song-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.playlist-song-item.current {
+  background: rgba(102, 126, 234, 0.1);
+  border-left: 4px solid #667eea;
+}
+
+.playlist-song-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+  background: rgba(102, 126, 234, 0.2) !important;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+
+/* Drop zone visual feedback */
+.playlist-song-item[draggable="true"]:not(.dragging):hover {
+  background: rgba(102, 126, 234, 0.05);
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+/* Visual indicator during drag */
+.playlist-song-item[draggable="true"] {
+  transition: all 0.2s ease;
+}
+
+.playlist-song-item[draggable="true"]:hover .drag-handle {
+  opacity: 1;
+}
+
+/* Handle de drag */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  color: #666;
+  cursor: grab;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-handle mat-icon {
+  font-size: 18px;
+}
+
+/* Acciones de canciones */
+.song-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0;
+}
+
+.playlist-song-item:hover .action-button {
+  opacity: 1;
+}
+
+.action-button:hover {
+  background: rgba(102, 126, 234, 0.2);
+  transform: scale(1.1);
+}
+
+.action-button mat-icon {
+  font-size: 16px;
+}
+
+/* Información sobre drag/sort */
+.drag-info, .sort-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: rgba(102, 126, 234, 0.05);
+  border-left: 3px solid #667eea;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: #667eea;
+}
+
+.drag-info mat-icon, .sort-info mat-icon {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.song-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.playing-icon {
+  color: #667eea;
+  font-size: 20px;
+}
+
+.song-thumbnail {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.song-details {
+  min-width: 0;
+}
+
+.song-title {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-title.current {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.song-artist {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-duration {
+  font-size: 0.85rem;
+  color: #999;
+  font-weight: 500;
+}
+
+/* Estado vacío */
+.empty-playlist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 64px;
+  color: #ddd;
+  margin-bottom: 16px;
+}
+
+.empty-playlist h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.empty-playlist p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Indicador de carga más contenido */
+.load-more-indicator {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .playlist-modal-container {
+    background: #1f1f1f;
+    color: white;
+  }
+
+  .playlist-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .playlist-song-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .song-title {
+    color: white;
+  }
+
+  .song-artist {
+    color: #ccc;
+  }
+
+  .song-duration {
+    color: #999;
+  }
+
+  .action-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+  }
+
+  .action-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+
+  .drag-handle {
+    color: #ccc;
+  }
+
+  .empty-playlist h4 {
+    color: white;
+  }
+
+  .load-more-indicator {
+    border-top-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .playlist-modal-container {
+    width: 95vw;
+    max-height: 90vh;
+    border-radius: 12px;
+  }
+
+  .playlist-modal-header {
+    padding: 20px;
+  }
+
+  .sort-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .sort-button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .playlist-song-item {
+    grid-template-columns: auto 30px 48px 1fr auto;
+    gap: 12px;
+    padding: 10px 20px;
+  }
+
+  .drag-info, .sort-info {
+    padding: 10px 20px;
+    font-size: 0.8rem;
+  }
+
+  .song-thumbnail {
+    width: 40px;
+    height: 40px;
+  }
+
+  .song-title {
+    font-size: 0.9rem;
+  }
+
+  .song-artist {
+    font-size: 0.8rem;
+  }
+}

@@ -2,14 +2,77 @@
   <div class="search-header">
     <h1 class="text-3xl font-bold mb-6">{{ "SEARCH.TITLE" | translate }}</h1>
 
-    <!-- Barra de búsqueda -->
-    <div class="search-bar mb-8">
-      <input
-        type="text"
-        [formControl]="searchControl"
-        [placeholder]="'SEARCH.PLACEHOLDER' | translate"
-        class="w-full p-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+    <!-- Barra de búsqueda con filtros -->
+    <div class="search-controls mb-8">
+      <div class="search-bar-wrapper">
+        <input
+          type="text"
+          [formControl]="searchControl"
+          [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+          class="search-input"
+          (keydown.enter)="performManualSearch()"
+        />
+        
+        <!-- Botón de búsqueda -->
+        <button 
+          class="search-btn"
+          (click)="performManualSearch()"
+          [disabled]="isSearching() || !searchControl.value?.trim()"
+          [attr.aria-label]="'Buscar'"
+        >
+          <mat-icon *ngIf="!isSearching()">search</mat-icon>
+          <div *ngIf="isSearching()" class="search-loader">
+            <div class="spinner"></div>
+          </div>
+        </button>
+        
+        <button 
+          class="filters-toggle-btn"
+          (click)="toggleFilters()"
+          [class.active]="showFilters()"
+          [attr.aria-label]="'Filtros avanzados'"
+        >
+          <mat-icon>tune</mat-icon>
+          <span class="filters-badge" *ngIf="searchFiltersService.hasActiveFilters()">
+            {{ searchFiltersService.getActiveFiltersCount() }}
+          </span>
+        </button>
+      </div>
+      
+      <!-- Controles adicionales -->
+      <div class="search-options flex items-center gap-4 mb-4">
+        <!-- Toggle YouTube -->
+        <label class="youtube-toggle flex items-center gap-2 cursor-pointer">
+          <input 
+            type="checkbox" 
+            [checked]="includeYouTube()"
+            (change)="toggleYouTube()"
+            class="sr-only"
+          />
+          <div class="toggle-switch" [class.active]="includeYouTube()">
+            <div class="toggle-thumb"></div>
+          </div>
+          <span class="text-sm font-medium text-gray-700">
+            <mat-icon class="w-4 h-4 inline mr-1">videocam</mat-icon>
+            Incluir YouTube
+          </span>
+        </label>
+        
+        <!-- Indicador de búsqueda activa -->
+        <div *ngIf="isSearching()" class="search-status flex items-center gap-2 text-blue-600">
+          <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <span class="text-sm">Buscando...</span>
+        </div>
+      </div>
+      
+      <!-- Panel de filtros colapsable -->
+      <div class="filters-panel" [class.expanded]="showFilters()">
+        <app-search-filters (filtersChanged)="onFiltersChanged()"></app-search-filters>
+      </div>
     </div>
   </div>
 
@@ -34,21 +97,33 @@
     </div>
   </div>
 
-  <!-- Estado de carga -->
-  <div class="loading-state" *ngIf="isSearching()">
+  <!-- Estado de carga inicial -->
+  <div class="loading-state" *ngIf="isSearching() && !hasSearched()">
     <div class="flex items-center justify-center py-12">
       <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       <span class="ml-3 text-gray-600">{{ "SEARCH.SEARCHING" | translate }}</span>
     </div>
   </div>
 
-  <!-- Resultados de búsqueda -->
-  <div class="search-results" *ngIf="hasSearched() && !isSearching()">
+  <!-- Resultados de búsqueda con scroll infinito -->
+  <div 
+    class="search-results" 
+    *ngIf="hasSearched()"
+    appInfiniteScroll
+    [threshold]="200"
+    [isLoading]="isLoading()"
+    [hasMore]="hasMoreResults()"
+    (loadMore)="onLoadMore()"
+  >
     <div class="mb-6 flex items-center justify-between">
-      <p class="text-gray-600">
-        {{ "SEARCH.RESULTS_FOR" | translate: { query: searchQuery() } }}
-        ({{ searchResults().length }} {{ "SEARCH.RESULTS_COUNT" | translate }})
-      </p>
+      <div class="results-info">
+        <p class="text-gray-600">
+          {{ "SEARCH.RESULTS_FOR" | translate: { query: searchQuery() } }}
+        </p>
+        <p class="text-sm text-gray-500">
+          Mostrando {{ searchResults().length }} de {{ pagination().count }} resultados
+        </p>
+      </div>
       <button
         (click)="clearSearch()"
         class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
@@ -59,9 +134,115 @@
     </div>
 
     <!-- Resultados encontrados -->
-    <div *ngIf="hasResults(); else noResults">
-      <h3 class="text-xl font-semibold mb-4">{{ "SEARCH.SONGS" | translate }}</h3>
-      <app-musics-table [songs]="searchResults()"></app-musics-table>
+    <div *ngIf="hasResults(); else noResults" class="results-container">
+      <div class="results-header flex items-center justify-between mb-6">
+        <h3 class="text-xl font-semibold">{{ "SEARCH.SONGS" | translate }}</h3>
+        <div class="header-actions flex items-center gap-3">
+          <!-- Botón reproducir todo -->
+          <button
+            (click)="playAllSongs()"
+            class="play-all-btn bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full flex items-center gap-2 font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            <mat-icon class="w-5 h-5">play_arrow</mat-icon>
+            <span>Reproducir Todo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Vista de lista moderna -->
+      <div class="songs-grid space-y-3" *ngIf="viewModeService.viewMode() === 'list'">
+        <div 
+          *ngFor="let song of searchResults(); let i = index" 
+          class="song-card bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center gap-4"
+        >
+          <!-- Número de posición -->
+          <div class="song-number text-gray-400 font-mono text-sm w-8 text-center">
+            {{ i + 1 }}
+          </div>
+
+          <!-- Imagen de la canción -->
+          <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
+            <img 
+              [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
+              [alt]="song.title + ' - ' + song.artist_name"
+              class="w-full h-full object-cover"
+              appImageFallback="assets/images/default-album-small.svg"
+            />
+          </div>
+
+          <!-- Botón de reproducción individual -->
+          <button
+            (click)="playSong(song)"
+            class="play-btn bg-green-500 hover:bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-md"
+            [attr.aria-label]="'Reproducir ' + song.title"
+          >
+            <mat-icon class="w-6 h-6">play_arrow</mat-icon>
+          </button>
+
+          <!-- Información de la canción -->
+          <div class="song-info flex-1 min-w-0">
+            <h4 class="font-semibold text-gray-900 truncate">{{ song.title }}</h4>
+            <p class="text-gray-600 text-sm truncate">{{ song.artist_name || 'Artista desconocido' }}</p>
+            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+              <span *ngIf="song.album_name" class="truncate">{{ song.album_name }}</span>
+              <span *ngIf="song.duration_formatted">• {{ song.duration_formatted }}</span>
+              <span *ngIf="song.genre_names_display">• {{ song.genre_names_display }}</span>
+            </div>
+          </div>
+
+          <!-- Acciones adicionales -->
+          <div class="song-actions flex items-center gap-2">
+            <button
+              (click)="addToPlaylist(song)"
+              class="action-btn text-gray-400 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
+              title="Agregar a playlist"
+            >
+              <mat-icon class="w-5 h-5">playlist_add</mat-icon>
+            </button>
+            <button
+              (click)="addToFavorites(song)"
+              class="action-btn text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
+              title="Agregar a favoritos"
+            >
+              <mat-icon class="w-5 h-5">favorite_border</mat-icon>
+            </button>
+            <button
+              (click)="showMoreOptions(song)"
+              class="action-btn text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Más opciones para ' + song.title"
+              title="Más opciones"
+            >
+              <mat-icon class="w-5 h-5">more_vert</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista de tabla tradicional -->
+      <div class="traditional-view" *ngIf="viewModeService.viewMode() === 'table'">
+        <app-musics-table 
+          [songs]="searchResults()" 
+          contextType="search"
+          [contextName]="'Búsqueda: ' + searchQuery()"
+        ></app-musics-table>
+      </div>
+      
+      <!-- Indicador de carga más resultados -->
+      <div class="load-more-indicator" *ngIf="isLoadingMore()">
+        <div class="flex items-center justify-center py-6">
+          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+          <span class="ml-3 text-gray-600 text-sm">Cargando más resultados...</span>
+        </div>
+      </div>
+      
+      <!-- Fin de resultados -->
+      <div class="end-results" *ngIf="!hasMoreResults() && pagination().count > 0">
+        <div class="text-center py-6 text-gray-500 text-sm">
+          Has visto todos los {{ pagination().count }} resultados
+        </div>
+      </div>
     </div>
 
     <!-- Sin resultados -->

@@ -4,7 +4,7 @@ export interface Album {
   title: string;
   artist_name: string;
   artist_id: string;
-  release_date: Date;
+  release_date: Date | null;
   cover_url?: string;
   genre?: string;
   total_tracks: number;
@@ -19,6 +19,6 @@ export interface AlbumListItem {
   artist_name: string;
   artist_id: string;
   cover_url?: string;
-  release_date: Date;
+  release_date: Date | null;
   total_tracks: number;
 }

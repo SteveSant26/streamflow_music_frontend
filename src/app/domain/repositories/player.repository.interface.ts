@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Song } from '../entities/song.entity';
-import { Playlist } from '../entities/playlist.entity';
+import { LegacyPlaylist as Playlist } from '../entities/playlist.entity';
 import { PlayerState } from '../entities/player-state.entity';
 
 export interface IPlayerRepository {

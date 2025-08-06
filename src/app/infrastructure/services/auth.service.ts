@@ -8,6 +8,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { SupabaseService } from '@app/infrastructure/supabase/supabase.service';
+import { ROUTES_CONFIG_AUTH, ROUTES_CONFIG_SITE } from '@app/config';
 import {
   AuthChangeEvent,
   Session,
@@ -66,7 +67,7 @@ export class AuthService {
       this.isAuthenticated.set(false);
       this._supabaseUser.set(null);
       this.session.set(null);
-      this.router.navigate(['/login']);
+      this.router.navigate([ROUTES_CONFIG_AUTH.LOGIN.link]);
       return null;
     }
     try {
@@ -82,7 +83,7 @@ export class AuthService {
       this.isAuthenticated.set(false);
       this._supabaseUser.set(null);
       this.session.set(null);
-      this.router.navigate(['/login']);
+      this.router.navigate([ROUTES_CONFIG_AUTH.LOGIN.link]);
       return null;
     }
   }
@@ -156,9 +157,9 @@ export class AuthService {
     console.log(`Auth event: ${event}`);
 
     if (event === 'SIGNED_IN' || (event === 'INITIAL_SESSION' && session)) {
-      this.router.navigate(['/home']);
+      this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
     } else if (event === 'SIGNED_OUT') {
-      this.router.navigate(['/login']);
+      this.router.navigate([ROUTES_CONFIG_AUTH.LOGIN.link]);
     }
   }
 

@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { Song } from '@app/domain/entities/song.entity';
 import { MusicsTable } from '@app/presentation/components/music/musics-table/musics-table';
+import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 
 export type MusicSectionType = 'grid' | 'table';
 
@@ -17,16 +18,28 @@ export interface MusicSectionButton {
 @Component({
   selector: 'app-music-section',
   standalone: true,
-  imports: [CommonModule, MatIconModule, TranslateModule, MusicsTable],
+  imports: [CommonModule, MatIconModule, TranslateModule, MusicsTable, ImageFallbackDirective],
   templateUrl: './music-section.html',
-  styleUrls: ['./music-section.css']
+  styleUrls: ['./music-section.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MusicSectionComponent {
   @Input() title = '';
   @Input() titleIcon = '';
   @Input() songs: Song[] = [];
   @Input() loading = false;
-  @Input() type: MusicSectionType = 'grid';
+  
+  private _type: MusicSectionType = 'grid';
+  @Input() 
+  set type(value: MusicSectionType) {
+    console.log('🎯 MusicSection: Type changed from', this._type, 'to:', value);
+    console.log('🎯 MusicSection: Will show', value === 'grid' ? 'GRID/CARDS' : 'TABLE');
+    this._type = value;
+  }
+  get type(): MusicSectionType {
+    return this._type;
+  }
+  
   @Input() primaryButton?: MusicSectionButton;
   @Input() actionButtons: MusicSectionButton[] = [];
   @Input() showPlayCount = true;
@@ -37,6 +50,7 @@ export class MusicSectionComponent {
   @Output() retryLoad = new EventEmitter<void>();
 
   onSongClick(song: Song): void {
+    console.log('🎵 MusicSection: Song clicked, current type is:', this.type);
     this.songSelected.emit(song);
   }
 

@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { AuthSessionUseCase } from './domain/usecases';
 import { LanguageService } from '@app/shared/services';
 import { MaterialThemeService } from './shared/services/material-theme.service';
+import { GlobalPlayerStateService } from './infrastructure/services/global-player-state.service';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ export class App implements OnInit {
   private readonly materialThemeService = inject(MaterialThemeService);
   private readonly authSessionUseCase = inject(AuthSessionUseCase);
   private readonly languageService = inject(LanguageService);
+  private readonly globalPlayerStateService = inject(GlobalPlayerStateService);
 
   ngOnInit() {
     // Initialize Material theme (se inicializa automáticamente)
@@ -24,6 +26,9 @@ export class App implements OnInit {
 
     // Initialize auth session
     this.initializeAuth();
+
+    // Initialize global player state
+    this.initializeGlobalPlayerState();
   }
   
   private initializeMaterialTheme() {
@@ -46,5 +51,11 @@ export class App implements OnInit {
       console.error('❌ App: Error inicializando sesión:', error);
       // No lanzar error para evitar que falle la inicialización de la app
     }
+  }
+
+  private initializeGlobalPlayerState() {
+    // Initialize the global player state service
+    console.log('🎵 Initializing global player state...');
+    this.globalPlayerStateService.ensureInitialized();
   }
 }

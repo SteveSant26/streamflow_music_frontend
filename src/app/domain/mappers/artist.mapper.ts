@@ -6,9 +6,8 @@ export class ArtistMapper {
     return {
       id: dto.id,
       name: dto.name,
-      biography: dto.biography,
-      country: dto.country,
-      image_url: dto.image_url,
+      biography: dto.biography ?? undefined,
+      image_url: dto.image_url ?? undefined,
       followers_count: dto.followers_count,
       is_verified: dto.is_verified,
       created_at: new Date(dto.created_at),
@@ -16,12 +15,11 @@ export class ArtistMapper {
     };
   }
 
-  static mapArtistListToArtists(dtos: ArtistDto[]): ArtistListItem[] {
+  static mapArtistDtoListToListItem(dtos: ArtistDto[]): ArtistListItem[] {
     return dtos.map(dto => ({
       id: dto.id,
       name: dto.name,
-      country: dto.country,
-      image_url: dto.image_url,
+      image_url: dto.image_url ?? undefined,
       followers_count: dto.followers_count,
       is_verified: dto.is_verified
     }));
