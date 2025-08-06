@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Card, Greeting } from '@app/presentation/components/ui';
 import { PlayListItemCard } from '@app/presentation/components/music';
@@ -155,8 +155,8 @@ export class HomeComponent implements OnInit {
     return count.toString();
   }
 
-  // Configuraciones para las secciones de música
-  get popularSectionConfig() {
+  // Configuraciones para las secciones de música (usando computed para reactividad)
+  readonly popularSectionConfig = computed(() => {
     const primaryButton: MusicSectionButton = {
       text: 'Ver todas',
       action: () => this.loadMostPopularSongs(),
@@ -164,7 +164,7 @@ export class HomeComponent implements OnInit {
     };
 
     // Usar el servicio global para determinar el tipo de vista
-    const viewType = this.viewModeService.viewMode() === 'list' ? 'grid' : 'table';
+    const viewType: 'grid' | 'table' = this.viewModeService.viewMode() === 'list' ? 'grid' : 'table';
 
     return {
       title: '🔥 Más Populares',
@@ -175,9 +175,9 @@ export class HomeComponent implements OnInit {
       emptyMessage: 'No se pudieron cargar las canciones populares',
       loadingMessage: 'Cargando canciones populares...'
     };
-  }
+  });
 
-  get randomSectionConfig() {
+  readonly randomSectionConfig = computed(() => {
     const actionButtons: MusicSectionButton[] = [
       {
         icon: 'refresh',
@@ -192,7 +192,7 @@ export class HomeComponent implements OnInit {
     ];
 
     // Usar el servicio global para determinar el tipo de vista
-    const viewType = this.viewModeService.viewMode() === 'list' ? 'grid' : 'table';
+    const viewType: 'grid' | 'table' = this.viewModeService.viewMode() === 'list' ? 'grid' : 'table';
 
     return {
       title: '🎲 Descubre Música Nueva',
@@ -204,5 +204,5 @@ export class HomeComponent implements OnInit {
       emptyMessage: 'No se pudieron cargar las canciones',
       loadingMessage: 'Cargando música...'
     };
-  }
+  });
 }
