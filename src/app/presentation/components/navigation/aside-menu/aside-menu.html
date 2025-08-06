@@ -64,8 +64,28 @@
       </div>
 
       <div class="space-y-2 mb-4">
-        @for (playlist of playlists(); track playlist.id) {
-          <app-side-menu-card [playlist]="playlist" />
+        @if (isLoadingPlaylists()) {
+          <div class="flex items-center justify-center py-4">
+            <div class="text-sm text-gray-500">Cargando playlists...</div>
+          </div>
+        } @else if (playlistsError()) {
+          <div class="flex items-center justify-center py-4">
+            <div class="text-sm text-red-500">{{ playlistsError() }}</div>
+          </div>
+        } @else if (showEmptyState()) {
+          <div class="flex flex-col items-center justify-center py-6 text-center">
+            <mat-icon class="text-gray-400 mb-2 text-3xl">queue_music</mat-icon>
+            <div class="text-sm text-gray-500 mb-2">No tienes playlists aún</div>
+            <button 
+              (click)="openCreatePlaylistDialog()"
+              class="text-xs text-blue-600 hover:text-blue-800 transition-colors">
+              Crea tu primera playlist
+            </button>
+          </div>
+        } @else {
+          @for (playlist of playlists(); track playlist.id) {
+            <app-side-menu-card [playlist]="playlist" />
+          }
         }
       </div>
     }

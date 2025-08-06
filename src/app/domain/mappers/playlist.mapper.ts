@@ -219,10 +219,25 @@ export class PlaylistMapper {
 
   // Mappers para respuestas paginadas
   static fromPaginatedDto(response: PaginatedPlaylistResponseDto): PaginatedPlaylistResponse {
+    // Validar que la respuesta tenga la estructura esperada
+    if (!response) {
+      throw new Error('Respuesta de playlists vacía o inválida');
+    }
+
+    if (!response.results || !Array.isArray(response.results)) {
+      console.warn('Respuesta de playlists sin resultados válidos:', response);
+      return {
+        count: response.count || 0,
+        next: response.next || null,
+        previous: response.previous || null,
+        results: []
+      };
+    }
+
     return {
-      count: response.count,
-      next: response.next,
-      previous: response.previous,
+      count: response.count || 0,
+      next: response.next || null,
+      previous: response.previous || null,
       results: response.results.map(PlaylistMapper.dtoToEntity)
     };
   }

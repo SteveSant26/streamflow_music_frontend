@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, computed, signal, OnInit, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, signal, OnInit, OnDestroy, effect } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStateService, LanguageService } from '@app/shared/services';
 import { LogoutUseCase } from '@app/domain/usecases';
+import { GetUserPlaylistsUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 // Interfaz simple para las playlists del sidebar
 interface SidebarPlaylist {
-  id: number;
+  id: string; // Cambiado de number a string para coincidir con la entidad Playlist
   name: string;
   cover: string;
   total_songs?: number;
@@ -42,7 +44,7 @@ interface SidebarPlaylist {
   styleUrls: ['./aside-menu.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AsideMenu implements OnInit {
+export class AsideMenu implements OnInit, OnDestroy {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   protected readonly ROUTES_CONFIG_MUSIC = ROUTES_CONFIG_MUSIC;
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
@@ -50,6 +52,7 @@ export class AsideMenu implements OnInit {
   protected readonly ROUTES_CONFIG_USER = ROUTES_CONFIG_USER;
   private readonly authStateService = inject(AuthStateService);
   private readonly logoutUseCase = inject(LogoutUseCase);
+  private readonly getUserPlaylistsUseCase = inject(GetUserPlaylistsUseCase);
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
   private readonly materialThemeService = inject(MaterialThemeService);
@@ -58,8 +61,19 @@ export class AsideMenu implements OnInit {
   isAuthenticated = this.authStateService.isAuthenticated;
   user = this.authStateService.user;
 
-  // Playlists signals - Por ahora usando mock data hasta tener los providers configurados
+  // Signals para playlists
   playlists = signal<SidebarPlaylist[]>([]);
+  isLoadingPlaylists = signal<boolean>(false);
+  playlistsError = signal<string | null>(null);
+
+  // Computed para estados de las playlists
+  readonly hasPlaylists = computed(() => this.playlists().length > 0);
+  readonly showEmptyState = computed(() => 
+    !this.isLoadingPlaylists() && !this.playlistsError() && !this.hasPlaylists()
+  );
+
+  // Gestión de suscripciones
+  private readonly subscriptions = new Set<Subscription>();
 
   constructor() {
     // Efecto para reaccionar a cambios de autenticación
@@ -67,7 +81,7 @@ export class AsideMenu implements OnInit {
       if (this.isAuthenticated()) {
         this.loadUserPlaylists();
       } else {
-        this.playlists.set([]);
+        this.clearPlaylists();
       }
     });
   }
@@ -159,17 +173,48 @@ export class AsideMenu implements OnInit {
     // El efecto en el constructor ya maneja la carga de playlists
   }
 
+  ngOnDestroy() {
+    // Cleanup de suscripciones
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.clear();
+  }
+
   private loadUserPlaylists() {
-    // NOTA: Usando datos mock con imágenes existentes
-    // Cuando los providers estén configurados, esto se conectará al servicio real
-    const mockPlaylists: SidebarPlaylist[] = [
-      { id: 1, name: 'Mis Favoritas', cover: '/assets/playlists/playlist1.jpg', total_songs: 45, is_public: false },
-      { id: 2, name: 'Workout Mix', cover: '/assets/playlists/playlist2.webp', total_songs: 32, is_public: false },
-      { id: 3, name: 'Chill Vibes', cover: '/assets/playlists/playlist3.jpg', total_songs: 28, is_public: false },
-      { id: 4, name: 'Road Trip', cover: '/assets/playlists/playlist4.jpg', total_songs: 51, is_public: false },
-    ];
-    
-    this.playlists.set(mockPlaylists);
+    this.isLoadingPlaylists.set(true);
+    this.playlistsError.set(null);
+
+    // Limitar a máximo 4 playlists para el sidebar
+    const filters = { page: 1, page_size: 4 };
+
+    const subscription = this.getUserPlaylistsUseCase.execute(filters).subscribe({
+      next: (playlists) => {
+        // Convertir las playlists del dominio al formato del sidebar
+        const sidebarPlaylists: SidebarPlaylist[] = playlists.map(playlist => ({
+          id: playlist.id,
+          name: playlist.name,
+          cover: '/assets/playlists/placeholder.jpg', // Por ahora usando placeholder hasta tener campo cover en backend
+          total_songs: playlist.total_songs || 0,
+          is_public: playlist.is_public
+        }));
+
+        this.playlists.set(sidebarPlaylists);
+        this.isLoadingPlaylists.set(false);
+      },
+      error: (error) => {
+        console.error('Error cargando playlists del usuario:', error);
+        this.playlistsError.set('No se pudieron cargar las playlists');
+        this.playlists.set([]);
+        this.isLoadingPlaylists.set(false);
+      }
+    });
+
+    this.subscriptions.add(subscription);
+  }
+
+  private clearPlaylists() {
+    this.playlists.set([]);
+    this.isLoadingPlaylists.set(false);
+    this.playlistsError.set(null);
   }
 
   openCreatePlaylistDialog() {

@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 
 interface Playlist {
-  id: number;
+  id: string; // Cambiado de number a string para coincidir con la entidad del dominio
   name: string;
   cover: string;
 }
