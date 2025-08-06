@@ -109,19 +109,10 @@ export class RandomSongsComponent implements OnInit {
   }
 
   showLyrics(song: Song) {
-    // Por ahora, usar el componente SongLyricsComponent directamente
-    import('../../../../shared/components/song-lyrics/song-lyrics.component').then(({ SongLyricsComponent }) => {
-      this.dialog.open(SongLyricsComponent, {
-        data: { songId: song.id, title: song.title, artist: song.artist_name },
-        width: '600px',
-        maxWidth: '90vw',
-        maxHeight: '80vh',
-        panelClass: ['lyrics-dialog-panel']
-      });
-    }).catch(() => {
-      // Fallback: mostrar mensaje
-      console.log(`Mostrando letras para: ${song.title} - ${song.artist_name}`);
-      alert(`Función de letras disponible para: ${song.title} - ${song.artist_name}`);
-    });
+    // TODO: Implementar diálogo de letras completo
+    console.log(`Mostrando letras para: ${song.title} - ${song.artist_name} (ID: ${song.id})`);
+    
+    // Por ahora, mostrar un alert como placeholder
+    alert(`Letras disponibles para:\n${song.title}\nArtista: ${song.artist_name}\n\n(Funcionalidad en desarrollo)`);
   }
 }

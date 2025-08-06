@@ -131,6 +131,12 @@
                   <mat-icon>play_arrow</mat-icon>
                 </button>
                 <button mat-icon-button 
+                        (click)="showLyrics(song)"
+                        matTooltip="Ver letras"
+                        color="accent">
+                  <mat-icon>lyrics</mat-icon>
+                </button>
+                <button mat-icon-button 
                         (click)="addToFavorites(song)"
                         matTooltip="Agregar a favoritos">
                   <mat-icon>favorite_border</mat-icon>
