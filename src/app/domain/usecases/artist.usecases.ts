@@ -26,7 +26,7 @@ export class GetAllArtistsUseCase {
   execute(params?: ArtistSearchParams): Observable<ArtistListItem[]> {
     return this.artistService.getAllArtists(params).pipe(
       map((response: PaginatedResponse<ArtistDto>) => 
-        ArtistMapper.mapArtistListToArtists(response.results)
+        ArtistMapper.mapArtistDtoListToListItem(response.results)
       )
     );
   }
@@ -47,7 +47,7 @@ export class GetPopularArtistsUseCase {
     
     return this.artistService.getAllArtists(searchParams).pipe(
       map((response: PaginatedResponse<ArtistDto>) => 
-        ArtistMapper.mapArtistListToArtists(response.results)
+        ArtistMapper.mapArtistDtoListToListItem(response.results)
       )
     );
   }

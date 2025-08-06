@@ -39,7 +39,6 @@ export function mapSongDtoToEntity(dto: SongDto): Song {
       id: dto.artist_id,
       name: dto.artist_name || 'Unknown Artist',
       biography: '',
-      country: '',
       image_url: dto.thumbnail_url,
       followers_count: 0,
       is_verified: false,

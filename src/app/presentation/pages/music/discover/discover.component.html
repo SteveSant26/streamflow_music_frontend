@@ -54,7 +54,6 @@
             <mat-icon *ngIf="artist.is_verified" class="verified-icon">verified</mat-icon>
           </h3>
           <p class="artist-info">{{ artist.followers_count | number }} seguidores</p>
-          <p class="artist-country" *ngIf="artist.country">{{ artist.country }}</p>
         </mat-card-content>
         <mat-card-actions>
           <button mat-button color="primary">Ver Perfil</button>
