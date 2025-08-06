@@ -1,4 +1,11 @@
-<div class="playlist-detail-container" *ngIf="playlist()">
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading()">
+  <mat-spinner></mat-spinner>
+  <p>Cargando playlist...</p>
+</div>
+
+<!-- Playlist Content -->
+<div class="playlist-detail-container" *ngIf="!loading() && playlist()">
   <div class="playlist-header">
     <div class="playlist-info">
       <h1>{{ playlist()!.name }}</h1>

@@ -1,3 +1,17 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  gap: 1rem;
+}
+
+.loading-container p {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 1.1rem;
+}
+
 .playlist-detail-container {
   padding: 24px;
   max-width: 1200px;

@@ -55,7 +55,7 @@ export class PlaylistMapper {
   static withSongsDtoToEntity(dto: PlaylistWithSongsDto): PlaylistWithSongs {
     return {
       ...this.dtoToEntity(dto),
-      songs: dto.songs.map(song => this.songDtoToEntity(song))
+      songs: dto.songs ? dto.songs.map(song => this.songDtoToEntity(song)) : []
     };
   }
 

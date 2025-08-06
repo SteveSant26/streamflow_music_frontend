@@ -1,7 +1,9 @@
 import { Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Playlist } from '../../../domain/entities/playlist.entity';
 import { PlaylistFacadeService } from '../../../domain/services/playlist-facade.service';
+import { ROUTES_CONFIG_MUSIC } from '../../../config/routes-config';
 
 @Component({
   selector: 'app-playlist-card',

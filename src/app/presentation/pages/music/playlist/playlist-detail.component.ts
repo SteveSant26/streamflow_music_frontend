@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { 
   GetPlaylistByIdUseCase,
   RemoveSongFromPlaylistUseCase
@@ -23,7 +24,8 @@ import { Song } from '../../../../domain/entities/song.entity';
     MatCardModule,
     MatIconModule,
     MatTableModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './playlist-detail.component.html',
   styleUrl: './playlist-detail.component.css'
