@@ -163,9 +163,10 @@
           <!-- Imagen de la canción -->
           <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
             <img 
-              [src]="song.thumbnail_url || 'assets/images/default-album.svg'" 
+              [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
               [alt]="song.title + ' - ' + song.artist_name"
               class="w-full h-full object-cover"
+              appImageFallback="assets/images/default-album.svg"
             />
           </div>
 

@@ -14,10 +14,11 @@ import { Song } from '@app/domain/entities/song.entity';
 import { PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 import { SongActionButtonComponent } from '../song/song-action-button/song-action-button.component';
+import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 
 @Component({
   selector: 'app-musics-table',
-  imports: [MusicsTablePlay, MatIcon, TranslateModule, CommonModule, SongActionButtonComponent],
+  imports: [MusicsTablePlay, MatIcon, TranslateModule, CommonModule, SongActionButtonComponent, ImageFallbackDirective],
   templateUrl: './musics-table.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
