@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
@@ -20,7 +20,8 @@ export interface MusicSectionButton {
   standalone: true,
   imports: [CommonModule, MatIconModule, TranslateModule, MusicsTable, ImageFallbackDirective],
   templateUrl: './music-section.html',
-  styleUrls: ['./music-section.css']
+  styleUrls: ['./music-section.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MusicSectionComponent {
   @Input() title = '';
