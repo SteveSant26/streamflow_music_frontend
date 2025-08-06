@@ -1,0 +1,164 @@
+<div class="random-songs-container">
+  <!-- Header -->
+  <div class="random-songs-header">
+    <div class="header-content">
+      <h1>Canciones Aleatorias</h1>
+      <p class="subtitle">Descubre música nueva con nuestra selección aleatoria</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button 
+              color="accent" 
+              (click)="refreshSongs()"
+              [disabled]="loading()"
+              matTooltip="Obtener nuevas canciones aleatorias">
+        <mat-icon>shuffle</mat-icon>
+        Mezclar
+      </button>
+      <button mat-fab 
+              color="primary" 
+              (click)="playAllSongs()"
+              [disabled]="loading() || songs().length === 0"
+              matTooltip="Reproducir todas">
+        <mat-icon>play_arrow</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="songs-stats" *ngIf="!loading() && songs().length > 0">
+    <mat-chip-set>
+      <mat-chip class="stats-chip">
+        <mat-icon matChipAvatar>queue_music</mat-icon>
+        {{ songs().length }} canciones
+      </mat-chip>
+      <mat-chip class="stats-chip">
+        <mat-icon matChipAvatar>shuffle</mat-icon>
+        Selección aleatoria
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando canciones aleatorias...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error() && !loading()">
+    <mat-icon class="error-icon">error</mat-icon>
+    <p>{{ error() }}</p>
+    <button mat-raised-button color="primary" (click)="loadRandomSongs()">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Songs Table -->
+  <div class="songs-table-container" *ngIf="!loading() && !error() && songs().length > 0">
+    <mat-card class="songs-card">
+      <mat-card-content>
+        <table mat-table [dataSource]="songs()" class="songs-table">
+          <!-- Thumbnail Column -->
+          <ng-container matColumnDef="thumbnail">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let song">
+              <div class="song-thumbnail">
+                <img [src]="song.thumbnail_url || '/assets/default-song.png'" 
+                     [alt]="song.title"
+                     class="thumbnail-image">
+                <div class="thumbnail-overlay">
+                  <button mat-icon-button 
+                          (click)="playSong(song)"
+                          class="play-button">
+                    <mat-icon>play_arrow</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Título</th>
+            <td mat-cell *matCellDef="let song">
+              <div class="song-info">
+                <div class="song-title">{{ song.title }}</div>
+                <div class="song-genres" *ngIf="song.genre_names">
+                  <mat-chip-set>
+                    <mat-chip *ngFor="let genre of song.genre_names?.slice(0, 2)" 
+                             class="genre-chip">
+                      {{ genre }}
+                    </mat-chip>
+                  </mat-chip-set>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Artist Column -->
+          <ng-container matColumnDef="artist">
+            <th mat-header-cell *matHeaderCellDef>Artista</th>
+            <td mat-cell *matCellDef="let song">
+              <span class="artist-name">{{ song.artist_name || 'Artista desconocido' }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Album Column -->
+          <ng-container matColumnDef="album">
+            <th mat-header-cell *matHeaderCellDef>Álbum</th>
+            <td mat-cell *matCellDef="let song">
+              <span class="album-name">{{ song.album_name || '-' }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Duration Column -->
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>Duración</th>
+            <td mat-cell *matCellDef="let song">
+              <span class="duration">{{ formatDuration(song.duration_seconds) }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let song">
+              <div class="song-actions">
+                <button mat-icon-button 
+                        (click)="playSong(song)"
+                        matTooltip="Reproducir"
+                        color="primary">
+                  <mat-icon>play_arrow</mat-icon>
+                </button>
+                <button mat-icon-button 
+                        (click)="addToFavorites(song)"
+                        matTooltip="Agregar a favoritos">
+                  <mat-icon>favorite_border</mat-icon>
+                </button>
+                <button mat-icon-button 
+                        (click)="addToPlaylist(song)"
+                        matTooltip="Agregar a playlist">
+                  <mat-icon>playlist_add</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+              [class.playing]="currentlyPlaying() === row.id"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading() && !error() && songs().length === 0">
+    <mat-icon class="empty-icon">shuffle</mat-icon>
+    <h2>No hay canciones disponibles</h2>
+    <p>No se pudieron cargar canciones aleatorias en este momento.</p>
+    <button mat-raised-button color="primary" (click)="loadRandomSongs()">
+      Intentar de nuevo
+    </button>
+  </div>
+</div>
