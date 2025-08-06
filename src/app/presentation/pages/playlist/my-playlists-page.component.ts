@@ -293,21 +293,21 @@ export class MyPlaylistsPageComponent implements OnInit {
   private readonly deletePlaylistUseCase = inject(DeleteMyPlaylistUseCase);
 
   // State
-  readonly playlists = signal<Playlist[]>([]);
-  readonly isLoading = signal(false);
-  readonly isLoadingMore = signal(false);
-  readonly searchTerm = signal('');
-  readonly selectedFilter = signal<'all' | 'public' | 'private'>('all');
-  readonly showCreateForm = signal(false);
-  readonly currentPage = signal(1);
-  readonly hasMoreData = signal(false);
+  playlists = signal<Playlist[]>([]);
+  isLoading = signal(false);
+  isLoadingMore = signal(false);
+  searchTerm = signal('');
+  selectedFilter = signal<'all' | 'public' | 'private'>('all');
+  showCreateForm = signal(false);
+  currentPage = signal(1);
+  hasMoreData = signal(false);
 
   // Computed values
-  readonly totalPlaylists = signal(0);
-  readonly publicPlaylists = signal(0);
-  readonly privatePlaylists = signal(0);
+  totalPlaylists = signal(0);
+  publicPlaylists = signal(0);
+  privatePlaylists = signal(0);
 
-  readonly filteredPlaylists = signal<Playlist[]>([]);
+  filteredPlaylists = signal<Playlist[]>([]);
 
   ngOnInit() {
     this.loadPlaylists();
