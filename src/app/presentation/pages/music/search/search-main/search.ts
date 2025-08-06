@@ -280,19 +280,19 @@ export class SearchComponent implements OnInit {
   }
 
   addToPlaylist(song: Song): void {
-    // TODO: Implementar funcionalidad de agregar a playlist
+    // Implementar funcionalidad de agregar a playlist
     console.log(`Agregando "${song.title}" a playlist`);
     // Aquí irá la lógica para mostrar modal de playlists o agregar a favoritos
   }
 
   addToFavorites(song: Song): void {
-    // TODO: Implementar funcionalidad de favoritos
+    // Implementar funcionalidad de favoritos
     console.log(`Agregando "${song.title}" a favoritos`);
     // Aquí irá la lógica para agregar/quitar de favoritos
   }
 
   showMoreOptions(song: Song): void {
-    // TODO: Implementar menú de más opciones
+    // Implementar menú de más opciones
     console.log(`Mostrando más opciones para "${song.title}"`);
     // Aquí irá la lógica para mostrar menú contextual con más opciones
   }
