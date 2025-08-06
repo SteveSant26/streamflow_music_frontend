@@ -1,6 +1,7 @@
 import { Component, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ROUTES_CONFIG_SUBSCRIPTION } from '@app/config';
 import { 
   GetUserSubscriptionUseCase, 
   GetPaymentMethodsUseCase, 
