@@ -9,25 +9,8 @@ import { Song } from '@app/domain/entities/song.entity';
   selector: 'app-add-to-current-playlist-button',
   standalone: true,
   imports: [MatIconModule, MatButtonModule, CommonModule],
-  template: `
-    <button
-      mat-icon-button
-      [title]="isInPlaylist ? 'Ya está en la playlist actual' : 'Agregar a playlist actual'"
-      [disabled]="isInPlaylist"
-      [class]="isInPlaylist 
-        ? 'text-green-500 cursor-not-allowed' 
-        : 'text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400'"
-      (click)="addToCurrentPlaylist()"
-      class="transition-colors duration-200"
-    >
-      <mat-icon>{{ isInPlaylist ? 'playlist_add_check' : 'playlist_add' }}</mat-icon>
-    </button>
-  `,
-  styles: [`
-    :host {
-      display: inline-block;
-    }
-  `]
+  templateUrl: './add-to-current-playlist-button.html',
+  styleUrl: './add-to-current-playlist-button.css'
 })
 export class AddToCurrentPlaylistButtonComponent {
   @Input() song!: Song;
