@@ -81,6 +81,18 @@ export interface PlaylistQueryParamsDto {
   page_size?: number;
 }
 
+// DTOs específicos para diferentes tipos de consultas
+export interface MyPlaylistsQueryParamsDto {
+  search?: string;
+  ordering?: string;
+  page?: number;
+  page_size?: number;
+}
+
+export interface PublicPlaylistsQueryParamsDto extends PlaylistQueryParamsDto {
+  is_public: true; // Siempre true para playlists públicas
+}
+
 export interface PlaylistSongQueryParamsDto {
   ordering?: string;
   page?: number;

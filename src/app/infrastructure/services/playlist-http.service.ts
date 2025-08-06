@@ -19,7 +19,9 @@ import {
   PlaylistWithSongsDto,
   PlaylistSongDto,
   PaginatedPlaylistResponseDto,
-  PaginatedPlaylistSongResponseDto
+  PaginatedPlaylistSongResponseDto,
+  MyPlaylistsQueryParamsDto,
+  PublicPlaylistsQueryParamsDto
 } from '../../domain/dtos/playlist.dto';
 import { PlaylistMapper } from '../../domain/mappers/playlist.mapper';
 import { IPlaylistRepository } from '../../domain/repositories/i-playlist.repository';

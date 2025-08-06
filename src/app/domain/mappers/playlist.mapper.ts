@@ -209,6 +209,60 @@ export class PlaylistMapper {
     
     return errors;
   }
+
+  // Métodos adicionales para los servicios HTTP
+
+  // Alias para compatibilidad
+  static readonly fromPlaylistDto = PlaylistMapper.dtoToEntity;
+  static readonly fromPlaylistSongDto = PlaylistMapper.songDtoToEntity;
+  static readonly fromPlaylistWithSongsDto = PlaylistMapper.withSongsDtoToEntity;
+
+  // Mappers para respuestas paginadas
+  static fromPaginatedDto(response: PaginatedPlaylistResponseDto): PaginatedPlaylistResponse {
+    return {
+      count: response.count,
+      next: response.next,
+      previous: response.previous,
+      results: response.results.map(PlaylistMapper.dtoToEntity)
+    };
+  }
+
+  static fromPaginatedPlaylistResponseDto = PlaylistMapper.fromPaginatedDto;
+
+  static fromPaginatedSongDto(response: PaginatedPlaylistSongResponseDto): PaginatedPlaylistSongResponse {
+    return {
+      count: response.count,
+      next: response.next,
+      previous: response.previous,
+      results: response.results.map(PlaylistMapper.songDtoToEntity)
+    };
+  }
+
+  static fromPaginatedPlaylistSongResponseDto = PlaylistMapper.fromPaginatedSongDto;
+
+  // Mappers para requests
+  static toCreatePlaylistRequestDto(data: CreatePlaylistDto): CreatePlaylistRequestDto {
+    return {
+      name: data.name,
+      description: data.description,
+      is_public: data.is_public
+    };
+  }
+
+  static toUpdatePlaylistRequestDto(data: UpdatePlaylistDto): UpdatePlaylistRequestDto {
+    return {
+      name: data.name,
+      description: data.description,
+      is_public: data.is_public
+    };
+  }
+
+  static toAddSongToPlaylistRequestDto(data: AddSongToPlaylistDto): AddSongToPlaylistRequestDto {
+    return {
+      song_id: data.song_id,
+      position: data.position
+    };
+  }
 }
 
 // Funciones de compatibilidad con la implementación anterior
