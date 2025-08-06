@@ -47,10 +47,16 @@ export class AsideMenu implements OnInit {
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
   private readonly materialThemeService = inject(MaterialThemeService);
+  private readonly getMyPlaylistsUseCase = inject(GetMyPlaylistsUseCase);
+  private readonly dialog = inject(MatDialog);
   readonly viewModeService = inject(ViewModeService);
 
   isAuthenticated = this.authStateService.isAuthenticated;
   user = this.authStateService.user;
+
+  // Playlists signals
+  playlists = signal<Playlist[]>([]);
+  isLoadingPlaylists = signal<boolean>(false);
 
   // Theme properties
   showThemeOptions = false;
@@ -134,11 +140,44 @@ export class AsideMenu implements OnInit {
       this.logout();
     }
   }
-  // Mock data para las playlists
-  playlists = [
-    { id: 1, name: 'Liked Songs', cover: '/assets/playlists/playlist1.jpg' },
-    { id: 2, name: 'Daily Mix 1', cover: '/assets/playlists/playlist2.webp' },
-    { id: 3, name: 'Rock Classics', cover: '/assets/playlists/playlist3.jpg' },
-    { id: 4, name: 'Chill Hits', cover: '/assets/playlists/playlist4.jpg' },
-  ];
+
+  ngOnInit() {
+    // Solo cargar playlists si el usuario está autenticado
+    if (this.isAuthenticated()) {
+      this.loadUserPlaylists();
+    }
+  }
+
+  private loadUserPlaylists() {
+    if (this.isLoadingPlaylists()) return;
+
+    this.isLoadingPlaylists.set(true);
+    
+    const params = {
+      page: 1,
+      page_size: 4, // Solo las primeras 4
+      ordering: '-created_at'
+    };
+
+    this.getMyPlaylistsUseCase.execute(params).subscribe({
+      next: (response) => {
+        if (response?.results) {
+          this.playlists.set(response.results);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading user playlists:', error);
+        this.playlists.set([]);
+      },
+      complete: () => {
+        this.isLoadingPlaylists.set(false);
+      }
+    });
+  }
+
+  openCreatePlaylistDialog() {
+    // Por ahora, redirigir a la página de mis playlists
+    // TODO: Implementar un dialog global para crear playlists
+    this.router.navigate(['/my-playlists']);
+  }
 }
