@@ -18,8 +18,8 @@ import {
   ROUTES_CONFIG_USER
 } from '@app/config/routes-config';
 import { TranslateModule } from '@ngx-translate/core';
-import { GetMyPlaylistsUseCase } from '../../../domain/usecases/playlist/my-playlists.usecases';
-import { Playlist } from '../../../domain/entities/playlist.entity';
+import { GetMyPlaylistsUseCase } from '@app/domain/usecases/playlist/my-playlists.usecases';
+import { Playlist } from '@app/domain/entities/playlist.entity';
 
 @Component({
   selector: 'app-aside-menu',
@@ -160,12 +160,12 @@ export class AsideMenu implements OnInit {
     };
 
     this.getMyPlaylistsUseCase.execute(params).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         if (response?.results) {
           this.playlists.set(response.results);
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading user playlists:', error);
         this.playlists.set([]);
       },
