@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, computed, signal, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, signal, OnInit, effect } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
@@ -60,6 +60,17 @@ export class AsideMenu implements OnInit {
 
   // Playlists signals - Por ahora usando mock data hasta tener los providers configurados
   playlists = signal<SidebarPlaylist[]>([]);
+
+  constructor() {
+    // Efecto para reaccionar a cambios de autenticación
+    effect(() => {
+      if (this.isAuthenticated()) {
+        this.loadUserPlaylists();
+      } else {
+        this.playlists.set([]);
+      }
+    });
+  }
 
   // Theme properties
   showThemeOptions = false;
@@ -145,20 +156,17 @@ export class AsideMenu implements OnInit {
   }
 
   ngOnInit() {
-    // Solo cargar playlists si el usuario está autenticado
-    if (this.isAuthenticated()) {
-      this.loadUserPlaylists();
-    }
+    // El efecto en el constructor ya maneja la carga de playlists
   }
 
   private loadUserPlaylists() {
-    // Por ahora usamos datos mock hasta que se configuren correctamente los providers
-    // En el futuro esto se reemplazará con el servicio real
+    // NOTA: Usando datos mock con imágenes existentes
+    // Cuando los providers estén configurados, esto se conectará al servicio real
     const mockPlaylists: SidebarPlaylist[] = [
-      { id: 1, name: 'Mis Favoritas', cover: '/assets/playlists/favorites.jpg', total_songs: 45, is_public: false },
-      { id: 2, name: 'Workout Mix', cover: '/assets/playlists/workout.jpg', total_songs: 32, is_public: true },
-      { id: 3, name: 'Chill Vibes', cover: '/assets/playlists/chill.jpg', total_songs: 28, is_public: false },
-      { id: 4, name: 'Road Trip', cover: '/assets/playlists/roadtrip.jpg', total_songs: 51, is_public: true },
+      { id: 1, name: 'Mis Favoritas', cover: '/assets/playlists/playlist1.jpg', total_songs: 45, is_public: false },
+      { id: 2, name: 'Workout Mix', cover: '/assets/playlists/playlist2.webp', total_songs: 32, is_public: false },
+      { id: 3, name: 'Chill Vibes', cover: '/assets/playlists/playlist3.jpg', total_songs: 28, is_public: false },
+      { id: 4, name: 'Road Trip', cover: '/assets/playlists/playlist4.jpg', total_songs: 51, is_public: false },
     ];
     
     this.playlists.set(mockPlaylists);
