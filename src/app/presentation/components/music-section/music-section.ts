@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { Song } from '@app/domain/entities/song.entity';
 import { MusicsTable } from '@app/presentation/components/music/musics-table/musics-table';
+import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 
 export type MusicSectionType = 'grid' | 'table';
 
@@ -17,7 +18,7 @@ export interface MusicSectionButton {
 @Component({
   selector: 'app-music-section',
   standalone: true,
-  imports: [CommonModule, MatIconModule, TranslateModule, MusicsTable],
+  imports: [CommonModule, MatIconModule, TranslateModule, MusicsTable, ImageFallbackDirective],
   templateUrl: './music-section.html',
   styleUrls: ['./music-section.css']
 })
