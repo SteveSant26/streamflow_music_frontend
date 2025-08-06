@@ -1,0 +1,122 @@
+<div class="music-player" *ngIf="playbackState$ | async as state">
+  <div class="player-container" *ngIf="state.currentSong">
+    <!-- Song Info -->
+    <div class="song-info" (click)="goToSongDetail(state.currentSong.id)">
+      <img 
+        [src]="state.currentSong.thumbnail_url" 
+        [alt]="state.currentSong.title"
+        class="album-cover"
+        (error)="onImageError($event)"
+      />
+      <div class="song-details">
+        <h4 class="song-title">{{ state.currentSong.title }}</h4>
+        <p class="artist-name">{{ state.currentSong.artist_name }}</p>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="player-controls">
+      <button mat-icon-button (click)="previousSong()">
+        <mat-icon>skip_previous</mat-icon>
+      </button>
+      
+      <button 
+        mat-fab 
+        color="primary" 
+        (click)="togglePlay()"
+        [disabled]="audioPlayer.isLoadingAudio()"
+      >
+        <mat-icon *ngIf="audioPlayer.isLoadingAudio()">refresh</mat-icon>
+        <mat-icon *ngIf="!audioPlayer.isLoadingAudio() && state.isPlaying">pause</mat-icon>
+        <mat-icon *ngIf="!audioPlayer.isLoadingAudio() && !state.isPlaying">play_arrow</mat-icon>
+      </button>
+      
+      <button mat-icon-button (click)="nextSong()">
+        <mat-icon>skip_next</mat-icon>
+      </button>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-container">
+      <span class="time-label">{{ formatTime(state.currentTime) }}</span>
+      <mat-slider 
+        class="progress-slider"
+        [max]="state.duration"
+        [disabled]="audioPlayer.isLoadingAudio()"
+      >
+        <input matSliderThumb [value]="state.currentTime" (input)="onSeek($event)">
+      </mat-slider>
+      <span class="time-label">{{ formatTime(state.duration) }}</span>
+    </div>
+
+    <!-- Additional Controls -->
+    <div class="additional-controls">
+      <button 
+        mat-icon-button 
+        (click)="toggleRepeat()"
+        [class.active]="currentPlaylist?.repeatMode !== 'none'"
+      >
+        <mat-icon *ngIf="currentPlaylist?.repeatMode === 'one'">repeat_one</mat-icon>
+        <mat-icon *ngIf="currentPlaylist?.repeatMode !== 'one'">repeat</mat-icon>
+      </button>
+      
+      <button 
+        mat-icon-button 
+        (click)="toggleShuffle()"
+        [class.active]="currentPlaylist?.isShuffled"
+      >
+        <mat-icon>shuffle</mat-icon>
+      </button>
+      
+      <button mat-icon-button (click)="toggleMute()">
+        <mat-icon *ngIf="audioPlayer.getVolume() > 0">volume_up</mat-icon>
+        <mat-icon *ngIf="audioPlayer.getVolume() === 0">volume_off</mat-icon>
+      </button>
+      
+      <mat-slider 
+        class="volume-slider"
+        [max]="1"
+        [step]="0.01"
+      >
+        <input matSliderThumb [value]="audioPlayer.getVolume()" (input)="onVolumeChange($event)">
+      </mat-slider>
+    </div>
+
+    <!-- Playlist Button -->
+    <button 
+      mat-icon-button 
+      (click)="togglePlaylist()"
+      class="playlist-toggle"
+      [class.active]="showPlaylist"
+    >
+      <mat-icon>queue_music</mat-icon>
+    </button>
+  </div>
+
+  <!-- Playlist Panel -->
+  <div class="playlist-panel" *ngIf="showPlaylist && currentPlaylist">
+    <div class="playlist-header">
+      <h3>{{ currentPlaylist.name }}</h3>
+      <button mat-icon-button (click)="showPlaylist = false">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    
+    <div class="playlist-items">
+      <div 
+        *ngFor="let song of currentPlaylist.songs; let i = index"
+        class="playlist-item"
+        [class.current]="song.id === state.currentSong?.id"
+        (click)="playFromPlaylist(i)"
+      >
+        <div class="song-number">{{ i + 1 }}</div>
+        <img [src]="song.thumbnail_url" [alt]="song.title" class="item-thumbnail">
+        <div class="item-info">
+          <div class="item-title">{{ song.title }}</div>
+          <div class="item-artist">{{ song.artist_name }}</div>
+        </div>
+        <div class="item-duration">{{ formatTime(song.duration) }}</div>
+      </div>
+    </div>
+  </div>
+</div>

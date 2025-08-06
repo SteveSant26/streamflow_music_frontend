@@ -1,4 +1,17 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Co@Component({
+  selector: 'app-music-player',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSliderModule,
+    MatCardModule,
+  ],
+  templateUrl: './music-player.component.html',
+  styleUrl: './music-player.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})ject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';

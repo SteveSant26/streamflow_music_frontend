@@ -1,0 +1,294 @@
+/* Music Player Component Styles */
+.music-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.player-container {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Song Info Section */
+.song-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.song-info:hover {
+  transform: scale(1.02);
+}
+
+.album-cover {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.song-details {
+  overflow: hidden;
+}
+
+.song-title {
+  margin: 0;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.artist-name {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* Player Controls */
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.player-controls button {
+  color: white;
+}
+
+.player-controls .mat-fab {
+  width: 48px;
+  height: 48px;
+}
+
+/* Progress Section */
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.time-label {
+  color: white;
+  font-size: 12px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.progress-slider {
+  flex: 1;
+}
+
+.progress-slider ::ng-deep .mat-slider-track-fill {
+  background-color: white;
+}
+
+.progress-slider ::ng-deep .mat-slider-track-background {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.progress-slider ::ng-deep .mat-slider-thumb {
+  background-color: white;
+  border-color: white;
+}
+
+/* Additional Controls */
+.additional-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.additional-controls button {
+  color: white;
+  transition: color 0.2s ease;
+}
+
+.additional-controls button.active {
+  color: #4CAF50;
+}
+
+.volume-slider {
+  width: 100px;
+}
+
+.volume-slider ::ng-deep .mat-slider-track-fill {
+  background-color: white;
+}
+
+.volume-slider ::ng-deep .mat-slider-track-background {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.volume-slider ::ng-deep .mat-slider-thumb {
+  background-color: white;
+  border-color: white;
+}
+
+/* Playlist Toggle */
+.playlist-toggle {
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.playlist-toggle.active {
+  color: #4CAF50;
+  transform: scale(1.1);
+}
+
+/* Playlist Panel */
+.playlist-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.playlist-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.playlist-items {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 20px;
+  gap: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.playlist-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.playlist-item.current {
+  background-color: rgba(102, 126, 234, 0.1);
+  border-left: 3px solid #667eea;
+}
+
+.song-number {
+  min-width: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.item-thumbnail {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.item-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-artist {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-duration {
+  font-size: 12px;
+  color: #666;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .player-container {
+    padding: 8px 16px;
+    gap: 12px;
+  }
+  
+  .song-info {
+    min-width: 150px;
+  }
+  
+  .song-title {
+    max-width: 100px;
+  }
+  
+  .artist-name {
+    max-width: 100px;
+  }
+  
+  .progress-container {
+    min-width: 150px;
+  }
+  
+  .volume-slider {
+    width: 60px;
+  }
+  
+  .additional-controls {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .additional-controls {
+    display: none;
+  }
+  
+  .progress-container {
+    min-width: 120px;
+  }
+}
