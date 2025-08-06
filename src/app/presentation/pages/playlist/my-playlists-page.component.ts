@@ -76,7 +76,7 @@ import { PlaylistCardComponent } from '../../components/playlist/playlist-card.c
         <div class="filter-chips">
           <mat-chip-set>
             <mat-chip 
-              [class.selected]="selectedFilter === 'all'"
+              [class.selected]="selectedFilter() === 'all'"
               (click)="applyFilter('all')">
               Todas ({{ totalPlaylists() }})
             </mat-chip>
@@ -95,7 +95,7 @@ import { PlaylistCardComponent } from '../../components/playlist/playlist-card.c
       </div>
 
       <!-- Create Form -->
-      <div class="create-form-section" *ngIf="showCreateForm">
+      <div class="create-form-section" *ngIf="showCreateForm()">
         <mat-card class="create-form-card">
           <mat-card-header>
             <mat-card-title>Nueva Playlist</mat-card-title>
@@ -381,7 +381,7 @@ export class MyPlaylistsPageComponent implements OnInit {
     if (search) {
       filtered = filtered.filter(p => 
         p.name.toLowerCase().includes(search) ||
-        (p.description && p.description.toLowerCase().includes(search))
+        p.description?.toLowerCase().includes(search)
       );
     }
     
