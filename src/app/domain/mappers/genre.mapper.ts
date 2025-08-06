@@ -6,9 +6,9 @@ export class GenreMapper {
     return {
       id: dto.id,
       name: dto.name,
-      description: dto.description,
-      color: dto.color_hex || '',
-      image_url: dto.image_url,
+      description: dto.description ?? undefined,
+      color: dto.color_hex ?? '',
+      image_url: dto.image_url ?? undefined,
       popularity_score: dto.popularity_score,
       created_at: new Date(dto.created_at),
       updated_at: new Date(dto.updated_at)
@@ -19,9 +19,9 @@ export class GenreMapper {
     return dtos.map(dto => ({
       id: dto.id,
       name: dto.name,
-      description: dto.description,
-      color: dto.color_hex || '',
-      image_url: dto.image_url,
+      description: dto.description ?? undefined,
+      color: dto.color_hex ?? '',
+      image_url: dto.image_url ?? undefined,
       popularity_score: dto.popularity_score
     }));
   }
