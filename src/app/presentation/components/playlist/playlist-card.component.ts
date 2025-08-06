@@ -156,6 +156,7 @@ import { ROUTES_CONFIG_MUSIC } from '../../../config/routes-config';
   `]
 })
 export class PlaylistCardComponent {
+  private readonly router = inject(Router);
   private readonly playlistFacade = inject(PlaylistFacadeService);
 
   // Inputs
@@ -175,6 +176,9 @@ export class PlaylistCardComponent {
   readonly isLoading = this.playlistFacade.isLoading;
 
   onPlaylistClick(): void {
+    // Navegar directamente al detalle de la playlist
+    this.router.navigate([ROUTES_CONFIG_MUSIC.PLAYLIST.getLinkWithId(this.playlist().id)]);
+    // También emitir el evento para compatibilidad
     this.playlistSelected.emit(this.playlist());
   }
 
