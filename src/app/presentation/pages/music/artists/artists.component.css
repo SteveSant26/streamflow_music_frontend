@@ -48,6 +48,11 @@
   cursor: pointer;
 }
 
+.filter-chip.selected {
+  background-color: #1976d2 !important;
+  color: white !important;
+}
+
 .loading-container,
 .error-container,
 .empty-state {

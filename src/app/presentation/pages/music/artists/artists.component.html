@@ -31,7 +31,7 @@
     <div class="filter-chips">
       <mat-chip-set>
         <mat-chip 
-          [selected]="verifiedOnly()"
+          [class.selected]="verifiedOnly()"
           (click)="toggleVerifiedFilter()"
           class="filter-chip">
           <mat-icon matChipAvatar>verified</mat-icon>
