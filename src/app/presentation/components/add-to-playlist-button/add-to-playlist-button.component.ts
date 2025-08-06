@@ -15,40 +15,8 @@ import { PlaylistService } from '@app/infrastructure/services/playlist.service';
     MatButtonModule,
     MatTooltipModule,
   ],
-  template: `
-    <button 
-      mat-icon-button
-      (click)="addToPlaylist()"
-      [disabled]="!song"
-      matTooltip="Agregar a playlist"
-      class="add-to-playlist-btn"
-      [class.compact]="compact"
-    >
-      <mat-icon>{{ compact ? 'playlist_add' : 'add' }}</mat-icon>
-    </button>
-  `,
-  styles: [`
-    .add-to-playlist-btn {
-      color: var(--primary-color, #1976d2);
-      transition: all 0.2s ease;
-    }
-
-    .add-to-playlist-btn:hover {
-      background-color: rgba(25, 118, 210, 0.1);
-      transform: scale(1.05);
-    }
-
-    .add-to-playlist-btn:disabled {
-      color: rgba(0, 0, 0, 0.26);
-      cursor: not-allowed;
-    }
-
-    .add-to-playlist-btn.compact {
-      width: 32px;
-      height: 32px;
-      min-width: 32px;
-    }
-  `]
+  templateUrl: './add-to-playlist-button.component.html',
+  styleUrl: './add-to-playlist-button.component.css'
 })
 export class AddToPlaylistButtonComponent {
   @Input() song: Song | null = null;

@@ -1,0 +1,10 @@
+<button 
+  mat-icon-button
+  (click)="addToPlaylist()"
+  [disabled]="!song"
+  matTooltip="Agregar a playlist"
+  class="add-to-playlist-btn"
+  [class.compact]="compact"
+>
+  <mat-icon>{{ compact ? 'playlist_add' : 'add' }}</mat-icon>
+</button>
