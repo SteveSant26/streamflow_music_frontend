@@ -58,8 +58,10 @@
     </div>
     
     <!-- Grid layout (when viewMode is 'list') -->
+    <!-- DEBUG: viewModeService.viewMode() = {{ debugViewMode() }} -->
     <div *ngIf="!loading() && popularSongs().length > 0 && viewModeService.viewMode() === 'list'" 
          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+      <!-- SHOWING GRID LAYOUT -->
       <button 
         *ngFor="let song of popularSongs()" 
         class="song-card bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors w-full text-left"
@@ -78,6 +80,7 @@
     
     <!-- Table layout (when viewMode is 'table') -->
     <div *ngIf="!loading() && popularSongs().length > 0 && viewModeService.viewMode() === 'table'" class="mt-4">
+      <!-- SHOWING TABLE LAYOUT -->
       <app-musics-table [songs]="popularSongs()"></app-musics-table>
     </div>
     
@@ -147,6 +150,7 @@
     <!-- Grid layout (when viewMode is 'list') -->
     <div *ngIf="!loading() && randomSongs().length > 0 && viewModeService.viewMode() === 'list'" 
          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+      <!-- SHOWING GRID FOR RANDOM SONGS -->
       <button 
         *ngFor="let song of randomSongs()" 
         class="song-card bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors w-full text-left"
@@ -165,6 +169,7 @@
     
     <!-- Table layout (when viewMode is 'table') -->
     <div *ngIf="!loading() && randomSongs().length > 0 && viewModeService.viewMode() === 'table'" class="mt-4">
+      <!-- SHOWING TABLE FOR RANDOM SONGS -->
       <app-musics-table [songs]="randomSongs()"></app-musics-table>
     </div>
     

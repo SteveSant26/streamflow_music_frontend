@@ -99,9 +99,31 @@ export class HomeComponent implements OnInit {
     effect(() => {
       const currentMode = this.viewModeService.viewMode();
       console.log('🏠 Home Effect: View mode changed to:', currentMode);
+      console.log('🏠 Home Effect: Should show', currentMode === 'list' ? 'GRID/CARDS' : 'TABLE');
       console.log('🏠 Force change detection...');
       this.cdr.markForCheck(); // Forzar detección de cambios
     });
+  }
+
+  // Método para debug - llamar desde el template
+  debugViewMode(): string {
+    const mode = this.viewModeService.viewMode();
+    console.log('🔍 Debug from template - current mode:', mode);
+    return mode;
+  }
+
+  // Método para resetear el viewMode (para debug)
+  resetViewMode(): void {
+    console.log('🔄 Resetting view mode to list');
+    this.viewModeService.setViewMode('list');
+  }
+
+  // Método para cambiar manualmente el viewMode (para debug)
+  toggleViewModeManually(): void {
+    const current = this.viewModeService.viewMode();
+    const newMode = current === 'list' ? 'table' : 'list';
+    console.log('🔄 Manual toggle from', current, 'to', newMode);
+    this.viewModeService.setViewMode(newMode);
   }
 
   private loadHomeData(): void {
