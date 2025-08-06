@@ -130,7 +130,7 @@
     <div class="random-songs-grid" *ngIf="!isLoadingRandomSongs() && !randomSongsError()">
       <mat-card *ngFor="let song of randomSongs()" class="song-card">
         <div class="song-image-container">
-          <img [src]="song.cover_url || '/assets/default-song.png'" 
+          <img [src]="song.thumbnail_url || '/assets/default-song.png'" 
                [alt]="song.title" 
                class="song-image">
           <div class="song-overlay">
@@ -144,7 +144,7 @@
         <mat-card-content>
           <h4>{{ song.title }}</h4>
           <p class="song-artist">{{ song.artist_name }}</p>
-          <p class="song-duration">{{ formatDuration(song.duration) }}</p>
+          <p class="song-duration">{{ song.duration_formatted || formatDuration(song.duration_seconds || 0) }}</p>
         </mat-card-content>
       </mat-card>
     </div>
