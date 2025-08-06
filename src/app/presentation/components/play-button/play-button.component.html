@@ -1,0 +1,11 @@
+<button 
+  mat-icon-button
+  (click)="togglePlay()"
+  [disabled]="!song"
+  [matTooltip]="isCurrentSongPlaying() ? 'Pausar' : 'Reproducir'"
+  class="play-btn"
+  [class.playing]="isCurrentSongPlaying()"
+  [class.compact]="compact"
+>
+  <mat-icon>{{ isCurrentSongPlaying() ? 'pause' : 'play_arrow' }}</mat-icon>
+</button>

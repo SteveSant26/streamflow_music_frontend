@@ -1,0 +1,94 @@
+/* Play Button Component Styles */
+.play-btn {
+  color: var(--primary-color, #1976d2);
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.play-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.play-btn:hover::before {
+  transform: translateX(100%);
+}
+
+.play-btn:hover {
+  background-color: rgba(25, 118, 210, 0.1);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+.play-btn.playing {
+  color: var(--accent-color, #ff4081);
+  background-color: rgba(255, 64, 129, 0.1);
+}
+
+.play-btn.playing:hover {
+  background-color: rgba(255, 64, 129, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);
+}
+
+.play-btn:disabled {
+  color: rgba(0, 0, 0, 0.26);
+  cursor: not-allowed;
+  transform: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.play-btn:disabled::before {
+  display: none;
+}
+
+.play-btn.compact {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+}
+
+.play-btn.compact .mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Animation for play/pause transition */
+.play-btn .mat-icon {
+  transition: transform 0.2s ease;
+}
+
+.play-btn:active .mat-icon {
+  transform: scale(0.9);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .play-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+  
+  .play-btn.compact {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+  }
+  
+  .play-btn.compact .mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
