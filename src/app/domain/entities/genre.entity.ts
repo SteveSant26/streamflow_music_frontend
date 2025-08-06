@@ -4,6 +4,8 @@ export interface Genre {
   name: string;
   description?: string;
   color?: string;
+  image_url?: string;
+  popularity_score: number;
   created_at: Date;
   updated_at: Date;
 }
@@ -13,4 +15,6 @@ export interface GenreListItem {
   name: string;
   description?: string;
   color?: string;
+  image_url?: string;
+  popularity_score: number;
 }

@@ -7,7 +7,9 @@ export class GenreMapper {
       id: dto.id,
       name: dto.name,
       description: dto.description,
-      color: dto.color,
+      color: dto.color_hex || '',
+      image_url: dto.image_url,
+      popularity_score: dto.popularity_score,
       created_at: new Date(dto.created_at),
       updated_at: new Date(dto.updated_at)
     };
@@ -18,7 +20,9 @@ export class GenreMapper {
       id: dto.id,
       name: dto.name,
       description: dto.description,
-      color: dto.color
+      color: dto.color_hex || '',
+      image_url: dto.image_url,
+      popularity_score: dto.popularity_score
     }));
   }
 }
