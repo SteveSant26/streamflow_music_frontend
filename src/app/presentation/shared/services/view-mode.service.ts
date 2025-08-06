@@ -32,9 +32,11 @@ export class ViewModeService {
    * Cambia el modo de vista y lo persiste en localStorage
    */
   public setViewMode(mode: ViewMode): void {
+    console.log('🔄 ViewModeService: Changing view mode from', this._viewMode(), 'to', mode);
     this._viewMode.set(mode);
     try {
       localStorage.setItem(this.STORAGE_KEY, mode);
+      console.log('💾 ViewModeService: Saved to localStorage:', mode);
     } catch (error) {
       console.warn('No se pudo guardar el modo de vista:', error);
     }

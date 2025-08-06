@@ -27,7 +27,17 @@ export class MusicSectionComponent {
   @Input() titleIcon = '';
   @Input() songs: Song[] = [];
   @Input() loading = false;
-  @Input() type: MusicSectionType = 'grid';
+  
+  private _type: MusicSectionType = 'grid';
+  @Input() 
+  set type(value: MusicSectionType) {
+    console.log('🎯 MusicSection: Type changed to:', value);
+    this._type = value;
+  }
+  get type(): MusicSectionType {
+    return this._type;
+  }
+  
   @Input() primaryButton?: MusicSectionButton;
   @Input() actionButtons: MusicSectionButton[] = [];
   @Input() showPlayCount = true;
@@ -38,6 +48,7 @@ export class MusicSectionComponent {
   @Output() retryLoad = new EventEmitter<void>();
 
   onSongClick(song: Song): void {
+    console.log('🎵 MusicSection: Song clicked, current type is:', this.type);
     this.songSelected.emit(song);
   }
 

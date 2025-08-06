@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Card, Greeting } from '@app/presentation/components/ui';
 import { PlayListItemCard } from '@app/presentation/components/music';
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
-  readonly viewModeService = inject(ViewModeService);
+  private readonly viewModeService = inject(ViewModeService);
 
   // Route configs
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
@@ -78,6 +78,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadHomeData();
+    
+    // Effect para debuggear cambios de view mode
+    effect(() => {
+      const currentMode = this.viewModeService.viewMode();
+      console.log('🏠 Home Effect: View mode changed to:', currentMode);
+    });
   }
 
   private loadHomeData(): void {
@@ -164,7 +170,10 @@ export class HomeComponent implements OnInit {
     };
 
     // Usar el servicio global para determinar el tipo de vista
-    const viewType: 'grid' | 'table' = this.viewModeService.viewMode() === 'list' ? 'grid' : 'table';
+    const currentViewMode = this.viewModeService.viewMode();
+    const viewType: 'grid' | 'table' = currentViewMode === 'list' ? 'grid' : 'table';
+    
+    console.log('🏠 Popular Section - Current view mode:', currentViewMode, 'Using type:', viewType);
 
     return {
       title: '🔥 Más Populares',
@@ -192,7 +201,10 @@ export class HomeComponent implements OnInit {
     ];
 
     // Usar el servicio global para determinar el tipo de vista
-    const viewType: 'grid' | 'table' = this.viewModeService.viewMode() === 'list' ? 'grid' : 'table';
+    const currentViewMode = this.viewModeService.viewMode();
+    const viewType: 'grid' | 'table' = currentViewMode === 'list' ? 'grid' : 'table';
+    
+    console.log('🏠 Random Section - Current view mode:', currentViewMode, 'Using type:', viewType);
 
     return {
       title: '🎲 Descubre Música Nueva',
