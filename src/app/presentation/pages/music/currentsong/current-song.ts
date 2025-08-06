@@ -10,14 +10,13 @@ import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { ROUTES_CONFIG_SITE } from '@app/config';
 import { MatIconModule } from '@angular/material/icon';
-import { GlobalPlayerStateService } from '@app/infrastructure/services';
+import { GlobalPlayerStateService, LyricsService } from '@app/infrastructure/services';
 import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
 import { GlobalPlaylistModalComponent } from '@app/shared/components/global-playlist-modal/global-playlist-modal';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
-import { LyricsService } from '@app/infrastructure/services/lyrics.service';
 
 interface CurrentSongView {
   id: string;
