@@ -227,7 +227,7 @@ export class PlaylistMapper {
     };
   }
 
-  static fromPaginatedPlaylistResponseDto = PlaylistMapper.fromPaginatedDto;
+  static readonly fromPaginatedPlaylistResponseDto = PlaylistMapper.fromPaginatedDto;
 
   static fromPaginatedSongDto(response: PaginatedPlaylistSongResponseDto): PaginatedPlaylistSongResponse {
     return {
@@ -238,7 +238,7 @@ export class PlaylistMapper {
     };
   }
 
-  static fromPaginatedPlaylistSongResponseDto = PlaylistMapper.fromPaginatedSongDto;
+  static readonly fromPaginatedPlaylistSongResponseDto = PlaylistMapper.fromPaginatedSongDto;
 
   // Mappers para requests
   static toCreatePlaylistRequestDto(data: CreatePlaylistDto): CreatePlaylistRequestDto {
@@ -250,11 +250,13 @@ export class PlaylistMapper {
   }
 
   static toUpdatePlaylistRequestDto(data: UpdatePlaylistDto): UpdatePlaylistRequestDto {
-    return {
-      name: data.name,
-      description: data.description,
-      is_public: data.is_public
-    };
+    const result: UpdatePlaylistRequestDto = {};
+    
+    if (data.name !== undefined) result.name = data.name;
+    if (data.description !== undefined) result.description = data.description;
+    if (data.is_public !== undefined) result.is_public = data.is_public;
+    
+    return result;
   }
 
   static toAddSongToPlaylistRequestDto(data: AddSongToPlaylistDto): AddSongToPlaylistRequestDto {
