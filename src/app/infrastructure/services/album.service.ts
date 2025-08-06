@@ -3,8 +3,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { AlbumDto, AlbumSearchParams, AlbumsByArtistParams, PopularAlbumsParams } from '../../domain/dtos/album.dto';
-import { Album, AlbumListItem } from '../../domain/entities/album.entity';
+import { API_CONFIG_ALBUMS } from '../../config/end-points/api-config-albums';
+import { AlbumDto, AlbumSearchParams } from '../../domain/dtos/album.dto';
+import { Album } from '../../domain/entities/album.entity';
 import { AlbumMapper } from '../../domain/mappers/album.mapper';
 import { PaginatedResponse } from '../../shared/interfaces/paginated-response.interface';
 
@@ -12,53 +13,45 @@ import { PaginatedResponse } from '../../shared/interfaces/paginated-response.in
   providedIn: 'root'
 })
 export class AlbumService {
-  private readonly apiUrl = `${environment.apiUrl}/api/albums`;
+  private readonly baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getAlbumById(id: string): Observable<Album> {
-    return this.http.get<AlbumDto>(`${this.apiUrl}/${id}/`)
+    return this.http.get<AlbumDto>(`${this.baseUrl}${API_CONFIG_ALBUMS.albums.getById(id)}`)
       .pipe(
         map(dto => AlbumMapper.mapAlbumDtoToEntity(dto))
       );
   }
 
-  searchAlbums(params: AlbumSearchParams): Observable<AlbumListItem[]> {
-    let httpParams = new HttpParams().set('title', params.title);
-    
-    if (params.limit) {
-      httpParams = httpParams.set('limit', params.limit.toString());
-    }
-
-    return this.http.get<PaginatedResponse<AlbumDto>>(`${this.apiUrl}/search/`, { params: httpParams })
-      .pipe(
-        map(response => AlbumMapper.mapAlbumListToAlbums(response.results))
-      );
-  }
-
-  getAlbumsByArtist(params: AlbumsByArtistParams): Observable<AlbumListItem[]> {
-    let httpParams = new HttpParams().set('artist_id', params.artist_id);
-    
-    if (params.limit) {
-      httpParams = httpParams.set('limit', params.limit.toString());
-    }
-
-    return this.http.get<PaginatedResponse<AlbumDto>>(`${this.apiUrl}/by-artist/`, { params: httpParams })
-      .pipe(
-        map(response => AlbumMapper.mapAlbumListToAlbums(response.results))
-      );
-  }
-
-  getPopularAlbums(params?: PopularAlbumsParams): Observable<AlbumListItem[]> {
+  getAllAlbums(params?: AlbumSearchParams): Observable<PaginatedResponse<AlbumDto>> {
     let httpParams = new HttpParams();
     
-    if (params?.limit) {
-      httpParams = httpParams.set('limit', params.limit.toString());
+    if (params?.title) {
+      httpParams = httpParams.set('title', params.title);
+    }
+    
+    if (params?.artist_name) {
+      httpParams = httpParams.set('artist_name', params.artist_name);
+    }
+    
+    if (params?.artist_id) {
+      httpParams = httpParams.set('artist_id', params.artist_id);
+    }
+    
+    if (params?.search) {
+      httpParams = httpParams.set('search', params.search);
+    }
+    
+    // Agregar paginación
+    if (params?.page) {
+      httpParams = httpParams.set('page', params.page.toString());
+    }
+    
+    if (params?.page_size) {
+      httpParams = httpParams.set('page_size', params.page_size.toString());
     }
 
-    return this.http.get<PaginatedResponse<AlbumDto>>(`${this.apiUrl}/popular/`, { params: httpParams })
-      .pipe(
-        map(response => AlbumMapper.mapAlbumListToAlbums(response.results))
-      );
+    return this.http.get<PaginatedResponse<AlbumDto>>(`${this.baseUrl}${API_CONFIG_ALBUMS.albums.list}`, { params: httpParams });
   }
 }
