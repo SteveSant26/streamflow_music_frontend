@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { RegisterSessionUseCase, SocialLoginUseCase } from '@app/domain/usecases';
 import { RegisterCredentials } from '@app/domain/repositories/i-auth.repository';
 import { MatIcon } from '@angular/material/icon';
-import { ROUTES_CONFIG_AUTH } from '@app/config';
+import { ROUTES_CONFIG_AUTH, ROUTES_CONFIG_SITE } from '@app/config';
 import {
   AuthError,
   ValidationError,
