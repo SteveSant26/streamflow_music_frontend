@@ -2,9 +2,8 @@
 export interface ArtistDto {
   id: string;
   name: string;
-  biography?: string;
-  country?: string;
-  image_url?: string;
+  biography?: string | null;
+  image_url?: string | null;
   followers_count: number;
   is_verified: boolean;
   created_at: string;

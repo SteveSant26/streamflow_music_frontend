@@ -4,12 +4,15 @@ export interface AlbumDto {
   title: string;
   artist_id: string;
   artist_name: string;
-  release_date: string; // ISO date string
-  description?: string;
-  cover_url?: string;
+  artist_verified: boolean;
+  release_date: string | null; // ISO date string
+  description?: string | null;
+  cover_image_url?: string | null;
   total_tracks: number;
-  duration_formatted: string;
   play_count: number;
+  source_type: 'manual' | 'youtube' | 'spotify' | 'soundcloud';
+  source_id?: string | null;
+  source_url?: string | null;
   created_at: string;
   updated_at: string;
 }
