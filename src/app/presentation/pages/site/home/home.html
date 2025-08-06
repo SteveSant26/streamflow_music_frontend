@@ -52,17 +52,118 @@
     </div>
   </div>
   
-  <app-music-section
-    [title]="'🔥 Más Populares'"
-    [type]="currentViewType()"
-    [songs]="popularSongs()"
-    [loading]="loading()"
-    [primaryButton]="popularSectionConfig().primaryButton"
-    [emptyMessage]="'No se pudieron cargar las canciones populares'"
-    [loadingMessage]="'Cargando canciones populares...'"
-    (songSelected)="playSong($event)"
-    (retryLoad)="refreshHomeData()"
-  ></app-music-section>
+  <div class="music-section mb-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">🔥 Más Populares</h2>
+      <button 
+        class="text-white hover:text-gray-300 text-sm font-medium"
+        (click)="loadMostPopularSongs()"
+      >
+        Ver todas
+      </button>
+    </div>
+    
+    <!-- Loading state -->
+    <div *ngIf="loading()" class="flex justify-center items-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+      <span class="ml-3 text-white">Cargando canciones populares...</span>
+    </div>
+
+    <!-- Resultados encontrados - IGUAL QUE SEARCH -->
+    <div *ngIf="!loading() && popularSongs().length > 0" class="results-container">
+      <!-- Vista de lista moderna (IGUAL QUE SEARCH) -->
+      <div class="songs-grid space-y-3" *ngIf="viewModeService.viewMode() === 'list'">
+        <div 
+          *ngFor="let song of popularSongs(); let i = index" 
+          class="song-card bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center gap-4"
+        >
+          <!-- Número de posición -->
+          <div class="song-number text-gray-400 font-mono text-sm w-8 text-center">
+            {{ i + 1 }}
+          </div>
+
+          <!-- Imagen de la canción -->
+          <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
+            <img 
+              [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
+              [alt]="song.title + ' - ' + song.artist_name"
+              class="w-full h-full object-cover"
+            />
+          </div>
+
+          <!-- Botón de reproducción individual -->
+          <button
+            (click)="playSong(song)"
+            class="play-btn bg-green-500 hover:bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-md"
+            [attr.aria-label]="'Reproducir ' + song.title"
+          >
+            <mat-icon class="w-6 h-6">play_arrow</mat-icon>
+          </button>
+
+          <!-- Información de la canción -->
+          <div class="song-info flex-1 min-w-0">
+            <h4 class="font-semibold text-gray-900 truncate">{{ song.title }}</h4>
+            <p class="text-gray-600 text-sm truncate">{{ song.artist_name || 'Artista desconocido' }}</p>
+            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+              <span *ngIf="song.album_name" class="truncate">{{ song.album_name }}</span>
+              <span *ngIf="song.duration_formatted">• {{ song.duration_formatted }}</span>
+              <span *ngIf="song.genre_names_display">• {{ song.genre_names_display }}</span>
+            </div>
+          </div>
+
+          <!-- Acciones adicionales -->
+          <div class="song-actions flex items-center gap-2">
+            <button
+              (click)="addToPlaylist(song)"
+              class="action-btn text-gray-400 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
+              title="Agregar a playlist"
+            >
+              <mat-icon class="w-5 h-5">playlist_add</mat-icon>
+            </button>
+            <button
+              (click)="addToFavorites(song)"
+              class="action-btn text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
+              title="Agregar a favoritos"
+            >
+              <mat-icon class="w-5 h-5">favorite_border</mat-icon>
+            </button>
+            <button
+              (click)="showMoreOptions(song)"
+              class="action-btn text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Más opciones para ' + song.title"
+              title="Más opciones"
+            >
+              <mat-icon class="w-5 h-5">more_vert</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista de tabla tradicional (IGUAL QUE SEARCH) -->
+      <div class="traditional-view" *ngIf="viewModeService.viewMode() === 'table'">
+        <app-musics-table 
+          [songs]="popularSongs()" 
+          contextType="popular"
+          [contextName]="'Más Populares'"
+        ></app-musics-table>
+      </div>
+    </div>
+    
+    <!-- Empty state -->
+    <div *ngIf="!loading() && popularSongs().length === 0" class="text-center py-8">
+      <mat-icon class="text-gray-400 text-4xl mb-2">music_note</mat-icon>
+      <p class="text-gray-400">No se pudieron cargar las canciones populares</p>
+      <button 
+        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        (click)="refreshHomeData()"
+      >
+        Reintentar
+      </button>
+    </div>
+  </div>
 
   <!-- Playlists Recomendadas -->
   <div class="mb-8">
@@ -86,16 +187,116 @@
   </div>
 
   <!-- Trending Now / Canciones Aleatorias -->
-  <app-music-section
-    [title]="'🎲 Descubre Música Nueva'"
-    [type]="currentViewType()"
-    [songs]="randomSongs()"
-    [loading]="loading()"
-    [actionButtons]="randomSectionConfig().actionButtons"
-    [showPlayCount]="false"
-    [emptyMessage]="'No se pudieron cargar las canciones'"
-    [loadingMessage]="'Cargando música...'"
-    (songSelected)="playSong($event)"
-    (retryLoad)="refreshHomeData()"
-  ></app-music-section>
+  <div class="music-section">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">🎲 Descubre Música Nueva</h2>
+      <button 
+        class="text-white hover:text-gray-300 text-sm font-medium"
+        (click)="loadRandomSongs()"
+      >
+        Actualizar
+      </button>
+    </div>
+    
+    <!-- Loading state -->
+    <div *ngIf="loading()" class="flex justify-center items-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+      <span class="ml-3 text-white">Cargando música...</span>
+    </div>
+
+    <!-- Resultados encontrados - IGUAL QUE SEARCH -->
+    <div *ngIf="!loading() && randomSongs().length > 0" class="results-container">
+      <!-- Vista de lista moderna (IGUAL QUE SEARCH) -->
+      <div class="songs-grid space-y-3" *ngIf="viewModeService.viewMode() === 'list'">
+        <div 
+          *ngFor="let song of randomSongs(); let i = index" 
+          class="song-card bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center gap-4"
+        >
+          <!-- Número de posición -->
+          <div class="song-number text-gray-400 font-mono text-sm w-8 text-center">
+            {{ i + 1 }}
+          </div>
+
+          <!-- Imagen de la canción -->
+          <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
+            <img 
+              [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
+              [alt]="song.title + ' - ' + song.artist_name"
+              class="w-full h-full object-cover"
+            />
+          </div>
+
+          <!-- Botón de reproducción individual -->
+          <button
+            (click)="playSong(song)"
+            class="play-btn bg-green-500 hover:bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-md"
+            [attr.aria-label]="'Reproducir ' + song.title"
+          >
+            <mat-icon class="w-6 h-6">play_arrow</mat-icon>
+          </button>
+
+          <!-- Información de la canción -->
+          <div class="song-info flex-1 min-w-0">
+            <h4 class="font-semibold text-gray-900 truncate">{{ song.title }}</h4>
+            <p class="text-gray-600 text-sm truncate">{{ song.artist_name || 'Artista desconocido' }}</p>
+            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+              <span *ngIf="song.album_name" class="truncate">{{ song.album_name }}</span>
+              <span *ngIf="song.duration_formatted">• {{ song.duration_formatted }}</span>
+              <span *ngIf="song.genre_names_display">• {{ song.genre_names_display }}</span>
+            </div>
+          </div>
+
+          <!-- Acciones adicionales -->
+          <div class="song-actions flex items-center gap-2">
+            <button
+              (click)="addToPlaylist(song)"
+              class="action-btn text-gray-400 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
+              title="Agregar a playlist"
+            >
+              <mat-icon class="w-5 h-5">playlist_add</mat-icon>
+            </button>
+            <button
+              (click)="addToFavorites(song)"
+              class="action-btn text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
+              title="Agregar a favoritos"
+            >
+              <mat-icon class="w-5 h-5">favorite_border</mat-icon>
+            </button>
+            <button
+              (click)="showMoreOptions(song)"
+              class="action-btn text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Más opciones para ' + song.title"
+              title="Más opciones"
+            >
+              <mat-icon class="w-5 h-5">more_vert</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista de tabla tradicional (IGUAL QUE SEARCH) -->
+      <div class="traditional-view" *ngIf="viewModeService.viewMode() === 'table'">
+        <app-musics-table 
+          [songs]="randomSongs()" 
+          contextType="random"
+          [contextName]="'Descubre Música Nueva'"
+        ></app-musics-table>
+      </div>
+    </div>
+    
+    <!-- Empty state -->
+    <div *ngIf="!loading() && randomSongs().length === 0" class="text-center py-8">
+      <mat-icon class="text-gray-400 text-4xl mb-2">music_note</mat-icon>
+      <p class="text-gray-400">No se pudieron cargar las canciones</p>
+      <button 
+        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        (click)="refreshHomeData()"
+      >
+        Reintentar
+      </button>
+    </div>
+  </div>
 </div>

@@ -1,8 +1,10 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { Card, Greeting } from '@app/presentation/components/ui';
-import { PlayListItemCard } from '@app/presentation/components/music';
-import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
+import { PlayListItemCard, MusicsTable } from '@app/presentation/components/music';
+import { MusicSectionButton } from '@app/presentation/components/music-section/music-section';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
@@ -21,8 +23,10 @@ import { Song } from '../../../../domain/entities/song.entity';
     Card,
     Greeting,
     PlayListItemCard,
-    MusicSectionComponent,
     TranslateModule,
+    MatIconModule,
+    MatButtonModule,
+    MusicsTable,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
@@ -260,4 +264,23 @@ export class HomeComponent implements OnInit {
       loadingMessage: 'Cargando música...'
     };
   });
+
+  // Métodos para los botones de acción (igual que Search)
+  addToPlaylist(song: Song): void {
+    // Implementar funcionalidad de agregar a playlist
+    console.log(`Agregando "${song.title}" a playlist`);
+    // Aquí irá la lógica para mostrar modal de playlists o agregar a favoritos
+  }
+
+  addToFavorites(song: Song): void {
+    // Implementar funcionalidad de favoritos
+    console.log(`Agregando "${song.title}" a favoritos`);
+    // Aquí irá la lógica para agregar/quitar de favoritos
+  }
+
+  showMoreOptions(song: Song): void {
+    // Implementar menú de más opciones
+    console.log(`Mostrando más opciones para "${song.title}"`);
+    // Aquí irá la lógica para mostrar menú contextual con más opciones
+  }
 }
