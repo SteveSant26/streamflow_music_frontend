@@ -65,6 +65,8 @@ export class SearchComponent implements OnInit {
   isLoadingMore = signal(false);
   hasSearched = signal(false);
   showFilters = signal(false);
+  viewMode = signal<'list' | 'table'>('list'); // Vista por defecto: lista moderna
+  includeYouTube = signal(false); // Por defecto en false
   pagination = signal<PaginationInfo>({
     count: 0,
     next: null,
@@ -83,45 +85,17 @@ export class SearchComponent implements OnInit {
   isLoading = computed(() => this.isSearching() || this.isLoadingMore());
 
   ngOnInit() {
-    // Configurar búsqueda automática con debounce
+    // Solo escuchar cambios para limpiar resultados si el campo se vacía
     this.searchControl.valueChanges
       .pipe(
         takeUntilDestroyed(),
-        debounceTime(400),
-        distinctUntilChanged(),
-        switchMap((query) => {
-          if (!query || query.trim().length < 2) {
-            this.resetSearch();
-            return of(null);
-          }
-          
-          // Crear un observable que llame a performSearch
-          this.isSearching.set(true);
-          const currentPage = 1;
-          
-          const searchParams: SongSearchParams = {
-            ...this.searchFiltersService.buildSearchParams(),
-            search: query,
-            page: currentPage,
-            page_size: 20,
-            include_youtube: true,
-          };
-
-          return this.searchSongsPaginatedUseCase.execute(searchParams);
-        }),
-        catchError((error) => {
-          console.error('Error en búsqueda:', error);
-          this.isSearching.set(false);
-          return of({ songs: [], pagination: this.pagination() });
-        })
+        debounceTime(300),
+        distinctUntilChanged()
       )
-      .subscribe((result) => {
-        if (result) {
-          this.searchResults.set(result.songs);
-          this.pagination.set(result.pagination);
-          this.hasSearched.set(true);
+      .subscribe((query) => {
+        if (!query || query.trim().length === 0) {
+          this.resetSearch();
         }
-        this.isSearching.set(false);
       });
   }
 
@@ -156,7 +130,7 @@ export class SearchComponent implements OnInit {
       search: query,
       page: currentPage,
       page_size: 20,
-      include_youtube: true, // Siempre incluir YouTube
+      include_youtube: this.includeYouTube(), // Usar el signal
     };
 
     this.searchSongsPaginatedUseCase.execute(searchParams)
@@ -198,6 +172,22 @@ export class SearchComponent implements OnInit {
 
   toggleFilters() {
     this.showFilters.update(current => !current);
+  }
+
+  toggleViewMode() {
+    this.viewMode.update(current => current === 'list' ? 'table' : 'list');
+  }
+
+  toggleYouTube() {
+    this.includeYouTube.update(current => !current);
+  }
+
+  performManualSearch() {
+    const query = this.searchControl.value?.trim();
+    if (!query || query.length < 2) {
+      return;
+    }
+    this.performSearch(query, true);
   }
 
   onGenreClick(genreName: string) {
@@ -271,6 +261,23 @@ export class SearchComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al reproducir canción:', error);
+      }
+    });
+  }
+
+  playAllSongs(): void {
+    const songs = this.searchResults();
+    if (songs.length === 0) return;
+
+    // Reproducir la primera canción de la lista
+    const firstSong = songs[0];
+    this.playSongUseCase.executeSimple(firstSong.id).subscribe({
+      next: () => {
+        console.log(`Reproduciendo lista de búsqueda: ${songs.length} canciones`);
+        console.log(`Iniciando con: ${firstSong.title} - ${firstSong.artist_name}`);
+      },
+      error: (error) => {
+        console.error('Error al reproducir lista:', error);
       }
     });
   }
