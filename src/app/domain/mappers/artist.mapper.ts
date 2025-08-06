@@ -7,7 +7,6 @@ export class ArtistMapper {
       id: dto.id,
       name: dto.name,
       biography: dto.biography,
-      country: dto.country,
       image_url: dto.image_url,
       followers_count: dto.followers_count,
       is_verified: dto.is_verified,

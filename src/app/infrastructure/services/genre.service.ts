@@ -35,6 +35,38 @@ export class GenreService {
       httpParams = httpParams.set('search', params.search);
     }
     
+    if (params?.has_color !== undefined) {
+      httpParams = httpParams.set('has_color', params.has_color.toString());
+    }
+    
+    if (params?.has_description !== undefined) {
+      httpParams = httpParams.set('has_description', params.has_description.toString());
+    }
+    
+    if (params?.has_image !== undefined) {
+      httpParams = httpParams.set('has_image', params.has_image.toString());
+    }
+    
+    if (params?.min_popularity_score) {
+      httpParams = httpParams.set('min_popularity_score', params.min_popularity_score.toString());
+    }
+    
+    if (params?.max_popularity_score) {
+      httpParams = httpParams.set('max_popularity_score', params.max_popularity_score.toString());
+    }
+    
+    if (params?.created_after) {
+      httpParams = httpParams.set('created_after', params.created_after);
+    }
+    
+    if (params?.created_before) {
+      httpParams = httpParams.set('created_before', params.created_before);
+    }
+    
+    if (params?.ordering) {
+      httpParams = httpParams.set('ordering', params.ordering);
+    }
+    
     // Agregar paginación
     if (params?.page) {
       httpParams = httpParams.set('page', params.page.toString());
