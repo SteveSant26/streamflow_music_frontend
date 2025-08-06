@@ -59,7 +59,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly playlistService: PlaylistService,
     private readonly globalPlaylistModalService: GlobalPlaylistModalService,
     private readonly materialThemeService: MaterialThemeService,
-    private readonly lyricsService: LyricsService,
+    private readonly getSongLyricsUseCase: GetSongLyricsUseCase,
+    private readonly updateSongLyricsUseCase: UpdateSongLyricsUseCase,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {
@@ -458,7 +459,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     this.currentSong.lyricsError = undefined;
     this.cdr.detectChanges();
 
-    this.lyricsService.getSongLyrics(this.currentSong.id)
+    this.getSongLyricsUseCase.execute(this.currentSong.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -468,7 +469,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
           }
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error cargando letras:', error);
           if (this.currentSong) {
             this.currentSong.lyricsError = 'Error al cargar las letras';
@@ -498,7 +499,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     this.currentSong.lyricsError = undefined;
     this.cdr.detectChanges();
 
-    this.lyricsService.updateSongLyrics(this.currentSong.id, true)
+    this.updateSongLyricsUseCase.execute(this.currentSong.id, true)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -508,7 +509,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
           }
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error actualizando letras:', error);
           if (this.currentSong) {
             this.currentSong.lyricsError = 'Error al actualizar las letras';
