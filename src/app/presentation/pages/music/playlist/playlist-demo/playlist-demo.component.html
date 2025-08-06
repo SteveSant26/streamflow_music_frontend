@@ -64,7 +64,9 @@
             
             <div class="flex items-center gap-2">
               <span class="text-sm text-gray-500">{{ song.duration_formatted || 'Unknown' }}</span>
-              <app-song-action-button [song]="song" size="small" />
+              <button mat-icon-button color="primary">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
             </div>
           </div>
         }
