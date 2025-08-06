@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Song } from '../../entities/song.entity';
 import { PlayerState } from '../../entities/player-state.entity';
@@ -19,7 +19,7 @@ export interface PlaybackState {
 @Injectable({
   providedIn: 'root'
 })
-export class PlayerUseCase {
+export class PlayerUseCase implements OnDestroy {
   private readonly currentSong$ = new BehaviorSubject<Song | null>(null);
   private readonly playbackState$ = new BehaviorSubject<PlaybackState>({
     currentSong: null,
@@ -38,7 +38,7 @@ export class PlayerUseCase {
   private audioElement: HTMLAudioElement | null = null;
   
   // Event listeners to track for cleanup
-  private eventListeners: Array<{event: string, handler: any}> = [];
+  private eventListeners: {event: string, handler: any}[] = [];
   
   // Interval para limpiar audios duplicados periódicamente
   private cleanupInterval: any = null;
@@ -241,7 +241,7 @@ export class PlayerUseCase {
     try {
       const allAudioElements = document.querySelectorAll('audio');
       let pausedCount = 0;
-      let totalAudios = allAudioElements.length;
+      const totalAudios = allAudioElements.length;
       let playingAudios = 0;
       
       console.log(`[Player UseCase] 🛑 MODO ULTRA AGRESIVO: Encontrados ${totalAudios} elementos de audio`);

@@ -31,7 +31,7 @@ export class MusicLibraryService {
     });
   }
 
-  getRandomSongs(count: number = 10): Observable<Song[]> {
+  getRandomSongs(count = 10): Observable<Song[]> {
     return this.getRandomSongsUseCase.execute(1, count);
   }
 

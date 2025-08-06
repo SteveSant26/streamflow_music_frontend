@@ -24,7 +24,7 @@ export class GlobalPlayerStateService {
   constructor(
     private readonly playerUseCase: PlayerUseCase,
     private readonly musicLibraryService: MusicLibraryService,
-    @Inject(PLATFORM_ID) private readonly platformId: Object,
+    @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {
     console.log('🔴 GlobalPlayerStateService constructor called');
 

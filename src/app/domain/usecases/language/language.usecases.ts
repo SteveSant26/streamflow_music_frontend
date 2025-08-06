@@ -11,7 +11,7 @@ export type Language = 'en' | 'es';
 export class GetCurrentLanguageUseCase {
   constructor(
     private readonly translateService: TranslateService,
-    @Inject(PLATFORM_ID) private readonly platformId: Object
+    @Inject(PLATFORM_ID) private readonly platformId: object
   ) {}
 
   execute(): Observable<string> {
@@ -33,7 +33,7 @@ export class GetCurrentLanguageUseCase {
   providedIn: 'root'
 })
 export class GetAvailableLanguagesUseCase {
-  execute(): Observable<Array<{ code: Language; name: string }>> {
+  execute(): Observable<{ code: Language; name: string }[]> {
     return of([
       { code: 'en', name: 'English' },
       { code: 'es', name: 'Español' }
@@ -47,7 +47,7 @@ export class GetAvailableLanguagesUseCase {
 export class ChangeLanguageUseCase {
   constructor(
     private readonly translateService: TranslateService,
-    @Inject(PLATFORM_ID) private readonly platformId: Object
+    @Inject(PLATFORM_ID) private readonly platformId: object
   ) {}
 
   execute(language: Language): Observable<void> {

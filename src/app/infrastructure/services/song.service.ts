@@ -42,7 +42,7 @@ export class SongService {
    * Get most popular songs
    * GET /api/songs/most-popular/
    */
-  getMostPopular(page: number = 1, pageSize: number = 10): Observable<PaginatedResponse<SongListDto>> {
+  getMostPopular(page = 1, pageSize = 10): Observable<PaginatedResponse<SongListDto>> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString());
@@ -54,7 +54,7 @@ export class SongService {
    * Get random songs
    * GET /api/songs/random/
    */
-  getRandomSongs(page: number = 1, pageSize: number = 10): Observable<PaginatedResponse<SongListDto>> {
+  getRandomSongs(page = 1, pageSize = 10): Observable<PaginatedResponse<SongListDto>> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString());

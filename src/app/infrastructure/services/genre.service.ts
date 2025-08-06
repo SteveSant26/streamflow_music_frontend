@@ -79,7 +79,7 @@ export class GenreService {
     return this.http.get<PaginatedResponse<GenreDto>>(`${this.baseUrl}${API_CONFIG_GENRES.genres.list}`, { params: httpParams });
   }
 
-  getPopularGenres(page: number = 1, pageSize: number = 10): Observable<PaginatedResponse<GenreDto>> {
+  getPopularGenres(page = 1, pageSize = 10): Observable<PaginatedResponse<GenreDto>> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString());

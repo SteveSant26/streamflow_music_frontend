@@ -33,7 +33,7 @@ export class PlaylistService {
   /**
    * Crear nueva playlist desde lista de canciones con contexto inteligente
    */
-  createPlaylist(songs: Song[], name: string = 'Queue', startIndex: number = 0): void {
+  createPlaylist(songs: Song[], name = 'Queue', startIndex = 0): void {
     const items: PlaylistItem[] = songs.map((song, index) => ({
       ...song,
       position: index,
@@ -293,7 +293,7 @@ export class PlaylistService {
     }
 
     try {
-      let newSongs: Song[] = [];
+      const newSongs: Song[] = [];
       const nextPage = (playlist.currentPage || 1) + 1;
 
       switch (playlist.contextType) {
@@ -411,7 +411,7 @@ export class PlaylistService {
     const playlist = this.currentPlaylist();
     if (!playlist) return;
 
-    const modes: Array<'none' | 'one' | 'all'> = ['none', 'one', 'all'];
+    const modes: ('none' | 'one' | 'all')[] = ['none', 'one', 'all'];
     const currentIndex = modes.indexOf(playlist.repeatMode);
     const nextMode = modes[(currentIndex + 1) % modes.length];
 
@@ -703,7 +703,7 @@ export class PlaylistService {
     const playlist = this.currentPlaylist();
     if (!playlist) return -1;
 
-    let nextIndex = playlist.currentIndex + 1;
+    const nextIndex = playlist.currentIndex + 1;
 
     // Si llegamos al final de la playlist
     if (nextIndex >= playlist.items.length) {

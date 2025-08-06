@@ -13,7 +13,7 @@ export class LocalStorageThemeRepository implements ThemeRepository {
   private readonly themeSubject: BehaviorSubject<ThemeEntity>;
   private readonly systemThemeMediaQuery: MediaQueryList | null;
 
-  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private readonly platformId: object) {
     this.systemThemeMediaQuery = isPlatformBrowser(this.platformId) 
       ? window.matchMedia('(prefers-color-scheme: dark)')
       : null;

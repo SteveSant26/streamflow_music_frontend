@@ -527,7 +527,7 @@ export class SubscriptionManagementComponent implements OnInit {
   }
 
   formatCardBrand(brand: string): string {
-    const brandMap: { [key: string]: string } = {
+    const brandMap: Record<string, string> = {
       visa: 'Visa',
       mastercard: 'Mastercard',
       amex: 'American Express',
@@ -541,7 +541,7 @@ export class SubscriptionManagementComponent implements OnInit {
   }
 
   getStatusText(status: string): string {
-    const statusMap: { [key: string]: string } = {
+    const statusMap: Record<string, string> = {
       active: 'Activa',
       canceled: 'Cancelada',
       incomplete: 'Incompleta',

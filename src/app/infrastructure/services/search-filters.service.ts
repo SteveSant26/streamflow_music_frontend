@@ -5,7 +5,7 @@ export interface SearchFilter {
   id: string;
   name: string;
   type: 'text' | 'select' | 'range' | 'boolean' | 'date';
-  options?: Array<{ value: string | number | boolean; label: string }>;
+  options?: { value: string | number | boolean; label: string }[];
   value?: any;
   placeholder?: string;
   min?: number;

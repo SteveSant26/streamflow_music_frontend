@@ -20,7 +20,7 @@ import { PlaylistService } from '@app/infrastructure/services/playlist.service';
 })
 export class AddToPlaylistButtonComponent {
   @Input() song: Song | null = null;
-  @Input() compact: boolean = false;
+  @Input() compact = false;
 
   private readonly playlistService = inject(PlaylistService);
 

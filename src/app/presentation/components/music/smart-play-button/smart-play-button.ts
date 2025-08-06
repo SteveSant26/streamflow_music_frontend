@@ -16,7 +16,7 @@ export class SmartPlayButtonComponent {
   @Input() song!: Song;
   @Input() context: 'search' | 'random' | 'popular' | 'album' | 'artist' | 'single' = 'single';
   @Input() contextSongs: Song[] = []; // Lista de canciones del contexto actual
-  @Input() startIndex: number = 0; // Índice de la canción en el contexto
+  @Input() startIndex = 0; // Índice de la canción en el contexto
   
   private readonly playlistService = inject(PlaylistService);
 

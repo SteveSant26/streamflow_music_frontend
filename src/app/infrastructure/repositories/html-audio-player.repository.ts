@@ -102,7 +102,7 @@ export class HtmlAudioPlayerRepository implements IPlayerRepository {
     });
   };
 
-  constructor(@Inject(PLATFORM_ID) platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
 
     if (this.isBrowser) {

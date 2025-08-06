@@ -37,7 +37,7 @@ export class IncrementPlayCountUseCase {
 export class GetMostPopularSongsUseCase {
   private readonly songService = inject(SongService);
 
-  execute(page: number = 1, pageSize: number = 10): Observable<Song[]> {
+  execute(page = 1, pageSize = 10): Observable<Song[]> {
     return this.songService
       .getMostPopular(page, pageSize)
       .pipe(map((response) => mapSongListToSongs(response.results)));
@@ -48,7 +48,7 @@ export class GetMostPopularSongsUseCase {
 export class GetRandomSongsUseCase {
   private readonly songService = inject(SongService);
 
-  execute(page: number = 1, pageSize: number = 10): Observable<Song[]> {
+  execute(page = 1, pageSize = 10): Observable<Song[]> {
     return this.songService
       .getRandomSongs(page, pageSize)
       .pipe(map((response) => mapSongListToSongs(response.results)));
@@ -138,7 +138,7 @@ export class PlaySongUseCase {
   }
 
   // Método de compatibilidad para llamadas existentes
-  executeSimple(songId: string, createNewPlaylist: boolean = true): Observable<Song> {
+  executeSimple(songId: string, createNewPlaylist = true): Observable<Song> {
     return this.getSongUseCase.execute(songId).pipe(
       tap((song) => {
         if (createNewPlaylist) {

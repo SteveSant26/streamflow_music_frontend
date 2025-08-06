@@ -29,7 +29,7 @@ import { AddSongToPlaylistDialogComponent } from '../../playlist/add-song-to-pla
 })
 export class SongActionButtonComponent {
   @Input({ required: true }) song!: Song;
-  @Input() showQuickPlay: boolean = true;
+  @Input() showQuickPlay = true;
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
 
   private readonly playerUseCase = inject(PlayerUseCase);
