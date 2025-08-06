@@ -1,0 +1,78 @@
+.create-playlist-dialog {
+  min-width: 400px;
+  max-width: 500px;
+}
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  color: var(--primary-color, #1976d2);
+}
+
+mat-dialog-content {
+  padding: 0 1.5rem;
+}
+
+.w-full {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.privacy-section {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--surface-variant, #f5f5f5);
+  border-radius: 8px;
+  border: 1px solid var(--outline-variant, #e0e0e0);
+}
+
+.privacy-checkbox {
+  margin-bottom: 0.5rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.privacy-description {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.875rem;
+  color: var(--on-surface-variant, #666);
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem 0;
+  margin: 0;
+}
+
+button[mat-raised-button] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 140px;
+  justify-content: center;
+}
+
+mat-spinner {
+  margin-right: 0.5rem;
+}
+
+/* Dark mode support */
+:host-context(.dark-theme) .privacy-section {
+  background: var(--surface-variant-dark, #2c2c2c);
+  border-color: var(--outline-variant-dark, #404040);
+}
+
+:host-context(.dark-theme) .privacy-description {
+  color: var(--on-surface-variant-dark, #b3b3b3);
+}
