@@ -1,0 +1,91 @@
+<div class="subscription-plans-container">
+  <div class="plans-header">
+    <h1>Elige tu plan</h1>
+    <p>Disfruta de música sin límites con nuestros planes premium</p>
+  </div>
+
+  <div class="billing-toggle" *ngIf="plans().length > 0">
+    <button
+      [class.active]="billingPeriod() === 'month'"
+      (click)="setBillingPeriod('month')"
+    >
+      Mensual
+    </button>
+    <button
+      [class.active]="billingPeriod() === 'year'"
+      (click)="setBillingPeriod('year')"
+    >
+      Anual
+      <span class="discount-badge">Ahorra 20%</span>
+    </button>
+  </div>
+
+  <div class="plans-grid" *ngIf="!loading(); else loadingTemplate">
+    <div
+      *ngFor="let plan of filteredPlans()"
+      class="plan-card"
+      [class.current-plan]="isCurrentPlan(plan.id)"
+      [class.recommended]="plan.name.toLowerCase().includes('premium')"
+    >
+      <div class="plan-header">
+        <h3>{{ plan.name }}</h3>
+        <div class="plan-price">
+          <span class="amount">{{ formatPrice(plan.price) }}</span>
+          <span class="period"
+            >/{{ plan.interval === 'month' ? 'mes' : 'año' }}</span
+          >
+        </div>
+        <p class="plan-description">{{ plan.description }}</p>
+      </div>
+
+      <div class="plan-features">
+        <ul>
+          <li *ngFor="let feature of plan.features">
+            <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            {{ feature }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="plan-action">
+        <button
+          *ngIf="!isCurrentPlan(plan.id)"
+          class="subscribe-btn"
+          [class.loading]="loading()"
+          [disabled]="loading()"
+          (click)="selectPlan(plan)"
+        >
+          {{
+            hasActiveSubscription() ? 'Cambiar plan' : 'Seleccionar plan'
+          }}
+        </button>
+
+        <button
+          *ngIf="isCurrentPlan(plan.id)"
+          class="current-plan-btn"
+          disabled
+        >
+          Plan actual
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Cargando planes...</p>
+    </div>
+  </ng-template>
+
+  <div class="error-state" *ngIf="error()">
+    <p>{{ error() }}</p>
+    <button (click)="loadPlans()">Reintentar</button>
+  </div>
+</div>

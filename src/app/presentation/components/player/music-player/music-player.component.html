@@ -54,16 +54,16 @@
       <button 
         mat-icon-button 
         (click)="toggleRepeat()"
-        [class.active]="currentPlaylist?.repeatMode !== 'none'"
+        [class.active]="currentPlaylist()?.repeatMode !== 'none'"
       >
-        <mat-icon *ngIf="currentPlaylist?.repeatMode === 'one'">repeat_one</mat-icon>
-        <mat-icon *ngIf="currentPlaylist?.repeatMode !== 'one'">repeat</mat-icon>
+        <mat-icon *ngIf="currentPlaylist()?.repeatMode === 'one'">repeat_one</mat-icon>
+        <mat-icon *ngIf="currentPlaylist()?.repeatMode !== 'one'">repeat</mat-icon>
       </button>
       
       <button 
         mat-icon-button 
         (click)="toggleShuffle()"
-        [class.active]="currentPlaylist?.isShuffled"
+        [class.active]="currentPlaylist()?.isShuffled"
       >
         <mat-icon>shuffle</mat-icon>
       </button>
@@ -87,17 +87,17 @@
       mat-icon-button 
       (click)="togglePlaylist()"
       class="playlist-toggle"
-      [class.active]="showPlaylist"
+      [class.active]="showPlaylist()"
     >
       <mat-icon>queue_music</mat-icon>
     </button>
   </div>
 
   <!-- Playlist Panel -->
-  <div class="playlist-panel" *ngIf="showPlaylist && currentPlaylist">
+  <div class="playlist-panel" *ngIf="showPlaylist() && currentPlaylist()">
     <div class="playlist-header">
-      <h3>{{ currentPlaylist.name }}</h3>
-      <button mat-icon-button (click)="showPlaylist = false">
+      <h3>{{ currentPlaylist()?.name }}</h3>
+      <button mat-icon-button (click)="showPlaylist.set(false)">
         <mat-icon>close</mat-icon>
       </button>
     </div>
