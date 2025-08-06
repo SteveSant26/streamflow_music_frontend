@@ -212,8 +212,6 @@ td.mat-mdc-cell {
   .mat-column-duration {
     display: none;
   }
-  
-  .displayedColumns = ['thumbnail', 'title', 'actions'];
 }
 
 @media (max-width: 480px) {

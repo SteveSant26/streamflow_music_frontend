@@ -30,6 +30,7 @@ import { ROUTES_CONFIG_MUSIC } from '../../../../config/routes-config/routes-mus
     MatInputModule,
     MatSelectModule,
     MatChipsModule,
+    MatTooltipModule,
     FormsModule
   ],
   templateUrl: './genres.component.html',
@@ -54,7 +55,7 @@ export class GenresComponent implements OnInit {
     if (search) {
       genresList = genresList.filter(genre => 
         genre.name.toLowerCase().includes(search) ||
-        (genre.description && genre.description.toLowerCase().includes(search))
+        genre.description?.toLowerCase().includes(search)
       );
     }
     
