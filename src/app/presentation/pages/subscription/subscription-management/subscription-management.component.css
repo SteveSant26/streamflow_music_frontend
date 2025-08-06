@@ -1,0 +1,262 @@
+.subscription-management-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  color: #fff;
+}
+
+.billing-portal-btn {
+  padding: 12px 24px;
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.billing-portal-btn:hover:not(:disabled) {
+  background: #1ed760;
+}
+
+.content-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .content-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.subscription-info-card,
+.payment-methods-card,
+.billing-info-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.subscription-info-card h2,
+.payment-methods-card h2,
+.billing-info-card h2 {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.plan-details {
+  margin-bottom: 2rem;
+}
+
+.plan-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.plan-price {
+  font-size: 1.5rem;
+  color: #1db954;
+  margin-bottom: 0.5rem;
+}
+
+.plan-status {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.plan-status.active {
+  background: #1db954;
+  color: white;
+}
+
+.plan-status.canceled {
+  background: #ff6b6b;
+  color: white;
+}
+
+.subscription-dates {
+  margin-bottom: 2rem;
+}
+
+.date-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #333;
+}
+
+.date-info:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.date-info label {
+  color: #b3b3b3;
+}
+
+.date-info span {
+  color: #fff;
+  font-weight: 500;
+}
+
+.subscription-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.change-plan-btn {
+  padding: 12px 24px;
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  padding: 12px 24px;
+  background: transparent;
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: #ff6b6b;
+  color: white;
+}
+
+.payment-method-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #333;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.payment-method-item.default {
+  border-color: #1db954;
+}
+
+.card-info .card-brand {
+  font-weight: 600;
+  color: #fff;
+}
+
+.card-info .card-number {
+  color: #b3b3b3;
+  margin: 0.25rem 0;
+}
+
+.card-info .card-expiry {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.method-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.default-badge {
+  background: #1db954;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.manage-btn {
+  padding: 8px 16px;
+  background: transparent;
+  color: #1db954;
+  border: 1px solid #1db954;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.no-payment-methods {
+  text-align: center;
+  padding: 2rem;
+  color: #b3b3b3;
+}
+
+.add-payment-btn {
+  margin-top: 1rem;
+  padding: 12px 24px;
+  background: #1db954;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.invoice-info .amount {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1db954;
+  margin-bottom: 0.5rem;
+}
+
+.invoice-info .due-date {
+  color: #b3b3b3;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #333;
+  border-top: 4px solid #1db954;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-state {
+  text-align: center;
+  padding: 3rem;
+  color: #ff6b6b;
+}
