@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { GetRandomSongsUseCase } from '../../../../domain/usecases/song/song.usecases';
 import { Song } from '../../../../domain/entities/song.entity';
@@ -26,7 +27,8 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
     MatProgressSpinnerModule,
     MatTableModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    MatDialogModule
   ],
   templateUrl: './random-songs.component.html',
   styleUrl: './random-songs.component.css'
@@ -35,6 +37,7 @@ export class RandomSongsComponent implements OnInit {
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly audioPlayerService = inject(AudioPlayerService);
   private readonly playlistService = inject(PlaylistService);
+  private readonly dialog = inject(MatDialog);
 
   // Signals
   songs = signal<Song[]>([]);
@@ -103,5 +106,22 @@ export class RandomSongsComponent implements OnInit {
   addToPlaylist(song: Song) {
     // Implementar lógica para agregar a playlist
     console.log('Add to playlist:', song.title);
+  }
+
+  showLyrics(song: Song) {
+    // Por ahora, usar el componente SongLyricsComponent directamente
+    import('../../../../shared/components/song-lyrics/song-lyrics.component').then(({ SongLyricsComponent }) => {
+      this.dialog.open(SongLyricsComponent, {
+        data: { songId: song.id, title: song.title, artist: song.artist_name },
+        width: '600px',
+        maxWidth: '90vw',
+        maxHeight: '80vh',
+        panelClass: ['lyrics-dialog-panel']
+      });
+    }).catch(() => {
+      // Fallback: mostrar mensaje
+      console.log(`Mostrando letras para: ${song.title} - ${song.artist_name}`);
+      alert(`Función de letras disponible para: ${song.title} - ${song.artist_name}`);
+    });
   }
 }
