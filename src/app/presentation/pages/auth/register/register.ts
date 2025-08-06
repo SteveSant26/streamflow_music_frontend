@@ -77,7 +77,7 @@ export class RegisterComponent {
 
       // Redirigir después de mostrar el mensaje de éxito
       setTimeout(() => {
-        this.router.navigate(['/home']);
+        this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
       }, 2000);
     } catch (error) {
       this.handleError(error);

@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ROUTES_CONFIG_AUTH } from '@app/config';
 
 interface Plan {
   id: string;
@@ -120,7 +121,7 @@ export class SubscriptionPlansMainComponent {
     switch (planId) {
       case 'free':
         // Redirigir al registro gratuito
-        this.router.navigate(['/register']);
+        this.router.navigate([ROUTES_CONFIG_AUTH.REGISTER.link]);
         break;
       case 'monthly':
         // Redirigir al proceso de pago mensual

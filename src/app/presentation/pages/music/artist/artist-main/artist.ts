@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ROUTES_CONFIG_MUSIC } from '@app/config';
 
 // Domain imports
 import { GetArtistByIdUseCase } from '@app/domain/usecases/artist.usecases';
@@ -99,7 +100,7 @@ export class ArtistComponent implements OnInit {
   }
 
   navigateToAlbum(albumId: string): void {
-    this.router.navigate(['/music/album', albumId]);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.ALBUM.getLinkWithId(albumId)]);
   }
 
   onImageError(event: any): void {

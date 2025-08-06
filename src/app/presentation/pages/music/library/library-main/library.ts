@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
+import { ROUTES_CONFIG_MUSIC } from '@app/config';
 
 // Domain imports
 import { GetUserPlaylistsUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
@@ -116,15 +117,15 @@ export class LibraryComponent implements OnInit {
   }
 
   navigateToArtist(artistId: string): void {
-    this.router.navigate(['/music/artist', artistId]);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.ARTIST.getLinkWithId(artistId)]);
   }
 
   navigateToAlbum(albumId: string): void {
-    this.router.navigate(['/music/album', albumId]);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.ALBUM.getLinkWithId(albumId)]);
   }
 
   navigateToPlaylist(playlistId: string): void {
-    this.router.navigate(['/music/playlist', playlistId]);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.PLAYLIST.getLinkWithId(playlistId)]);
   }
 
   onImageError(event: any): void {
