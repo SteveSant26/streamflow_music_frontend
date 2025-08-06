@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Card, Greeting } from '@app/presentation/components/ui';
 import { PlayListItemCard } from '@app/presentation/components/music';
@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
   readonly viewModeService = inject(ViewModeService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   // Route configs
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
@@ -83,6 +84,8 @@ export class HomeComponent implements OnInit {
     effect(() => {
       const currentMode = this.viewModeService.viewMode();
       console.log('🏠 Home Effect: View mode changed to:', currentMode);
+      console.log('🏠 Force change detection...');
+      this.cdr.markForCheck(); // Forzar detección de cambios
     });
   }
 
@@ -165,7 +168,8 @@ export class HomeComponent implements OnInit {
   getCurrentViewType(): 'grid' | 'table' {
     const currentMode = this.viewModeService.viewMode();
     const resultType = currentMode === 'list' ? 'grid' : 'table';
-    console.log('🎯 getCurrentViewType: viewMode =', currentMode, '→ resultType =', resultType);
+    console.log('🎯 Home getCurrentViewType: viewMode =', currentMode, '→ resultType =', resultType);
+    console.log('🎯 Should show:', resultType === 'grid' ? 'GRID/CARDS' : 'TABLE');
     return resultType;
   }
 

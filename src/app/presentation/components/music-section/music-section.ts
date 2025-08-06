@@ -31,7 +31,8 @@ export class MusicSectionComponent {
   private _type: MusicSectionType = 'grid';
   @Input() 
   set type(value: MusicSectionType) {
-    console.log('🎯 MusicSection: Type changed to:', value);
+    console.log('🎯 MusicSection: Type changed from', this._type, 'to:', value);
+    console.log('🎯 MusicSection: Will show', value === 'grid' ? 'GRID/CARDS' : 'TABLE');
     this._type = value;
   }
   get type(): MusicSectionType {
