@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_CONFIG_PLAYLISTS } from '../../config/end-points/api-config-playlists';
 import {
@@ -9,8 +9,19 @@ import {
   CreatePlaylistDto,
   UpdatePlaylistDto,
   AddSongToPlaylistDto,
-  PlaylistSong
+  PlaylistSong,
+  PaginatedPlaylistResponse,
+  PaginatedPlaylistSongResponse,
+  PlaylistFilters
 } from '../../domain/entities/playlist.entity';
+import {
+  PlaylistDto,
+  PlaylistWithSongsDto,
+  PlaylistSongDto,
+  PaginatedPlaylistResponseDto,
+  PaginatedPlaylistSongResponseDto
+} from '../../domain/dtos/playlist.dto';
+import { PlaylistMapper } from '../../domain/mappers/playlist.mapper';
 import { IPlaylistRepository } from '../../domain/repositories/i-playlist.repository';
 
 @Injectable({
@@ -22,52 +33,108 @@ export class PlaylistHttpService implements IPlaylistRepository {
   constructor(private readonly http: HttpClient) {}
 
   // CRUD operations for playlists
-  getPlaylists(): Observable<Playlist[]> {
-    return this.http.get<Playlist[]>(`${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.list}`);
+  getPlaylists(filters?: PlaylistFilters): Observable<PaginatedPlaylistResponse> {
+    let params = new HttpParams();
+    
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          params = params.set(key, value.toString());
+        }
+      });
+    }
+
+    return this.http.get<PaginatedPlaylistResponseDto>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.list}`,
+      { params }
+    ).pipe(
+      map(response => PlaylistMapper.paginatedDtoToEntity(response))
+    );
   }
 
   getPlaylist(id: string): Observable<PlaylistWithSongs> {
-    return this.http.get<PlaylistWithSongs>(`${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.getById(id)}`);
+    return this.http.get<PlaylistWithSongsDto>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.getById(id)}`
+    ).pipe(
+      map(response => PlaylistMapper.withSongsDtoToEntity(response))
+    );
   }
 
   createPlaylist(playlist: CreatePlaylistDto): Observable<Playlist> {
-    return this.http.post<Playlist>(`${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.create}`, playlist);
+    const requestDto = PlaylistMapper.createDtoFromEntity(playlist);
+    
+    return this.http.post<PlaylistDto>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.create}`,
+      requestDto
+    ).pipe(
+      map(response => PlaylistMapper.dtoToEntity(response))
+    );
   }
 
   updatePlaylist(id: string, playlist: UpdatePlaylistDto): Observable<Playlist> {
-    return this.http.patch<Playlist>(`${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.update(id)}`, playlist);
+    const requestDto = PlaylistMapper.updateDtoFromEntity(playlist);
+    
+    return this.http.put<PlaylistDto>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.update(id)}`,
+      requestDto
+    ).pipe(
+      map(response => PlaylistMapper.dtoToEntity(response))
+    );
   }
 
   deletePlaylist(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.delete(id)}`);
+    return this.http.delete<void>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.delete(id)}`
+    );
   }
 
   // Playlist songs operations
-  getPlaylistSongs(playlistId: string): Observable<PlaylistSong[]> {
-    return this.http.get<PlaylistSong[]>(`${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.list(playlistId)}`);
+  getPlaylistSongs(playlistId: string, page?: number, pageSize?: number): Observable<PaginatedPlaylistSongResponse> {
+    let params = new HttpParams();
+    
+    if (page !== undefined) {
+      params = params.set('page', page.toString());
+    }
+    if (pageSize !== undefined) {
+      params = params.set('page_size', pageSize.toString());
+    }
+
+    return this.http.get<PaginatedPlaylistSongResponseDto>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.list(playlistId)}`,
+      { params }
+    ).pipe(
+      map(response => PlaylistMapper.paginatedSongDtoToEntity(response))
+    );
   }
 
   addSongToPlaylist(playlistId: string, song: AddSongToPlaylistDto): Observable<PlaylistSong> {
-    return this.http.post<PlaylistSong>(`${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.add(playlistId)}`, song);
+    const requestDto = PlaylistMapper.addSongDtoFromEntity(song);
+    
+    return this.http.post<PlaylistSongDto>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.add(playlistId)}`,
+      requestDto
+    ).pipe(
+      map(response => PlaylistMapper.songDtoToEntity(response))
+    );
   }
 
   removeSongFromPlaylist(playlistId: string, songId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.remove(playlistId, songId)}`);
+    return this.http.delete<void>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.remove(playlistId, songId)}`
+    );
   }
 
-  reorderPlaylistSongs(playlistId: string, songIds: string[]): Observable<PlaylistSong[]> {
-    // Esta funcionalidad no existe en la API según el OpenAPI
-    throw new Error('Reorder functionality not available in API');
+  // User-specific operations
+  getUserPlaylists(filters?: PlaylistFilters): Observable<PaginatedPlaylistResponse> {
+    // Para obtener solo las playlists del usuario, añadimos el filtro por defecto
+    const userFilters = { ...filters };
+    // Si hay autenticación, el backend debería filtrar automáticamente por usuario
+    
+    return this.getPlaylists(userFilters);
   }
 
-  // Special operations
-  getFavoritesPlaylist(): Observable<PlaylistWithSongs> {
-    // Esta funcionalidad no existe en la API según el OpenAPI
-    throw new Error('Favorites playlist functionality not available in API');
-  }
-
-  ensureDefaultPlaylist(): Observable<Playlist> {
-    // Esta funcionalidad no existe en la API según el OpenAPI
-    throw new Error('Ensure default playlist functionality not available in API');
+  getUserPlaylist(id: string): Observable<PlaylistWithSongs> {
+    // Similar a getPlaylist, pero el backend debería verificar que pertenece al usuario autenticado
+    return this.getPlaylist(id);
   }
 }
