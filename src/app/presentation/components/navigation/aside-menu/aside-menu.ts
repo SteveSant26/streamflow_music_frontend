@@ -188,6 +188,8 @@ export class AsideMenu implements OnInit, OnDestroy {
 
     const subscription = this.getUserPlaylistsUseCase.execute(filters).subscribe({
       next: (playlists) => {
+        console.log('Playlists recibidas en el componente:', playlists);
+        
         // Convertir las playlists del dominio al formato del sidebar
         const sidebarPlaylists: SidebarPlaylist[] = playlists.map(playlist => ({
           id: playlist.id,
@@ -199,10 +201,15 @@ export class AsideMenu implements OnInit, OnDestroy {
 
         this.playlists.set(sidebarPlaylists);
         this.isLoadingPlaylists.set(false);
+        
+        // Si no hay playlists, no es un error
+        if (sidebarPlaylists.length === 0) {
+          console.log('No se encontraron playlists del usuario');
+        }
       },
       error: (error) => {
         console.error('Error cargando playlists del usuario:', error);
-        this.playlistsError.set('No se pudieron cargar las playlists');
+        this.playlistsError.set('Error al conectar con el servidor. Intenta más tarde.');
         this.playlists.set([]);
         this.isLoadingPlaylists.set(false);
       }

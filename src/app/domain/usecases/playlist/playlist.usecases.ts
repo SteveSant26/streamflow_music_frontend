@@ -37,9 +37,24 @@ export class GetUserPlaylistsUseCase {
 
   execute(filters?: PlaylistFilters): Observable<Playlist[]> {
     return this.repository.getUserPlaylists(filters).pipe(
-      map(response => response.results),
+      map(response => {
+        console.log('GetUserPlaylistsUseCase - Respuesta del repositorio:', response);
+        return response.results || [];
+      }),
       catchError(error => {
         console.error('Error getting user playlists:', error);
+        console.log('Detalles del error:', {
+          message: error.message,
+          status: error.status,
+          error: error
+        });
+        
+        // Si es un error del servidor (500), devolver array vacío para que no bloquee la UI
+        if (error.status === 500 || error.message?.includes('Error del servidor')) {
+          console.warn('Error 500 detectado, devolviendo array vacío temporalmente');
+          return []; // Devolver array vacío en lugar de error
+        }
+        
         return throwError(() => new Error('No se pudieron cargar las playlists del usuario'));
       })
     );
