@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { API_CONFIG_LYRICS } from '../../config/end-points';
 
 export interface SongLyricsResponse {
   song_id: string;
@@ -25,20 +25,16 @@ export interface UpdateLyricsResponse {
   providedIn: 'root'
 })
 export class LyricsService {
-  private readonly baseUrl = `${environment.apiUrl}/songs`;
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   /**
    * Obtiene las letras de una canción específica
    */
   getSongLyrics(songId: string, fetchIfMissing: boolean = true): Observable<SongLyricsResponse> {
+    const url = API_CONFIG_LYRICS.lyrics.getSongLyrics(songId);
     const params = fetchIfMissing ? { fetch_if_missing: 'true' } : { fetch_if_missing: 'false' };
     
-    return this.http.get<SongLyricsResponse>(
-      `${this.baseUrl}/${songId}/lyrics/`,
-      { params }
-    ).pipe(
+    return this.http.get<SongLyricsResponse>(url, { params }).pipe(
       catchError(error => {
         console.error('Error fetching lyrics:', error);
         // Retornar respuesta vacía en caso de error
@@ -58,12 +54,10 @@ export class LyricsService {
    * Fuerza la actualización de letras para una canción
    */
   updateSongLyrics(songId: string, forceUpdate: boolean = false): Observable<UpdateLyricsResponse> {
+    const url = API_CONFIG_LYRICS.lyrics.updateSongLyrics(songId);
     const body = { force_update: forceUpdate };
     
-    return this.http.post<UpdateLyricsResponse>(
-      `${this.baseUrl}/${songId}/lyrics/update/`,
-      body
-    ).pipe(
+    return this.http.post<UpdateLyricsResponse>(url, body).pipe(
       catchError(error => {
         console.error('Error updating lyrics:', error);
         throw error;
