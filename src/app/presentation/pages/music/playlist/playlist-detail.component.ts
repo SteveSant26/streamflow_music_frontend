@@ -11,7 +11,7 @@ import {
   GetPlaylistByIdUseCase,
   RemoveSongFromPlaylistUseCase
 } from '../../../../domain/usecases/playlist/playlist.usecases';
-import { PlaylistWithSongs } from '../../../../domain/entities/playlist.entity';
+import { PlaylistWithSongs, PlaylistSong } from '../../../../domain/entities/playlist.entity';
 import { Song } from '../../../../domain/entities/song.entity';
 import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
@@ -41,6 +41,7 @@ export class PlaylistDetailComponent implements OnInit {
 
   playlist = signal<PlaylistWithSongs | null>(null);
   loading = signal(false);
+  removingTask = signal<string | null>(null); // Para mostrar loading específico por canción
   
   displayedColumns: string[] = ['position', 'title', 'album', 'duration', 'added_at', 'actions'];
 
@@ -93,7 +94,7 @@ export class PlaylistDetailComponent implements OnInit {
     }
   }
 
-  playSong(song: Song) {
+  playSong(song: PlaylistSong) {
     const playlist = this.playlist();
     if (playlist) {
       const songIndex = playlist.songs.findIndex(s => s.id === song.id);
@@ -114,15 +115,26 @@ export class PlaylistDetailComponent implements OnInit {
     }
   }
 
-  removeSong(song: Song) {
-    if (confirm(`¿Quieres eliminar "${song.title}" de esta playlist?`)) {
-      this.removeSongFromPlaylistUseCase.execute(this.playlist()!.id, song.id).subscribe({
+  removeSong(song: PlaylistSong) {
+    const playlist = this.playlist();
+    if (!playlist) return;
+
+    const confirmMessage = `¿Estás seguro de que quieres eliminar "${song.title}" de la playlist "${playlist.name}"?`;
+    
+    if (confirm(confirmMessage)) {
+      this.removingTask.set(song.id); // Indicar que esta canción se está eliminando
+      
+      this.removeSongFromPlaylistUseCase.execute(playlist.id, song.id).subscribe({
         next: () => {
-          // Recargar la playlist
-          this.loadPlaylist(this.playlist()!.id);
+          console.log(`Canción "${song.title}" eliminada de la playlist`);
+          this.removingTask.set(null);
+          // Recargar la playlist para mostrar los cambios
+          this.loadPlaylist(playlist.id);
         },
         error: (error) => {
           console.error('Error removing song:', error);
+          this.removingTask.set(null);
+          alert('Error al eliminar la canción. Por favor, inténtalo de nuevo.');
         }
       });
     }
