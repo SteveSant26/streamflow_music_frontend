@@ -31,6 +31,10 @@ export class AlbumService {
       httpParams = httpParams.set('title', params.title);
     }
     
+    if (params?.search) {
+      httpParams = httpParams.set('search', params.search);
+    }
+    
     if (params?.artist_name) {
       httpParams = httpParams.set('artist_name', params.artist_name);
     }
@@ -39,8 +43,64 @@ export class AlbumService {
       httpParams = httpParams.set('artist_id', params.artist_id);
     }
     
-    if (params?.search) {
-      httpParams = httpParams.set('search', params.search);
+    if (params?.source_type) {
+      httpParams = httpParams.set('source_type', params.source_type);
+    }
+    
+    if (params?.min_release_date) {
+      httpParams = httpParams.set('min_release_date', params.min_release_date);
+    }
+    
+    if (params?.max_release_date) {
+      httpParams = httpParams.set('max_release_date', params.max_release_date);
+    }
+    
+    if (params?.release_year) {
+      httpParams = httpParams.set('release_year', params.release_year.toString());
+    }
+    
+    if (params?.min_total_tracks) {
+      httpParams = httpParams.set('min_total_tracks', params.min_total_tracks.toString());
+    }
+    
+    if (params?.max_total_tracks) {
+      httpParams = httpParams.set('max_total_tracks', params.max_total_tracks.toString());
+    }
+    
+    if (params?.min_play_count) {
+      httpParams = httpParams.set('min_play_count', params.min_play_count.toString());
+    }
+    
+    if (params?.max_play_count) {
+      httpParams = httpParams.set('max_play_count', params.max_play_count.toString());
+    }
+    
+    if (params?.has_cover_image !== undefined) {
+      httpParams = httpParams.set('has_cover_image', params.has_cover_image.toString());
+    }
+    
+    if (params?.has_description !== undefined) {
+      httpParams = httpParams.set('has_description', params.has_description.toString());
+    }
+    
+    if (params?.popular !== undefined) {
+      httpParams = httpParams.set('popular', params.popular.toString());
+    }
+    
+    if (params?.recent !== undefined) {
+      httpParams = httpParams.set('recent', params.recent.toString());
+    }
+    
+    if (params?.created_after) {
+      httpParams = httpParams.set('created_after', params.created_after);
+    }
+    
+    if (params?.created_before) {
+      httpParams = httpParams.set('created_before', params.created_before);
+    }
+    
+    if (params?.ordering) {
+      httpParams = httpParams.set('ordering', params.ordering);
     }
     
     // Agregar paginación
