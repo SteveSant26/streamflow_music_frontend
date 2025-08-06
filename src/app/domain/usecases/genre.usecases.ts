@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { GenreService } from '../../infrastructure/services/genre.service';
 import { Genre, GenreListItem } from '../../domain/entities/genre.entity';
-import { PopularGenresParams } from '../../domain/dtos/genre.dto';
+import { GenreSearchParams, GenreDto } from '../../domain/dtos/genre.dto';
+import { GenreMapper } from '../mappers/genre.mapper';
+import { PaginatedResponse } from '../../shared/interfaces/paginated-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GetGenreByIdUseCase {
-  constructor(private genreService: GenreService) {}
+  constructor(private readonly genreService: GenreService) {}
 
   execute(id: string): Observable<Genre> {
     return this.genreService.getGenreById(id);
@@ -19,10 +21,14 @@ export class GetGenreByIdUseCase {
   providedIn: 'root'
 })
 export class GetAllGenresUseCase {
-  constructor(private genreService: GenreService) {}
+  constructor(private readonly genreService: GenreService) {}
 
-  execute(): Observable<GenreListItem[]> {
-    return this.genreService.getAllGenres();
+  execute(params?: GenreSearchParams): Observable<GenreListItem[]> {
+    return this.genreService.getAllGenres(params).pipe(
+      map((response: PaginatedResponse<GenreDto>) => 
+        GenreMapper.mapGenreListToGenres(response.results)
+      )
+    );
   }
 }
 
@@ -30,9 +36,13 @@ export class GetAllGenresUseCase {
   providedIn: 'root'
 })
 export class GetPopularGenresUseCase {
-  constructor(private genreService: GenreService) {}
+  constructor(private readonly genreService: GenreService) {}
 
-  execute(params?: PopularGenresParams): Observable<GenreListItem[]> {
-    return this.genreService.getPopularGenres(params);
+  execute(page: number = 1, pageSize: number = 10): Observable<GenreListItem[]> {
+    return this.genreService.getPopularGenres(page, pageSize).pipe(
+      map((response: PaginatedResponse<GenreDto>) => 
+        GenreMapper.mapGenreListToGenres(response.results)
+      )
+    );
   }
 }
