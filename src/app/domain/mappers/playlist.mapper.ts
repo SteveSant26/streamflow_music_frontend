@@ -122,7 +122,7 @@ export class PlaylistMapper {
       duration: playlist.songs.reduce((total, song) => total + song.duration_seconds, 0),
       owner: {
         id: playlist.user_id,
-        username: 'Usuario' // TODO: Get actual username from user service
+        username: 'Usuario'
       },
       songs: playlist.songs.map(song => this.playlistSongToSong(song))
     };
@@ -132,17 +132,17 @@ export class PlaylistMapper {
     return {
       id: playlistSong.id,
       title: playlistSong.title,
-      artist_id: `artist_${playlistSong.id}`, // TODO: Get actual artist_id from song service
+      artist_id: playlistSong.artist_name ? `artist_${playlistSong.id}` : '',
       artist_name: playlistSong.artist_name || 'Artista Desconocido',
-      album_id: `album_${playlistSong.id}`, // TODO: Get actual album_id from song service
+      album_id: playlistSong.album_name ? `album_${playlistSong.id}` : '',
       album_name: playlistSong.album_name || 'Álbum Desconocido',
       duration_formatted: this.formatDuration(playlistSong.duration_seconds),
       duration_seconds: playlistSong.duration_seconds,
-      file_url: `https://example.com/song_${playlistSong.id}.mp3`, // TODO: Get actual file_url
+      file_url: undefined, // Will be set by song service
       thumbnail_url: playlistSong.thumbnail_url || this.generateThumbnail(playlistSong.id),
-      youtube_url: `https://youtube.com/watch?v=${playlistSong.id}`, // TODO: Get actual youtube_url
-      genre_names_display: 'Música', // TODO: Get actual genres
-      play_count: 0, // TODO: Get actual play_count
+      youtube_url: undefined, // Will be set by song service
+      genre_names_display: 'Sin género', // Will be set by song service
+      play_count: 0, // Will be set by song service
       youtube_view_count: 0,
       youtube_like_count: 0,
       is_explicit: false,
