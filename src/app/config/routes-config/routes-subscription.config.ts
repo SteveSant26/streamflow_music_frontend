@@ -16,4 +16,8 @@ export const ROUTES_CONFIG_SUBSCRIPTION = {
     path: 'success',
     link: '/subscription/success',
   },
+  PAYMENT: {
+    path: 'payment',
+    link: '/payment',
+  },
 };

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { ROUTES_CONFIG_AUTH } from '@app/config';
+import { ROUTES_CONFIG_AUTH, ROUTES_CONFIG_SUBSCRIPTION } from '@app/config';
 
 interface Plan {
   id: string;
@@ -125,13 +125,13 @@ export class SubscriptionPlansMainComponent {
         break;
       case 'monthly':
         // Redirigir al proceso de pago mensual
-        this.router.navigate(['/payment'], {
+        this.router.navigate([ROUTES_CONFIG_SUBSCRIPTION.PAYMENT.link], {
           queryParams: { plan: 'monthly' },
         });
         break;
       case 'annual':
         // Redirigir al proceso de pago anual
-        this.router.navigate(['/payment'], { queryParams: { plan: 'annual' } });
+        this.router.navigate([ROUTES_CONFIG_SUBSCRIPTION.PAYMENT.link], { queryParams: { plan: 'annual' } });
         break;
       default:
         console.error('Plan no reconocido');
