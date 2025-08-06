@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Card, Greeting } from '@app/presentation/components/ui';
 import { PlayListItemCard } from '@app/presentation/components/music';
 import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
+import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { 
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit {
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  readonly viewModeService = inject(ViewModeService);
 
   // Route configs
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
@@ -161,9 +163,12 @@ export class HomeComponent implements OnInit {
       ariaLabel: 'Ver todas las canciones populares'
     };
 
+    // Usar el servicio global para determinar el tipo de vista
+    const viewType = this.viewModeService.viewMode() === 'list' ? 'grid' : 'table';
+
     return {
       title: '🔥 Más Populares',
-      type: 'grid' as const,
+      type: viewType,
       primaryButton,
       songs: this.popularSongs(),
       loading: this.loading(),
@@ -186,9 +191,12 @@ export class HomeComponent implements OnInit {
       }
     ];
 
+    // Usar el servicio global para determinar el tipo de vista
+    const viewType = this.viewModeService.viewMode() === 'list' ? 'grid' : 'table';
+
     return {
       title: '🎲 Descubre Música Nueva',
-      type: 'table' as const,
+      type: viewType,
       actionButtons,
       songs: this.randomSongs(),
       loading: this.loading(),
