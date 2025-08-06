@@ -82,7 +82,16 @@
 
   <!-- Géneros Populares -->
   <section class="discover-section">
-    <h2>Géneros Populares</h2>
+    <div class="section-header">
+      <h2>Géneros Populares</h2>
+      <button mat-button 
+              color="primary" 
+              routerLink="/genres"
+              class="view-all-btn">
+        Ver todos
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
     <div class="loading-container" *ngIf="isLoadingGenres()">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
@@ -97,6 +106,47 @@
           {{ genre.name }}
         </mat-chip>
       </mat-chip-set>
+    </div>
+  </section>
+
+  <!-- Música Aleatoria -->
+  <section class="discover-section">
+    <div class="section-header">
+      <h2>Música Aleatoria</h2>
+      <button mat-button 
+              color="primary" 
+              routerLink="/random-songs"
+              class="view-all-btn">
+        Ver todas
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+    <div class="loading-container" *ngIf="isLoadingRandomSongs()">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <div class="error-message" *ngIf="randomSongsError()">
+      Error al cargar música aleatoria: {{ randomSongsError() }}
+    </div>
+    <div class="random-songs-grid" *ngIf="!isLoadingRandomSongs() && !randomSongsError()">
+      <mat-card *ngFor="let song of randomSongs()" class="song-card">
+        <div class="song-image-container">
+          <img [src]="song.cover_url || '/assets/default-song.png'" 
+               [alt]="song.title" 
+               class="song-image">
+          <div class="song-overlay">
+            <button mat-icon-button 
+                    (click)="playRandomSong(song)"
+                    class="play-button">
+              <mat-icon>play_arrow</mat-icon>
+            </button>
+          </div>
+        </div>
+        <mat-card-content>
+          <h4>{{ song.title }}</h4>
+          <p class="song-artist">{{ song.artist_name }}</p>
+          <p class="song-duration">{{ formatDuration(song.duration) }}</p>
+        </mat-card-content>
+      </mat-card>
     </div>
   </section>
 </div>

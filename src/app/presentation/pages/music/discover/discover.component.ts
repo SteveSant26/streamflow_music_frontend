@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,10 +9,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AlbumListItem } from '../../../../domain/entities/album.entity';
 import { ArtistListItem } from '../../../../domain/entities/artist.entity';
 import { GenreListItem } from '../../../../domain/entities/genre.entity';
+import { Song } from '../../../../domain/entities/song.entity';
 import { GetPopularAlbumsUseCase } from '../../../../domain/usecases/album.usecases';
 import { GetPopularArtistsUseCase } from '../../../../domain/usecases/artist.usecases';
 import { GetPopularGenresUseCase } from '../../../../domain/usecases/genre.usecases';
+import { GetRandomSongsUseCase } from '../../../../domain/usecases/song/song.usecases';
 import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
+import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
 
 @Component({
   selector: 'app-discover',
