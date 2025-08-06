@@ -45,6 +45,15 @@ export class HomeComponent implements OnInit {
   readonly randomSongs = signal<Song[]>([]);
   readonly loading = signal(true);
 
+  // Signal computed para el tipo de vista
+  readonly currentViewType = computed(() => {
+    const currentMode = this.viewModeService.viewMode();
+    const resultType = currentMode === 'list' ? 'grid' : 'table';
+    console.log('🎯 COMPUTED currentViewType: viewMode =', currentMode, '→ resultType =', resultType);
+    console.log('🎯 COMPUTED Should show:', resultType === 'grid' ? 'GRID/CARDS' : 'TABLE');
+    return resultType;
+  });
+
   // Datos mock para las playlists (mantenemos algunos como ejemplo)
   featuredPlaylists = [
     {

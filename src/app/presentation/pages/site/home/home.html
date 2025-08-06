@@ -41,7 +41,7 @@
   <!-- Canciones Populares -->
   <app-music-section
     [title]="'🔥 Más Populares'"
-    [type]="getCurrentViewType()"
+    [type]="currentViewType()"
     [songs]="popularSongs()"
     [loading]="loading()"
     [primaryButton]="popularSectionConfig().primaryButton"
@@ -75,7 +75,7 @@
   <!-- Trending Now / Canciones Aleatorias -->
   <app-music-section
     [title]="'🎲 Descubre Música Nueva'"
-    [type]="getCurrentViewType()"
+    [type]="currentViewType()"
     [songs]="randomSongs()"
     [loading]="loading()"
     [actionButtons]="randomSectionConfig().actionButtons"
