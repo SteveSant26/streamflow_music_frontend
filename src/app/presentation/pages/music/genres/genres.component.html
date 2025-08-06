@@ -1,0 +1,129 @@
+<div class="genres-container">
+  <!-- Header -->
+  <div class="genres-header">
+    <h1>Géneros Musicales</h1>
+    <p class="subtitle">Explora la música por género y encuentra tu sonido favorito</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="genres-controls">
+    <div class="genres-filters">
+      <mat-form-field class="search-field">
+        <mat-label>Buscar géneros</mat-label>
+        <input matInput 
+               [value]="searchTerm()" 
+               (input)="onSearchChange($event.target.value)"
+               placeholder="Escribe el nombre del género...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field class="sort-field">
+        <mat-label>Ordenar por</mat-label>
+        <mat-select [value]="sortBy()" (selectionChange)="onSortChange($event.value)">
+          <mat-option value="name">Nombre A-Z</mat-option>
+          <mat-option value="-name">Nombre Z-A</mat-option>
+          <mat-option value="-popularity_score">Más populares</mat-option>
+          <mat-option value="popularity_score">Menos populares</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="view-controls">
+      <button mat-icon-button 
+              (click)="toggleViewMode()"
+              [matTooltip]="viewMode() === 'grid' ? 'Vista de chips' : 'Vista de grid'">
+        <mat-icon>{{ viewMode() === 'grid' ? 'view_list' : 'view_module' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando géneros...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error() && !loading()">
+    <mat-icon class="error-icon">error</mat-icon>
+    <p>{{ error() }}</p>
+    <button mat-raised-button color="primary" (click)="loadGenres()">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Grid View -->
+  <div class="genres-grid" 
+       *ngIf="!loading() && !error() && filteredGenres().length > 0 && viewMode() === 'grid'">
+    <mat-card *ngFor="let genre of filteredGenres()" 
+              class="genre-card"
+              [style.border-left]="'4px solid ' + getGenreColor(genre)">
+      <div class="genre-color-bar" [style.background-color]="getGenreColor(genre)"></div>
+      
+      <mat-card-content>
+        <div class="genre-header">
+          <h3 class="genre-name">{{ genre.name }}</h3>
+          <div class="genre-popularity">
+            <mat-icon class="popularity-icon">trending_up</mat-icon>
+            <span>{{ genre.popularity_score }}</span>
+          </div>
+        </div>
+        
+        <p class="genre-description" *ngIf="genre.description">
+          {{ genre.description }}
+        </p>
+        
+        <div class="genre-visual" 
+             *ngIf="genre.image_url"
+             [style.background-image]="'url(' + genre.image_url + ')'">
+        </div>
+        
+        <div class="genre-placeholder" *ngIf="!genre.image_url">
+          <mat-icon class="genre-icon">library_music</mat-icon>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions>
+        <button mat-button 
+                [routerLink]="getGenreLink(genre.id)" 
+                color="primary">
+          <mat-icon>explore</mat-icon>
+          Explorar
+        </button>
+        <button mat-icon-button matTooltip="Música popular del género">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Chips View -->
+  <div class="genres-chips" 
+       *ngIf="!loading() && !error() && filteredGenres().length > 0 && viewMode() === 'chips'">
+    <mat-chip-set class="genre-chip-set">
+      <mat-chip *ngFor="let genre of filteredGenres()" 
+               class="genre-chip"
+               [style.background-color]="getGenreColor(genre)"
+               [routerLink]="getGenreLink(genre.id)"
+               matTooltip="{{ genre.description || 'Explorar ' + genre.name }}">
+        <span class="chip-content">
+          {{ genre.name }}
+          <small class="chip-popularity">({{ genre.popularity_score }})</small>
+        </span>
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading() && !error() && filteredGenres().length === 0">
+    <mat-icon class="empty-icon">music_note</mat-icon>
+    <h2>No se encontraron géneros</h2>
+    <p *ngIf="searchTerm()">
+      No hay géneros que coincidan con "{{ searchTerm() }}". 
+      Intenta con otros términos de búsqueda.
+    </p>
+    <p *ngIf="!searchTerm()">
+      Aún no hay géneros disponibles en la biblioteca.
+    </p>
+  </div>
+</div>
