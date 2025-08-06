@@ -9,33 +9,8 @@ import { Song } from '@app/domain/entities/song.entity';
   selector: 'app-smart-play-button',
   standalone: true,
   imports: [MatIconModule, MatButtonModule, CommonModule],
-  template: `
-    <button
-      mat-icon-button
-      [title]="'Reproducir ' + (song.title || 'canción')"
-      (click)="playSmartly()"
-      class="text-white bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-      [disabled]="!song"
-    >
-      <mat-icon>play_arrow</mat-icon>
-    </button>
-  `,
-  styles: [`
-    :host {
-      display: inline-block;
-    }
-    
-    button {
-      width: 48px;
-      height: 48px;
-    }
-    
-    mat-icon {
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-    }
-  `]
+  templateUrl: './smart-play-button.html',
+  styleUrl: './smart-play-button.css'
 })
 export class SmartPlayButtonComponent {
   @Input() song!: Song;

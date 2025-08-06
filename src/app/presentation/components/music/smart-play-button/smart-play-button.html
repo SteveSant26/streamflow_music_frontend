@@ -1,0 +1,9 @@
+<button
+  mat-icon-button
+  [title]="'Reproducir ' + (song.title || 'canción')"
+  (click)="playSmartly()"
+  class="text-white bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+  [disabled]="!song"
+>
+  <mat-icon>play_arrow</mat-icon>
+</button>
