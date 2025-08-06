@@ -17,6 +17,7 @@ import { GlobalPlaylistModalComponent } from '@app/shared/components/global-play
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
+import { LyricsService } from '@app/infrastructure/services/lyrics.service';
 
 interface CurrentSongView {
   id: string;
@@ -32,6 +33,8 @@ interface CurrentSongView {
   isPlaying: boolean;
   isLoading: boolean;
   lyrics?: string;
+  lyricsLoading?: boolean;
+  lyricsError?: string;
 }
 
 @Component({
@@ -56,6 +59,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly playlistService: PlaylistService,
     private readonly globalPlaylistModalService: GlobalPlaylistModalService,
     private readonly materialThemeService: MaterialThemeService,
+    private readonly lyricsService: LyricsService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {
@@ -187,6 +191,11 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       'Panel de letras:',
       this.showLyricsPanel ? 'Abierto' : 'Cerrado',
     );
+
+    // Si se abre el panel y no hay letras, intentar cargarlas
+    if (this.showLyricsPanel && this.currentSong && !this.currentSong.lyrics && !this.currentSong.lyricsLoading) {
+      this.loadLyrics();
+    }
   }
 
   togglePlaylistPanel() {
@@ -436,5 +445,89 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     } else {
       return `linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 50%, ${lighterColor} 100%)`;
     }
+  }
+
+  // ========== LYRICS METHODS ==========
+  
+  loadLyrics(): void {
+    if (!this.currentSong || this.currentSong.lyricsLoading) {
+      return;
+    }
+
+    this.currentSong.lyricsLoading = true;
+    this.currentSong.lyricsError = undefined;
+    this.cdr.detectChanges();
+
+    this.lyricsService.getSongLyrics(this.currentSong.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (this.currentSong) {
+            this.currentSong.lyrics = response.lyrics || 'Letras no disponibles';
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error) => {
+          console.error('Error cargando letras:', error);
+          if (this.currentSong) {
+            this.currentSong.lyricsError = 'Error al cargar las letras';
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        }
+      });
+  }
+
+  refreshLyrics(): void {
+    if (!this.currentSong) {
+      return;
+    }
+
+    this.currentSong.lyrics = undefined;
+    this.currentSong.lyricsError = undefined;
+    this.loadLyrics();
+  }
+
+  updateLyrics(): void {
+    if (!this.currentSong || this.currentSong.lyricsLoading) {
+      return;
+    }
+
+    this.currentSong.lyricsLoading = true;
+    this.currentSong.lyricsError = undefined;
+    this.cdr.detectChanges();
+
+    this.lyricsService.updateSongLyrics(this.currentSong.id, true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (this.currentSong) {
+            this.currentSong.lyrics = response.lyrics || 'Letras no disponibles';
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error) => {
+          console.error('Error actualizando letras:', error);
+          if (this.currentSong) {
+            this.currentSong.lyricsError = 'Error al actualizar las letras';
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        }
+      });
+  }
+
+  get hasLyrics(): boolean {
+    return !!this.currentSong?.lyrics && this.currentSong.lyrics !== 'Letras no disponibles';
+  }
+
+  get canLoadLyrics(): boolean {
+    return !!this.currentSong && !this.currentSong.lyricsLoading;
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 }
