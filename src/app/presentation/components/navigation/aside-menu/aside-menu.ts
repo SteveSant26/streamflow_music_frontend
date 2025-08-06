@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, computed, signal, OnInit } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
@@ -9,6 +9,7 @@ import { MaterialThemeService } from '@app/shared/services/material-theme.servic
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { 
   ROUTES_CONFIG_AUTH, 
   ROUTES_CONFIG_MUSIC, 
@@ -17,6 +18,8 @@ import {
   ROUTES_CONFIG_USER
 } from '@app/config/routes-config';
 import { TranslateModule } from '@ngx-translate/core';
+import { GetMyPlaylistsUseCase } from '../../../domain/usecases/playlist/my-playlists.usecases';
+import { Playlist } from '../../../domain/entities/playlist.entity';
 
 @Component({
   selector: 'app-aside-menu',
@@ -33,7 +36,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./aside-menu.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AsideMenu {
+export class AsideMenu implements OnInit {
   protected readonly ROUTES_CONFIG_AUTH = ROUTES_CONFIG_AUTH;
   protected readonly ROUTES_CONFIG_MUSIC = ROUTES_CONFIG_MUSIC;
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;

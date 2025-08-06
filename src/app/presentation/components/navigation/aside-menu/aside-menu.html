@@ -48,13 +48,16 @@
       class="flex items-center justify-between mb-4 hover:bg-black/5 transition-colors duration-300"
     >
       <a
-        [routerLink]="ROUTES_CONFIG_MUSIC.LIBRARY.link"
+        routerLink="/my-playlists"
         class="text-black font-semibold flex items-center gap-2 mt-4 mb-2 hover:bg-black/5 transition-colors duration-300 cursor-pointer"
       >
         <mat-icon>library_music</mat-icon>
-        {{ "SIDEBAR.LIBRARY" | translate }}
+        {{ "SIDEBAR.MY_PLAYLISTS" | translate }}
       </a>
-      <button class="text-black hover:text-black transition-colors mt-4 mb-2">
+      <button 
+        (click)="openCreatePlaylistDialog()"
+        class="text-black hover:text-black transition-colors mt-4 mb-2"
+        title="Crear nueva playlist">
         <mat-icon>add</mat-icon>
       </button>
     </div>
