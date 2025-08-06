@@ -2,7 +2,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, map, catchError } from 'rxjs';
+import { Observable, map, catchError, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_CONFIG_PLAYLISTS } from '../../config/end-points/api-config-playlists';
 import {
@@ -75,10 +75,40 @@ export class PlaylistHttpService implements IPlaylistRepository {
   }
 
   getPlaylist(id: string): Observable<PlaylistWithSongs> {
-    return this.http.get<PlaylistWithSongsDto>(
+    // Primero obtenemos la información básica de la playlist
+    const playlistInfo$ = this.http.get<PlaylistWithSongsDto>(
       `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.getById(id)}`
-    ).pipe(
-      map(response => PlaylistMapper.withSongsDtoToEntity(response))
+    );
+
+    // Luego obtenemos las canciones detalladas usando el endpoint específico
+    const playlistSongs$ = this.http.get<PaginatedPlaylistSongResponseDto>(
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.songs.list(id)}`
+    );
+
+    // Combinamos ambas respuestas
+    return playlistInfo$.pipe(
+      switchMap((playlistInfo: PlaylistWithSongsDto) => 
+        playlistSongs$.pipe(
+          map((songsResponse: PaginatedPlaylistSongResponseDto) => {
+            const playlist = PlaylistMapper.withSongsDtoToEntity(playlistInfo);
+            const detailedSongs = PlaylistMapper.fromPaginatedSongDto(songsResponse);
+            
+            // Reemplazamos las canciones básicas con las detalladas
+            return {
+              ...playlist,
+              songs: detailedSongs.results,
+              total_songs: detailedSongs.count
+            };
+          })
+        )
+      ),
+      catchError(error => {
+        console.error('Error fetching playlist with songs:', error);
+        // Si falla, intentamos devolver solo la información básica
+        return playlistInfo$.pipe(
+          map((response: PlaylistWithSongsDto) => PlaylistMapper.withSongsDtoToEntity(response))
+        );
+      })
     );
   }
 
