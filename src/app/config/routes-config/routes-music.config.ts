@@ -12,6 +12,10 @@ export const ROUTES_CONFIG_MUSIC = {
     path: 'search',
     link: '/search',
   },
+  DISCOVER: {
+    path: 'discover',
+    link: '/discover',
+  },
   CURRENT_SONG: {
     path: 'current-song',
     link: '/current-song',
@@ -26,14 +30,39 @@ export const ROUTES_CONFIG_MUSIC = {
     link: '/artist',
     getLinkWithId: (id: string) => `/artist/${id}`,
   },
+  ARTISTS: {
+    path: 'artists',
+    link: '/artists',
+  },
   SONG: {
     path: 'song/:id',
     link: '/song',
     getLinkWithId: (id: string) => `/song/${id}`,
   },
+  SONGS: {
+    path: 'songs',
+    link: '/songs',
+  },
+  RANDOM_SONGS: {
+    path: 'random-songs',
+    link: '/random-songs',
+  },
   ALBUM: {
     path: 'album/:id',
     link: '/album',
     getLinkWithId: (id: string) => `/album/${id}`,
+  },
+  ALBUMS: {
+    path: 'albums',
+    link: '/albums',
+  },
+  GENRE: {
+    path: 'genre/:id',
+    link: '/genre',
+    getLinkWithId: (id: string) => `/genre/${id}`,
+  },
+  GENRES: {
+    path: 'genres',
+    link: '/genres',
   },
 };
