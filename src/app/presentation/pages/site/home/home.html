@@ -40,13 +40,13 @@
 
   <!-- Canciones Populares -->
   <app-music-section
-    [title]="popularSectionConfig().title"
-    [type]="popularSectionConfig().type"
-    [songs]="popularSectionConfig().songs"
-    [loading]="popularSectionConfig().loading"
+    [title]="'🔥 Más Populares'"
+    [type]="getCurrentViewType()"
+    [songs]="popularSongs()"
+    [loading]="loading()"
     [primaryButton]="popularSectionConfig().primaryButton"
-    [emptyMessage]="popularSectionConfig().emptyMessage"
-    [loadingMessage]="popularSectionConfig().loadingMessage"
+    [emptyMessage]="'No se pudieron cargar las canciones populares'"
+    [loadingMessage]="'Cargando canciones populares...'"
     (songSelected)="playSong($event)"
     (retryLoad)="refreshHomeData()"
   ></app-music-section>
@@ -74,14 +74,14 @@
 
   <!-- Trending Now / Canciones Aleatorias -->
   <app-music-section
-    [title]="randomSectionConfig().title"
-    [type]="randomSectionConfig().type"
-    [songs]="randomSectionConfig().songs"
-    [loading]="randomSectionConfig().loading"
+    [title]="'🎲 Descubre Música Nueva'"
+    [type]="getCurrentViewType()"
+    [songs]="randomSongs()"
+    [loading]="loading()"
     [actionButtons]="randomSectionConfig().actionButtons"
-    [showPlayCount]="randomSectionConfig().showPlayCount"
-    [emptyMessage]="randomSectionConfig().emptyMessage"
-    [loadingMessage]="randomSectionConfig().loadingMessage"
+    [showPlayCount]="false"
+    [emptyMessage]="'No se pudieron cargar las canciones'"
+    [loadingMessage]="'Cargando música...'"
     (songSelected)="playSong($event)"
     (retryLoad)="refreshHomeData()"
   ></app-music-section>

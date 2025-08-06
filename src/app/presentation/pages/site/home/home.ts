@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
-  private readonly viewModeService = inject(ViewModeService);
+  readonly viewModeService = inject(ViewModeService);
 
   // Route configs
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
@@ -159,6 +159,14 @@ export class HomeComponent implements OnInit {
       return `${(count / 1000).toFixed(1)}K`;
     }
     return count.toString();
+  }
+
+  // Getter para debugging - ver qué tipo se está usando
+  getCurrentViewType(): 'grid' | 'table' {
+    const currentMode = this.viewModeService.viewMode();
+    const resultType = currentMode === 'list' ? 'grid' : 'table';
+    console.log('🎯 getCurrentViewType: viewMode =', currentMode, '→ resultType =', resultType);
+    return resultType;
   }
 
   // Configuraciones para las secciones de música (usando computed para reactividad)
