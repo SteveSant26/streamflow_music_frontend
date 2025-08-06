@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { API_CONFIG_SONGS } from '../../config/end-points/api-config-songs';
 import { 
   SongDto, 
   SongListDto, 
@@ -14,7 +15,7 @@ import {
   providedIn: 'root'
 })
 export class SongService {
-  private readonly baseUrl = `${environment.apiUrl}/api/songs`;
+  private readonly baseUrl = environment.apiUrl;
 
   constructor(private readonly http: HttpClient) {}
 
@@ -23,7 +24,7 @@ export class SongService {
    * GET /api/songs/list/{id}/
    */
   getSongById(songId: string): Observable<SongDto> {
-    return this.http.get<SongDto>(`${this.baseUrl}/list/${songId}/`);
+    return this.http.get<SongDto>(`${this.baseUrl}${API_CONFIG_SONGS.songs.getById(songId)}`);
   }
 
   /**
@@ -32,7 +33,7 @@ export class SongService {
    */
   incrementPlayCount(songId: string): Observable<PlayCountResponseDto> {
     return this.http.post<PlayCountResponseDto>(
-      `${this.baseUrl}/api/${songId}/increment-play-count/`,
+      `${this.baseUrl}${API_CONFIG_SONGS.songs.incrementPlayCount(songId)}`,
       {}
     );
   }
@@ -46,7 +47,7 @@ export class SongService {
       .set('page', page.toString())
       .set('page_size', pageSize.toString());
 
-    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}/most-popular/`, { params });
+    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}${API_CONFIG_SONGS.songs.mostPopular}`, { params });
   }
 
   /**
@@ -58,7 +59,7 @@ export class SongService {
       .set('page', page.toString())
       .set('page_size', pageSize.toString());
 
-    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}/random/`, { params });
+    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}${API_CONFIG_SONGS.songs.random}`, { params });
   }
 
   /**
@@ -67,7 +68,7 @@ export class SongService {
    */
   searchSongs(searchParams: SongSearchParams): Observable<PaginatedResponse<SongListDto>> {
     const params = this.buildSearchParams(searchParams);
-    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}/list/`, { params });
+    return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}${API_CONFIG_SONGS.songs.list}`, { params });
   }
 
   private buildSearchParams(searchParams: SongSearchParams): HttpParams {
