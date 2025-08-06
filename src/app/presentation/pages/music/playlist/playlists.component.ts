@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { ROUTES_CONFIG_MUSIC } from '../../../../config/routes-config/routes-music.config';
 import { 
   GetUserPlaylistsUseCase, 
   DeletePlaylistUseCase,
@@ -32,6 +33,9 @@ export class PlaylistsComponent implements OnInit {
   private readonly deletePlaylistUseCase = inject(DeletePlaylistUseCase);
   private readonly ensureDefaultPlaylistUseCase = inject(EnsureDefaultPlaylistUseCase);
   private readonly dialog = inject(MatDialog);
+
+  // Configuraciones de rutas para el template
+  readonly ROUTES_CONFIG_MUSIC = ROUTES_CONFIG_MUSIC;
 
   playlists = signal<Playlist[]>([]);
   loading = signal(false);
