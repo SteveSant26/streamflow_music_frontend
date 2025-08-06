@@ -104,7 +104,7 @@
     
     <div class="playlist-items">
       <div 
-        *ngFor="let song of currentPlaylist.songs; let i = index"
+        *ngFor="let song of playlistSongs(); let i = index"
         class="playlist-item"
         [class.current]="song.id === state.currentSong?.id"
         (click)="playFromPlaylist(i)"
@@ -115,7 +115,7 @@
           <div class="item-title">{{ song.title }}</div>
           <div class="item-artist">{{ song.artist_name }}</div>
         </div>
-        <div class="item-duration">{{ formatTime(song.duration) }}</div>
+        <div class="item-duration">{{ song.duration_formatted || formatTime(song.duration_seconds || 0) }}</div>
       </div>
     </div>
   </div>

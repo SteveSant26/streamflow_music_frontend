@@ -12,8 +12,7 @@ import { Observable, map } from 'rxjs';
 import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
 import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
-import { Song } from '../../../../domain/entities/song.entity';
-import { Playlist } from '../../../../domain/entities/playlist.entity';
+import { Song, Playlist } from '../../../../domain/entities/song.entity';
 
 @Component({
   selector: 'app-music-player',
@@ -64,6 +63,9 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
 
   formattedCurrentTime = computed(() => this.formatTime(this.currentTime()));
   formattedDuration = computed(() => this.formatTime(this.duration()));
+  
+  // Adaptador para compatibilidad con el template
+  playlistSongs = computed(() => this.currentPlaylist()?.items || []);
 
   ngOnInit() {
     // Configurar el observable para el template
@@ -93,7 +95,7 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     });
 
     // Subscribe to playlist changes
-    this.playlistService.getCurrentPlaylist$().subscribe(playlist => {
+    this.playlistService.currentPlaylist$.subscribe(playlist => {
       this.currentPlaylist.set(playlist);
     });
   }
