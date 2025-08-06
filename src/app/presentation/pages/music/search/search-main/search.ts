@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap, of, catchError, finalize } from 'rxjs';
+import { debounceTime, distinctUntilChanged, of, catchError, finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // Domain
@@ -19,6 +19,7 @@ import { SearchFiltersComponent } from '@app/presentation/components/music/searc
 
 // Services and Directives
 import { SearchFiltersService } from '@app/infrastructure/services/search-filters.service';
+import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { InfiniteScrollDirective } from '@app/shared/directives/infinite-scroll.directive';
 
 interface PaginationInfo {
@@ -55,6 +56,7 @@ export class SearchComponent implements OnInit {
   private readonly searchSongsPaginatedUseCase = inject(SearchSongsPaginatedUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
   readonly searchFiltersService = inject(SearchFiltersService);
+  readonly viewModeService = inject(ViewModeService);
 
   // Control de formulario para la búsqueda
   searchControl = new FormControl('');
@@ -65,7 +67,6 @@ export class SearchComponent implements OnInit {
   isLoadingMore = signal(false);
   hasSearched = signal(false);
   showFilters = signal(false);
-  viewMode = signal<'list' | 'table'>('list'); // Vista por defecto: lista moderna
   includeYouTube = signal(false); // Por defecto en false
   pagination = signal<PaginationInfo>({
     count: 0,
@@ -175,7 +176,7 @@ export class SearchComponent implements OnInit {
   }
 
   toggleViewMode() {
-    this.viewMode.update(current => current === 'list' ? 'table' : 'list');
+    this.viewModeService.toggleViewMode();
   }
 
   toggleYouTube() {

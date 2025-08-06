@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Fondo degradado -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="icon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.7" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="url(#bg)" rx="12"/>
+  
+  <!-- Ícono de música -->
+  <g transform="translate(50, 40)">
+    <!-- Nota musical grande -->
+    <circle cx="30" cy="90" r="12" fill="url(#icon)"/>
+    <rect x="40" y="30" width="4" height="65" fill="url(#icon)"/>
+    <path d="M 44 30 Q 80 20 80 35 L 80 85 Q 80 95 70 95 Q 60 95 60 85 Q 60 75 70 75 Q 75 75 80 78 L 80 40 Q 65 45 44 50 Z" fill="url(#icon)"/>
+    
+    <!-- Nota musical pequeña -->
+    <circle cx="80" cy="100" r="8" fill="url(#icon)" opacity="0.8"/>
+    <rect x="87" y="60" width="3" height="45" fill="url(#icon)" opacity="0.8"/>
+    
+    <!-- Ondas sonoras -->
+    <path d="M 15 60 Q 20 55 15 50" stroke="url(#icon)" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M 10 70 Q 18 60 10 50" stroke="url(#icon)" stroke-width="2" fill="none" opacity="0.4"/>
+    <path d="M 5 80 Q 15 65 5 50" stroke="url(#icon)" stroke-width="2" fill="none" opacity="0.3"/>
+  </g>
+  
+  <!-- Texto -->
+  <text x="100" y="160" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" opacity="0.8">
+    Sin imagen
+  </text>
+</svg>

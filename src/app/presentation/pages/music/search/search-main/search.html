@@ -142,14 +142,14 @@
           <div class="view-toggle bg-gray-100 rounded-lg p-1 flex">
             <button
               (click)="toggleViewMode()"
-              [class.active]="viewMode() === 'list'"
+              [class.active]="viewModeService.viewMode() === 'list'"
               class="view-btn px-3 py-2 rounded-md text-sm font-medium transition-all"
             >
               <mat-icon class="w-4 h-4">view_list</mat-icon>
             </button>
             <button
               (click)="toggleViewMode()"
-              [class.active]="viewMode() === 'table'"
+              [class.active]="viewModeService.viewMode() === 'table'"
               class="view-btn px-3 py-2 rounded-md text-sm font-medium transition-all"
             >
               <mat-icon class="w-4 h-4">table_chart</mat-icon>
@@ -168,7 +168,7 @@
       </div>
 
       <!-- Vista de lista moderna -->
-      <div class="songs-grid space-y-3" *ngIf="viewMode() === 'list'">
+      <div class="songs-grid space-y-3" *ngIf="viewModeService.viewMode() === 'list'">
         <div 
           *ngFor="let song of searchResults(); let i = index" 
           class="song-card bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center gap-4"
@@ -176,6 +176,15 @@
           <!-- Número de posición -->
           <div class="song-number text-gray-400 font-mono text-sm w-8 text-center">
             {{ i + 1 }}
+          </div>
+
+          <!-- Imagen de la canción -->
+          <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
+            <img 
+              [src]="song.thumbnail_url || 'assets/images/default-album.svg'" 
+              [alt]="song.title + ' - ' + song.artist_name"
+              class="w-full h-full object-cover"
+            />
           </div>
 
           <!-- Botón de reproducción individual -->
@@ -203,21 +212,30 @@
             <button
               class="action-btn text-gray-400 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
               [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
+              title="Agregar a playlist"
             >
               <mat-icon class="w-5 h-5">playlist_add</mat-icon>
             </button>
             <button
               class="action-btn text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
               [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
+              title="Agregar a favoritos"
             >
               <mat-icon class="w-5 h-5">favorite_border</mat-icon>
+            </button>
+            <button
+              class="action-btn text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              [attr.aria-label]="'Más opciones para ' + song.title"
+              title="Más opciones"
+            >
+              <mat-icon class="w-5 h-5">more_vert</mat-icon>
             </button>
           </div>
         </div>
       </div>
 
       <!-- Vista de tabla tradicional -->
-      <div class="traditional-view" *ngIf="viewMode() === 'table'">
+      <div class="traditional-view" *ngIf="viewModeService.viewMode() === 'table'">
         <app-musics-table 
           [songs]="searchResults()" 
           contextType="search"
