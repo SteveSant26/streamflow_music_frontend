@@ -1,10 +1,11 @@
 export const API_CONFIG_PLAYLISTS = {
   playlists: {
-    list: '/api/playlists/playlists/',
-    create: '/api/playlists/playlists/',
-    getById: (id: string) => `/api/playlists/playlists/${id}/`,
-    update: (id: string) => `/api/playlists/playlists/${id}/`,
-    delete: (id: string) => `/api/playlists/playlists/${id}/`,
+    // Endpoints basados en la API OpenAPI
+    list: '/api/playlists/playlist/',
+    create: '/api/playlists/playlist/',
+    getById: (id: string) => `/api/playlists/playlist/${id}/`,
+    update: (id: string) => `/api/playlists/playlist/${id}/`,
+    delete: (id: string) => `/api/playlists/playlist/${id}/`,
     songs: {
       list: (id: string) => `/api/playlists/playlists/${id}/songs/`,
       add: (id: string) => `/api/playlists/playlists/${id}/songs/`,
