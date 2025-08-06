@@ -7,7 +7,7 @@ export interface PlaylistDto {
   user_id: string;
   is_default: boolean;
   is_public: boolean;
-  total_songs: number;
+  song_count: number; // Cambiado de total_songs a song_count para coincidir con la API real
   created_at: string;
   updated_at: string;
 }

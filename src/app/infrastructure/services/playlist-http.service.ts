@@ -1,8 +1,8 @@
 // DEPRECATED: Use MyPlaylistsHttpService and PublicPlaylistsHttpService instead
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, map, catchError, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map, catchError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_CONFIG_PLAYLISTS } from '../../config/end-points/api-config-playlists';
 import {
@@ -20,7 +20,6 @@ import {
   PlaylistDto,
   PlaylistWithSongsDto,
   PlaylistSongDto,
-  PaginatedPlaylistResponseDto,
   PaginatedPlaylistSongResponseDto
 } from '../../domain/dtos/playlist.dto';
 import { PlaylistMapper } from '../../domain/mappers/playlist.mapper';
@@ -50,13 +49,20 @@ export class PlaylistHttpService implements IPlaylistRepository {
       });
     }
 
-    return this.http.get<PaginatedPlaylistResponseDto>(
+    return this.http.get<PlaylistDto[]>( // Cambiar a array directo
       `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.list}`,
       { params }
     ).pipe(
       map(response => {
         console.log('Raw API response for user playlists:', response);
-        return PlaylistMapper.fromPaginatedDto(response);
+        // Crear una respuesta paginada mock ya que la API devuelve array directo
+        const paginatedResponse: PaginatedPlaylistResponse = {
+          count: response.length,
+          next: null,
+          previous: null,
+          results: response.map(PlaylistMapper.dtoToEntity)
+        };
+        return paginatedResponse;
       }),
       catchError((error: any) => {
         console.error('Error en getUserPlaylists:', error);

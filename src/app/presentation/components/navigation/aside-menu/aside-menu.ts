@@ -189,6 +189,7 @@ export class AsideMenu implements OnInit, OnDestroy {
     const subscription = this.getUserPlaylistsUseCase.execute(filters).subscribe({
       next: (playlists) => {
         console.log('Playlists recibidas en el componente:', playlists);
+        console.log('Total playlists encontradas:', playlists.length);
         
         // Convertir las playlists del dominio al formato del sidebar
         const sidebarPlaylists: SidebarPlaylist[] = playlists.map(playlist => ({
@@ -199,6 +200,7 @@ export class AsideMenu implements OnInit, OnDestroy {
           is_public: playlist.is_public
         }));
 
+        console.log('Sidebar playlists creadas:', sidebarPlaylists);
         this.playlists.set(sidebarPlaylists);
         this.isLoadingPlaylists.set(false);
         
