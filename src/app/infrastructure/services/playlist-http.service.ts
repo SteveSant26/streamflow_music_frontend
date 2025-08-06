@@ -1,3 +1,5 @@
+// DEPRECATED: Use MyPlaylistsHttpService and PublicPlaylistsHttpService instead
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
@@ -19,13 +21,15 @@ import {
   PlaylistWithSongsDto,
   PlaylistSongDto,
   PaginatedPlaylistResponseDto,
-  PaginatedPlaylistSongResponseDto,
-  MyPlaylistsQueryParamsDto,
-  PublicPlaylistsQueryParamsDto
+  PaginatedPlaylistSongResponseDto
 } from '../../domain/dtos/playlist.dto';
 import { PlaylistMapper } from '../../domain/mappers/playlist.mapper';
 import { IPlaylistRepository } from '../../domain/repositories/i-playlist.repository';
 
+/**
+ * @deprecated Use MyPlaylistsHttpService and PublicPlaylistsHttpService instead
+ * This service is kept for backward compatibility
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +38,7 @@ export class PlaylistHttpService implements IPlaylistRepository {
 
   constructor(private readonly http: HttpClient) {}
 
-  // CRUD operations for playlists
+  // CRUD operations for playlists - Default to myPlaylists for backward compatibility
   getPlaylists(filters?: PlaylistFilters): Observable<PaginatedPlaylistResponse> {
     let params = new HttpParams();
     
@@ -47,26 +51,26 @@ export class PlaylistHttpService implements IPlaylistRepository {
     }
 
     return this.http.get<PaginatedPlaylistResponseDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.list}`,
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.list}`,
       { params }
     ).pipe(
-      map(response => PlaylistMapper.paginatedDtoToEntity(response))
+      map(response => PlaylistMapper.fromPaginatedDto(response))
     );
   }
 
   getPlaylist(id: string): Observable<PlaylistWithSongs> {
     return this.http.get<PlaylistWithSongsDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.getById(id)}`
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.getById(id)}`
     ).pipe(
       map(response => PlaylistMapper.withSongsDtoToEntity(response))
     );
   }
 
   createPlaylist(playlist: CreatePlaylistDto): Observable<Playlist> {
-    const requestDto = PlaylistMapper.createDtoFromEntity(playlist);
+    const requestDto = PlaylistMapper.toCreatePlaylistRequestDto(playlist);
     
     return this.http.post<PlaylistDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.create}`,
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.create}`,
       requestDto
     ).pipe(
       map(response => PlaylistMapper.dtoToEntity(response))
@@ -74,10 +78,10 @@ export class PlaylistHttpService implements IPlaylistRepository {
   }
 
   updatePlaylist(id: string, playlist: UpdatePlaylistDto): Observable<Playlist> {
-    const requestDto = PlaylistMapper.updateDtoFromEntity(playlist);
+    const requestDto = PlaylistMapper.toUpdatePlaylistRequestDto(playlist);
     
     return this.http.put<PlaylistDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.update(id)}`,
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.update(id)}`,
       requestDto
     ).pipe(
       map(response => PlaylistMapper.dtoToEntity(response))
@@ -86,7 +90,7 @@ export class PlaylistHttpService implements IPlaylistRepository {
 
   deletePlaylist(id: string): Observable<void> {
     return this.http.delete<void>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.delete(id)}`
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.delete(id)}`
     );
   }
 
@@ -102,18 +106,18 @@ export class PlaylistHttpService implements IPlaylistRepository {
     }
 
     return this.http.get<PaginatedPlaylistSongResponseDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.list(playlistId)}`,
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.songs.list(playlistId)}`,
       { params }
     ).pipe(
-      map(response => PlaylistMapper.paginatedSongDtoToEntity(response))
+      map(response => PlaylistMapper.fromPaginatedSongDto(response))
     );
   }
 
   addSongToPlaylist(playlistId: string, song: AddSongToPlaylistDto): Observable<PlaylistSong> {
-    const requestDto = PlaylistMapper.addSongDtoFromEntity(song);
+    const requestDto = PlaylistMapper.toAddSongToPlaylistRequestDto(song);
     
     return this.http.post<PlaylistSongDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.add(playlistId)}`,
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.songs.add(playlistId)}`,
       requestDto
     ).pipe(
       map(response => PlaylistMapper.songDtoToEntity(response))
@@ -122,21 +126,16 @@ export class PlaylistHttpService implements IPlaylistRepository {
 
   removeSongFromPlaylist(playlistId: string, songId: string): Observable<void> {
     return this.http.delete<void>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.playlists.songs.remove(playlistId, songId)}`
+      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.songs.remove(playlistId, songId)}`
     );
   }
 
   // User-specific operations
   getUserPlaylists(filters?: PlaylistFilters): Observable<PaginatedPlaylistResponse> {
-    // Para obtener solo las playlists del usuario, añadimos el filtro por defecto
-    const userFilters = { ...filters };
-    // Si hay autenticación, el backend debería filtrar automáticamente por usuario
-    
-    return this.getPlaylists(userFilters);
+    return this.getPlaylists(filters);
   }
 
   getUserPlaylist(id: string): Observable<PlaylistWithSongs> {
-    // Similar a getPlaylist, pero el backend debería verificar que pertenece al usuario autenticado
     return this.getPlaylist(id);
   }
 }

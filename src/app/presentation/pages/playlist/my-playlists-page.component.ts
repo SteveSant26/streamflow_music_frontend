@@ -54,7 +54,7 @@ import { PlaylistCardComponent } from '../../components/playlist/playlist-card.c
           <button 
             mat-fab 
             color="primary"
-            (click)="showCreateForm = !showCreateForm"
+            (click)="showCreateForm.set(!showCreateForm())"
             class="create-btn">
             <mat-icon>add</mat-icon>
           </button>
@@ -67,8 +67,8 @@ import { PlaylistCardComponent } from '../../components/playlist/playlist-card.c
           <mat-label>Buscar en mis playlists</mat-label>
           <input 
             matInput 
-            [(ngModel)]="searchTerm" 
-            (input)="onSearchChange()"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="onSearchChange($event)"
             placeholder="Nombre de playlist...">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
@@ -81,12 +81,12 @@ import { PlaylistCardComponent } from '../../components/playlist/playlist-card.c
               Todas ({{ totalPlaylists() }})
             </mat-chip>
             <mat-chip 
-              [class.selected]="selectedFilter === 'public'"
+              [class.selected]="selectedFilter() === 'public'"
               (click)="applyFilter('public')">
               Públicas ({{ publicPlaylists() }})
             </mat-chip>
             <mat-chip 
-              [class.selected]="selectedFilter === 'private'"
+              [class.selected]="selectedFilter() === 'private'"
               (click)="applyFilter('private')">
               Privadas ({{ privatePlaylists() }})
             </mat-chip>
@@ -101,15 +101,15 @@ import { PlaylistCardComponent } from '../../components/playlist/playlist-card.c
             <mat-card-title>Nueva Playlist</mat-card-title>
             <button 
               mat-icon-button 
-              (click)="showCreateForm = false">
+              (click)="showCreateForm.set(false)">
               <mat-icon>close</mat-icon>
             </button>
           </mat-card-header>
           <mat-card-content>
             <app-playlist-form
-              [isVisible]="showCreateForm"
+              [isVisible]="showCreateForm()"
               (playlistSaved)="onPlaylistCreated($event)"
-              (formCancelled)="showCreateForm = false">
+              (formCancelled)="showCreateForm.set(false)">
             </app-playlist-form>
           </mat-card-content>
         </mat-card>
@@ -129,8 +129,8 @@ import { PlaylistCardComponent } from '../../components/playlist/playlist-card.c
         <button 
           mat-raised-button 
           color="primary"
-          (click)="showCreateForm = true"
-          *ngIf="searchTerm === ''">
+          (click)="showCreateForm.set(true)"
+          *ngIf="searchTerm() === ''">>
           <mat-icon>add</mat-icon>
           Crear mi primera playlist
         </button>
@@ -141,12 +141,11 @@ import { PlaylistCardComponent } from '../../components/playlist/playlist-card.c
         <app-playlist-card
           *ngFor="let playlist of filteredPlaylists(); trackBy: trackByPlaylistId"
           [playlist]="playlist"
-          [showOwner]="false"
-          [showEditControls]="true"
+          [showActions]="true"
+          [showVisibility]="true"
           (playlistSelected)="onPlaylistSelected($event)"
-          (editPlaylist)="onEditPlaylist($event)"
-          (deletePlaylist)="onDeletePlaylist($event)"
-          (addSongs)="onAddSongs($event)">
+          (playlistEdit)="onEditPlaylist($event)"
+          (playlistDelete)="onDeletePlaylist($event)">
         </app-playlist-card>
       </div>
 
@@ -328,23 +327,31 @@ export class MyPlaylistsPageComponent implements OnInit {
         ordering: '-created_at'
       };
 
-      const response = await this.getMyPlaylistsUseCase.execute(params).toPromise();
-      
-      if (response) {
-        if (page === 1) {
-          this.playlists.set(response.results);
-        } else {
-          this.playlists.update(current => [...current, ...response.results]);
+      this.getMyPlaylistsUseCase.execute(params).subscribe({
+        next: (response) => {
+          if (response) {
+            if (page === 1) {
+              this.playlists.set(response.results);
+            } else {
+              this.playlists.update(current => [...current, ...response.results]);
+            }
+            
+            this.hasMoreData.set(!!response.next);
+            this.currentPage.set(page);
+            this.updateCounters();
+            this.applyCurrentFilter();
+          }
+        },
+        error: (error) => {
+          console.error('Error loading my playlists:', error);
+        },
+        complete: () => {
+          this.isLoading.set(false);
+          this.isLoadingMore.set(false);
         }
-        
-        this.hasMoreData.set(!!response.next);
-        this.currentPage.set(page);
-        this.updateCounters();
-        this.applyCurrentFilter();
-      }
+      });
     } catch (error) {
       console.error('Error loading my playlists:', error);
-    } finally {
       this.isLoading.set(false);
       this.isLoadingMore.set(false);
     }
@@ -381,7 +388,8 @@ export class MyPlaylistsPageComponent implements OnInit {
     this.filteredPlaylists.set(filtered);
   }
 
-  onSearchChange() {
+  onSearchChange(term: string) {
+    this.searchTerm.set(term);
     this.applyCurrentFilter();
   }
 
@@ -420,10 +428,16 @@ export class MyPlaylistsPageComponent implements OnInit {
   async onDeletePlaylist(playlist: Playlist) {
     if (confirm(`¿Estás seguro de que quieres eliminar la playlist "${playlist.name}"?`)) {
       try {
-        await this.deletePlaylistUseCase.execute(playlist.id).toPromise();
-        this.playlists.update(current => current.filter(p => p.id !== playlist.id));
-        this.updateCounters();
-        this.applyCurrentFilter();
+        this.deletePlaylistUseCase.execute(playlist.id).subscribe({
+          next: () => {
+            this.playlists.update(current => current.filter(p => p.id !== playlist.id));
+            this.updateCounters();
+            this.applyCurrentFilter();
+          },
+          error: (error) => {
+            console.error('Error deleting playlist:', error);
+          }
+        });
       } catch (error) {
         console.error('Error deleting playlist:', error);
       }
