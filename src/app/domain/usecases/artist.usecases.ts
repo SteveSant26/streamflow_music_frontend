@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ArtistService } from '../../infrastructure/services/artist.service';
 import { Artist, ArtistListItem } from '../../domain/entities/artist.entity';
-import { ArtistSearchParams, ArtistsByCountryParams, PopularArtistsParams, VerifiedArtistsParams } from '../../domain/dtos/artist.dto';
+import { ArtistSearchParams, ArtistDto } from '../../domain/dtos/artist.dto';
+import { ArtistMapper } from '../mappers/artist.mapper';
+import { PaginatedResponse } from '../../shared/interfaces/paginated-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GetArtistByIdUseCase {
-  constructor(private artistService: ArtistService) {}
+  constructor(private readonly artistService: ArtistService) {}
 
   execute(id: string): Observable<Artist> {
     return this.artistService.getArtistById(id);
@@ -18,43 +20,14 @@ export class GetArtistByIdUseCase {
 @Injectable({
   providedIn: 'root'
 })
-export class SearchArtistsUseCase {
-  constructor(private artistService: ArtistService) {}
+export class GetAllArtistsUseCase {
+  constructor(private readonly artistService: ArtistService) {}
 
-  execute(params: ArtistSearchParams): Observable<ArtistListItem[]> {
-    return this.artistService.searchArtists(params);
-  }
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class GetArtistsByCountryUseCase {
-  constructor(private artistService: ArtistService) {}
-
-  execute(params: ArtistsByCountryParams): Observable<ArtistListItem[]> {
-    return this.artistService.getArtistsByCountry(params);
-  }
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class GetPopularArtistsUseCase {
-  constructor(private artistService: ArtistService) {}
-
-  execute(params?: PopularArtistsParams): Observable<ArtistListItem[]> {
-    return this.artistService.getPopularArtists(params);
-  }
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class GetVerifiedArtistsUseCase {
-  constructor(private artistService: ArtistService) {}
-
-  execute(params?: VerifiedArtistsParams): Observable<ArtistListItem[]> {
-    return this.artistService.getVerifiedArtists(params);
+  execute(params?: ArtistSearchParams): Observable<ArtistListItem[]> {
+    return this.artistService.getAllArtists(params).pipe(
+      map((response: PaginatedResponse<ArtistDto>) => 
+        ArtistMapper.mapArtistListToArtists(response.results)
+      )
+    );
   }
 }
