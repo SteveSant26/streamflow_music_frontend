@@ -7,10 +7,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { Router } from '@angular/router';
+import { Observable, map } from 'rxjs';
 import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
 import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
 import { Song } from '../../../../domain/entities/song.entity';
+import { Playlist } from '../../../../domain/entities/playlist.entity';
 
 @Component({
   selector: 'app-music-player',
@@ -31,8 +34,14 @@ import { Song } from '../../../../domain/entities/song.entity';
 export class MusicPlayerComponent implements OnInit, OnDestroy {
   private readonly playerUseCase = inject(PlayerUseCase);
   private readonly playlistService = inject(PlaylistService);
-  private readonly audioPlayerService = inject(AudioPlayerService);
+  private readonly router = inject(Router);
 
+  // Exponer el audioPlayerService para el template
+  audioPlayer = inject(AudioPlayerService);
+
+  // Observable para el template
+  playbackState$!: Observable<any>;
+  
   // Player state signals
   currentSong = signal<Song | null>(null);
   isPlaying = signal<boolean>(false);
@@ -45,6 +54,7 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   // UI state
   showPlaylist = signal<boolean>(false);
   isLoading = signal<boolean>(false);
+  currentPlaylist = signal<Playlist | null>(null);
 
   // Computed values
   progress = computed(() => {
@@ -56,7 +66,21 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
   formattedDuration = computed(() => this.formatTime(this.duration()));
 
   ngOnInit() {
-    // Subscribe to player state changes
+    // Configurar el observable para el template
+    this.playbackState$ = this.playerUseCase.getPlayerState().pipe(
+      map(state => ({
+        currentSong: state.currentSong,
+        isPlaying: state.isPlaying,
+        currentTime: state.currentTime,
+        duration: state.duration,
+        volume: state.volume,
+        isShuffleEnabled: state.isShuffleEnabled,
+        repeatMode: state.repeatMode,
+        isLoading: state.isLoading
+      }))
+    );
+
+    // Subscribe to player state changes for signals
     this.playerUseCase.getPlayerState().subscribe(state => {
       this.currentSong.set(state.currentSong);
       this.isPlaying.set(state.isPlaying);
@@ -67,14 +91,41 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
       this.repeatMode.set(state.repeatMode);
       this.isLoading.set(state.isLoading);
     });
+
+    // Subscribe to playlist changes
+    this.playlistService.getCurrentPlaylist$().subscribe(playlist => {
+      this.currentPlaylist.set(playlist);
+    });
   }
 
   ngOnDestroy() {
     // Cleanup handled by service
   }
 
+  // Template methods
+  goToSongDetail(songId: string) {
+    this.router.navigate(['/music/song', songId]);
+  }
+
+  onImageError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.src = '/assets/placeholders/song.jpg';
+  }
+
+  previousSong() {
+    this.playerUseCase.playPrevious();
+  }
+
+  togglePlay() {
+    this.playerUseCase.togglePlayPause();
+  }
+
   togglePlayPause() {
     this.playerUseCase.togglePlayPause();
+  }
+
+  nextSong() {
+    this.playerUseCase.playNext();
   }
 
   playPrevious() {
@@ -85,10 +136,21 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     this.playerUseCase.playNext();
   }
 
+  onSeek(event: any) {
+    const value = event.value || event.target.value;
+    const newTime = (value / 100) * this.duration();
+    this.playerUseCase.seekTo(newTime);
+  }
+
   seekTo(event: any) {
     const value = event.value || event.target.value;
     const newTime = (value / 100) * this.duration();
     this.playerUseCase.seekTo(newTime);
+  }
+
+  onVolumeChange(event: any) {
+    const value = event.value || event.target.value;
+    this.playerUseCase.setVolume(value / 100);
   }
 
   setVolume(event: any) {
@@ -96,19 +158,55 @@ export class MusicPlayerComponent implements OnInit, OnDestroy {
     this.playerUseCase.setVolume(value / 100);
   }
 
+  toggleMute() {
+    const currentVolume = this.volume();
+    if (currentVolume > 0) {
+      this.playerUseCase.setVolume(0);
+    } else {
+      this.playerUseCase.setVolume(0.5);
+    }
+  }
+
   toggleShuffle() {
     this.playerUseCase.toggleShuffle();
   }
 
   toggleRepeat() {
-    this.playerUseCase.toggleRepeat();
+    // Como toggleRepeat no existe en PlayerUseCase, usamos un método alternativo
+    const currentMode = this.repeatMode();
+    let newMode: 'none' | 'one' | 'all';
+    
+    switch (currentMode) {
+      case 'none':
+        newMode = 'all';
+        break;
+      case 'all':
+        newMode = 'one';
+        break;
+      case 'one':
+        newMode = 'none';
+        break;
+      default:
+        newMode = 'none';
+    }
+    
+    // Aquí necesitarías un método en PlayerUseCase para establecer el modo de repetición
+    console.log('Toggle repeat to:', newMode);
   }
 
   togglePlaylist() {
     this.showPlaylist.update(show => !show);
   }
 
-  private formatTime(seconds: number): string {
+  playFromPlaylist(index: number) {
+    const playlist = this.currentPlaylist();
+    if (playlist && playlist.items && playlist.items[index]) {
+      // Aquí necesitarías un método para reproducir desde un índice específico
+      console.log('Play from playlist index:', index);
+    }
+  }
+
+  formatTime(seconds: number): string {
     if (!seconds || isNaN(seconds)) return '0:00';
     
     const minutes = Math.floor(seconds / 60);
