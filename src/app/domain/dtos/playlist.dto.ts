@@ -1,3 +1,5 @@
+// DTOs que mapean exactamente la respuesta de la API según OpenAPI
+
 export interface PlaylistDto {
   id: string;
   name: string;
@@ -25,29 +27,63 @@ export interface PlaylistWithSongsDto extends PlaylistDto {
   songs: PlaylistSongDto[];
 }
 
-export interface CreatePlaylistDto {
+// DTOs para requests
+export interface CreatePlaylistRequestDto {
   name: string;
   description?: string;
   is_public?: boolean;
 }
 
-export interface UpdatePlaylistDto {
+export interface UpdatePlaylistRequestDto {
   name?: string;
   description?: string;
   is_public?: boolean;
 }
 
-export interface AddSongToPlaylistDto {
+export interface AddSongToPlaylistRequestDto {
   song_id: string;
   position?: number;
 }
 
-export interface PaginatedPlaylistResponse {
+// DTOs para respuestas paginadas (según la API)
+export interface PaginatedPlaylistResponseDto {
   count: number;
   next: string | null;
   previous: string | null;
-  current_page: number;
-  amount_of_pages: number;
-  page_size: number;
   results: PlaylistDto[];
+}
+
+export interface PaginatedPlaylistSongResponseDto {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: PlaylistSongDto[];
+}
+
+// DTOs para filtros y parámetros de consulta
+export interface PlaylistQueryParamsDto {
+  name?: string;
+  description?: string;
+  is_public?: boolean;
+  is_default?: boolean;
+  user_id?: string;
+  user_username?: string;
+  has_description?: boolean;
+  min_song_count?: number;
+  max_song_count?: number;
+  created_after?: string;
+  created_before?: string;
+  updated_after?: string;
+  updated_before?: string;
+  search?: string;
+  ordering?: string;
+  page?: number;
+  page_size?: number;
+}
+
+export interface PlaylistSongQueryParamsDto {
+  ordering?: string;
+  page?: number;
+  page_size?: number;
+  search?: string;
 }
