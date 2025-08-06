@@ -192,6 +192,7 @@
           <!-- Acciones adicionales -->
           <div class="song-actions flex items-center gap-2">
             <button
+              (click)="addToPlaylist(song)"
               class="action-btn text-gray-400 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
               [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
               title="Agregar a playlist"
@@ -199,6 +200,7 @@
               <mat-icon class="w-5 h-5">playlist_add</mat-icon>
             </button>
             <button
+              (click)="addToFavorites(song)"
               class="action-btn text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
               [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
               title="Agregar a favoritos"
@@ -206,6 +208,7 @@
               <mat-icon class="w-5 h-5">favorite_border</mat-icon>
             </button>
             <button
+              (click)="showMoreOptions(song)"
               class="action-btn text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
               [attr.aria-label]="'Más opciones para ' + song.title"
               title="Más opciones"

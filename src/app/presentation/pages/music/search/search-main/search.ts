@@ -175,10 +175,6 @@ export class SearchComponent implements OnInit {
     this.showFilters.update(current => !current);
   }
 
-  toggleViewMode() {
-    this.viewModeService.toggleViewMode();
-  }
-
   toggleYouTube() {
     this.includeYouTube.update(current => !current);
   }
@@ -281,5 +277,23 @@ export class SearchComponent implements OnInit {
         console.error('Error al reproducir lista:', error);
       }
     });
+  }
+
+  addToPlaylist(song: Song): void {
+    // TODO: Implementar funcionalidad de agregar a playlist
+    console.log(`Agregando "${song.title}" a playlist`);
+    // Aquí irá la lógica para mostrar modal de playlists o agregar a favoritos
+  }
+
+  addToFavorites(song: Song): void {
+    // TODO: Implementar funcionalidad de favoritos
+    console.log(`Agregando "${song.title}" a favoritos`);
+    // Aquí irá la lógica para agregar/quitar de favoritos
+  }
+
+  showMoreOptions(song: Song): void {
+    // TODO: Implementar menú de más opciones
+    console.log(`Mostrando más opciones para "${song.title}"`);
+    // Aquí irá la lógica para mostrar menú contextual con más opciones
   }
 }
