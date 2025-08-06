@@ -15,7 +15,7 @@ import { GetPopularArtistsUseCase } from '../../../../domain/usecases/artist.use
 import { GetPopularGenresUseCase } from '../../../../domain/usecases/genre.usecases';
 import { GetRandomSongsUseCase } from '../../../../domain/usecases/song/song.usecases';
 import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
-import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
+import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
 
 @Component({
   selector: 'app-discover',
@@ -38,7 +38,7 @@ export class DiscoverPageComponent implements OnInit {
   private readonly getPopularArtistsUseCase = inject(GetPopularArtistsUseCase);
   private readonly getPopularGenresUseCase = inject(GetPopularGenresUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
-  private readonly audioPlayerService = inject(AudioPlayerService);
+  private readonly playlistService = inject(PlaylistService);
 
   // Signals
   isDarkTheme = this.themeService._isDarkMode;
@@ -141,7 +141,8 @@ export class DiscoverPageComponent implements OnInit {
   playRandomSong(song: Song) {
     const playlist = this.randomSongs();
     const songIndex = playlist.findIndex(s => s.id === song.id);
-    this.audioPlayerService.playSong(song, playlist, songIndex);
+    this.playlistService.createPlaylist(playlist, 'Música Aleatoria', songIndex);
+    this.playlistService.togglePlayback();
   }
 
   formatDuration(seconds: number): string {
