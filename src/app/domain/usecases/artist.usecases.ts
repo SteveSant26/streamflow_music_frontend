@@ -31,3 +31,24 @@ export class GetAllArtistsUseCase {
     );
   }
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetPopularArtistsUseCase {
+  constructor(private readonly artistService: ArtistService) {}
+
+  execute(params?: { limit?: number }): Observable<ArtistListItem[]> {
+    const searchParams: ArtistSearchParams = {
+      popular: true,
+      page_size: params?.limit || 10,
+      ordering: '-followers_count'
+    };
+    
+    return this.artistService.getAllArtists(searchParams).pipe(
+      map((response: PaginatedResponse<ArtistDto>) => 
+        ArtistMapper.mapArtistListToArtists(response.results)
+      )
+    );
+  }
+}

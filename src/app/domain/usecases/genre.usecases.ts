@@ -38,7 +38,10 @@ export class GetAllGenresUseCase {
 export class GetPopularGenresUseCase {
   constructor(private readonly genreService: GenreService) {}
 
-  execute(page: number = 1, pageSize: number = 10): Observable<GenreListItem[]> {
+  execute(params?: { limit?: number }): Observable<GenreListItem[]> {
+    const page = 1;
+    const pageSize = params?.limit || 10;
+    
     return this.genreService.getPopularGenres(page, pageSize).pipe(
       map((response: PaginatedResponse<GenreDto>) => 
         GenreMapper.mapGenreListToGenres(response.results)
