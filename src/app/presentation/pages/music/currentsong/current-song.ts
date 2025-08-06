@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { ROUTES_CONFIG_SITE } from '@app/config';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlaylistService } from '@app/infrastructure/services/playlist.service';
@@ -215,7 +216,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     // CRITICAL: Preserve state before navigation
     this.globalPlayerState.preserveStateForNavigation();
 
-    this.router.navigate(['/home']);
+    this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
   }
 
   skipPrevious() {

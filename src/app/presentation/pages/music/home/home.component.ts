@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, finalize } from 'rxjs';
 import { Router } from '@angular/router';
+import { ROUTES_CONFIG_MUSIC } from '@app/config';
 
 import { Song } from '../../../../domain/entities/song.entity';
 import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
@@ -88,7 +89,7 @@ export class HomePageComponent implements OnInit {
 
   onSongSelect(song: Song) {
     // Navegación a la página de detalles de la canción
-    this.router.navigate(['/song', song.id]);
+    this.router.navigate([ROUTES_CONFIG_MUSIC.SONG.getLinkWithId(song.id)]);
   }
 
   onPlaySong(song: Song) {

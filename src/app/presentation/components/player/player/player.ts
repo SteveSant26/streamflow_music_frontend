@@ -21,6 +21,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { ROUTES_CONFIG_MUSIC } from '@app/config';
 import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
 
 interface Song {
@@ -194,7 +195,7 @@ export class Player implements OnInit, AfterViewInit, OnDestroy {
     console.log('🔍 Router disponible:', !!this.router);
     console.log('🔍 Intentando navegar a /current-song...');
     
-    this.router.navigate(['/current-song'])
+    this.router.navigate([ROUTES_CONFIG_MUSIC.CURRENT_SONG.link])
       .then(success => {
         console.log('✅ Navegación exitosa:', success);
       })

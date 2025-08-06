@@ -460,7 +460,7 @@ export class SubscriptionManagementComponent implements OnInit {
   }
 
   changePlan(): void {
-    this.router.navigate(['/subscription/plans']);
+    this.router.navigate([ROUTES_CONFIG_SUBSCRIPTION.PLANS.link]);
   }
 
   async cancelSubscription(): Promise<void> {
