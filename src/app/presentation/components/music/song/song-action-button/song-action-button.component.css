@@ -1,0 +1,77 @@
+.song-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.play-btn {
+  color: var(--primary-color, #1976d2);
+  background: var(--primary-container, rgba(25, 118, 210, 0.1));
+  transition: all 0.2s ease;
+}
+
+.play-btn:hover {
+  background: var(--primary-color, #1976d2);
+  color: white;
+  transform: scale(1.05);
+}
+
+.more-btn {
+  color: var(--on-surface-variant, #666);
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.more-btn:hover {
+  opacity: 1;
+}
+
+.song-actions-menu {
+  max-width: 250px;
+}
+
+.song-actions-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0 16px;
+}
+
+.song-actions-menu mat-icon {
+  color: var(--on-surface-variant, #666);
+  margin-right: 0;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .song-actions {
+    gap: 0.125rem;
+  }
+
+  .play-btn,
+  .more-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .play-btn mat-icon,
+  .more-btn mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Dark mode support */
+:host-context(.dark-theme) .play-btn {
+  background: var(--primary-container-dark, rgba(129, 199, 255, 0.1));
+}
+
+:host-context(.dark-theme) .more-btn {
+  color: var(--on-surface-variant-dark, #b3b3b3);
+}
+
+:host-context(.dark-theme) .song-actions-menu mat-icon {
+  color: var(--on-surface-variant-dark, #b3b3b3);
+}
