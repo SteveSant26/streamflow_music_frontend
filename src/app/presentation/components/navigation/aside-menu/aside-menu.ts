@@ -18,6 +18,15 @@ import {
 } from '@app/config/routes-config';
 import { TranslateModule } from '@ngx-translate/core';
 
+// Interfaz simple para las playlists del sidebar
+interface SidebarPlaylist {
+  id: number;
+  name: string;
+  cover: string;
+  total_songs?: number;
+  is_public?: boolean;
+}
+
 @Component({
   selector: 'app-aside-menu',
   imports: [
@@ -50,7 +59,7 @@ export class AsideMenu implements OnInit {
   user = this.authStateService.user;
 
   // Playlists signals - Por ahora usando mock data hasta tener los providers configurados
-  playlists = signal<Playlist[]>([]);
+  playlists = signal<SidebarPlaylist[]>([]);
 
   // Theme properties
   showThemeOptions = false;
@@ -143,35 +152,20 @@ export class AsideMenu implements OnInit {
   }
 
   private loadUserPlaylists() {
-    if (this.isLoadingPlaylists()) return;
-
-    this.isLoadingPlaylists.set(true);
+    // Por ahora usamos datos mock hasta que se configuren correctamente los providers
+    // En el futuro esto se reemplazará con el servicio real
+    const mockPlaylists: SidebarPlaylist[] = [
+      { id: 1, name: 'Mis Favoritas', cover: '/assets/playlists/favorites.jpg', total_songs: 45, is_public: false },
+      { id: 2, name: 'Workout Mix', cover: '/assets/playlists/workout.jpg', total_songs: 32, is_public: true },
+      { id: 3, name: 'Chill Vibes', cover: '/assets/playlists/chill.jpg', total_songs: 28, is_public: false },
+      { id: 4, name: 'Road Trip', cover: '/assets/playlists/roadtrip.jpg', total_songs: 51, is_public: true },
+    ];
     
-    const params = {
-      page: 1,
-      page_size: 4, // Solo las primeras 4
-      ordering: '-created_at'
-    };
-
-    this.getMyPlaylistsUseCase.execute(params).subscribe({
-      next: (response: any) => {
-        if (response?.results) {
-          this.playlists.set(response.results);
-        }
-      },
-      error: (error: any) => {
-        console.error('Error loading user playlists:', error);
-        this.playlists.set([]);
-      },
-      complete: () => {
-        this.isLoadingPlaylists.set(false);
-      }
-    });
+    this.playlists.set(mockPlaylists);
   }
 
   openCreatePlaylistDialog() {
-    // Por ahora, redirigir a la página de mis playlists
-    // TODO: Implementar un dialog global para crear playlists
+    // Redirigir a la página de mis playlists donde se puede crear una nueva
     this.router.navigate(['/my-playlists']);
   }
 }
