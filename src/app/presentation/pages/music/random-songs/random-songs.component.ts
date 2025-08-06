@@ -8,7 +8,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { GetRandomSongsUseCase } from '../../../../domain/usecases/song/song.usecases';
 import { Song } from '../../../../domain/entities/song.entity';
@@ -27,8 +26,7 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
     MatProgressSpinnerModule,
     MatTableModule,
     MatTooltipModule,
-    MatChipsModule,
-    MatDialogModule
+    MatChipsModule
   ],
   templateUrl: './random-songs.component.html',
   styleUrl: './random-songs.component.css'
@@ -37,7 +35,6 @@ export class RandomSongsComponent implements OnInit {
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly audioPlayerService = inject(AudioPlayerService);
   private readonly playlistService = inject(PlaylistService);
-  private readonly dialog = inject(MatDialog);
 
   // Signals
   songs = signal<Song[]>([]);
@@ -106,13 +103,5 @@ export class RandomSongsComponent implements OnInit {
   addToPlaylist(song: Song) {
     // Implementar lógica para agregar a playlist
     console.log('Add to playlist:', song.title);
-  }
-
-  showLyrics(song: Song) {
-    // Nota: Se implementará diálogo de letras completo en futuras actualizaciones
-    console.log(`Mostrando letras para: ${song.title} - ${song.artist_name} (ID: ${song.id})`);
-    
-    // Por ahora, mostrar un alert como placeholder
-    alert(`Letras disponibles para:\n${song.title}\nArtista: ${song.artist_name}\n\n(Funcionalidad en desarrollo)`);
   }
 }
