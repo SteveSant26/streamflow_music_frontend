@@ -15,7 +15,6 @@ import { GetUserPlaylistsUseCase } from '../../../../../domain/usecases/playlist
 import { GetRandomSongsUseCase } from '../../../../../domain/usecases/song/song.usecases';
 
 // Components
-import { SongActionButtonComponent } from '../../../../components/music/song/song-action-button/song-action-button.component';
 import { CreatePlaylistDialogComponent } from '../../../../components/music/playlist/create-playlist-dialog/create-playlist-dialog.component';
 import { AddSongToPlaylistDialogComponent } from '../../../../components/music/playlist/add-song-to-playlist-dialog/add-song-to-playlist-dialog.component';
 
@@ -27,8 +26,7 @@ import { AddSongToPlaylistDialogComponent } from '../../../../components/music/p
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    MatDividerModule,
-    SongActionButtonComponent
+    MatDividerModule
   ],
   templateUrl: './playlist-demo.component.html',
   styleUrl: './playlist-demo.component.css'
