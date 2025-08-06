@@ -109,7 +109,7 @@ export class RandomSongsComponent implements OnInit {
   }
 
   showLyrics(song: Song) {
-    // TODO: Implementar diálogo de letras completo
+    // Nota: Se implementará diálogo de letras completo en futuras actualizaciones
     console.log(`Mostrando letras para: ${song.title} - ${song.artist_name} (ID: ${song.id})`);
     
     // Por ahora, mostrar un alert como placeholder
