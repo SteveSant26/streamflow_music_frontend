@@ -1,9 +1,12 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { Card, Greeting } from '@app/presentation/components/ui';
 import { PlayListItemCard } from '@app/presentation/components/music';
+import { MusicsTable } from '@app/presentation/components/music/musics-table/musics-table';
 import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
+import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { 
@@ -18,10 +21,13 @@ import { Song } from '../../../../domain/entities/song.entity';
   standalone: true,
   imports: [
     CommonModule,
+    MatIconModule,
     Card,
     Greeting,
     PlayListItemCard,
+    MusicsTable,
     MusicSectionComponent,
+    ImageFallbackDirective,
     TranslateModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

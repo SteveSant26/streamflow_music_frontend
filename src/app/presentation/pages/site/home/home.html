@@ -39,17 +39,60 @@
   </div>
 
   <!-- Canciones Populares -->
-  <app-music-section
-    [title]="'🔥 Más Populares'"
-    [type]="currentViewType()"
-    [songs]="popularSongs()"
-    [loading]="loading()"
-    [primaryButton]="popularSectionConfig().primaryButton"
-    [emptyMessage]="'No se pudieron cargar las canciones populares'"
-    [loadingMessage]="'Cargando canciones populares...'"
-    (songSelected)="playSong($event)"
-    (retryLoad)="refreshHomeData()"
-  ></app-music-section>
+  <div class="music-section mb-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">🔥 Más Populares</h2>
+      <button 
+        class="text-black hover:text-gray-700 text-sm font-medium"
+        (click)="loadMostPopularSongs()"
+      >
+        Ver todas
+      </button>
+    </div>
+    
+    <!-- Loading state -->
+    <div *ngIf="loading()" class="flex justify-center items-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+      <span class="ml-3 text-white">Cargando canciones populares...</span>
+    </div>
+    
+    <!-- Grid layout (when viewMode is 'list') -->
+    <div *ngIf="!loading() && popularSongs().length > 0 && viewModeService.viewMode() === 'list'" 
+         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+      <button 
+        *ngFor="let song of popularSongs()" 
+        class="song-card bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors w-full text-left"
+        (click)="playSong(song)"
+      >
+        <img 
+          [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
+          [alt]="song.title"
+          class="w-full aspect-square object-cover rounded-md mb-3"
+          appImageFallback="assets/images/default-album-small.svg"
+        />
+        <h3 class="text-white font-medium text-sm truncate">{{ song.title }}</h3>
+        <p class="text-gray-400 text-xs truncate">{{ song.artist_name }}</p>
+      </button>
+    </div>
+    
+    <!-- Table layout (when viewMode is 'table') -->
+    <div *ngIf="!loading() && popularSongs().length > 0 && viewModeService.viewMode() === 'table'" class="mt-4">
+      <app-musics-table [songs]="popularSongs()"></app-musics-table>
+    </div>
+    
+    <!-- Empty state -->
+    <div *ngIf="!loading() && popularSongs().length === 0" class="text-center py-8">
+      <mat-icon class="text-gray-400 text-4xl mb-2">music_note</mat-icon>
+      <p class="text-gray-400">No se pudieron cargar las canciones populares</p>
+      <button 
+        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        (click)="refreshHomeData()"
+      >
+        Reintentar
+      </button>
+    </div>
+  </div>
 
   <!-- Playlists Recomendadas -->
   <div class="mb-8">
@@ -73,16 +116,68 @@
   </div>
 
   <!-- Trending Now / Canciones Aleatorias -->
-  <app-music-section
-    [title]="'🎲 Descubre Música Nueva'"
-    [type]="currentViewType()"
-    [songs]="randomSongs()"
-    [loading]="loading()"
-    [actionButtons]="randomSectionConfig().actionButtons"
-    [showPlayCount]="false"
-    [emptyMessage]="'No se pudieron cargar las canciones'"
-    [loadingMessage]="'Cargando música...'"
-    (songSelected)="playSong($event)"
-    (retryLoad)="refreshHomeData()"
-  ></app-music-section>
+  <div class="music-section mb-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">🎲 Descubre Música Nueva</h2>
+      <div class="flex items-center gap-2">
+        <button 
+          class="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+          (click)="loadRandomSongs()"
+          aria-label="Refrescar canciones aleatorias"
+        >
+          <mat-icon class="text-white text-base">refresh</mat-icon>
+        </button>
+        <button 
+          class="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+          (click)="loadRandomSongs()"
+          aria-label="Reproducir playlist aleatoria"
+        >
+          <mat-icon class="text-white text-base">play_arrow</mat-icon>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Loading state -->
+    <div *ngIf="loading()" class="flex justify-center items-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+      <span class="ml-3 text-white">Cargando música...</span>
+    </div>
+    
+    <!-- Grid layout (when viewMode is 'list') -->
+    <div *ngIf="!loading() && randomSongs().length > 0 && viewModeService.viewMode() === 'list'" 
+         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+      <button 
+        *ngFor="let song of randomSongs()" 
+        class="song-card bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors w-full text-left"
+        (click)="playSong(song)"
+      >
+        <img 
+          [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
+          [alt]="song.title"
+          class="w-full aspect-square object-cover rounded-md mb-3"
+          appImageFallback="assets/images/default-album-small.svg"
+        />
+        <h3 class="text-white font-medium text-sm truncate">{{ song.title }}</h3>
+        <p class="text-gray-400 text-xs truncate">{{ song.artist_name }}</p>
+      </button>
+    </div>
+    
+    <!-- Table layout (when viewMode is 'table') -->
+    <div *ngIf="!loading() && randomSongs().length > 0 && viewModeService.viewMode() === 'table'" class="mt-4">
+      <app-musics-table [songs]="randomSongs()"></app-musics-table>
+    </div>
+    
+    <!-- Empty state -->
+    <div *ngIf="!loading() && randomSongs().length === 0" class="text-center py-8">
+      <mat-icon class="text-gray-400 text-4xl mb-2">music_note</mat-icon>
+      <p class="text-gray-400">No se pudieron cargar las canciones</p>
+      <button 
+        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        (click)="refreshHomeData()"
+      >
+        Reintentar
+      </button>
+    </div>
+  </div>
 </div>
