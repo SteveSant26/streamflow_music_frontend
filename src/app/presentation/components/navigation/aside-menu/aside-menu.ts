@@ -9,7 +9,6 @@ import { MaterialThemeService } from '@app/shared/services/material-theme.servic
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
 import { 
   ROUTES_CONFIG_AUTH, 
   ROUTES_CONFIG_MUSIC, 
@@ -18,8 +17,6 @@ import {
   ROUTES_CONFIG_USER
 } from '@app/config/routes-config';
 import { TranslateModule } from '@ngx-translate/core';
-import { GetMyPlaylistsUseCase } from '@app/domain/usecases/playlist/my-playlists.usecases';
-import { Playlist } from '@app/domain/entities/playlist.entity';
 
 @Component({
   selector: 'app-aside-menu',
@@ -47,16 +44,13 @@ export class AsideMenu implements OnInit {
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
   private readonly materialThemeService = inject(MaterialThemeService);
-  private readonly getMyPlaylistsUseCase = inject(GetMyPlaylistsUseCase);
-  private readonly dialog = inject(MatDialog);
   readonly viewModeService = inject(ViewModeService);
 
   isAuthenticated = this.authStateService.isAuthenticated;
   user = this.authStateService.user;
 
-  // Playlists signals
+  // Playlists signals - Por ahora usando mock data hasta tener los providers configurados
   playlists = signal<Playlist[]>([]);
-  isLoadingPlaylists = signal<boolean>(false);
 
   // Theme properties
   showThemeOptions = false;
