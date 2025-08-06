@@ -7,7 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 
-import { LegacyPlaylist as Playlist } from '@app/domain/entities/playlist.entity';
+import { LegacyPlaylist, PlaylistWithSongs } from '@app/domain/entities/playlist.entity';
 import { Song } from '@app/domain/entities/song.entity';
 import { GetPlaylistByIdUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
 import { PlaylistService } from '@app/infrastructure/services/playlist.service';
@@ -32,7 +32,7 @@ export class PlaylistComponent implements OnInit {
   private readonly playlistService = inject(PlaylistService);
 
   // Signals para estado reactivo
-  readonly playlist = signal<Playlist | null>(null);
+  readonly playlist = signal<LegacyPlaylist | null>(null);
   readonly loading = signal<boolean>(true);
   readonly error = signal<string | null>(null);
 
@@ -56,7 +56,8 @@ export class PlaylistComponent implements OnInit {
 
     this.getPlaylistUseCase.execute(this.playlistId).subscribe({
       next: (playlist) => {
-        this.playlist.set(playlist);
+        const legacyPlaylist = this.convertToLegacyPlaylist(playlist);
+        this.playlist.set(legacyPlaylist);
         this.loading.set(false);
       },
       error: (err) => {
@@ -69,9 +70,41 @@ export class PlaylistComponent implements OnInit {
     });
   }
 
+  private convertToLegacyPlaylist(playlist: PlaylistWithSongs): LegacyPlaylist {
+    const songs: Song[] = playlist.songs.map(playlistSong => ({
+      id: playlistSong.id,
+      title: playlistSong.title,
+      artist_name: playlistSong.artist_name || 'Artista Desconocido',
+      album_name: playlistSong.album_name || 'Album Desconocido',
+      duration_seconds: playlistSong.duration_seconds,
+      thumbnail_url: playlistSong.thumbnail_url,
+      youtube_url: '', // No disponible en PlaylistSong
+      file_url: '', // No disponible en PlaylistSong
+      play_count: 0 // Default value
+    }));
+
+    const totalDuration = songs.reduce((acc, song) => acc + (song.duration_seconds || 0), 0);
+
+    return {
+      id: playlist.id,
+      name: playlist.name,
+      description: playlist.description,
+      coverImage: `https://picsum.photos/300/300?random=${playlist.id}`,
+      isPublic: playlist.is_public,
+      createdDate: playlist.created_at,
+      songs: songs,
+      songCount: playlist.total_songs,
+      duration: totalDuration,
+      owner: {
+        id: playlist.user_id,
+        username: 'Usuario' // Placeholder ya que no tenemos información del usuario
+      }
+    };
+  }
+
   private loadMockData() {
     // Datos de prueba mientras no hay backend funcionando
-    const mockPlaylist: Playlist = {
+    const mockPlaylist: LegacyPlaylist = {
       id: this.playlistId || '1',
       name: `Mi Playlist #${this.playlistId}`,
       description: 'Una colección especial de tus canciones favoritas',

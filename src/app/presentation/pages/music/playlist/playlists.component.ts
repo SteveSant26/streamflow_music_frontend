@@ -9,7 +9,7 @@ import { ROUTES_CONFIG_MUSIC } from '../../../../config/routes-config/routes-mus
 import { 
   GetUserPlaylistsUseCase, 
   DeletePlaylistUseCase,
-  EnsureDefaultPlaylistUseCase
+  CreatePlaylistUseCase
 } from '../../../../domain/usecases/playlist/playlist.usecases';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
 import { CreatePlaylistDialogComponent } from '../../../components/music/playlist/create-playlist-dialog/create-playlist-dialog.component';
@@ -31,7 +31,7 @@ import { CreatePlaylistDialogComponent } from '../../../components/music/playlis
 export class PlaylistsComponent implements OnInit {
   private readonly getUserPlaylistsUseCase = inject(GetUserPlaylistsUseCase);
   private readonly deletePlaylistUseCase = inject(DeletePlaylistUseCase);
-  private readonly ensureDefaultPlaylistUseCase = inject(EnsureDefaultPlaylistUseCase);
+  private readonly createPlaylistUseCase = inject(CreatePlaylistUseCase);
   private readonly dialog = inject(MatDialog);
 
   // Configuraciones de rutas para el template
@@ -42,7 +42,6 @@ export class PlaylistsComponent implements OnInit {
 
   ngOnInit() {
     this.loadPlaylists();
-    this.ensureDefaultPlaylist();
   }
 
   private loadPlaylists() {
@@ -52,20 +51,9 @@ export class PlaylistsComponent implements OnInit {
         this.playlists.set(playlists);
         this.loading.set(false);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading playlists:', error);
         this.loading.set(false);
-      }
-    });
-  }
-
-  private ensureDefaultPlaylist() {
-    this.ensureDefaultPlaylistUseCase.execute().subscribe({
-      next: () => {
-        // La playlist de favoritos se aseguró correctamente
-      },
-      error: (error) => {
-        console.error('Error ensuring default playlist:', error);
       }
     });
   }

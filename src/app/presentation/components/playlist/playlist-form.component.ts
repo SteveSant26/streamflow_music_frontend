@@ -129,94 +129,255 @@ import { PlaylistMapper } from '../../../domain/mappers/playlist.mapper';
   `,
   styles: [`
     .playlist-form {
-      @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md mx-auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      max-width: 28rem;
+      margin: 0 auto;
     }
 
     .form-header {
-      @apply flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .form-title {
-      @apply text-xl font-semibold text-gray-900 dark:text-white;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0;
     }
 
     .close-btn {
-      @apply p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-md;
-      @apply hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors;
+      padding: 0.5rem;
+      color: #9ca3af;
+      border: none;
+      background: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      color: #4b5563;
+      background-color: #f3f4f6;
     }
 
     .form-content {
-      @apply p-6 space-y-6;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
     .field-group {
-      @apply space-y-2;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     .field-label {
-      @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #374151;
     }
 
     .field-input, .field-textarea {
-      @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md;
-      @apply bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
-      @apply focus:ring-2 focus:ring-blue-500 focus:border-transparent;
-      @apply placeholder-gray-400 dark:placeholder-gray-500;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background-color: white;
+      color: #111827;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+
+    .field-input:focus, .field-textarea:focus {
+      outline: none;
+      ring: 2px solid #3b82f6;
+      border-color: transparent;
     }
 
     .field-input.error, .field-textarea.error {
-      @apply border-red-500 ring-2 ring-red-200 dark:ring-red-800;
+      border-color: #ef4444;
+      ring: 2px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .field-input::placeholder, .field-textarea::placeholder {
+      color: #9ca3af;
     }
 
     .field-error {
-      @apply text-sm text-red-600 dark:text-red-400;
+      font-size: 0.875rem;
+      color: #dc2626;
     }
 
     .field-hint {
-      @apply text-xs text-gray-500 dark:text-gray-400;
+      font-size: 0.75rem;
+      color: #6b7280;
     }
 
     .checkbox-group {
-      @apply flex items-start;
+      display: flex;
+      align-items: flex-start;
     }
 
     .checkbox-label {
-      @apply flex items-center cursor-pointer;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
     }
 
     .checkbox-input {
-      @apply mr-3 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500;
+      margin-right: 0.75rem;
+      height: 1rem;
+      width: 1rem;
+      color: #3b82f6;
+      border: 1px solid #d1d5db;
+      border-radius: 3px;
+    }
+
+    .checkbox-input:focus {
+      ring: 2px solid #3b82f6;
     }
 
     .checkbox-text {
-      @apply text-sm text-gray-700 dark:text-gray-300 flex items-center gap-2;
+      font-size: 0.875rem;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .form-actions {
-      @apply flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
     }
 
     .btn {
-      @apply px-4 py-2 rounded-md font-medium transition-colors duration-200;
-      @apply flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .btn-primary {
-      @apply bg-blue-600 text-white hover:bg-blue-700 disabled:hover:bg-blue-600;
+      background-color: #3b82f6;
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: #2563eb;
     }
 
     .btn-secondary {
-      @apply bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200;
-      @apply hover:bg-gray-400 dark:hover:bg-gray-500 disabled:hover:bg-gray-300 dark:disabled:hover:bg-gray-600;
+      background-color: #e5e7eb;
+      color: #374151;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #d1d5db;
     }
 
     .error-banner {
-      @apply mx-6 mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md;
-      @apply flex items-center gap-3 text-red-700 dark:text-red-300;
+      margin: 0 1.5rem 1.5rem;
+      padding: 1rem;
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #b91c1c;
     }
 
     .error-close {
-      @apply ml-auto text-red-400 hover:text-red-600 dark:hover:text-red-200;
+      margin-left: auto;
+      color: #f87171;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .error-close:hover {
+      color: #dc2626;
+    }
+
+    /* Dark mode styles */
+    @media (prefers-color-scheme: dark) {
+      .playlist-form {
+        background-color: #1f2937;
+      }
+
+      .form-header {
+        border-bottom-color: #374151;
+      }
+
+      .form-title {
+        color: white;
+      }
+
+      .close-btn:hover {
+        color: #e5e7eb;
+        background-color: #374151;
+      }
+
+      .field-label {
+        color: #d1d5db;
+      }
+
+      .field-input, .field-textarea {
+        background-color: #374151;
+        border-color: #4b5563;
+        color: white;
+      }
+
+      .field-input::placeholder, .field-textarea::placeholder {
+        color: #6b7280;
+      }
+
+      .checkbox-text {
+        color: #d1d5db;
+      }
+
+      .form-actions {
+        border-top-color: #374151;
+      }
+
+      .btn-secondary {
+        background-color: #4b5563;
+        color: #e5e7eb;
+      }
+
+      .btn-secondary:hover:not(:disabled) {
+        background-color: #6b7280;
+      }
+
+      .error-banner {
+        background-color: rgba(127, 29, 29, 0.2);
+        border-color: rgba(239, 68, 68, 0.8);
+        color: #fca5a5;
+      }
     }
   `]
 })
