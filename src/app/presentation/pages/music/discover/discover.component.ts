@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MusicSectionComponent } from '../../../components/music-section/music-section';
+import { ViewModeService } from '../../../shared/services/view-mode.service';
 import { AlbumListItem } from '../../../../domain/entities/album.entity';
 import { ArtistListItem } from '../../../../domain/entities/artist.entity';
 import { GenreListItem } from '../../../../domain/entities/genre.entity';
@@ -27,13 +29,15 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MusicSectionComponent
   ],
   templateUrl: './discover.component.html',
   styleUrl: './discover.component.css'
 })
 export class DiscoverPageComponent implements OnInit {
   private readonly themeService = inject(MaterialThemeService);
+  private readonly viewModeService = inject(ViewModeService);
   private readonly getPopularAlbumsUseCase = inject(GetPopularAlbumsUseCase);
   private readonly getPopularArtistsUseCase = inject(GetPopularArtistsUseCase);
   private readonly getPopularGenresUseCase = inject(GetPopularGenresUseCase);
@@ -42,6 +46,7 @@ export class DiscoverPageComponent implements OnInit {
 
   // Signals
   isDarkTheme = this.themeService._isDarkMode;
+  viewMode = this.viewModeService.viewMode;
   popularAlbums = signal<AlbumListItem[]>([]);
   popularArtists = signal<ArtistListItem[]>([]);
   popularGenres = signal<GenreListItem[]>([]);
@@ -56,6 +61,24 @@ export class DiscoverPageComponent implements OnInit {
   artistsError = signal<string | null>(null);
   genresError = signal<string | null>(null);
   randomSongsError = signal<string | null>(null);
+
+  // Button configurations for music section
+  randomSongsPrimaryButton = {
+    text: 'Ver todas',
+    action: () => {
+      console.log('🎵 Navigate to all random songs');
+      // TODO: Navigate to random songs page
+    },
+    ariaLabel: 'Ver todas las canciones aleatorias'
+  };
+
+  randomSongsActionButtons = [
+    {
+      icon: 'refresh',
+      action: () => this.loadRandomSongs(),
+      ariaLabel: 'Recargar música aleatoria'
+    }
+  ];
 
   ngOnInit() {
     this.loadPopularAlbums();
@@ -143,6 +166,20 @@ export class DiscoverPageComponent implements OnInit {
     const songIndex = playlist.findIndex(s => s.id === song.id);
     this.playlistService.createPlaylist(playlist, 'Música Aleatoria', songIndex);
     this.playlistService.togglePlayback();
+  }
+
+  onRandomSongSelected(song: Song) {
+    console.log('🎵 Discover: Random song selected:', song.title);
+    this.playRandomSong(song);
+  }
+
+  onRetryRandomSongs() {
+    console.log('🔄 Discover: Retrying random songs load');
+    this.loadRandomSongs();
+  }
+
+  toggleViewMode() {
+    this.viewModeService.toggleViewMode();
   }
 
   formatDuration(seconds: number): string {

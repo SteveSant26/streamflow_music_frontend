@@ -2,9 +2,15 @@
   <!-- Header -->
   <div class="discover-header">
     <h1>Descubrir Música</h1>
-    <button mat-icon-button (click)="toggleTheme()">
-      <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-    </button>
+    <div class="flex items-center gap-2">
+      <!-- View Mode Toggle -->
+      <button mat-icon-button (click)="toggleViewMode()" class="text-white">
+        <mat-icon>{{ viewMode() === 'grid' ? 'view_list' : viewMode() === 'table' ? 'view_module' : 'grid_view' }}</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleTheme()">
+        <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+    </div>
   </div>
 
   <!-- Albums Populares -->
@@ -111,42 +117,18 @@
 
   <!-- Música Aleatoria -->
   <section class="discover-section">
-    <div class="section-header">
-      <h2>Música Aleatoria</h2>
-      <button mat-button 
-              color="primary" 
-              routerLink="/random-songs"
-              class="view-all-btn">
-        Ver todas
-        <mat-icon>arrow_forward</mat-icon>
-      </button>
-    </div>
-    <div class="loading-container" *ngIf="isLoadingRandomSongs()">
-      <mat-spinner diameter="40"></mat-spinner>
-    </div>
-    <div class="error-message" *ngIf="randomSongsError()">
-      Error al cargar música aleatoria: {{ randomSongsError() }}
-    </div>
-    <div class="random-songs-grid" *ngIf="!isLoadingRandomSongs() && !randomSongsError()">
-      <mat-card *ngFor="let song of randomSongs()" class="song-card">
-        <div class="song-image-container">
-          <img [src]="song.thumbnail_url || '/assets/default-song.png'" 
-               [alt]="song.title" 
-               class="song-image">
-          <div class="song-overlay">
-            <button mat-icon-button 
-                    (click)="playRandomSong(song)"
-                    class="play-button">
-              <mat-icon>play_arrow</mat-icon>
-            </button>
-          </div>
-        </div>
-        <mat-card-content>
-          <h4>{{ song.title }}</h4>
-          <p class="song-artist">{{ song.artist_name }}</p>
-          <p class="song-duration">{{ song.duration_formatted || formatDuration(song.duration_seconds || 0) }}</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <app-music-section
+      title="Música Aleatoria"
+      titleIcon="🎲"
+      [songs]="randomSongs()"
+      [loading]="isLoadingRandomSongs()"
+      [type]="viewMode()"
+      [primaryButton]="randomSongsPrimaryButton"
+      [actionButtons]="randomSongsActionButtons"
+      emptyMessage="No se pudieron cargar las canciones aleatorias"
+      loadingMessage="Cargando música aleatoria..."
+      (songSelected)="onRandomSongSelected($event)"
+      (retryLoad)="onRetryRandomSongs()"
+    ></app-music-section>
   </section>
 </div>

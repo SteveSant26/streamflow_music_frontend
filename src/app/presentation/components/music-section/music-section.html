@@ -77,6 +77,36 @@
         <app-musics-table [songs]="songs"></app-musics-table>
       </div>
     }
+
+    <!-- List layout for songs -->
+    @if (type === 'list') {
+      <div class="space-y-2">
+        @for (song of songs; track song.id) {
+          <button 
+            class="song-list-item flex items-center w-full p-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-left"
+            (click)="onSongClick(song)"
+          >
+            <img 
+              [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
+              [alt]="song.title"
+              class="w-12 h-12 object-cover rounded-md mr-4 flex-shrink-0"
+              appImageFallback="assets/images/default-album-small.svg"
+            />
+            <div class="flex-1 min-w-0">
+              <h3 class="text-white font-medium text-sm truncate">{{ song.title }}</h3>
+              <p class="text-gray-400 text-xs truncate">{{ song.artist_name }}</p>
+            </div>
+            @if (showPlayCount && song.play_count) {
+              <div class="flex items-center text-xs text-gray-500 ml-4">
+                <mat-icon class="text-xs mr-1">play_arrow</mat-icon>
+                <span>{{ formatPlayCount(song.play_count) }}</span>
+              </div>
+            }
+            <mat-icon class="text-gray-400 ml-2">play_arrow</mat-icon>
+          </button>
+        }
+      </div>
+    }
   }
   
   <!-- Empty state -->

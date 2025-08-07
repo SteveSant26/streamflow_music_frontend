@@ -11,6 +11,8 @@ import { ROUTES_CONFIG_MUSIC } from '@app/config';
 
 import { Song } from '../../../../domain/entities/song.entity';
 import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
+import { ViewModeService } from '../../../shared/services/view-mode.service';
+import { MusicSectionComponent } from '../../../components/music-section/music-section';
 import { MusicsTable } from '../../../components/music/musics-table/musics-table';
 import { 
   GetMostPopularSongsUseCase,
@@ -28,6 +30,7 @@ import { GlobalPlayerStateService } from '../../../../infrastructure/services/gl
     MatIconModule,
     MatProgressSpinnerModule,
     TranslateModule,
+    MusicSectionComponent,
     MusicsTable
   ],
   templateUrl: './home.component.html',
@@ -35,6 +38,7 @@ import { GlobalPlayerStateService } from '../../../../infrastructure/services/gl
 })
 export class HomePageComponent implements OnInit {
   private readonly themeService = inject(MaterialThemeService);
+  private readonly viewModeService = inject(ViewModeService);
   private readonly getMostPopularSongsUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
@@ -43,6 +47,9 @@ export class HomePageComponent implements OnInit {
 
   // Observable para el tema
   isDarkTheme$ = this.themeService.isDarkMode();
+  
+  // Signal para el modo de vista
+  viewMode = this.viewModeService.viewMode;
 
   // Signals para el estado
   mostPopularSongs = signal<Song[]>([]);

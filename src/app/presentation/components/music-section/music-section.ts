@@ -6,7 +6,7 @@ import { Song } from '@app/domain/entities/song.entity';
 import { MusicsTable } from '@app/presentation/components/music/musics-table/musics-table';
 import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 
-export type MusicSectionType = 'grid' | 'table';
+export type MusicSectionType = 'grid' | 'table' | 'list';
 
 export interface MusicSectionButton {
   icon?: string;
@@ -33,7 +33,23 @@ export class MusicSectionComponent {
   @Input() 
   set type(value: MusicSectionType) {
     console.log('🎯 MusicSection: Type changed from', this._type, 'to:', value);
-    console.log('🎯 MusicSection: Will show', value === 'grid' ? 'GRID/CARDS' : 'TABLE');
+    
+    let displayMode: string;
+    switch (value) {
+      case 'grid':
+        displayMode = 'GRID/CARDS';
+        break;
+      case 'table':
+        displayMode = 'TABLE';
+        break;
+      case 'list':
+        displayMode = 'LIST';
+        break;
+      default:
+        displayMode = 'UNKNOWN';
+    }
+    
+    console.log('🎯 MusicSection: Will show', displayMode);
     this._type = value;
   }
   get type(): MusicSectionType {
