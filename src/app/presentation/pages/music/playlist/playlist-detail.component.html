@@ -74,9 +74,9 @@
       loadingMessage="Cargando canciones..."
       emptyMessage="No hay canciones en esta playlist"
       [showPlayCount]="false"
-      [actionButtons]="[
+      [actionButtons]="hasMoreSongs() && !loadingSongs() ? [
         { icon: 'expand_more', text: 'Cargar más', action: loadMoreSongs.bind(this), ariaLabel: 'Cargar más canciones' }
-      ]"
+      ] : []"
       (songSelected)="onSongClick($event)"
       (addToQueueRequest)="addToQueue($event)"
       (addToPlaylistRequest)="addToPlaylist($event)"

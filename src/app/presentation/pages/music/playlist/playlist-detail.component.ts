@@ -216,6 +216,11 @@ export class PlaylistDetailComponent implements OnInit {
     this.loadPlaylistSongs(playlist.id, nextPage);
   }
 
+  // Método para el actionButton del MusicSection
+  onLoadMoreClick() {
+    this.loadMoreSongs();
+  }
+
   formatPlayCount(count: number): string {
     if (count >= 1000000) {
       return `${(count / 1000000).toFixed(1)}M`;
