@@ -11,6 +11,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // Domain
 import { Song } from '@app/domain/entities/song.entity';
 import { SearchSongsPaginatedUseCase, PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
+import { FavoritesUseCase } from '@app/domain/usecases/favorites/favorites.usecases';
+import { PlayerUseCase } from '@app/domain/usecases/player/player.usecases';
 import { SongSearchParams } from '@app/domain/dtos/song.dto';
 
 // Components
@@ -55,6 +57,8 @@ export class SearchComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly searchSongsPaginatedUseCase = inject(SearchSongsPaginatedUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly favoritesUseCase = inject(FavoritesUseCase);
+  private readonly playerUseCase = inject(PlayerUseCase);
   readonly searchFiltersService = inject(SearchFiltersService);
   readonly viewModeService = inject(ViewModeService);
 
@@ -295,9 +299,18 @@ export class SearchComponent implements OnInit {
   }
 
   addToFavorites(song: Song): void {
-    // Implementar funcionalidad de favoritos
-    console.log(`Agregando "${song.title}" a favoritos`);
-    // Aquí irá la lógica para agregar/quitar de favoritos
+    console.log(`❤️ Search: Agregando "${song.title}" a favoritos`);
+    
+    this.favoritesUseCase.addToFavorites(song.id).subscribe({
+      next: (favorite) => {
+        console.log('✅ Canción agregada a favoritos exitosamente:', favorite);
+        console.log(`🔔 "${song.title}" se agregó a favoritos`);
+      },
+      error: (error) => {
+        console.error('❌ Error agregando a favoritos:', error);
+        console.log(`🔔 Error: No se pudo agregar "${song.title}" a favoritos`);
+      }
+    });
   }
 
   showMoreOptions(song: Song): void {
@@ -314,7 +327,8 @@ export class SearchComponent implements OnInit {
 
   onAddToQueue(song: Song) {
     console.log('🎵 Search: Add to queue requested for:', song.title);
-    // TODO: Implementar lógica de agregar a cola
+    this.playerUseCase.addToQueue(song);
+    console.log(`✅ "${song.title}" agregada a la cola de reproducción`);
   }
 
   onAddToPlaylist(song: Song) {
