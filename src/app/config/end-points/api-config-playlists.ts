@@ -7,9 +7,9 @@ export const API_CONFIG_PLAYLISTS = {
     update: (id: string) => `/api/playlists/playlist/${id}/`,
     delete: (id: string) => `/api/playlists/playlist/${id}/`,
     songs: {
-      list: (id: string) => `/api/playlists/playlists/${id}/songs/`,
-      add: (id: string) => `/api/playlists/playlists/${id}/songs/`,
-      remove: (id: string, songId: string) => `/api/playlists/playlists/${id}/songs/${songId}/`,
+      list: (id: string) => `/api/playlists/playlist-songs/${id}/songs/`,
+      add: (id: string) => `/api/playlists/playlist-songs/${id}/songs/`,
+      remove: (id: string, songId: string) => `/api/playlists/playlist-songs/${id}/songs/${songId}/`,
     },
   },
   // Playlists públicas (pueden ser anónimas)
@@ -17,7 +17,7 @@ export const API_CONFIG_PLAYLISTS = {
     list: '/api/playlists/playlist/', // Con filtro is_public=true
     getById: (id: string) => `/api/playlists/playlist/${id}/`,
     songs: {
-      list: (id: string) => `/api/playlists/playlists/${id}/songs/`,
+      list: (id: string) => `/api/playlists/playlist-songs/${id}/songs/`,
     },
   },
 };
