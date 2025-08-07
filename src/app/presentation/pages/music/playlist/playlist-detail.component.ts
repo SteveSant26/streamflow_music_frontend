@@ -44,6 +44,7 @@ export class PlaylistDetailComponent implements OnInit {
   private readonly playlistService = inject(PlaylistService);
   private readonly playerUseCase = inject(PlayerUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly favoritesUseCase = inject(FavoritesUseCase);
   readonly viewModeService = inject(ViewModeService);
 
   playlist = signal<PlaylistWithSongs | null>(null);
@@ -294,8 +295,17 @@ export class PlaylistDetailComponent implements OnInit {
 
   addToFavorites(song: Song) {
     console.log('❤️ PlaylistDetail: Add to favorites requested for:', song.title);
-    console.log('Agregando a favoritos:', song.title);
-    // Funcionalidad básica implementada
+    
+    this.favoritesUseCase.addToFavorites(song.id).subscribe({
+      next: (favorite) => {
+        console.log('✅ Canción agregada a favoritos exitosamente:', favorite);
+        console.log(`🔔 "${song.title}" se agregó a favoritos`);
+      },
+      error: (error) => {
+        console.error('❌ Error agregando a favoritos:', error);
+        console.log(`🔔 Error: No se pudo agregar "${song.title}" a favoritos`);
+      }
+    });
   }
 
   playNext(song: Song): void {
