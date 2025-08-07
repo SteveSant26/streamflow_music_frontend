@@ -2,14 +2,29 @@
   <!-- Header -->
   <div class="discover-header">
     <h1>Descubrir Música</h1>
-    <button mat-icon-button (click)="toggleTheme()">
-      <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-    </button>
+    <div class="flex items-center gap-2">
+      <!-- View Mode Toggle -->
+      <button mat-icon-button (click)="toggleViewMode()" class="text-white">
+        <mat-icon>{{ viewMode() === 'grid' ? 'view_list' : viewMode() === 'table' ? 'view_module' : 'grid_view' }}</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleTheme()">
+        <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+    </div>
   </div>
 
   <!-- Albums Populares -->
   <section class="discover-section">
-    <h2>Álbumes Populares</h2>
+    <div class="section-header">
+      <h2>Álbumes Populares</h2>
+      <button mat-button 
+              color="primary" 
+              routerLink="/albums"
+              class="view-all-btn">
+        Ver todos
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
     <div class="loading-container" *ngIf="isLoadingAlbums()">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
@@ -27,7 +42,7 @@
           <p class="release-date">{{ album.release_date | date:'MMM yyyy' }}</p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button color="primary">
+          <button mat-button color="primary" [routerLink]="['/album', album.id]">
             <mat-icon>play_arrow</mat-icon>
             Reproducir
           </button>
@@ -38,7 +53,16 @@
 
   <!-- Artistas Populares -->
   <section class="discover-section">
-    <h2>Artistas Populares</h2>
+    <div class="section-header">
+      <h2>Artistas Populares</h2>
+      <button mat-button 
+              color="primary" 
+              routerLink="/artists"
+              class="view-all-btn">
+        Ver todos
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
     <div class="loading-container" *ngIf="isLoadingArtists()">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
@@ -56,7 +80,7 @@
           <p class="artist-info">{{ artist.followers_count | number }} seguidores</p>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button color="primary">Ver Perfil</button>
+          <button mat-button color="primary" [routerLink]="['/artist', artist.id]">Ver Perfil</button>
         </mat-card-actions>
       </mat-card>
     </div>
@@ -64,7 +88,16 @@
 
   <!-- Géneros Populares -->
   <section class="discover-section">
-    <h2>Géneros Populares</h2>
+    <div class="section-header">
+      <h2>Géneros Populares</h2>
+      <button mat-button 
+              color="primary" 
+              routerLink="/genres"
+              class="view-all-btn">
+        Ver todos
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
     <div class="loading-container" *ngIf="isLoadingGenres()">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
@@ -80,5 +113,26 @@
         </mat-chip>
       </mat-chip-set>
     </div>
+  </section>
+
+  <!-- Música Aleatoria -->
+  <section class="discover-section">
+    <app-music-section
+      title="Música Aleatoria"
+      titleIcon="🎲"
+      [songs]="randomSongs()"
+      [loading]="isLoadingRandomSongs()"
+      [type]="viewMode()"
+      [primaryButton]="randomSongsPrimaryButton"
+      [actionButtons]="randomSongsActionButtons"
+      emptyMessage="No se pudieron cargar las canciones aleatorias"
+      loadingMessage="Cargando música aleatoria..."
+      (songSelected)="onRandomSongSelected($event)"
+      (retryLoad)="onRetryRandomSongs()"
+      (addToQueueRequest)="onAddToQueue($event)"
+      (addToPlaylistRequest)="onAddToPlaylist($event)"
+      (addToFavoritesRequest)="onAddToFavorites($event)"
+      (moreOptionsRequest)="onMoreOptions($event)"
+    ></app-music-section>
   </section>
 </div>

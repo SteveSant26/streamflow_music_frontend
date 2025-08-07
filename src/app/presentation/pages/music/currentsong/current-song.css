@@ -300,6 +300,18 @@
   background: white;
 }
 
+/* Active state for shuffle and repeat buttons */
+.control-button.active {
+  background: rgba(34, 197, 94, 0.8) !important;
+  color: white !important;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+}
+
+.control-button.active:hover {
+  background: rgba(34, 197, 94, 0.9) !important;
+  transform: scale(1.05);
+}
+
 /* Control de volumen */
 .volume-section {
   width: 100%;
@@ -664,6 +676,140 @@
 .lyrics-line.chorus {
   font-weight: 500;
   color: white;
+}
+
+/* ========== NUEVOS ESTILOS PARA LETRAS DINÁMICAS ========== */
+
+/* Header de letras con acciones */
+.lyrics-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.update-lyrics-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.update-lyrics-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Estados de carga y error */
+.lyrics-loading,
+.lyrics-error,
+.no-lyrics {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  height: 100%;
+  min-height: 200px;
+}
+
+.lyrics-loading .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.lyrics-error mat-icon,
+.no-lyrics mat-icon {
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.lyrics-error p,
+.no-lyrics p,
+.lyrics-loading p {
+  margin: 0 0 1.5rem 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+}
+
+.retry-button,
+.search-lyrics-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.retry-button:hover:not(:disabled),
+.search-lyrics-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.retry-button:disabled,
+.search-lyrics-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Contenido de letras con scroll */
+.lyrics-content-scroll {
+  max-height: calc(100% - 2rem);
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.lyrics-content-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.lyrics-content-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.lyrics-content-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.lyrics-content-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Líneas vacías en letras */
+.lyrics-line.empty-line {
+  height: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+/* Animación de spin para carga */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Responsive para pantallas desktop (768px+) */
@@ -1062,5 +1208,93 @@
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+/* ========== NUEVOS ESTILOS PARA LETRAS ========== */
+
+/* Contenedor de botones de letras */
+.lyrics-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Botón de generar letras con IA */
+.generate-lyrics-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.generate-lyrics-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+.generate-lyrics-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.generate-lyrics-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.generate-lyrics-button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Mejorar el botón de búscar letras existente */
+.search-lyrics-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.search-lyrics-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.search-lyrics-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive design para botones */
+@media (max-width: 768px) {
+  .lyrics-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .generate-lyrics-button,
+  .search-lyrics-button {
+    width: 100%;
+    max-width: 200px;
   }
 }

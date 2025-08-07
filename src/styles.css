@@ -1,8 +1,6 @@
-/* Importación de Tailwind CSS */
-@import "tailwindcss";
-
 /* Importación de temas Material UI personalizados */
 @import "./app/shared/theme/material-theme.css";
+@import "tailwindcss";
 
 /* Configuración base del HTML y Body */
 html,

@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { PlayerUseCase } from '../../domain/usecases';
 import { MusicLibraryService } from './music-library.service';
 import { PlayerState } from '../../domain/entities/player-state.entity';
+import { PlaybackPersistenceService, PlaybackState } from './playback-persistence.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -24,6 +25,7 @@ export class GlobalPlayerStateService {
   constructor(
     private readonly playerUseCase: PlayerUseCase,
     private readonly musicLibraryService: MusicLibraryService,
+    private readonly playbackPersistence: PlaybackPersistenceService,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {
     console.log('🔴 GlobalPlayerStateService constructor called');
@@ -71,6 +73,9 @@ export class GlobalPlayerStateService {
         // Set up critical preservation listeners BEFORE setting to PlayerUseCase
         this.setupAudioPreservationListeners();
 
+        // Set up auto-persistence for localStorage
+        this.setupAutoPersistence();
+
         this.playerUseCase.setAudioElement(this.audioElement);
 
         console.log('Audio element created and set to PlayerUseCase');
@@ -85,6 +90,9 @@ export class GlobalPlayerStateService {
       // No cargamos una playlist por defecto
       // Las playlists se crearán cuando el usuario reproduzca música
       console.log('🎧 Reproductor listo para recibir música del contexto');
+
+      // Intentar restaurar estado persistido automáticamente
+      this.tryAutoRestoreState();
 
       this.isInitialized = true;
       console.log('Global player state initialized');
@@ -423,5 +431,209 @@ export class GlobalPlayerStateService {
     } catch (error) {
       console.error('Error restoring from preserved state:', error);
     }
+  }
+
+  /**
+   * Guarda el estado actual en localStorage
+   */
+  saveCurrentState(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    try {
+      const currentState = this.getPlayerState();
+      
+      if (currentState.currentSong) {
+        // Obtener información de la playlist actual desde PlayerUseCase
+        const currentQueue = this.playerUseCase.getCurrentQueue();
+        const currentQueueIndex = this.playerUseCase.getCurrentQueueIndex();
+        
+        let playlistInfo = null;
+        if (currentQueue.length > 0) {
+          playlistInfo = {
+            id: `queue-${Date.now()}`,
+            name: 'Current Queue',
+            songs: currentQueue,
+            currentIndex: currentQueueIndex
+          };
+        }
+        
+        const playbackState: PlaybackState = {
+          currentSong: {
+            id: currentState.currentSong.id,
+            title: currentState.currentSong.title,
+            artist_name: currentState.currentSong.artist_name || 'Unknown Artist',
+            album: currentState.currentSong.album,
+            thumbnail_url: currentState.currentSong.thumbnail_url,
+            file_url: currentState.currentSong.file_url
+          },
+          currentPlaylist: playlistInfo,
+          playerSettings: {
+            volume: currentState.volume,
+            isShuffle: currentState.isShuffleEnabled,
+            isRepeat: currentState.repeatMode !== 'none'
+          },
+          timestamp: Date.now()
+        };
+
+        this.playbackPersistence.savePlaybackState(playbackState);
+        console.log('🎵 Estado guardado con playlist:', {
+          song: currentState.currentSong.title,
+          queueLength: currentQueue.length,
+          currentIndex: currentQueueIndex
+        });
+      }
+    } catch (error) {
+      console.error('Error guardando estado:', error);
+    }
+  }
+
+  /**
+   * Restaura el estado desde localStorage
+   */
+  async restorePersistedState(): Promise<boolean> {
+    if (!isPlatformBrowser(this.platformId)) return false;
+
+    try {
+      const persistedState = this.playbackPersistence.getPersistedState();
+      if (!persistedState?.currentSong) {
+        return false;
+      }
+
+      console.log('🔄 Restaurando estado persistido:', {
+        song: persistedState.currentSong.title,
+        hasPlaylist: !!persistedState.currentPlaylist,
+        playlistLength: persistedState.currentPlaylist?.songs?.length || 0
+      });
+
+      // Si hay una playlist, restaurarla completa
+      if (persistedState.currentPlaylist && persistedState.currentPlaylist.songs.length > 0) {
+        const songs = persistedState.currentPlaylist.songs;
+        const currentIndex = persistedState.currentPlaylist.currentIndex || 0;
+        
+        console.log(`🎵 Restaurando playlist con ${songs.length} canciones, índice: ${currentIndex}`);
+        
+        // Usar playPlaylist para restaurar la queue completa
+        this.playerUseCase.playPlaylist(
+          songs as any[],
+          currentIndex,
+          persistedState.currentPlaylist.name || 'Restored Playlist'
+        );
+      } else {
+        // Solo restaurar la canción individual
+        console.log('🎵 Restaurando canción individual');
+        this.playerUseCase.playSong(persistedState.currentSong as any);
+      }
+
+      // Esperar un momento para que se cargue la canción y restaurar solo la configuración
+      setTimeout(() => {
+        if (this.audioElement) {
+          // Restaurar solo configuración básica (volumen)
+          this.playerUseCase.setVolume(persistedState.playerSettings.volume);
+          
+          // No auto-reproducir - la música queda pausada
+          if (this.audioElement.autoplay) {
+            this.audioElement.pause();
+          }
+          
+          console.log('✅ Estado restaurado - canción y configuración');
+        }
+      }, 1000);
+
+      console.log('🔄 Estado restaurado desde localStorage');
+      return true;
+    } catch (error) {
+      console.error('Error restaurando estado:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Verifica si hay una sesión guardada válida
+   */
+  hasValidPersistedSession(): boolean {
+    return this.playbackPersistence.hasValidSession();
+  }
+
+  /**
+   * Obtiene información de la última sesión
+   */
+  getLastSessionInfo() {
+    return this.playbackPersistence.getLastSessionInfo();
+  }
+
+  /**
+   * Limpia el estado persistido
+   */
+  clearPersistedState(): void {
+    this.playbackPersistence.clearPersistedState();
+  }
+
+  /**
+   * Intenta restaurar automáticamente el estado al inicializar
+   */
+  private tryAutoRestoreState(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Esperar un momento para que se inicialice completamente
+    setTimeout(() => {
+      if (this.hasValidPersistedSession()) {
+        console.log('🔄 Estado persistido encontrado, restaurando automáticamente...');
+        this.restorePersistedStateQuietly();
+      }
+    }, 500);
+  }
+
+  /**
+   * Restaura el estado sin mostrar diálogos ni reproducir automáticamente
+   */
+  private async restorePersistedStateQuietly(): Promise<void> {
+    try {
+      const persistedState = this.playbackPersistence.getPersistedState();
+      if (!persistedState?.currentSong) {
+        return;
+      }
+
+      // Restaurar la canción sin reproducir
+      this.playerUseCase.playSong(persistedState.currentSong as any);
+
+      // Esperar a que se cargue y configurar
+      setTimeout(() => {
+        if (this.audioElement) {
+          // Solo restaurar configuración básica (no posición de tiempo)
+          this.playerUseCase.setVolume(persistedState.playerSettings.volume);
+          
+          // Asegurar que NO se reproduzca automáticamente
+          this.audioElement.pause();
+          
+          // Actualizar el estado visual
+          this.playerUseCase.forceStateSync();
+          
+          console.log('🎵 Estado restaurado silenciosamente desde localStorage');
+        }
+      }, 1000);
+
+    } catch (error) {
+      console.error('Error restaurando estado silenciosamente:', error);
+    }
+  }
+
+  /**
+   * Configura listeners automáticos para guardar estado
+   */
+  private setupAutoPersistence(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Guardar estado cuando hay cambios significativos
+    this.playerUseCase.getPlayerState().subscribe((state: PlayerState) => {
+      // Solo guardar si hay una canción cargada
+      if (state.currentSong) {
+        this.saveCurrentState();
+      }
+    });
+
+    // Guardar estado cuando se cierre la página
+    window.addEventListener('beforeunload', () => {
+      this.saveCurrentState();
+    });
   }
 }

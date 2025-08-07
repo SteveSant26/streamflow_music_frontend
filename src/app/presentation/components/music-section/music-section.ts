@@ -6,7 +6,7 @@ import { Song } from '@app/domain/entities/song.entity';
 import { MusicsTable } from '@app/presentation/components/music/musics-table/musics-table';
 import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 
-export type MusicSectionType = 'grid' | 'table';
+export type MusicSectionType = 'grid' | 'table' | 'list';
 
 export interface MusicSectionButton {
   icon?: string;
@@ -33,7 +33,23 @@ export class MusicSectionComponent {
   @Input() 
   set type(value: MusicSectionType) {
     console.log('🎯 MusicSection: Type changed from', this._type, 'to:', value);
-    console.log('🎯 MusicSection: Will show', value === 'grid' ? 'GRID/CARDS' : 'TABLE');
+    
+    let displayMode: string;
+    switch (value) {
+      case 'grid':
+        displayMode = 'GRID/CARDS';
+        break;
+      case 'table':
+        displayMode = 'TABLE';
+        break;
+      case 'list':
+        displayMode = 'LIST';
+        break;
+      default:
+        displayMode = 'UNKNOWN';
+    }
+    
+    console.log('🎯 MusicSection: Will show', displayMode);
     this._type = value;
   }
   get type(): MusicSectionType {
@@ -48,14 +64,39 @@ export class MusicSectionComponent {
   
   @Output() songSelected = new EventEmitter<Song>();
   @Output() retryLoad = new EventEmitter<void>();
+  @Output() addToQueueRequest = new EventEmitter<Song>();
+  @Output() addToPlaylistRequest = new EventEmitter<Song>();
+  @Output() addToFavoritesRequest = new EventEmitter<Song>();
+  @Output() moreOptionsRequest = new EventEmitter<Song>();
 
   onSongClick(song: Song): void {
-    console.log('🎵 MusicSection: Song clicked, current type is:', this.type);
+    console.log('🎵 MusicSection: Song clicked:', song.title, 'current type is:', this.type);
     this.songSelected.emit(song);
   }
 
   onRetryClick(): void {
+    console.log('🔄 MusicSection: Retry clicked');
     this.retryLoad.emit();
+  }
+
+  addToQueue(song: Song): void {
+    console.log('🎵 MusicSection: Add to queue requested for:', song.title);
+    this.addToQueueRequest.emit(song);
+  }
+
+  addToPlaylist(song: Song): void {
+    console.log('📋 MusicSection: Add to playlist requested for:', song.title);
+    this.addToPlaylistRequest.emit(song);
+  }
+
+  addToFavorites(song: Song): void {
+    console.log('❤️ MusicSection: Add to favorites requested for:', song.title);
+    this.addToFavoritesRequest.emit(song);
+  }
+
+  showMoreOptions(song: Song): void {
+    console.log('⚙️ MusicSection: More options requested for:', song.title);
+    this.moreOptionsRequest.emit(song);
   }
 
   formatPlayCount(count: number): string {

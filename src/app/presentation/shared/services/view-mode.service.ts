@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-export type ViewMode = 'list' | 'table';
+export type ViewMode = 'grid' | 'table' | 'list';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +17,14 @@ export class ViewModeService {
   constructor() {}
 
   /**
-   * Obtiene el modo de vista inicial desde localStorage o usa 'list' como default
+   * Obtiene el modo de vista inicial desde localStorage o usa 'grid' como default
    */
   private getInitialViewMode(): ViewMode {
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY);
-      return (stored === 'list' || stored === 'table') ? stored as ViewMode : 'list';
+      return (stored === 'grid' || stored === 'table' || stored === 'list') ? stored as ViewMode : 'grid';
     } catch {
-      return 'list';
+      return 'grid';
     }
   }
 
@@ -43,19 +43,34 @@ export class ViewModeService {
   }
 
   /**
-   * Alterna entre los modos de vista
+   * Alterna entre los modos de vista (grid -> table -> list -> grid)
    */
   public toggleViewMode(): void {
     const currentMode = this._viewMode();
-    const newMode: ViewMode = currentMode === 'list' ? 'table' : 'list';
+    let newMode: ViewMode;
+    
+    switch (currentMode) {
+      case 'grid':
+        newMode = 'table';
+        break;
+      case 'table':
+        newMode = 'list';
+        break;
+      case 'list':
+        newMode = 'grid';
+        break;
+      default:
+        newMode = 'grid';
+    }
+    
     this.setViewMode(newMode);
   }
 
   /**
-   * Verifica si el modo actual es 'list'
+   * Verifica si el modo actual es 'grid'
    */
-  public isListMode(): boolean {
-    return this._viewMode() === 'list';
+  public isGridMode(): boolean {
+    return this._viewMode() === 'grid';
   }
 
   /**
@@ -63,5 +78,12 @@ export class ViewModeService {
    */
   public isTableMode(): boolean {
     return this._viewMode() === 'table';
+  }
+
+  /**
+   * Verifica si el modo actual es 'list'
+   */
+  public isListMode(): boolean {
+    return this._viewMode() === 'list';
   }
 }

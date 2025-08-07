@@ -3,9 +3,15 @@
     class="bg-white backdrop-blur-sm rounded-xl p-4 border border-black/10 shadow-md"
   >
     <ul class="space-y-2">
+
       <app-side-menu-item [href]="ROUTES_CONFIG_SITE.HOME.link">
         <mat-icon>home</mat-icon>
         {{ "SIDEBAR.HOME" | translate }}
+      </app-side-menu-item>
+
+      <app-side-menu-item [href]="'/discover'">
+        <mat-icon>explore</mat-icon>
+        {{ "SIDEBAR.DISCOVER" | translate }}
       </app-side-menu-item>
 
       <app-side-menu-item [href]="ROUTES_CONFIG_MUSIC.SEARCH.link">
@@ -44,19 +50,98 @@
       }
     </ul>
 
-    <div
-      class="flex items-center justify-between mb-4 hover:bg-black/5 transition-colors duration-300"
-    >
-      <a
-        [routerLink]="ROUTES_CONFIG_MUSIC.LIBRARY.link"
-        class="text-black font-semibold flex items-center gap-2 mt-4 mb-2 hover:bg-black/5 transition-colors duration-300 cursor-pointer"
+    @if (user()) {
+      <div
+        class="flex items-center justify-between mb-4 hover:bg-black/5 transition-colors duration-300"
       >
-        <mat-icon>library_music</mat-icon>
-        {{ "SIDEBAR.LIBRARY" | translate }}
-      </a>
-      <button class="text-black hover:text-black transition-colors mt-4 mb-2">
-        <mat-icon>add</mat-icon>
-      </button>
+        <a
+          routerLink="/my-playlists"
+          class="text-black font-semibold flex items-center gap-2 mt-4 mb-2 hover:bg-black/5 transition-colors duration-300 cursor-pointer"
+        >
+          <mat-icon>library_music</mat-icon>
+          {{ "SIDEBAR.MY_PLAYLISTS" | translate }}
+        </a>
+        <button 
+          (click)="openCreatePlaylistDialog()"
+          class="text-black hover:text-black transition-colors mt-4 mb-2"
+          title="Crear nueva playlist">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <div class="space-y-2 mb-4">
+        @if (isLoadingPlaylists()) {
+          <div class="flex items-center justify-center py-4">
+            <div class="text-sm text-gray-500">Cargando playlists...</div>
+          </div>
+        } @else if (playlistsError()) {
+          <div class="flex items-center justify-center py-4">
+            <div class="text-sm text-red-500">{{ playlistsError() }}</div>
+          </div>
+        } @else if (showEmptyState()) {
+          <div class="flex flex-col items-center justify-center py-6 text-center">
+            <mat-icon class="text-gray-400 mb-2 text-3xl">queue_music</mat-icon>
+            <div class="text-sm text-gray-500 mb-2">No tienes playlists aún</div>
+            <button 
+              (click)="openCreatePlaylistDialog()"
+              class="text-xs text-blue-600 hover:text-blue-800 transition-colors">
+              Crea tu primera playlist
+            </button>
+          </div>
+        } @else {
+          @for (playlist of playlists(); track playlist.id) {
+            <app-side-menu-card [playlist]="playlist" />
+          }
+        }
+      </div>
+    }
+
+    <!-- View Mode Options -->
+    <div class="view-mode-selector mb-4">
+      <div class="text-black font-semibold flex items-center gap-2 mb-3">
+        <mat-icon>view_comfy</mat-icon>
+        Vista de Música
+      </div>
+      <div class="grid grid-cols-3 gap-1 bg-gray-100 rounded-lg p-1">
+        <!-- Grid View -->
+        <button
+          (click)="setViewMode('grid')"
+          [class]="viewModeService.viewMode() === 'grid' 
+            ? 'bg-white text-black shadow-sm' 
+            : 'text-gray-600 hover:text-black'"
+          class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
+          title="Vista de tarjetas"
+        >
+          <mat-icon class="text-sm">grid_view</mat-icon>
+          <span>Cards</span>
+        </button>
+        
+        <!-- Table View -->
+        <button
+          (click)="setViewMode('table')"
+          [class]="viewModeService.viewMode() === 'table' 
+            ? 'bg-white text-black shadow-sm' 
+            : 'text-gray-600 hover:text-black'"
+          class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
+          title="Vista de tabla"
+        >
+          <mat-icon class="text-sm">view_list</mat-icon>
+          <span>Tabla</span>
+        </button>
+        
+        <!-- List View -->
+        <button
+          (click)="setViewMode('list')"
+          [class]="viewModeService.viewMode() === 'list' 
+            ? 'bg-white text-black shadow-sm' 
+            : 'text-gray-600 hover:text-black'"
+          class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
+          title="Vista de lista"
+        >
+          <mat-icon class="text-sm">view_module</mat-icon>
+          <span>Lista</span>
+        </button>
+      </div>
     </div>
 
     <!-- Language Selector -->
@@ -125,37 +210,5 @@
       </div>
     </div>
 
-    <!-- View Mode Selector -->
-    <div class="view-mode-selector">
-      <h4>Vista de Música</h4>
-      <div class="view-mode-toggle-container">
-        <div class="view-toggle bg-gray-100 rounded-lg p-1 flex">
-          <button
-            (click)="viewModeService.setViewMode('list')"
-            [class.active]="viewModeService.viewMode() === 'list'"
-            class="view-btn px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2"
-            title="Vista de lista moderna"
-          >
-            <mat-icon class="w-4 h-4">view_list</mat-icon>
-            <span class="hidden sm:inline">Lista</span>
-          </button>
-          <button
-            (click)="viewModeService.setViewMode('table')"
-            [class.active]="viewModeService.viewMode() === 'table'"
-            class="view-btn px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2"
-            title="Vista de tabla tradicional"
-          >
-            <mat-icon class="w-4 h-4">table_chart</mat-icon>
-            <span class="hidden sm:inline">Tabla</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="space-y-2">
-      @for (playlist of playlists; track playlist.id) {
-        <app-side-menu-card [playlist]="playlist" />
-      }
-    </div>
   </div>
 </nav>

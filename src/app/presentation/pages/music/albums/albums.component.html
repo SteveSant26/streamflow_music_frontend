@@ -1,0 +1,100 @@
+<div class="albums-container">
+  <!-- Header -->
+  <div class="albums-header">
+    <h1>Álbumes</h1>
+    <p class="subtitle">Explora toda nuestra colección de álbumes</p>
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="albums-filters">
+    <mat-form-field class="search-field">
+      <mat-label>Buscar álbumes o artistas</mat-label>
+      <input matInput 
+             [value]="searchTerm()" 
+             (input)="onSearchChange($event.target.value)"
+             placeholder="Escribe aquí para buscar...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field class="sort-field">
+      <mat-label>Ordenar por</mat-label>
+      <mat-select [value]="sortBy()" (selectionChange)="onSortChange($event.value)">
+        <mat-option value="title">Título A-Z</mat-option>
+        <mat-option value="-title">Título Z-A</mat-option>
+        <mat-option value="artist__name">Artista A-Z</mat-option>
+        <mat-option value="-artist__name">Artista Z-A</mat-option>
+        <mat-option value="-release_date">Más recientes</mat-option>
+        <mat-option value="release_date">Más antiguos</mat-option>
+        <mat-option value="-play_count">Más populares</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando álbumes...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error() && !loading()">
+    <mat-icon class="error-icon">error</mat-icon>
+    <p>{{ error() }}</p>
+    <button mat-raised-button color="primary" (click)="loadAlbums()">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Albums Grid -->
+  <div class="albums-grid" *ngIf="!loading() && !error() && filteredAlbums().length > 0">
+    <mat-card *ngFor="let album of filteredAlbums()" class="album-card">
+      <div class="album-image-container">
+        <img mat-card-image 
+             [src]="album.cover_url || '/assets/default-album.png'" 
+             [alt]="album.title" 
+             class="album-cover">
+        <div class="album-overlay">
+          <button mat-fab 
+                  color="primary" 
+                  [routerLink]="getAlbumLink(album.id)"
+                  matTooltip="Ver álbum">
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+        </div>
+      </div>
+      
+      <mat-card-content>
+        <h3 class="album-title">{{ album.title }}</h3>
+        <p class="artist-name">{{ album.artist_name }}</p>
+        <div class="album-info">
+          <span class="track-count">{{ album.total_tracks }} canciones</span>
+          <span *ngIf="album.release_date" class="release-date">
+            {{ album.release_date | date:'yyyy' }}
+          </span>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions>
+        <button mat-button 
+                [routerLink]="getAlbumLink(album.id)" 
+                color="primary">
+          <mat-icon>album</mat-icon>
+          Ver Álbum
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading() && !error() && filteredAlbums().length === 0">
+    <mat-icon class="empty-icon">library_music</mat-icon>
+    <h2>No se encontraron álbumes</h2>
+    <p *ngIf="searchTerm()">
+      No hay álbumes que coincidan con "{{ searchTerm() }}". 
+      Intenta con otros términos de búsqueda.
+    </p>
+    <p *ngIf="!searchTerm()">
+      Aún no hay álbumes disponibles en la biblioteca.
+    </p>
+  </div>
+</div>

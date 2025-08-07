@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, map } from 'rxjs';
-import { PlaylistHttpService } from '../../../infrastructure/services/playlist-http.service';
+import { Observable, map, catchError, throwError, switchMap } from 'rxjs';
+import { IPlaylistRepository } from '../../repositories/i-playlist.repository';
 import { 
   Playlist, 
   PlaylistWithSongs, 
@@ -8,169 +8,280 @@ import {
   CreatePlaylistDto,
   UpdatePlaylistDto,
   AddSongToPlaylistDto,
-  LegacyPlaylist
+  LegacyPlaylist,
+  PaginatedPlaylistResponse,
+  PaginatedPlaylistSongResponse,
+  PlaylistFilters
 } from '../../entities/playlist.entity';
-import { Song } from '../../entities/song.entity';
+import { PlaylistMapper } from '../../mappers/playlist.mapper';
+import { PlaylistRepositoryImpl } from '../../../infrastructure/repositories/playlist.repository.impl';
 
-// Función para convertir PlaylistWithSongs a LegacyPlaylist
-function mapToLegacyPlaylist(playlist: PlaylistWithSongs): LegacyPlaylist {
-  return {
-    id: playlist.id,
-    name: playlist.name,
-    description: playlist.description,
-    coverImage: `https://picsum.photos/300/300?random=${playlist.id}`,
-    isPublic: playlist.is_public,
-    createdDate: playlist.created_at,
-    songCount: playlist.total_songs,
-    duration: playlist.songs.reduce((total, song) => total + song.duration_seconds, 0),
-    owner: {
-      id: playlist.user_id,
-      username: 'Usuario'
-    },
-    songs: playlist.songs.map(song => mapPlaylistSongToSong(song))
-  };
-}
+// Casos de uso para operaciones CRUD de playlists
+@Injectable({ providedIn: 'root' })
+export class GetPlaylistsUseCase {
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
-// Función para convertir PlaylistSong a Song
-function mapPlaylistSongToSong(playlistSong: PlaylistSong): Song {
-  return {
-    id: playlistSong.id,
-    title: playlistSong.title,
-    artist_id: `artist_${playlistSong.id}`,
-    artist_name: playlistSong.artist_name || 'Artista Desconocido',
-    album_id: `album_${playlistSong.id}`,
-    album_name: playlistSong.album_name || 'Álbum Desconocido',
-    duration_formatted: formatDuration(playlistSong.duration_seconds),
-    duration_seconds: playlistSong.duration_seconds,
-    file_url: `https://example.com/song_${playlistSong.id}.mp3`,
-    thumbnail_url: playlistSong.thumbnail_url || `https://picsum.photos/64/64?random=${playlistSong.id}`,
-    youtube_url: `https://youtube.com/watch?v=${playlistSong.id}`,
-    genre_names_display: 'Música',
-    play_count: 0,
-    youtube_view_count: 0,
-    youtube_like_count: 0,
-    is_explicit: false,
-    audio_downloaded: true,
-    created_at: new Date(playlistSong.added_at),
-    published_at: new Date(playlistSong.added_at)
-  };
-}
-
-function formatDuration(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${minutes}:${secs.toString().padStart(2, '0')}`;
+  execute(filters?: PlaylistFilters): Observable<PaginatedPlaylistResponse> {
+    return this.repository.getPlaylists(filters).pipe(
+      catchError(error => {
+        console.error('Error getting playlists:', error);
+        return throwError(() => new Error('No se pudieron cargar las playlists'));
+      })
+    );
+  }
 }
 
 @Injectable({ providedIn: 'root' })
 export class GetUserPlaylistsUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
-  execute(): Observable<Playlist[]> {
-    return this.playlistService.getPlaylists().pipe(
-      map(playlists => playlists.map(playlist => ({
-        id: playlist.id,
-        name: playlist.name,
-        description: playlist.description || '',
-        user_id: playlist.user_id,
-        is_default: playlist.is_default,
-        is_public: playlist.is_public,
-        total_songs: playlist.total_songs,
-        created_at: playlist.created_at,
-        updated_at: playlist.updated_at
-      })))
+  execute(filters?: PlaylistFilters): Observable<Playlist[]> {
+    return this.repository.getUserPlaylists(filters).pipe(
+      map(response => {
+        console.log('GetUserPlaylistsUseCase - Respuesta del repositorio:', response);
+        return response.results || [];
+      }),
+      catchError(error => {
+        console.error('Error getting user playlists:', error);
+        console.log('Detalles del error:', {
+          message: error.message,
+          status: error.status,
+          error: error
+        });
+        
+        // Si es un error del servidor (500), devolver array vacío para que no bloquee la UI
+        if (error.status === 500 || error.message?.includes('Error del servidor')) {
+          console.warn('Error 500 detectado, devolviendo array vacío temporalmente');
+          return []; // Devolver array vacío en lugar de error
+        }
+        
+        return throwError(() => new Error('No se pudieron cargar las playlists del usuario'));
+      })
     );
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class GetPlaylistByIdUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+  private readonly repository = inject(PlaylistRepositoryImpl);
+
+  execute(id: string): Observable<PlaylistWithSongs> {
+    if (!id || id.trim().length === 0) {
+      return throwError(() => new Error('ID de playlist requerido'));
+    }
+
+    return this.repository.getPlaylist(id).pipe(
+      catchError(error => {
+        console.error('Error getting playlist:', error);
+        return throwError(() => new Error('No se pudo cargar la playlist'));
+      })
+    );
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class GetLegacyPlaylistByIdUseCase {
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
   execute(id: string): Observable<LegacyPlaylist> {
-    return this.playlistService.getPlaylist(id).pipe(
-      map(playlist => mapToLegacyPlaylist(playlist))
+    return this.repository.getPlaylist(id).pipe(
+      map(playlist => PlaylistMapper.toLegacyPlaylist(playlist)),
+      catchError(error => {
+        console.error('Error getting legacy playlist:', error);
+        return throwError(() => new Error('No se pudo cargar la playlist'));
+      })
     );
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class CreatePlaylistUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
   execute(data: CreatePlaylistDto): Observable<Playlist> {
-    return this.playlistService.createPlaylist(data);
+    const validationErrors = PlaylistMapper.validateCreatePlaylist(data);
+    if (validationErrors.length > 0) {
+      return throwError(() => new Error(validationErrors.join(', ')));
+    }
+
+    return this.repository.createPlaylist(data).pipe(
+      catchError(error => {
+        console.error('Error creating playlist:', error);
+        return throwError(() => new Error('No se pudo crear la playlist'));
+      })
+    );
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class UpdatePlaylistUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
   execute(id: string, data: UpdatePlaylistDto): Observable<Playlist> {
-    return this.playlistService.updatePlaylist(id, data);
+    if (!id || id.trim().length === 0) {
+      return throwError(() => new Error('ID de playlist requerido'));
+    }
+
+    const validationErrors = PlaylistMapper.validateUpdatePlaylist(data);
+    if (validationErrors.length > 0) {
+      return throwError(() => new Error(validationErrors.join(', ')));
+    }
+
+    return this.repository.updatePlaylist(id, data).pipe(
+      catchError(error => {
+        console.error('Error updating playlist:', error);
+        return throwError(() => new Error('No se pudo actualizar la playlist'));
+      })
+    );
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class DeletePlaylistUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
   execute(id: string): Observable<void> {
-    return this.playlistService.deletePlaylist(id);
+    if (!id || id.trim().length === 0) {
+      return throwError(() => new Error('ID de playlist requerido'));
+    }
+
+    return this.repository.deletePlaylist(id).pipe(
+      catchError(error => {
+        console.error('Error deleting playlist:', error);
+        return throwError(() => new Error('No se pudo eliminar la playlist'));
+      })
+    );
+  }
+}
+
+// Casos de uso para operaciones con canciones de playlists
+@Injectable({ providedIn: 'root' })
+export class GetPlaylistSongsUseCase {
+  private readonly repository = inject(PlaylistRepositoryImpl);
+
+  execute(playlistId: string, page?: number, pageSize?: number): Observable<PaginatedPlaylistSongResponse> {
+    if (!playlistId || playlistId.trim().length === 0) {
+      return throwError(() => new Error('ID de playlist requerido'));
+    }
+
+    return this.repository.getPlaylistSongs(playlistId, page, pageSize).pipe(
+      catchError(error => {
+        console.error('Error getting playlist songs:', error);
+        return throwError(() => new Error('No se pudieron cargar las canciones de la playlist'));
+      })
+    );
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class AddSongToPlaylistUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
   execute(playlistId: string, data: AddSongToPlaylistDto): Observable<PlaylistSong> {
-    return this.playlistService.addSongToPlaylist(playlistId, data);
+    if (!playlistId || playlistId.trim().length === 0) {
+      return throwError(() => new Error('ID de playlist requerido'));
+    }
+
+    const validationErrors = PlaylistMapper.validateAddSongToPlaylist(data);
+    if (validationErrors.length > 0) {
+      return throwError(() => new Error(validationErrors.join(', ')));
+    }
+
+    return this.repository.addSongToPlaylist(playlistId, data).pipe(
+      catchError(error => {
+        console.error('Error adding song to playlist:', error);
+        return throwError(() => new Error('No se pudo agregar la canción a la playlist'));
+      })
+    );
   }
 }
 
 @Injectable({ providedIn: 'root' })
 export class RemoveSongFromPlaylistUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
   execute(playlistId: string, songId: string): Observable<void> {
-    return this.playlistService.removeSongFromPlaylist(playlistId, songId);
+    if (!playlistId || playlistId.trim().length === 0) {
+      return throwError(() => new Error('ID de playlist requerido'));
+    }
+    
+    if (!songId || songId.trim().length === 0) {
+      return throwError(() => new Error('ID de canción requerido'));
+    }
+
+    return this.repository.removeSongFromPlaylist(playlistId, songId).pipe(
+      catchError(error => {
+        console.error('Error removing song from playlist:', error);
+        return throwError(() => new Error('No se pudo remover la canción de la playlist'));
+      })
+    );
+  }
+}
+
+// Casos de uso compuestos para operaciones más complejas
+@Injectable({ providedIn: 'root' })
+export class SearchPlaylistsUseCase {
+  private readonly repository = inject(PlaylistRepositoryImpl);
+
+  execute(searchTerm: string, filters?: Omit<PlaylistFilters, 'search'>): Observable<Playlist[]> {
+    if (!searchTerm || searchTerm.trim().length === 0) {
+      return throwError(() => new Error('Término de búsqueda requerido'));
+    }
+
+    const searchFilters: PlaylistFilters = {
+      ...filters,
+      search: searchTerm.trim()
+    };
+
+    return this.repository.getPlaylists(searchFilters).pipe(
+      map(response => response.results),
+      catchError(error => {
+        console.error('Error searching playlists:', error);
+        return throwError(() => new Error('No se pudieron buscar las playlists'));
+      })
+    );
   }
 }
 
 @Injectable({ providedIn: 'root' })
-export class GetFavoritesPlaylistUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+export class GetPublicPlaylistsUseCase {
+  private readonly repository = inject(PlaylistRepositoryImpl);
 
-  execute(): Observable<PlaylistWithSongs> {
-    return this.playlistService.getFavoritesPlaylist();
+  execute(page: number = 1, pageSize: number = 10): Observable<PaginatedPlaylistResponse> {
+    const filters: PlaylistFilters = {
+      is_public: true,
+      page,
+      page_size: pageSize
+    };
+
+    return this.repository.getPlaylists(filters).pipe(
+      catchError(error => {
+        console.error('Error getting public playlists:', error);
+        return throwError(() => new Error('No se pudieron cargar las playlists públicas'));
+      })
+    );
   }
 }
 
 @Injectable({ providedIn: 'root' })
-export class EnsureDefaultPlaylistUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
+export class DuplicatePlaylistUseCase {
+  private readonly getPlaylist = inject(GetPlaylistByIdUseCase);
+  private readonly createPlaylist = inject(CreatePlaylistUseCase);
 
-  execute(): Observable<Playlist> {
-    return this.playlistService.ensureDefaultPlaylist();
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class GetPlaylistSongsUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
-
-  execute(playlistId: string): Observable<PlaylistSong[]> {
-    return this.playlistService.getPlaylistSongs(playlistId);
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class ReorderPlaylistSongsUseCase {
-  private readonly playlistService = inject(PlaylistHttpService);
-
-  execute(playlistId: string, songIds: string[]): Observable<PlaylistSong[]> {
-    return this.playlistService.reorderPlaylistSongs(playlistId, songIds);
+  execute(playlistId: string, newName?: string): Observable<Playlist> {
+    return this.getPlaylist.execute(playlistId).pipe(
+      switchMap((originalPlaylist: PlaylistWithSongs) => {
+        const duplicateData: CreatePlaylistDto = {
+          name: newName || `${originalPlaylist.name} (Copia)`,
+          description: originalPlaylist.description,
+          is_public: false
+        };
+        return this.createPlaylist.execute(duplicateData);
+      }),
+      catchError(error => {
+        console.error('Error duplicating playlist:', error);
+        return throwError(() => new Error('No se pudo duplicar la playlist'));
+      })
+    );
   }
 }

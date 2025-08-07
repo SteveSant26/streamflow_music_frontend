@@ -1,10 +1,10 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Card, Greeting } from '@app/presentation/components/ui';
-import { PlayListItemCard, MusicsTable } from '@app/presentation/components/music';
-import { MusicSectionButton } from '@app/presentation/components/music-section/music-section';
+import { Greeting } from '@app/presentation/components/ui';
+import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
@@ -13,20 +13,26 @@ import {
   GetRandomSongsUseCase,
   PlaySongUseCase
 } from '../../../../domain/usecases/song/song.usecases';
+import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
+import { FavoritesUseCase } from '../../../../domain/usecases/favorites/favorites.usecases';
+import { SongMenuService } from '../../../../infrastructure/services/song-menu.service';
 import { Song } from '../../../../domain/entities/song.entity';
+import { Playlist } from '../../../../domain/entities/playlist.entity';
+import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
+import { PlayListItemCard } from '@app/presentation/components/music/play-list-item-card/play-list-item-card';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     CommonModule,
-    Card,
+    RouterModule,
     Greeting,
-    PlayListItemCard,
     TranslateModule,
     MatIconModule,
     MatButtonModule,
-    MusicsTable,
+    MusicSectionComponent,
+    PlayListItemCard,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
@@ -37,6 +43,10 @@ export class HomeComponent implements OnInit {
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly playerUseCase = inject(PlayerUseCase);
+  private readonly unifiedPlaylistService = inject(UnifiedPlaylistService);
+  private readonly favoritesUseCase = inject(FavoritesUseCase);
+  private readonly songMenuService = inject(SongMenuService);
   readonly viewModeService = inject(ViewModeService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -47,7 +57,9 @@ export class HomeComponent implements OnInit {
   // Signals para el estado del componente
   readonly popularSongs = signal<Song[]>([]);
   readonly randomSongs = signal<Song[]>([]);
+  readonly featuredPlaylists = signal<Playlist[]>([]);
   readonly loading = signal(true);
+  readonly playlistsLoading = signal(true);
 
   // Signal computed para el tipo de vista
   readonly currentViewType = computed(() => {
@@ -58,8 +70,8 @@ export class HomeComponent implements OnInit {
     return resultType;
   });
 
-  // Datos mock para las playlists (mantenemos algunos como ejemplo)
-  featuredPlaylists = [
+  // Datos mock para las playlists (mantenemos algunos como ejemplo - DEPRECATED, usar featuredPlaylists signal)
+  mockPlaylistsData = [
     {
       id: 1,
       title: 'Hits del Rock',
@@ -92,15 +104,82 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadHomeData();
+    this.loadFeaturedPlaylists();
     
     // Effect para debuggear cambios de view mode
     effect(() => {
       const currentMode = this.viewModeService.viewMode();
       console.log('🏠 Home Effect: View mode changed to:', currentMode);
       console.log('🏠 Home Effect: Should show', currentMode === 'list' ? 'GRID/CARDS' : 'TABLE');
-      console.log('🏠 Force change detection...');
-      this.cdr.markForCheck(); // Forzar detección de cambios
     });
+  }
+
+  loadFeaturedPlaylists(): void {
+    this.playlistsLoading.set(true);
+    this.unifiedPlaylistService.getPublicPlaylists(1, 4).subscribe({
+      next: (response) => {
+        console.log('🎵 Featured playlists loaded:', response.results);
+        this.featuredPlaylists.set(response.results);
+        this.playlistsLoading.set(false);
+      },
+      error: (error) => {
+        console.error('❌ Error loading featured playlists:', error);
+        this.playlistsLoading.set(false);
+        // Fallback a playlists mock si hay error
+        this.loadMockPlaylists();
+      }
+    });
+  }
+
+  loadMockPlaylists(): void {
+    // Mock playlists como fallback
+    const mockPlaylists: Playlist[] = [
+      {
+        id: 'mock-1',
+        name: 'Hits del Rock',
+        description: 'Los mejores éxitos del rock de todos los tiempos',
+        user_id: 'system',
+        is_default: false,
+        is_public: true,
+        total_songs: 25,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-2',
+        name: 'Mix Aleatorio',
+        description: 'Una mezcla de géneros para descubrir nueva música',
+        user_id: 'system',
+        is_default: false,
+        is_public: true,
+        total_songs: 30,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-3',
+        name: 'Descubrimientos',
+        description: 'Artistas emergentes y canciones por descubrir',
+        user_id: 'system',
+        is_default: false,
+        is_public: true,
+        total_songs: 20,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-4',
+        name: 'Tendencias',
+        description: 'Lo más popular en el momento',
+        user_id: 'system',
+        is_default: false,
+        is_public: true,
+        total_songs: 15,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ];
+    this.featuredPlaylists.set(mockPlaylists);
   }
 
   // Método para debug - llamar desde el template
@@ -116,12 +195,79 @@ export class HomeComponent implements OnInit {
     this.viewModeService.setViewMode('list');
   }
 
-  // Método para cambiar manualmente el viewMode (para debug)
+  // Método para toggle manual del viewMode (para debug)
   toggleViewModeManually(): void {
     const current = this.viewModeService.viewMode();
     const newMode = current === 'list' ? 'table' : 'list';
     console.log('🔄 Manual toggle from', current, 'to', newMode);
     this.viewModeService.setViewMode(newMode);
+  }
+
+  // ====================== SONG ACTIONS ======================
+
+  addToQueue(song: Song): void {
+    try {
+      this.playerUseCase.addToQueue(song);
+      console.log('✅ Canción agregada a la cola:', song.title);
+      
+      // Mostrar notificación básica al usuario
+      console.log(`🔔 "${song.title}" agregada a la cola`);
+    } catch (error) {
+      console.error('❌ Error agregando canción a la cola:', error);
+    }
+  }
+
+  addToPlaylist(song: Song): void {
+    try {
+      console.log('📋 Abriendo modal para agregar a playlist:', song.title);
+      
+      // Implementación básica por ahora
+      console.log('✅ Funcionalidad de playlist pendiente de implementar completamente');
+      console.log(`🔔 "${song.title}" se agregará a una playlist (función en desarrollo)`);
+    } catch (error) {
+      console.error('❌ Error agregando a playlist:', error);
+    }
+  }
+
+  addToFavorites(song: Song): void {
+    try {
+      console.log('❤️ Agregando a favoritos:', song.title);
+      
+      this.favoritesUseCase.addToFavorites(song.id).subscribe({
+        next: (favorite) => {
+          console.log('✅ Canción agregada a favoritos exitosamente:', favorite);
+          console.log(`🔔 "${song.title}" se agregó a favoritos`);
+        },
+        error: (error) => {
+          console.error('❌ Error agregando a favoritos:', error);
+          console.log(`🔔 Error: No se pudo agregar "${song.title}" a favoritos`);
+        }
+      });
+    } catch (error) {
+      console.error('❌ Error agregando a favoritos:', error);
+    }
+  }
+
+  showMoreOptions(song: Song): void {
+    try {
+      console.log('⚙️ Mostrando más opciones para:', song.title);
+      
+      const options = this.songMenuService.getMenuOptions(song);
+      console.log('📋 Opciones disponibles:', options.map(opt => opt.label));
+      
+      // Por ahora, mostrar en consola las opciones disponibles
+      // En el futuro se puede implementar un modal o menú contextual
+      options.forEach((option, index) => {
+        if (!option.disabled) {
+          console.log(`${index + 1}. ${option.label} (${option.icon})`);
+        }
+      });
+      
+      console.log(`✅ Menú de ${options.length} opciones disponibles para "${song.title}"`);
+      console.log('💡 Tip: Se puede implementar un menú contextual aquí');
+    } catch (error) {
+      console.error('❌ Error mostrando opciones:', error);
+    }
   }
 
   private loadHomeData(): void {
@@ -154,8 +300,38 @@ export class HomeComponent implements OnInit {
 
   // Métodos para reproducir canciones
   playSong(song: Song): void {
-    console.log(`Reproduciendo: ${song.title} - ${song.artist_name}`);
-    // Implementar lógica de reproducción
+    console.log(`🎵 Reproduciendo: ${song.title} - ${song.artist_name}`);
+    
+    // Usar PlaySongUseCase con el contexto apropiado
+    const contextSongs = song.id.includes('popular') || this.popularSongs().some(s => s.id === song.id) 
+      ? this.popularSongs() 
+      : this.randomSongs();
+    
+    const contextName = song.id.includes('popular') || this.popularSongs().some(s => s.id === song.id)
+      ? 'Canciones Populares - Home'
+      : 'Canciones Aleatorias - Home';
+    
+    const contextType = song.id.includes('popular') || this.popularSongs().some(s => s.id === song.id)
+      ? 'popular'
+      : 'random';
+
+    this.playSongUseCase.executeFromContext(song.id, contextSongs, contextName, contextType).subscribe({
+      next: () => {
+        console.log(`✅ Reproduciendo: ${song.title} desde contexto ${contextName}`);
+      },
+      error: (error) => {
+        console.error('❌ Error al reproducir canción:', error);
+        // Fallback al método simple
+        this.playSongUseCase.executeSimple(song.id).subscribe({
+          next: () => {
+            console.log(`✅ Reproduciendo (fallback): ${song.title}`);
+          },
+          error: (fallbackError) => {
+            console.error('❌ Error en fallback:', fallbackError);
+          }
+        });
+      }
+    });
   }
 
   loadMostPopularSongs(): void {
@@ -264,23 +440,4 @@ export class HomeComponent implements OnInit {
       loadingMessage: 'Cargando música...'
     };
   });
-
-  // Métodos para los botones de acción (igual que Search)
-  addToPlaylist(song: Song): void {
-    // Implementar funcionalidad de agregar a playlist
-    console.log(`Agregando "${song.title}" a playlist`);
-    // Aquí irá la lógica para mostrar modal de playlists o agregar a favoritos
-  }
-
-  addToFavorites(song: Song): void {
-    // Implementar funcionalidad de favoritos
-    console.log(`Agregando "${song.title}" a favoritos`);
-    // Aquí irá la lógica para agregar/quitar de favoritos
-  }
-
-  showMoreOptions(song: Song): void {
-    // Implementar menú de más opciones
-    console.log(`Mostrando más opciones para "${song.title}"`);
-    // Aquí irá la lógica para mostrar menú contextual con más opciones
-  }
 }

@@ -1,18 +1,64 @@
 .song-card {
   transition: all 0.3s ease;
+  background: white !important;
 }
 
 .song-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .song-card img {
   transition: transform 0.3s ease;
+  display: block;
+  background-color: #f3f4f6;
 }
 
 .song-card:hover img {
   transform: scale(1.05);
+}
+
+/* Asegurar que las imágenes se carguen correctamente */
+.song-card .relative {
+  background-color: #f3f4f6;
+}
+
+.song-image {
+  background-color: #f3f4f6 !important;
+}
+
+/* Botones de play principales */
+.play-btn, .play-overlay-btn {
+  z-index: 20 !important;
+  position: relative;
+  cursor: pointer;
+  background-color: #22c55e !important;
+  border: none;
+  outline: none;
+}
+
+.play-btn:hover, .play-overlay-btn:hover {
+  background-color: #16a34a !important;
+  transform: scale(1.1);
+}
+
+/* Asegurar que los botones sean visibles */
+.music-section button {
+  z-index: 10;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.music-section .action-btn,
+.music-section .action-btn-small {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: auto;
+  min-height: auto;
+  cursor: pointer;
 }
 
 /* Animaciones para los botones de acción */
@@ -24,6 +70,38 @@
   transform: scale(1.05);
 }
 
+/* Asegurar que los íconos de Material Icons se muestren correctamente */
+.music-section mat-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-weight: normal;
+  font-style: normal;
+  font-size: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+/* Overlay para cards */
+.song-card .absolute {
+  z-index: 15;
+}
+
+/* Asegurar visibilidad en modo oscuro */
+.music-section {
+  color: inherit;
+}
+
+/* Mejor hover para las cards */
+.group:hover .play-overlay-btn {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
 /* Mejoras visuales para el estado de carga */
 .loading-spinner {
   animation: spin 1s linear infinite;
@@ -32,4 +110,16 @@
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* Estilos específicos para imágenes */
+img[appImageFallback] {
+  background-color: #f3f4f6;
+  min-height: 100%;
+  min-width: 100%;
+}
+
+/* Asegurar que las acciones no interfieran con el click del play */
+.song-actions button {
+  z-index: 25;
 }

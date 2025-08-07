@@ -95,6 +95,18 @@
 
     <!-- Controles de reproducción -->
     <div class="player-controls" [class.loading]="currentSong.isLoading">
+      <!-- Shuffle control -->
+      <button
+        (click)="toggleShuffle()"
+        class="control-button secondary"
+        [class.active]="isShuffleEnabled()"
+        [disabled]="currentSong.isLoading"
+        aria-label="Reproducción aleatoria"
+        title="Reproducción aleatoria"
+      >
+        <mat-icon>shuffle</mat-icon>
+      </button>
+
       <button
         (click)="skipPrevious()"
         class="control-button secondary"
@@ -123,6 +135,18 @@
         aria-label="Siguiente canción"
       >
         <mat-icon>skip_next</mat-icon>
+      </button>
+
+      <!-- Repeat control -->
+      <button
+        (click)="toggleRepeat()"
+        class="control-button secondary"
+        [class.active]="getRepeatMode() !== 'none'"
+        [disabled]="currentSong.isLoading"
+        aria-label="Repetir"
+        [title]="getRepeatModeText()"
+      >
+        <mat-icon>{{ getRepeatMode() === 'one' ? 'repeat_one' : 'repeat' }}</mat-icon>
       </button>
     </div>
 
@@ -192,54 +216,85 @@
   <!-- Panel de letras deslizante -->
   <div class="lyrics-panel">
     <div class="lyrics-header">
-      <h3>Lyrics:</h3>
-      <button
-        (click)="toggleLyricsPanel()"
-        class="close-lyrics-button"
-        aria-label="Cerrar letras"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
+      <h3>Letras</h3>
+      <div class="lyrics-actions">
+        <!-- Botón de actualizar letras -->
+        <button
+          *ngIf="hasLyrics && canLoadLyrics"
+          (click)="updateLyrics()"
+          class="update-lyrics-button"
+          aria-label="Refrescar letras"
+          title="Volver a buscar letras"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+
+        <!-- Botón de cerrar -->
+        <button
+          (click)="toggleLyricsPanel()"
+          class="close-lyrics-button"
+          aria-label="Cerrar letras"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
     </div>
 
     <div class="lyrics-content">
-      <div class="lyrics-text">
-        <p class="lyrics-line active">City's breaking down on a camel's back</p>
-        <p class="lyrics-line">
-          They just have to go, 'cause they don't know wack
-        </p>
-        <p class="lyrics-line">
-          So while you fill the streets, it's appealing to see
-        </p>
-        <p class="lyrics-line">
-          You won't get out the county, 'cause you're bad and free
-        </p>
-        <p class="lyrics-line">
-          You've got a new horizon, it's ephemeral style
-        </p>
-        <p class="lyrics-line">A melancholy town where we never smile</p>
-        <p class="lyrics-line">And all I wanna hear is the message beep</p>
-        <p class="lyrics-line">My dreams, they got a kissing</p>
-        <p class="lyrics-line">'Cause I don't get sleep, no</p>
+      <!-- Estado de carga -->
+      <div *ngIf="currentSong?.lyricsLoading" class="lyrics-loading">
+        <div class="loading-spinner"></div>
+        <p>Buscando letras...</p>
+      </div>
 
-        <p class="lyrics-line chorus">Windmill, windmill for the land</p>
-        <p class="lyrics-line chorus">Turn forever, hand in hand</p>
-        <p class="lyrics-line chorus">Take it all in on your stride</p>
-        <p class="lyrics-line chorus">It is ticking, falling down</p>
-        <p class="lyrics-line chorus">Love forever, love has freely</p>
-        <p class="lyrics-line chorus">Turned forever, you and me</p>
-        <p class="lyrics-line chorus">Windmill, windmill for the land</p>
-        <p class="lyrics-line chorus">Is everybody in?</p>
+      <!-- Error al cargar letras -->
+      <div *ngIf="currentSong?.lyricsError && !currentSong?.lyricsLoading" class="lyrics-error">
+        <mat-icon>error_outline</mat-icon>
+        <p>{{ currentSong.lyricsError }}</p>
+        <button 
+          (click)="refreshLyrics()" 
+          class="retry-button"
+          [disabled]="!canLoadLyrics"
+        >
+          Reintentar
+        </button>
+      </div>
 
-        <p class="lyrics-line">Laughing gas these hazmats, fast cats</p>
-        <p class="lyrics-line">Lining 'em up like ass cracks</p>
-        <p class="lyrics-line">Play these ponies at the track</p>
-        <p class="lyrics-line">It's my chocolate attack</p>
-        <p class="lyrics-line">
-          Shit, I'm stepping in the heart of this here (yeah)
-        </p>
-        <p class="lyrics-line">Care Bear rappin' in harder this year (yeah)</p>
-        <p class="lyrics-line">Watch me as I gravitate, ha-ha-ha-ha-ha</p>
+      <!-- Letras disponibles -->
+      <div *ngIf="hasLyrics && !currentSong?.lyricsLoading" class="lyrics-text">
+        <div class="lyrics-content-scroll">
+          <p 
+            *ngFor="let line of currentSong.lyrics?.split('\n'); trackBy: trackByIndex" 
+            class="lyrics-line"
+            [class.empty-line]="line.trim() === ''"
+          >
+            {{ line || '&nbsp;' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Sin letras disponibles -->
+      <div *ngIf="!hasLyrics && !currentSong?.lyricsLoading && !currentSong?.lyricsError" class="no-lyrics">
+        <mat-icon>music_note</mat-icon>
+        <p>No hay letras disponibles para esta canción</p>
+        <div class="lyrics-buttons">
+          <button 
+            (click)="loadLyrics()" 
+            class="search-lyrics-button"
+            [disabled]="!canLoadLyrics"
+          >
+            Buscar letras
+          </button>
+          <button 
+            (click)="generateLyrics()" 
+            class="generate-lyrics-button"
+            [disabled]="!canLoadLyrics"
+            title="Buscar letras en fuentes externas"
+          >
+            <mat-icon>search</mat-icon>
+            Buscar en línea
+          </button>
+        </div>
       </div>
     </div>
   </div>

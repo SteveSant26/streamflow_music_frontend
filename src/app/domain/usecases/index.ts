@@ -22,6 +22,9 @@ export * from './player/player.usecases';
 // Song Use Cases
 export * from './song/song.usecases';
 
+// Lyrics Use Cases
+export * from './lyrics/lyrics.usecases';
+
 // Artist Use Cases
 export * from './artist.usecases';
 

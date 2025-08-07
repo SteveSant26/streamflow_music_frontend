@@ -5,3 +5,4 @@ export { API_CONFIG_ARTISTS } from './api-config-artists';
 export { API_CONFIG_GENRES } from './api-config-genres';
 export { API_CONFIG_PROFILE } from './api-config-profile';
 export { API_CONFIG_PLAYLISTS } from './api-config-playlists';
+export { API_CONFIG_LYRICS } from './api-config-lyrics';

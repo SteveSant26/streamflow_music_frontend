@@ -11,17 +11,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // Domain
 import { Song } from '@app/domain/entities/song.entity';
 import { SearchSongsPaginatedUseCase, PlaySongUseCase } from '@app/domain/usecases/song/song.usecases';
+import { FavoritesUseCase } from '@app/domain/usecases/favorites/favorites.usecases';
+import { PlayerUseCase } from '@app/domain/usecases/player/player.usecases';
 import { SongSearchParams } from '@app/domain/dtos/song.dto';
 
 // Components
-import { MusicsTable } from '@app/presentation/components/music';
+import { MusicSectionComponent } from '@app/presentation/components/music-section/music-section';
 import { SearchFiltersComponent } from '@app/presentation/components/music/search-filters/search-filters.component';
 
 // Services and Directives
 import { SearchFiltersService } from '@app/infrastructure/services/search-filters.service';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { InfiniteScrollDirective } from '@app/shared/directives/infinite-scroll.directive';
-import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 
 interface PaginationInfo {
   count: number;
@@ -43,10 +44,9 @@ interface PaginationInfo {
     MatIconModule, 
     MatButtonModule,
     ReactiveFormsModule, 
-    MusicsTable,
+    MusicSectionComponent,
     SearchFiltersComponent,
-    InfiniteScrollDirective,
-    ImageFallbackDirective
+    InfiniteScrollDirective
   ],
   templateUrl: './search.html',
   styleUrl: './search.css',
@@ -57,6 +57,8 @@ export class SearchComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly searchSongsPaginatedUseCase = inject(SearchSongsPaginatedUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly favoritesUseCase = inject(FavoritesUseCase);
+  private readonly playerUseCase = inject(PlayerUseCase);
   readonly searchFiltersService = inject(SearchFiltersService);
   readonly viewModeService = inject(ViewModeService);
 
@@ -86,6 +88,15 @@ export class SearchComponent implements OnInit {
   searchQuery = computed(() => this.searchControl.value || '');
   hasMoreResults = computed(() => this.pagination().hasNext);
   isLoading = computed(() => this.isSearching() || this.isLoadingMore());
+
+  // Button configurations for music section
+  searchActionButtons = [
+    {
+      icon: 'play_arrow',
+      action: () => this.playAllSongs(),
+      ariaLabel: 'Reproducir todas las canciones'
+    }
+  ];
 
   ngOnInit() {
     // Solo escuchar cambios para limpiar resultados si el campo se vacía
@@ -288,14 +299,50 @@ export class SearchComponent implements OnInit {
   }
 
   addToFavorites(song: Song): void {
-    // Implementar funcionalidad de favoritos
-    console.log(`Agregando "${song.title}" a favoritos`);
-    // Aquí irá la lógica para agregar/quitar de favoritos
+    console.log(`❤️ Search: Agregando "${song.title}" a favoritos`);
+    
+    this.favoritesUseCase.addToFavorites(song.id).subscribe({
+      next: (favorite) => {
+        console.log('✅ Canción agregada a favoritos exitosamente:', favorite);
+        console.log(`🔔 "${song.title}" se agregó a favoritos`);
+      },
+      error: (error) => {
+        console.error('❌ Error agregando a favoritos:', error);
+        console.log(`🔔 Error: No se pudo agregar "${song.title}" a favoritos`);
+      }
+    });
   }
 
   showMoreOptions(song: Song): void {
     // Implementar menú de más opciones
     console.log(`Mostrando más opciones para "${song.title}"`);
     // Aquí irá la lógica para mostrar menú contextual con más opciones
+  }
+
+  // Métodos para MusicSectionComponent
+  onSearchSongSelected(song: Song) {
+    console.log('🎵 Search: Song selected:', song.title);
+    this.playSong(song);
+  }
+
+  onAddToQueue(song: Song) {
+    console.log('🎵 Search: Add to queue requested for:', song.title);
+    this.playerUseCase.addToQueue(song);
+    console.log(`✅ "${song.title}" agregada a la cola de reproducción`);
+  }
+
+  onAddToPlaylist(song: Song) {
+    console.log('📋 Search: Add to playlist requested for:', song.title);
+    this.addToPlaylist(song);
+  }
+
+  onAddToFavorites(song: Song) {
+    console.log('❤️ Search: Add to favorites requested for:', song.title);
+    this.addToFavorites(song);
+  }
+
+  onMoreOptions(song: Song) {
+    console.log('⚙️ Search: More options requested for:', song.title);
+    this.showMoreOptions(song);
   }
 }

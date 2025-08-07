@@ -1,6 +1,6 @@
 import { Song } from './song.entity';
 
-// Nueva interfaz para nuestro backend
+// Entidades principales basadas en el backend
 export interface Playlist {
   id: string;
   name: string;
@@ -28,6 +28,60 @@ export interface PlaylistWithSongs extends Playlist {
   songs: PlaylistSong[];
 }
 
+// Entidad para respuesta paginada
+export interface PaginatedPlaylistResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Playlist[];
+}
+
+export interface PaginatedPlaylistSongResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: PlaylistSong[];
+}
+
+// Entidades para filtros de búsqueda
+export interface PlaylistFilters {
+  name?: string;
+  description?: string;
+  is_public?: boolean;
+  is_default?: boolean;
+  user_id?: string;
+  user_username?: string;
+  has_description?: boolean;
+  min_song_count?: number;
+  max_song_count?: number;
+  created_after?: string;
+  created_before?: string;
+  updated_after?: string;
+  updated_before?: string;
+  search?: string;
+  ordering?: string;
+  page?: number;
+  page_size?: number;
+}
+
+// DTOs para operaciones CRUD
+export interface CreatePlaylistDto {
+  name: string;
+  description?: string;
+  is_public?: boolean;
+}
+
+export interface UpdatePlaylistDto {
+  name?: string;
+  description?: string;
+  is_public?: boolean;
+}
+
+export interface AddSongToPlaylistDto {
+  song_id: string;
+  position?: number;
+}
+
 // Interfaz de compatibilidad para el reproductor existente
 export interface LegacyPlaylist {
   id: string;
@@ -45,20 +99,35 @@ export interface LegacyPlaylist {
   };
 }
 
-// DTOs para crear/actualizar playlists
-export interface CreatePlaylistDto {
-  name: string;
-  description?: string;
-  is_public?: boolean;
+// Eventos del dominio
+export interface PlaylistCreatedEvent {
+  type: 'PLAYLIST_CREATED';
+  payload: Playlist;
 }
 
-export interface UpdatePlaylistDto {
-  name?: string;
-  description?: string;
-  is_public?: boolean;
+export interface PlaylistUpdatedEvent {
+  type: 'PLAYLIST_UPDATED';
+  payload: Playlist;
 }
 
-export interface AddSongToPlaylistDto {
-  song_id: string;
-  position?: number;
+export interface PlaylistDeletedEvent {
+  type: 'PLAYLIST_DELETED';
+  payload: { id: string };
 }
+
+export interface SongAddedToPlaylistEvent {
+  type: 'SONG_ADDED_TO_PLAYLIST';
+  payload: { playlist: Playlist; song: PlaylistSong };
+}
+
+export interface SongRemovedFromPlaylistEvent {
+  type: 'SONG_REMOVED_FROM_PLAYLIST';
+  payload: { playlistId: string; songId: string };
+}
+
+export type PlaylistDomainEvent = 
+  | PlaylistCreatedEvent
+  | PlaylistUpdatedEvent
+  | PlaylistDeletedEvent
+  | SongAddedToPlaylistEvent
+  | SongRemovedFromPlaylistEvent;

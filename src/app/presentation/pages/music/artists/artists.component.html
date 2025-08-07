@@ -1,0 +1,122 @@
+<div class="artists-container">
+  <!-- Header -->
+  <div class="artists-header">
+    <h1>Artistas</h1>
+    <p class="subtitle">Descubre artistas increíbles de todos los géneros</p>
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="artists-filters">
+    <mat-form-field class="search-field">
+      <mat-label>Buscar artistas</mat-label>
+      <input matInput 
+             [value]="searchTerm()" 
+             (input)="onSearchChange($event.target.value)"
+             placeholder="Escribe el nombre del artista...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field class="sort-field">
+      <mat-label>Ordenar por</mat-label>
+      <mat-select [value]="sortBy()" (selectionChange)="onSortChange($event.value)">
+        <mat-option value="name">Nombre A-Z</mat-option>
+        <mat-option value="-name">Nombre Z-A</mat-option>
+        <mat-option value="-followers_count">Más populares</mat-option>
+        <mat-option value="followers_count">Menos populares</mat-option>
+        <mat-option value="-created_at">Más recientes</mat-option>
+        <mat-option value="created_at">Más antiguos</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="filter-chips">
+      <mat-chip-set>
+        <mat-chip 
+          [class.selected]="verifiedOnly()"
+          (click)="toggleVerifiedFilter()"
+          class="filter-chip">
+          <mat-icon matChipAvatar>verified</mat-icon>
+          Solo verificados
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando artistas...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error() && !loading()">
+    <mat-icon class="error-icon">error</mat-icon>
+    <p>{{ error() }}</p>
+    <button mat-raised-button color="primary" (click)="loadArtists()">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Artists Grid -->
+  <div class="artists-grid" *ngIf="!loading() && !error() && filteredArtists().length > 0">
+    <mat-card *ngFor="let artist of filteredArtists()" class="artist-card">
+      <div class="artist-image-container">
+        <img mat-card-image 
+             [src]="artist.image_url || '/assets/default-artist.png'" 
+             [alt]="artist.name" 
+             class="artist-image">
+        <div class="artist-overlay">
+          <button mat-fab 
+                  color="primary" 
+                  [routerLink]="getArtistLink(artist.id)"
+                  matTooltip="Ver perfil">
+            <mat-icon>person</mat-icon>
+          </button>
+        </div>
+      </div>
+      
+      <mat-card-content>
+        <div class="artist-header">
+          <h3 class="artist-name">{{ artist.name }}</h3>
+          <mat-icon *ngIf="artist.is_verified" 
+                   class="verified-icon" 
+                   matTooltip="Artista verificado">
+            verified
+          </mat-icon>
+        </div>
+        <div class="artist-stats">
+          <span class="followers-count">
+            {{ formatFollowersCount(artist.followers_count) }} seguidores
+          </span>
+        </div>
+      </mat-card-content>
+      
+      <mat-card-actions>
+        <button mat-button 
+                [routerLink]="getArtistLink(artist.id)" 
+                color="primary">
+          <mat-icon>person</mat-icon>
+          Ver Perfil
+        </button>
+        <button mat-icon-button matTooltip="Seguir artista">
+          <mat-icon>favorite_border</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading() && !error() && filteredArtists().length === 0">
+    <mat-icon class="empty-icon">people</mat-icon>
+    <h2>No se encontraron artistas</h2>
+    <p *ngIf="searchTerm()">
+      No hay artistas que coincidan con "{{ searchTerm() }}". 
+      Intenta con otros términos de búsqueda.
+    </p>
+    <p *ngIf="!searchTerm() && verifiedOnly()">
+      No hay artistas verificados disponibles en este momento.
+    </p>
+    <p *ngIf="!searchTerm() && !verifiedOnly()">
+      Aún no hay artistas disponibles en la biblioteca.
+    </p>
+  </div>
+</div>

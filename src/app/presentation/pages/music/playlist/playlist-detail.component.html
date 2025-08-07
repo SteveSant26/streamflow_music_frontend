@@ -1,139 +1,156 @@
-<div class="playlist-detail-container" *ngIf="playlist()">
-  <div class="playlist-header">
-    <div class="playlist-info">
-      <h1>{{ playlist()!.name }}</h1>
-      <p *ngIf="playlist()!.description" class="description">
-        {{ playlist()!.description }}
-      </p>
-      <div class="metadata">
-        <span>{{ playlist()!.songCount }} canciones</span>
-        <span>•</span>
-        <span>{{ playlist()!.isPublic ? 'Pública' : 'Privada' }}</span>
-        <span *ngIf="playlist()!.name === 'Favoritos'">•</span>
-        <span *ngIf="playlist()!.name === 'Favoritos'" class="favorites-badge">
-          <mat-icon>favorite</mat-icon>
-          Favoritos
-        </span>
+<div class="playlist-detail-container p-6 min-h-screen bg-gradient-to-br from-gray-900 to-black">
+  <!-- Loading state -->
+  <div *ngIf="loading()" class="flex justify-center items-center py-12">
+    <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+    <span class="ml-4 text-white">Cargando playlist...</span>
+  </div>
+
+  <!-- Playlist content -->
+  <div *ngIf="!loading() && playlist()" class="playlist-content">
+    <!-- Playlist Header -->
+    <div class="playlist-header mb-8 flex flex-col md:flex-row gap-6 items-start">
+      <!-- Playlist Cover -->
+      <div class="playlist-cover w-64 h-64 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-xl flex items-center justify-center flex-shrink-0">
+        <mat-icon class="text-white text-8xl">queue_music</mat-icon>
+      </div>
+
+      <!-- Playlist Info -->
+      <div class="playlist-info flex-1">
+        <p class="text-gray-400 text-sm uppercase tracking-wide mb-2">Playlist</p>
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">{{ playlist()?.name }}</h1>
+        
+        <p *ngIf="playlist()?.description" class="text-gray-300 text-lg mb-4">
+          {{ playlist()?.description }}
+        </p>
+
+        <div class="playlist-stats flex items-center gap-4 text-gray-400 text-sm mb-6">
+          <span class="flex items-center gap-1">
+            <mat-icon class="text-base">queue_music</mat-icon>
+            {{ playlist()?.total_songs }} {{ playlist()?.total_songs === 1 ? 'canción' : 'canciones' }}
+          </span>
+          <span>•</span>
+          <span>{{ playlist()?.created_at | date:'mediumDate' }}</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons flex items-center gap-4">
+          <button 
+            mat-fab 
+            color="primary" 
+            class="play-all-btn"
+            (click)="playAllSongs()"
+            [disabled]="songs().length === 0"
+            matTooltip="Reproducir todas las canciones"
+          >
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+
+          <button 
+            mat-icon-button 
+            (click)="shufflePlaylist()"
+            class="shuffle-btn text-white"
+            matTooltip="Reproducir en aleatorio"
+          >
+            <mat-icon>shuffle</mat-icon>
+          </button>
+
+          <button 
+            mat-icon-button 
+            class="more-options text-white"
+            matTooltip="Más opciones"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
-    
-    <div class="playlist-actions">
-      <button 
-        mat-fab 
-        color="primary" 
-        matTooltip="Reproducir todo"
-        (click)="playAllSongs()"
-        [disabled]="!playlist()!.songs.length">
-        <mat-icon>play_arrow</mat-icon>
-      </button>
-      
-      <button 
-        mat-raised-button 
-        [routerLink]="['/my-playlist', playlist()!.id, 'edit']"
-        *ngIf="playlist()!.name !== 'Favoritos'">
-        <mat-icon>edit</mat-icon>
-        Editar
-      </button>
+
+    <!-- Debugging Controls para View Mode -->
+    <div class="debug-controls mb-4 p-4 bg-yellow-100 rounded">
+      <p class="text-black"><strong>Current View Mode:</strong> {{ viewModeService.viewMode() }}</p>
+      <p class="text-black"><strong>Computed Type:</strong> {{ currentViewType() }}</p>
+      <div class="flex gap-2 mt-2">
+        <button 
+          class="px-3 py-1 bg-blue-500 text-white rounded text-sm"
+          (click)="viewModeService.setViewMode('list')"
+        >
+          Set to List (Grid)
+        </button>
+        <button 
+          class="px-3 py-1 bg-green-500 text-white rounded text-sm"
+          (click)="viewModeService.setViewMode('table')"
+        >
+          Set to Table
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Bar for Songs -->
+    <div class="search-section mb-6">
+      <div class="relative max-w-md">
+        <input
+          type="text"
+          placeholder="Buscar canciones en la playlist..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchChange($event)"
+          class="w-full px-4 py-2 pl-10 pr-4 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+        <mat-icon class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">search</mat-icon>
+        <button
+          *ngIf="searchQuery"
+          (click)="clearSearch()"
+          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+        >
+          <mat-icon class="text-sm">close</mat-icon>
+        </button>
+      </div>
+      <p *ngIf="searchQuery" class="text-sm text-gray-400 mt-2">
+        Mostrando {{ filteredSongs().length }} de {{ songs().length }} canciones
+        <button
+          *ngIf="filteredSongs().length > 0"
+          (click)="playFilteredSongs()"
+          class="ml-4 px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-xs rounded-full transition-colors"
+        >
+          <mat-icon class="text-xs mr-1">play_arrow</mat-icon>
+          Reproducir búsqueda
+        </button>
+      </p>
+    </div>
+
+
+    <!-- Songs Section usando MusicSectionComponent como en Home -->
+    <app-music-section
+      title="🎵 Canciones de la Playlist"
+      [songs]="filteredSongs()"
+      [loading]="loadingSongs()"
+      [type]="currentViewType()"
+      loadingMessage="Cargando canciones..."
+      [emptyMessage]="authenticationRequired() ? 'Necesitas iniciar sesión para ver las canciones de esta playlist' : searchQuery ? 'No se encontraron canciones que coincidan con tu búsqueda' : 'No hay canciones en esta playlist'"
+      [showPlayCount]="false"
+      [actionButtons]="hasMoreSongs() && !loadingSongs() && !searchQuery ? [
+        { icon: 'expand_more', text: 'Cargar más', action: loadMoreSongs.bind(this), ariaLabel: 'Cargar más canciones' }
+      ] : []"
+      (songSelected)="onSongClick($event)"
+      (addToQueueRequest)="addToQueue($event)"
+      (addToPlaylistRequest)="addToPlaylist($event)"
+      (addToFavoritesRequest)="addToFavorites($event)"
+      (moreOptionsRequest)="showMoreOptions($event)"
+    ></app-music-section>
+
+    <!-- Loading more songs indicator -->
+    <div *ngIf="loadingSongs() && songs().length > 0" class="flex justify-center items-center py-4">
+      <mat-progress-spinner diameter="30" mode="indeterminate"></mat-progress-spinner>
+      <span class="ml-3 text-white text-sm">Cargando más canciones...</span>
     </div>
   </div>
 
-  <div class="songs-section" *ngIf="playlist()!.songs.length; else noSongs">
-    <mat-card class="songs-card">
-      <mat-card-header>
-        <mat-card-title>Canciones</mat-card-title>
-      </mat-card-header>
-      
-      <mat-card-content>
-        <table mat-table [dataSource]="playlist()!.songs" class="songs-table">
-          <!-- Position Column -->
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef> # </th>
-            <td mat-cell *matCellDef="let song"> {{ song.position }} </td>
-          </ng-container>
-
-          <!-- Title Column -->
-          <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef> Título </th>
-            <td mat-cell *matCellDef="let song">
-              <div class="song-info">
-                <div class="song-title">{{ song.title }}</div>
-                <div class="song-artist" *ngIf="song.artist_name">
-                  {{ song.artist_name }}
-                </div>
-              </div>
-            </td>
-          </ng-container>
-
-          <!-- Album Column -->
-          <ng-container matColumnDef="album">
-            <th mat-header-cell *matHeaderCellDef> Álbum </th>
-            <td mat-cell *matCellDef="let song"> 
-              {{ song.album_name || '-' }} 
-            </td>
-          </ng-container>
-
-          <!-- Duration Column -->
-          <ng-container matColumnDef="duration">
-            <th mat-header-cell *matHeaderCellDef> Duración </th>
-            <td mat-cell *matCellDef="let song"> 
-              {{ song.duration_formatted }} 
-            </td>
-          </ng-container>
-
-          <!-- Added Date Column -->
-          <ng-container matColumnDef="added_at">
-            <th mat-header-cell *matHeaderCellDef> Agregada </th>
-            <td mat-cell *matCellDef="let song"> 
-              {{ song.created_at | date:'short' }} 
-            </td>
-          </ng-container>
-
-          <!-- Actions Column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef> Acciones </th>
-            <td mat-cell *matCellDef="let song">
-              <button 
-                mat-icon-button 
-                color="primary"
-                matTooltip="Reproducir"
-                (click)="playSong(song)">
-                <mat-icon>play_arrow</mat-icon>
-              </button>
-              
-              <button 
-                mat-icon-button 
-                color="warn"
-                matTooltip="Eliminar de la playlist"
-                (click)="removeSong(song)"
-                *ngIf="playlist()!.name !== 'Favoritos'">
-                <mat-icon>remove</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
+  <!-- Empty state -->
+  <div *ngIf="!loading() && !playlist()" class="empty-state text-center py-12">
+    <mat-icon class="text-gray-400 text-6xl mb-4">queue_music</mat-icon>
+    <h2 class="text-2xl font-semibold text-white mb-2">Playlist no encontrada</h2>
+    <p class="text-gray-400 mb-6">No se pudo cargar la información de esta playlist.</p>
+    <button mat-raised-button color="primary" routerLink="/library">
+      Volver a la biblioteca
+    </button>
   </div>
-
-  <ng-template #noSongs>
-    <div class="no-songs">
-      <mat-icon class="large-icon">music_note</mat-icon>
-      <h2>Esta playlist está vacía</h2>
-      <p>Agrega canciones desde la biblioteca de música.</p>
-      <button 
-        mat-raised-button 
-        color="primary"
-        routerLink="/discover">
-        <mat-icon>search</mat-icon>
-        Explorar Música
-      </button>
-    </div>
-  </ng-template>
-</div>
-
-<div class="loading" *ngIf="loading()">
-  Cargando playlist...
 </div>

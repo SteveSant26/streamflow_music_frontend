@@ -44,29 +44,91 @@
   <!-- Content based on type -->
   <!-- DEBUG: MusicSection type = {{ type }} -->
   @if (!loading && songs.length > 0) {
-    <!-- Grid layout for songs -->
+    <!-- Grid layout for songs (como cards de discover) -->
     @if (type === 'grid') {
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
         @for (song of songs; track song.id) {
-          <button 
-            class="song-card bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors w-full text-left"
-            (click)="onSongClick(song)"
-          >
-            <img 
-              [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
-              [alt]="song.title"
-              class="w-full aspect-square object-cover rounded-md mb-3"
-              appImageFallback="assets/images/default-album-small.svg"
-            />
-            <h3 class="text-white font-medium text-sm truncate">{{ song.title }}</h3>
-            <p class="text-gray-400 text-xs truncate">{{ song.artist_name }}</p>
-            @if (showPlayCount && song.play_count) {
-              <div class="flex items-center mt-2 text-xs text-gray-500">
-                <mat-icon class="text-xs mr-1">play_arrow</mat-icon>
-                <span>{{ formatPlayCount(song.play_count) }}</span>
+          <div class="song-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden group">
+            <!-- Imagen con overlay de botones -->
+            <div class="relative bg-gray-200 rounded-t-lg overflow-hidden aspect-square">
+              <img
+                [src]="song.thumbnail_url || 'assets/images/default-album.jpg'"
+                [alt]="song.title"
+                class="w-full h-full object-cover"
+                appImageFallback="assets/images/default-album.jpg"
+                loading="lazy"
+              />
+              <!-- Overlay con botón de play -->
+              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
+                <button
+                  (click)="onSongClick(song); $event.stopPropagation()"
+                  class="play-overlay-btn opacity-0 group-hover:opacity-100 bg-green-500 hover:bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-xl z-10"
+                  [attr.aria-label]="'Reproducir ' + song.title"
+                  type="button"
+                >
+                  <mat-icon class="text-3xl">play_arrow</mat-icon>
+                </button>
               </div>
-            }
-          </button>
+            </div>
+            
+            <!-- Información de la canción -->
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 text-sm truncate mb-1">{{ song.title }}</h3>
+              <p class="text-gray-600 text-xs truncate mb-2">{{ song.artist_name || 'Artista desconocido' }}</p>
+              
+              @if (showPlayCount && song.play_count) {
+                <div class="flex items-center text-xs text-gray-500 mb-3">
+                  <mat-icon class="w-3 h-3 mr-1">play_arrow</mat-icon>
+                  <span>{{ formatPlayCount(song.play_count) }} plays</span>
+                </div>
+              }
+              
+              <!-- Botones de acción usando SongActionButtonComponent -->
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1">
+                  <!-- Add to queue -->
+                  <button
+                    (click)="addToQueue(song); $event.stopPropagation()"
+                    class="action-btn-small text-gray-400 hover:text-green-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    [attr.aria-label]="'Agregar ' + song.title + ' a cola'"
+                    title="Agregar a cola"
+                  >
+                    <mat-icon class="w-4 h-4">queue_music</mat-icon>
+                  </button>
+                  
+                  <!-- Add to playlist -->
+                  <button
+                    (click)="addToPlaylist(song); $event.stopPropagation()"
+                    class="action-btn-small text-gray-400 hover:text-blue-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
+                    title="Agregar a playlist"
+                  >
+                    <mat-icon class="w-4 h-4">playlist_add</mat-icon>
+                  </button>
+                  
+                  <!-- Add to favorites -->
+                  <button
+                    (click)="addToFavorites(song); $event.stopPropagation()"
+                    class="action-btn-small text-gray-400 hover:text-red-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
+                    title="Agregar a favoritos"
+                  >
+                    <mat-icon class="w-4 h-4">favorite_border</mat-icon>
+                  </button>
+                  
+                  <!-- More options -->
+                  <button
+                    (click)="showMoreOptions(song); $event.stopPropagation()"
+                    class="action-btn-small text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    [attr.aria-label]="'Más opciones para ' + song.title"
+                    title="Más opciones"
+                  >
+                    <mat-icon class="w-4 h-4">more_vert</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         }
       </div>
     }
@@ -75,6 +137,97 @@
     @if (type === 'table') {
       <div class="mt-4">
         <app-musics-table [songs]="songs"></app-musics-table>
+      </div>
+    }
+
+    <!-- List layout for songs (como en search) -->
+    @if (type === 'list') {
+      <div class="space-y-3">
+        @for (song of songs; track song.id; let i = $index) {
+          <div class="song-card bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center gap-4">
+            <!-- Número de posición -->
+            <div class="song-number text-gray-400 font-mono text-sm w-8 text-center">
+              {{ i + 1 }}
+            </div>
+
+            <!-- Imagen de la canción -->
+            <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0 flex items-center justify-center">
+              <img 
+                [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
+                [alt]="song.title + ' - ' + song.artist_name"
+                class="w-full h-full object-cover"
+                appImageFallback="assets/images/default-album.jpg"
+                loading="lazy"
+              />
+            </div>
+
+            <!-- Botón de reproducción individual -->
+            <button
+              (click)="onSongClick(song); $event.stopPropagation()"
+              class="play-btn bg-green-500 hover:bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-md z-10"
+              [attr.aria-label]="'Reproducir ' + song.title"
+              type="button"
+            >
+              <mat-icon class="text-xl">play_arrow</mat-icon>
+            </button>
+
+            <!-- Información de la canción -->
+            <div class="song-info flex-1 min-w-0">
+              <h4 class="font-semibold text-gray-900 truncate">{{ song.title }}</h4>
+              <p class="text-gray-600 text-sm truncate">{{ song.artist_name || 'Artista desconocido' }}</p>
+              <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                <span *ngIf="song.album_name" class="truncate">{{ song.album_name }}</span>
+                <span *ngIf="song.duration_formatted">• {{ song.duration_formatted }}</span>
+                @if (showPlayCount && song.play_count) {
+                  <span>• {{ formatPlayCount(song.play_count) }} plays</span>
+                }
+              </div>
+            </div>
+
+            <!-- Acciones adicionales -->
+            <div class="song-actions flex items-center gap-2">
+              <!-- Add to queue -->
+              <button
+                (click)="addToQueue(song); $event.stopPropagation()"
+                class="action-btn text-gray-400 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                [attr.aria-label]="'Agregar ' + song.title + ' a cola'"
+                title="Agregar a cola"
+              >
+                <mat-icon class="w-5 h-5">queue_music</mat-icon>
+              </button>
+              
+              <!-- Add to playlist -->
+              <button
+                (click)="addToPlaylist(song); $event.stopPropagation()"
+                class="action-btn text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
+                title="Agregar a playlist"
+              >
+                <mat-icon class="w-5 h-5">playlist_add</mat-icon>
+              </button>
+              
+              <!-- Add to favorites -->
+              <button
+                (click)="addToFavorites(song); $event.stopPropagation()"
+                class="action-btn text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
+                title="Agregar a favoritos"
+              >
+                <mat-icon class="w-5 h-5">favorite_border</mat-icon>
+              </button>
+              
+              <!-- More options -->
+              <button
+                (click)="showMoreOptions(song); $event.stopPropagation()"
+                class="action-btn text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                [attr.aria-label]="'Más opciones para ' + song.title"
+                title="Más opciones"
+              >
+                <mat-icon class="w-5 h-5">more_vert</mat-icon>
+              </button>
+            </div>
+          </div>
+        }
       </div>
     }
   }

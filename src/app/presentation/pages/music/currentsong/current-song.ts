@@ -8,10 +8,12 @@ import {
 } from '@angular/core';
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { ROUTES_CONFIG_SITE } from '@app/config';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlaylistService } from '@app/infrastructure/services/playlist.service';
+import { GetSongLyricsUseCase, UpdateSongLyricsUseCase } from '@app/domain/usecases';
 import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
 import { GlobalPlaylistModalComponent } from '@app/shared/components/global-playlist-modal/global-playlist-modal';
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
@@ -32,6 +34,8 @@ interface CurrentSongView {
   isPlaying: boolean;
   isLoading: boolean;
   lyrics?: string;
+  lyricsLoading?: boolean;
+  lyricsError?: string;
 }
 
 @Component({
@@ -52,10 +56,13 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
+    private readonly dialog: MatDialog,
     private readonly globalPlayerState: GlobalPlayerStateService,
     private readonly playlistService: PlaylistService,
     private readonly globalPlaylistModalService: GlobalPlaylistModalService,
     private readonly materialThemeService: MaterialThemeService,
+    private readonly getSongLyricsUseCase: GetSongLyricsUseCase,
+    private readonly updateSongLyricsUseCase: UpdateSongLyricsUseCase,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {
@@ -67,6 +74,9 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     // Fix: Move isDarkTheme$ initialization to constructor or use inject()
     this.setupPlayerStateSubscription();
     this.initializePlayer();
+    
+    // Verificar si hay una sesión guardada y mostrar diálogo
+    this.checkForSavedSession();
 
     // Evitar scroll en el body solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
@@ -129,6 +139,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   private updateCurrentSongView(playerState: PlayerState): void {
     if (playerState.currentSong) {
+      const isNewSong = !this.currentSong || this.currentSong.id !== playerState.currentSong.id;
+      
       this.currentSong = {
         id: playerState.currentSong.id,
         title: playerState.currentSong.title,
@@ -142,8 +154,18 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         isPlaying: playerState.isPlaying,
         isLoading: playerState.isLoading,
-        lyrics: '🎵 Lyrics not available yet 🎵',
+        lyrics: isNewSong ? undefined : this.currentSong?.lyrics,
+        lyricsLoading: isNewSong ? false : this.currentSong?.lyricsLoading,
+        lyricsError: isNewSong ? undefined : this.currentSong?.lyricsError,
       };
+
+      // ✅ NUEVA FUNCIONALIDAD: Auto-cargar letras cuando es una nueva canción
+      if (isNewSong) {
+        // Cargar letras automáticamente después de un pequeño retraso
+        setTimeout(() => {
+          this.autoLoadLyrics();
+        }, 1000);
+      }
     } else {
       this.currentSong = null;
     }
@@ -187,6 +209,11 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       'Panel de letras:',
       this.showLyricsPanel ? 'Abierto' : 'Cerrado',
     );
+
+    // Si se abre el panel y no hay letras, intentar cargarlas con fuerza
+    if (this.showLyricsPanel && this.currentSong && !this.hasLyrics && !this.currentSong.lyricsLoading) {
+      this.loadLyrics();
+    }
   }
 
   togglePlaylistPanel() {
@@ -216,7 +243,12 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     // CRITICAL: Preserve state before navigation
     this.globalPlayerState.preserveStateForNavigation();
 
-    this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
+    // Si hay historial, regresar a la página anterior
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
+    }
   }
 
   skipPrevious() {
@@ -436,5 +468,243 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     } else {
       return `linear-gradient(135deg, ${darkerColor} 0%, ${baseColor} 50%, ${lighterColor} 100%)`;
     }
+  }
+
+  // ========== LYRICS METHODS ==========
+  
+  /**
+   * Método para cargar letras automáticamente en segundo plano
+   * cuando se reproduce una nueva canción
+   */
+  private autoLoadLyrics(): void {
+    if (!this.currentSong || this.currentSong.lyricsLoading || this.currentSong.lyrics) {
+      return;
+    }
+
+    console.log('🎵 Auto-cargando letras para:', this.currentSong.title);
+    
+    // Cargar letras en silencio (sin mostrar loading en la UI)
+    this.getSongLyricsUseCase.execute(this.currentSong.id, true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (this.currentSong) {
+            if (response.lyrics?.trim()) {
+              this.currentSong.lyrics = response.lyrics;
+              console.log('✅ Letras cargadas automáticamente para:', this.currentSong.title);
+            } else {
+              this.currentSong.lyrics = undefined;
+              console.log('⚠️ No se encontraron letras para:', this.currentSong.title);
+            }
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error: any) => {
+          console.log('❌ Error auto-cargando letras:', error);
+          // No mostrar error en auto-load, solo log
+        }
+      });
+  }
+  
+  loadLyrics(): void {
+    if (!this.currentSong || this.currentSong.lyricsLoading) {
+      return;
+    }
+
+    console.log('📥 Cargando letras para:', this.currentSong.title);
+
+    this.currentSong.lyricsLoading = true;
+    this.currentSong.lyricsError = undefined;
+    this.cdr.detectChanges();
+
+    this.getSongLyricsUseCase.execute(this.currentSong.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (this.currentSong) {
+            if (response.lyrics?.trim()) {
+              this.currentSong.lyrics = response.lyrics;
+              console.log('✅ Letras cargadas exitosamente');
+            } else {
+              this.currentSong.lyrics = '🎵 Letras no disponibles 🎵';
+              console.log('⚠️ No hay letras disponibles para esta canción');
+            }
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error: any) => {
+          console.error('Error cargando letras:', error);
+          if (this.currentSong) {
+            this.currentSong.lyricsError = 'Error al cargar las letras. Intenta nuevamente.';
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        }
+      });
+  }
+
+  refreshLyrics(): void {
+    if (!this.currentSong) {
+      return;
+    }
+
+    this.currentSong.lyrics = undefined;
+    this.currentSong.lyricsError = undefined;
+    this.loadLyrics();
+  }
+
+  updateLyrics(): void {
+    if (!this.currentSong || this.currentSong.lyricsLoading) {
+      return;
+    }
+
+    console.log('🔄 Refrescando letras para:', this.currentSong.title);
+
+    this.currentSong.lyricsLoading = true;
+    this.currentSong.lyricsError = undefined;
+    this.cdr.detectChanges();
+
+    this.updateSongLyricsUseCase.execute(this.currentSong.id, true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (this.currentSong) {
+            if (response.lyrics?.trim()) {
+              this.currentSong.lyrics = response.lyrics;
+              console.log('✅ Letras refrescadas exitosamente');
+            } else {
+              this.currentSong.lyrics = '🎵 Letras no encontradas 🎵';
+              console.log('⚠️ No se encontraron letras después del refresh');
+            }
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error: any) => {
+          console.error('Error refrescando letras:', error);
+          if (this.currentSong) {
+            this.currentSong.lyricsError = 'Error al recargar las letras. Intenta nuevamente.';
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        }
+      });
+  }
+
+  /**
+   * Método para buscar letras cuando el usuario lo solicita
+   * (El backend automáticamente busca en fuentes externas)
+   */
+  generateLyrics(): void {
+    if (!this.currentSong || this.currentSong.lyricsLoading) {
+      return;
+    }
+
+    console.log('🔍 Buscando letras para:', this.currentSong.title);
+    
+    this.currentSong.lyricsLoading = true;
+    this.currentSong.lyricsError = undefined;
+    this.cdr.detectChanges();
+
+    // El backend automáticamente busca en fuentes externas cuando no hay letras
+    this.updateSongLyricsUseCase.execute(this.currentSong.id, true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (this.currentSong) {
+            if (response.lyrics?.trim()) {
+              this.currentSong.lyrics = response.lyrics;
+              console.log('✅ Letras encontradas para:', this.currentSong.title);
+            } else {
+              this.currentSong.lyrics = '🎵 No se encontraron letras para esta canción 🎵';
+              console.log('⚠️ No se encontraron letras para:', this.currentSong.title);
+            }
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error: any) => {
+          console.error('Error buscando letras:', error);
+          if (this.currentSong) {
+            this.currentSong.lyricsError = 'Error al buscar las letras. Verifica tu conexión.';
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        }
+      });
+  }
+
+  get hasLyrics(): boolean {
+    return !!this.currentSong?.lyrics && 
+           this.currentSong.lyrics !== 'Letras no disponibles' &&
+           this.currentSong.lyrics !== '🎵 Letras no disponibles 🎵' &&
+           this.currentSong.lyrics !== '🎵 Letras no encontradas 🎵' &&
+           this.currentSong.lyrics !== '🎵 No se encontraron letras para esta canción 🎵' &&
+           this.currentSong.lyrics !== '🎵 Lyrics not available yet 🎵' &&
+           this.currentSong.lyrics.trim() !== '';
+  }
+
+  get canLoadLyrics(): boolean {
+    return !!this.currentSong && !this.currentSong.lyricsLoading;
+  }
+
+  trackByIndex(index: number): number {
+    return index;
+  }
+
+  // ========== SHUFFLE AND REPEAT CONTROLS ==========
+
+  toggleShuffle(): void {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.toggleShuffle();
+    console.log('🔀 Shuffle toggled');
+    
+    // Force sync after toggle
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  isShuffleEnabled(): boolean {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    const state = playerUseCase.getCurrentPlayerState();
+    return state.isShuffleEnabled;
+  }
+
+  toggleRepeat(): void {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.toggleRepeat();
+    console.log('🔁 Repeat mode toggled');
+    
+    // Force sync after toggle
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  getRepeatMode(): 'none' | 'one' | 'all' {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    const state = playerUseCase.getCurrentPlayerState();
+    return state.repeatMode;
+  }
+
+  getRepeatModeText(): string {
+    const mode = this.getRepeatMode();
+    switch (mode) {
+      case 'none':
+        return 'Sin repetición';
+      case 'one':
+        return 'Repetir canción actual';
+      case 'all':
+        return 'Repetir playlist';
+      default:
+        return 'Repetir';
+    }
+  }
+
+  /**
+   * El sistema ahora restaura automáticamente el estado sin diálogos
+   * Esta funcionalidad se maneja en GlobalPlayerStateService.initializePlayer()
+   */
+  private checkForSavedSession(): void {
+    // Ya no es necesario - la restauración es automática
+    console.log('ℹ️ Auto-restauración manejada por GlobalPlayerStateService');
   }
 }

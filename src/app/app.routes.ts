@@ -35,6 +35,36 @@ export const routes: Routes = [
           ),
       },
 
+      // Discovery routes
+      {
+        path: 'albums',
+        loadComponent: () =>
+          import('./presentation/pages/music/albums/albums.component').then(
+            (m) => m.AlbumsComponent,
+          ),
+      },
+      {
+        path: 'artists',
+        loadComponent: () =>
+          import('./presentation/pages/music/artists/artists.component').then(
+            (m) => m.ArtistsComponent,
+          ),
+      },
+      {
+        path: 'genres',
+        loadComponent: () =>
+          import('./presentation/pages/music/genres/genres.component').then(
+            (m) => m.GenresComponent,
+          ),
+      },
+      {
+        path: 'random-songs',
+        loadComponent: () =>
+          import('./presentation/pages/music/random-songs/random-songs.component').then(
+            (m) => m.RandomSongsComponent,
+          ),
+      },
+
       // Music routes (library, search, playlist, artist, song)
       ...MUSIC_ROUTES,
 

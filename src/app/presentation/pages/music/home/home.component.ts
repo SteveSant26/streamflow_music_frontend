@@ -11,7 +11,8 @@ import { ROUTES_CONFIG_MUSIC } from '@app/config';
 
 import { Song } from '../../../../domain/entities/song.entity';
 import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
-import { MusicsTable } from '../../../components/music/musics-table/musics-table';
+import { ViewModeService } from '../../../shared/services/view-mode.service';
+import { MusicSectionComponent } from '../../../components/music-section/music-section';
 import { 
   GetMostPopularSongsUseCase,
   GetRandomSongsUseCase,
@@ -28,13 +29,14 @@ import { GlobalPlayerStateService } from '../../../../infrastructure/services/gl
     MatIconModule,
     MatProgressSpinnerModule,
     TranslateModule,
-    MusicsTable
+    MusicSectionComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomePageComponent implements OnInit {
   private readonly themeService = inject(MaterialThemeService);
+  private readonly viewModeService = inject(ViewModeService);
   private readonly getMostPopularSongsUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
@@ -43,6 +45,9 @@ export class HomePageComponent implements OnInit {
 
   // Observable para el tema
   isDarkTheme$ = this.themeService.isDarkMode();
+  
+  // Signal para el modo de vista
+  viewMode = this.viewModeService.viewMode;
 
   // Signals para el estado
   mostPopularSongs = signal<Song[]>([]);
@@ -51,6 +56,23 @@ export class HomePageComponent implements OnInit {
   isLoadingRandom = signal(false);
   errorPopular = signal<string | null>(null);
   errorRandom = signal<string | null>(null);
+
+  // Button configurations for music sections
+  popularSongsActionButtons = [
+    {
+      icon: 'refresh',
+      action: () => this.loadMostPopularSongs(),
+      ariaLabel: 'Recargar canciones populares'
+    }
+  ];
+
+  randomSongsActionButtons = [
+    {
+      icon: 'refresh',
+      action: () => this.loadRandomSongs(),
+      ariaLabel: 'Recargar canciones aleatorias'
+    }
+  ];
 
   ngOnInit() {
     this.loadMostPopularSongs();
@@ -90,6 +112,51 @@ export class HomePageComponent implements OnInit {
   onSongSelect(song: Song) {
     // Navegación a la página de detalles de la canción
     this.router.navigate([ROUTES_CONFIG_MUSIC.SONG.getLinkWithId(song.id)]);
+  }
+
+  onPopularSongSelected(song: Song) {
+    console.log('🎵 Home: Popular song selected:', song.title);
+    this.onPlaySong(song);
+  }
+
+  onRandomSongSelected(song: Song) {
+    console.log('🎵 Home: Random song selected:', song.title);
+    this.onPlaySong(song);
+  }
+
+  onRetryPopularSongs() {
+    console.log('🔄 Home: Retrying popular songs load');
+    this.loadMostPopularSongs();
+  }
+
+  onRetryRandomSongs() {
+    console.log('🔄 Home: Retrying random songs load');
+    this.loadRandomSongs();
+  }
+
+  toggleViewMode() {
+    this.viewModeService.toggleViewMode();
+  }
+
+  // Métodos para acciones de canciones
+  onAddToQueue(song: Song) {
+    console.log('🎵 Home: Add to queue requested for:', song.title);
+    // TODO: Implementar lógica de agregar a cola
+  }
+
+  onAddToPlaylist(song: Song) {
+    console.log('📋 Home: Add to playlist requested for:', song.title);
+    // TODO: Implementar lógica de agregar a playlist
+  }
+
+  onAddToFavorites(song: Song) {
+    console.log('❤️ Home: Add to favorites requested for:', song.title);
+    // TODO: Implementar lógica de agregar a favoritos
+  }
+
+  onMoreOptions(song: Song) {
+    console.log('⚙️ Home: More options requested for:', song.title);
+    // TODO: Implementar menú de más opciones
   }
 
   onPlaySong(song: Song) {

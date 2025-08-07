@@ -106,14 +106,42 @@ export class SongActionButtonComponent {
   }
 
   addToQueue() {
+    console.log('🔥 SongActionButton.addToQueue() llamado!');
+    console.log('🎵 Canción a agregar:', this.song);
+    console.log('🔧 PlayerUseCase disponible:', !!this.playerUseCase);
+    
     try {
-      this.playlistService.addSongToCurrentPlaylist(this.song);
+      // Verificar que tenemos la canción
+      if (!this.song) {
+        console.error('❌ No hay canción para agregar');
+        return;
+      }
+      
+      // Verificar que tenemos el PlayerUseCase
+      if (!this.playerUseCase) {
+        console.error('❌ PlayerUseCase no está disponible');
+        return;
+      }
+      
+      console.log('🎵 Llamando a PlayerUseCase.addToQueue()...');
+      
+      // Usar el nuevo método addToQueue del PlayerUseCase
+      this.playerUseCase.addToQueue(this.song);
+      
       console.log('✅ Canción agregada a la cola:', this.song.title);
+      
+      // Verificar el resultado
+      const currentQueue = this.playerUseCase.getCurrentQueue();
+      console.log('📋 Queue después de agregar:', currentQueue.length, 'canciones');
+      console.log('📋 Última canción agregada:', currentQueue[currentQueue.length - 1]?.title);
       
       // Opcional: Mostrar algún feedback visual al usuario
       // Podrías usar un snackbar o toast aquí
     } catch (error) {
       console.error('❌ Error agregando canción a la cola:', error);
+      if (error instanceof Error) {
+        console.error('❌ Error stack:', error.stack);
+      }
     }
   }
 

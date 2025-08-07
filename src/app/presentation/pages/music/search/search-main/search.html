@@ -1,6 +1,17 @@
 <div class="search-container">
   <div class="search-header">
-    <h1 class="text-3xl font-bold mb-6">{{ "SEARCH.TITLE" | translate }}</h1>
+    <!-- Header con título y controles -->
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-3xl font-bold">{{ "SEARCH.TITLE" | translate }}</h1>
+      
+      <!-- Controles de vista -->
+      <div class="flex items-center gap-2">
+        <button mat-icon-button (click)="viewModeService.toggleViewMode()" 
+                class="text-gray-700 hover:text-blue-600">
+          <mat-icon>{{ viewModeService.viewMode() === 'grid' ? 'view_list' : viewModeService.viewMode() === 'table' ? 'view_module' : 'grid_view' }}</mat-icon>
+        </button>
+      </div>
+    </div>
 
     <!-- Barra de búsqueda con filtros -->
     <div class="search-controls mb-8">
@@ -135,99 +146,21 @@
 
     <!-- Resultados encontrados -->
     <div *ngIf="hasResults(); else noResults" class="results-container">
-      <div class="results-header flex items-center justify-between mb-6">
-        <h3 class="text-xl font-semibold">{{ "SEARCH.SONGS" | translate }}</h3>
-        <div class="header-actions flex items-center gap-3">
-          <!-- Botón reproducir todo -->
-          <button
-            (click)="playAllSongs()"
-            class="play-all-btn bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full flex items-center gap-2 font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            <mat-icon class="w-5 h-5">play_arrow</mat-icon>
-            <span>Reproducir Todo</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Vista de lista moderna -->
-      <div class="songs-grid space-y-3" *ngIf="viewModeService.viewMode() === 'list'">
-        <div 
-          *ngFor="let song of searchResults(); let i = index" 
-          class="song-card bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 flex items-center gap-4"
-        >
-          <!-- Número de posición -->
-          <div class="song-number text-gray-400 font-mono text-sm w-8 text-center">
-            {{ i + 1 }}
-          </div>
-
-          <!-- Imagen de la canción -->
-          <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
-            <img 
-              [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
-              [alt]="song.title + ' - ' + song.artist_name"
-              class="w-full h-full object-cover"
-              appImageFallback="assets/images/default-album-small.svg"
-            />
-          </div>
-
-          <!-- Botón de reproducción individual -->
-          <button
-            (click)="playSong(song)"
-            class="play-btn bg-green-500 hover:bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-md"
-            [attr.aria-label]="'Reproducir ' + song.title"
-          >
-            <mat-icon class="w-6 h-6">play_arrow</mat-icon>
-          </button>
-
-          <!-- Información de la canción -->
-          <div class="song-info flex-1 min-w-0">
-            <h4 class="font-semibold text-gray-900 truncate">{{ song.title }}</h4>
-            <p class="text-gray-600 text-sm truncate">{{ song.artist_name || 'Artista desconocido' }}</p>
-            <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
-              <span *ngIf="song.album_name" class="truncate">{{ song.album_name }}</span>
-              <span *ngIf="song.duration_formatted">• {{ song.duration_formatted }}</span>
-              <span *ngIf="song.genre_names_display">• {{ song.genre_names_display }}</span>
-            </div>
-          </div>
-
-          <!-- Acciones adicionales -->
-          <div class="song-actions flex items-center gap-2">
-            <button
-              (click)="addToPlaylist(song)"
-              class="action-btn text-gray-400 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
-              [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
-              title="Agregar a playlist"
-            >
-              <mat-icon class="w-5 h-5">playlist_add</mat-icon>
-            </button>
-            <button
-              (click)="addToFavorites(song)"
-              class="action-btn text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
-              [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
-              title="Agregar a favoritos"
-            >
-              <mat-icon class="w-5 h-5">favorite_border</mat-icon>
-            </button>
-            <button
-              (click)="showMoreOptions(song)"
-              class="action-btn text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
-              [attr.aria-label]="'Más opciones para ' + song.title"
-              title="Más opciones"
-            >
-              <mat-icon class="w-5 h-5">more_vert</mat-icon>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Vista de tabla tradicional -->
-      <div class="traditional-view" *ngIf="viewModeService.viewMode() === 'table'">
-        <app-musics-table 
-          [songs]="searchResults()" 
-          contextType="search"
-          [contextName]="'Búsqueda: ' + searchQuery()"
-        ></app-musics-table>
-      </div>
+      <app-music-section
+        title="{{ 'SEARCH.SONGS' | translate }}"
+        titleIcon="🔍"
+        [songs]="searchResults()"
+        [loading]="isSearching()"
+        [type]="viewModeService.viewMode()"
+        [actionButtons]="searchActionButtons"
+        emptyMessage="{{ 'SEARCH.NO_RESULTS' | translate }}"
+        loadingMessage="Buscando canciones..."
+        (songSelected)="onSearchSongSelected($event)"
+        (addToQueueRequest)="onAddToQueue($event)"
+        (addToPlaylistRequest)="onAddToPlaylist($event)"
+        (addToFavoritesRequest)="onAddToFavorites($event)"
+        (moreOptionsRequest)="onMoreOptions($event)"
+      ></app-music-section>
       
       <!-- Indicador de carga más resultados -->
       <div class="load-more-indicator" *ngIf="isLoadingMore()">
