@@ -15,6 +15,21 @@
   transform: scale(1.05);
 }
 
+/* Asegurar que los botones sean visibles */
+.music-section button {
+  z-index: 10;
+  position: relative;
+}
+
+.music-section .action-btn,
+.music-section .action-btn-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: auto;
+  min-height: auto;
+}
+
 /* Animaciones para los botones de acción */
 .music-section button[aria-label] {
   transition: all 0.2s ease;
@@ -22,6 +37,18 @@
 
 .music-section button[aria-label]:hover {
   transform: scale(1.05);
+}
+
+/* Asegurar que los íconos de Material Icons se muestren correctamente */
+.music-section mat-icon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botón de play principal */
+.play-btn {
+  z-index: 20;
 }
 
 /* Mejoras visuales para el estado de carga */
@@ -32,4 +59,14 @@
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* Overlay para cards */
+.song-card .absolute {
+  z-index: 15;
+}
+
+/* Asegurar visibilidad en modo oscuro */
+.music-section {
+  color: inherit;
 }

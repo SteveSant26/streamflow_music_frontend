@@ -50,7 +50,7 @@
         @for (song of songs; track song.id) {
           <div class="song-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden group">
             <!-- Imagen con overlay de botones -->
-            <div class="relative">
+            <div class="relative bg-gray-200 rounded-t-lg overflow-hidden">
               <img 
                 [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
                 [alt]="song.title"
@@ -142,7 +142,7 @@
             </div>
 
             <!-- Imagen de la canción -->
-            <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0">
+            <div class="song-image w-16 h-16 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0 flex items-center justify-center">
               <img 
                 [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
                 [alt]="song.title + ' - ' + song.artist_name"
