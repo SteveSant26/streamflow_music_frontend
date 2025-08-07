@@ -147,22 +147,44 @@ export class HomePageComponent implements OnInit {
   // Métodos para acciones de canciones
   onAddToQueue(song: Song) {
     console.log('🎵 Home: Add to queue requested for:', song.title);
-    // TODO: Implementar lógica de agregar a cola
+    this.playerUseCase.addToQueue(song);
+    console.log('✅ Canción agregada a la cola:', song.title);
   }
 
   onAddToPlaylist(song: Song) {
     console.log('📋 Home: Add to playlist requested for:', song.title);
-    // TODO: Implementar lógica de agregar a playlist
+    // Usar el SongMenuService que maneja el diálogo
+    const menuOptions = this.songMenuService.getMenuOptions(song);
+    const addToPlaylistOption = menuOptions.find(option => option.id === 'add-to-playlist');
+    if (addToPlaylistOption) {
+      addToPlaylistOption.action();
+    }
   }
 
   onAddToFavorites(song: Song) {
     console.log('❤️ Home: Add to favorites requested for:', song.title);
-    // TODO: Implementar lógica de agregar a favoritos
+    this.favoritesService.addToFavorites(song.id).subscribe({
+      next: () => {
+        console.log('✅ Canción agregada a favoritos:', song.title);
+      },
+      error: (error) => {
+        console.error('❌ Error agregando a favoritos:', error);
+      }
+    });
   }
 
   onMoreOptions(song: Song) {
     console.log('⚙️ Home: More options requested for:', song.title);
-    // TODO: Implementar menú de más opciones
+    // Usar el SongMenuService para mostrar todas las opciones
+    const menuOptions = this.songMenuService.getMenuOptions(song);
+    console.log('📋 Opciones disponibles:', menuOptions.map(o => o.label));
+    
+    // Por ahora, mostrar las opciones en console (luego se puede implementar un menú visual)
+    menuOptions.forEach(option => {
+      if (!option.disabled) {
+        console.log(`🔘 ${option.label} (${option.id})`);
+      }
+    });
   }
 
   onPlaySong(song: Song) {

@@ -23,6 +23,8 @@ import { SearchFiltersComponent } from '@app/presentation/components/music/searc
 import { SearchFiltersService } from '@app/infrastructure/services/search-filters.service';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { InfiniteScrollDirective } from '@app/shared/directives/infinite-scroll.directive';
+import { SongMenuService } from '@app/presentation/services/song-menu.service';
+import { FavoritesService } from '@app/infrastructure/services/favorites.service';
 
 interface PaginationInfo {
   count: number;
