@@ -16,8 +16,7 @@ import {
 } from '../../domain/entities/playlist.entity';
 import {
   PlaylistDto,
-  PlaylistSongDto,
-  PaginatedPlaylistSongResponseDto
+  PlaylistSongDto
 } from '../../domain/dtos/playlist.dto';
 import { PlaylistMapper } from '../../domain/mappers/playlist.mapper';
 
@@ -139,10 +138,11 @@ export class UnifiedPlaylistService {
    * Get playlist details with songs
    */
   getPlaylistById(id: string): Observable<PlaylistWithSongs> {
-    // Primero obtenemos la información básica de la playlist
-    return this.http.get<PlaylistDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.getById(id)}`
-    ).pipe(
+    // Determinar si usar endpoint público o privado
+    const endpoint = `${this.baseUrl}${API_CONFIG_PLAYLISTS.publicPlaylists.getById(id)}`;
+    console.log('🎵 Calling playlist detail endpoint:', endpoint);
+    
+    return this.http.get<PlaylistDto>(endpoint).pipe(
       map(response => {
         console.log('🎵 Raw API response for playlist detail:', response);
         
@@ -164,6 +164,43 @@ export class UnifiedPlaylistService {
       }),
       catchError((error: any) => {
         console.error('❌ Error loading playlist detail:', error);
+        console.error('❌ Error status:', error.status);
+        console.error('❌ Trying public endpoint...');
+        
+        // Fallback: intentar con endpoint público
+        return this.getPublicPlaylistById(id);
+      })
+    );
+  }
+
+  /**
+   * Get public playlist by ID (fallback)
+   */
+  private getPublicPlaylistById(id: string): Observable<PlaylistWithSongs> {
+    const endpoint = `${this.baseUrl}${API_CONFIG_PLAYLISTS.publicPlaylists.getById(id)}`;
+    console.log('🌍 Calling public playlist endpoint:', endpoint);
+    
+    return this.http.get<PlaylistDto>(endpoint).pipe(
+      map(response => {
+        console.log('🌍 Raw API response for public playlist:', response);
+        
+        const playlistWithSongs: PlaylistWithSongs = {
+          id: response.id,
+          name: response.name,
+          description: response.description || '',
+          user_id: response.user_id,
+          is_default: response.is_default || false,
+          is_public: response.is_public || false,
+          total_songs: response.song_count || 0,
+          created_at: response.created_at,
+          updated_at: response.updated_at,
+          songs: []
+        };
+        
+        return playlistWithSongs;
+      }),
+      catchError((error: any) => {
+        console.error('❌ Error loading public playlist detail:', error);
         throw error;
       })
     );
@@ -171,6 +208,7 @@ export class UnifiedPlaylistService {
 
   /**
    * Get playlist songs with pagination for infinite scroll
+   * Works for both public and private playlists
    */
   getPlaylistSongs(
     playlistId: string, 
@@ -181,16 +219,83 @@ export class UnifiedPlaylistService {
       .set('page', page.toString())
       .set('page_size', pageSize.toString());
 
-    return this.http.get<PaginatedPlaylistSongResponseDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.songs.list(playlistId)}`,
-      { params }
-    ).pipe(
+    // Usar el endpoint universal para canciones de playlist
+    const endpoint = `${this.baseUrl}/api/playlists/playlists/${playlistId}/songs/`;
+    console.log('🎵 Calling playlist songs endpoint:', endpoint);
+    console.log('🎵 With params:', { page, pageSize, playlistId });
+
+    return this.http.get<any>(endpoint, { params }).pipe(
       map(response => {
         console.log('🎶 Raw API response for playlist songs:', response);
-        return PlaylistMapper.fromPaginatedSongDto(response);
+        console.log('🎶 Response type:', typeof response);
+        console.log('🎶 Response keys:', Object.keys(response || {}));
+        
+        if (!response) {
+          console.warn('⚠️ Empty response from playlist songs API');
+          return {
+            count: 0,
+            next: null,
+            previous: null,
+            results: []
+          };
+        }
+
+        // Si la respuesta tiene resultados paginados
+        if (response.results && Array.isArray(response.results)) {
+          const songs = response.results.map((song: any) => ({
+            id: song.id,
+            title: song.title,
+            artist_name: song.artist_name || 'Artista desconocido',
+            album_name: song.album_name || '',
+            duration_seconds: song.duration_seconds || 0,
+            thumbnail_url: song.thumbnail_url || '',
+            position: song.position || 0,
+            added_at: song.added_at
+          }));
+
+          return {
+            count: response.count || songs.length,
+            next: response.next || null,
+            previous: response.previous || null,
+            results: songs
+          };
+        }
+
+        // Si la respuesta es un array directo
+        if (Array.isArray(response)) {
+          const songs = response.map((song: any) => ({
+            id: song.id,
+            title: song.title,
+            artist_name: song.artist_name || 'Artista desconocido',
+            album_name: song.album_name || '',
+            duration_seconds: song.duration_seconds || 0,
+            thumbnail_url: song.thumbnail_url || '',
+            position: song.position || 0,
+            added_at: song.added_at
+          }));
+
+          return {
+            count: songs.length,
+            next: null,
+            previous: null,
+            results: songs
+          };
+        }
+
+        console.warn('⚠️ Unexpected response format from playlist songs API');
+        return {
+          count: 0,
+          next: null,
+          previous: null,
+          results: []
+        };
       }),
       catchError((error: any) => {
         console.error('❌ Error loading playlist songs:', error);
+        console.error('❌ Error status:', error.status);
+        console.error('❌ Error message:', error.message);
+        console.error('❌ Full error:', error);
+        
         return of({
           count: 0,
           next: null,
