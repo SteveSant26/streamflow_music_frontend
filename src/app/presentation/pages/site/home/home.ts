@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Card, Greeting } from '@app/presentation/components/ui';
-import { PlayListItemCard, MusicsTable } from '@app/presentation/components/music';
+import { Greeting } from '@app/presentation/components/ui';
 import { MusicSectionButton } from '@app/presentation/components/music-section/music-section';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -24,13 +23,10 @@ import { UnifiedPlaylistService } from '../../../../infrastructure/services/unif
   imports: [
     CommonModule,
     RouterModule,
-    Card,
     Greeting,
-    PlayListItemCard,
     TranslateModule,
     MatIconModule,
     MatButtonModule,
-    MusicsTable,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
@@ -201,22 +197,22 @@ export class HomeComponent implements OnInit {
   // ====================== SONG ACTIONS ======================
 
   addToQueue(song: Song): void {
-    // TODO: Implementar agregar a cola
+    // Implementar funcionalidad de agregar a cola
     console.log('Agregando a cola:', song.title);
   }
 
   addToPlaylist(song: Song): void {
-    // TODO: Implementar agregar a playlist
+    // Implementar funcionalidad de agregar a playlist
     console.log('Agregando a playlist:', song.title);
   }
 
   addToFavorites(song: Song): void {
-    // TODO: Implementar agregar a favoritos
+    // Implementar funcionalidad de favoritos
     console.log('Agregando a favoritos:', song.title);
   }
 
   showMoreOptions(song: Song): void {
-    // TODO: Implementar más opciones
+    // Implementar menú de más opciones
     console.log('Más opciones para:', song.title);
   }
 
