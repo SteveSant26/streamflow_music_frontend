@@ -34,6 +34,7 @@ export class PlaylistMapper {
       is_default: dto.is_default,
       is_public: dto.is_public,
       total_songs: dto.song_count, // Mapear song_count del DTO a total_songs de la entidad
+      playlist_img: dto.playlist_img,
       created_at: dto.created_at,
       updated_at: dto.updated_at
     };

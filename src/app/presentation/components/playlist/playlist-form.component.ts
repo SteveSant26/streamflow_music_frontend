@@ -77,6 +77,64 @@ import { PlaylistMapper } from '../../../domain/mappers/playlist.mapper';
           </div>
         </div>
 
+        <!-- Image field -->
+        <div class="field-group">
+          <label for="image" class="field-label">
+            Imagen de la playlist
+          </label>
+          <div class="image-upload-container">
+            <!-- Current/Preview image -->
+            <div class="image-preview" *ngIf="selectedImageUrl || (isEditMode() && playlist()?.playlist_img)">
+              <img 
+                [src]="selectedImageUrl || playlist()?.playlist_img" 
+                alt="Preview de la playlist"
+                class="preview-image"
+              />
+              <button 
+                type="button" 
+                class="remove-image-btn"
+                (click)="removeImage()"
+                title="Eliminar imagen">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <!-- Upload area -->
+            <div class="upload-area" *ngIf="!selectedImageUrl && !(isEditMode() && playlist()?.playlist_img)">
+              <input
+                #fileInput
+                type="file"
+                (change)="onImageSelected($event)"
+                accept="image/*"
+                class="file-input"
+                id="image"
+              />
+              <label for="image" class="upload-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Seleccionar imagen</span>
+                <small>PNG, JPG, GIF hasta 5MB</small>
+              </label>
+            </div>
+            
+            <!-- Change image button for edit mode -->
+            <button 
+              type="button" 
+              class="change-image-btn"
+              *ngIf="selectedImageUrl || (isEditMode() && playlist()?.playlist_img)"
+              (click)="fileInput.click()">
+              <i class="fas fa-edit"></i>
+              Cambiar imagen
+            </button>
+          </div>
+          
+          <div class="field-error" *ngIf="imageError">
+            <span>{{ imageError }}</span>
+          </div>
+          <div class="field-hint">
+            Sube una imagen para personalizar tu playlist (opcional)
+          </div>
+        </div>
+
         <!-- Visibility field -->
         <div class="field-group">
           <div class="checkbox-group">
@@ -323,6 +381,110 @@ import { PlaylistMapper } from '../../../domain/mappers/playlist.mapper';
       color: #dc2626;
     }
 
+    /* Image upload styles */
+    .image-upload-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .image-preview {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #e5e7eb;
+    }
+
+    .preview-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-image-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: background-color 0.2s;
+    }
+
+    .remove-image-btn:hover {
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .upload-area {
+      border: 2px dashed #d1d5db;
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .upload-area:hover {
+      border-color: #3b82f6;
+      background-color: #f8fafc;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .upload-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    .upload-label i {
+      font-size: 2rem;
+      color: #9ca3af;
+    }
+
+    .upload-label span {
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .upload-label small {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .change-image-btn {
+      align-self: flex-start;
+      padding: 0.5rem 0.75rem;
+      background-color: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .change-image-btn:hover {
+      background-color: #e5e7eb;
+    }
+
     /* Dark mode styles */
     @media (prefers-color-scheme: dark) {
       .playlist-form {
@@ -378,6 +540,37 @@ import { PlaylistMapper } from '../../../domain/mappers/playlist.mapper';
         border-color: rgba(239, 68, 68, 0.8);
         color: #fca5a5;
       }
+
+      .image-preview {
+        border-color: #4b5563;
+      }
+
+      .upload-area {
+        border-color: #4b5563;
+      }
+
+      .upload-area:hover {
+        border-color: #3b82f6;
+        background-color: #1f2937;
+      }
+
+      .upload-label {
+        color: #9ca3af;
+      }
+
+      .upload-label span {
+        color: #d1d5db;
+      }
+
+      .change-image-btn {
+        background-color: #4b5563;
+        color: #e5e7eb;
+        border-color: #6b7280;
+      }
+
+      .change-image-btn:hover {
+        background-color: #6b7280;
+      }
     }
   `]
 })
@@ -399,6 +592,11 @@ export class PlaylistFormComponent implements OnInit {
   // State
   readonly error = this.playlistFacade.error;
   isSubmitting = input<boolean>(false);
+  
+  // Image handling
+  selectedImageFile: File | null = null;
+  selectedImageUrl: string | null = null;
+  imageError: string | null = null;
 
   // Computed
   isEditMode(): boolean {
@@ -436,6 +634,49 @@ export class PlaylistFormComponent implements OnInit {
     return !!(field && field.invalid && (field.dirty || field.touched));
   }
 
+  // Image handling methods
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      this.imageError = 'Por favor selecciona un archivo de imagen válido';
+      return;
+    }
+
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      this.imageError = 'La imagen no puede exceder 5MB';
+      return;
+    }
+
+    this.imageError = null;
+    this.selectedImageFile = file;
+
+    // Create preview URL
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.selectedImageUrl = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeImage(): void {
+    this.selectedImageFile = null;
+    this.selectedImageUrl = null;
+    this.imageError = null;
+    
+    // Clear file input
+    const fileInput = document.getElementById('image') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
   private initializeForm(): void {
     const playlist = this.playlist();
 
@@ -465,7 +706,8 @@ export class PlaylistFormComponent implements OnInit {
     const createData: CreatePlaylistDto = {
       name: formValue.name.trim(),
       description: formValue.description?.trim() || undefined,
-      is_public: formValue.is_public || false
+      is_public: formValue.is_public || false,
+      playlist_img: this.selectedImageFile || undefined
     };
 
     try {
@@ -487,7 +729,8 @@ export class PlaylistFormComponent implements OnInit {
     const updateData: UpdatePlaylistDto = {
       name: formValue.name.trim(),
       description: formValue.description?.trim() || undefined,
-      is_public: formValue.is_public || false
+      is_public: formValue.is_public || false,
+      playlist_img: this.selectedImageFile
     };
 
     try {
@@ -504,6 +747,7 @@ export class PlaylistFormComponent implements OnInit {
   private resetForm(): void {
     this.form.reset();
     this.clearError();
+    this.removeImage();
   }
 
   private markAllFieldsAsTouched(): void {

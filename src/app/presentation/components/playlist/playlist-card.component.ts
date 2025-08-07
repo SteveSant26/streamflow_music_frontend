@@ -203,7 +203,8 @@ export class PlaylistCardComponent {
   }
 
   getCoverImage(): string {
-    return `https://picsum.photos/300/300?random=${this.playlist().id}`;
+    // Usar la imagen de la playlist si está disponible, sino usar una imagen placeholder
+    return this.playlist().playlist_img || `https://picsum.photos/300/300?random=${this.playlist().id}`;
   }
 
   getVisibilityIcon(): string {

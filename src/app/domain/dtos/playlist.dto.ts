@@ -8,6 +8,7 @@ export interface PlaylistDto {
   is_default: boolean;
   is_public: boolean;
   song_count: number; // Cambiado de total_songs a song_count para coincidir con la API real
+  playlist_img?: string;
   created_at: string;
   updated_at: string;
 }

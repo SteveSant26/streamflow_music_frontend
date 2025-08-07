@@ -70,12 +70,14 @@ export interface CreatePlaylistDto {
   name: string;
   description?: string;
   is_public?: boolean;
+  playlist_img?: File;
 }
 
 export interface UpdatePlaylistDto {
   name?: string;
   description?: string;
   is_public?: boolean;
+  playlist_img?: File | null;
 }
 
 export interface AddSongToPlaylistDto {

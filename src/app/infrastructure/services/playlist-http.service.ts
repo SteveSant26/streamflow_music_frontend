@@ -113,25 +113,67 @@ export class PlaylistHttpService implements IPlaylistRepository {
   }
 
   createPlaylist(playlist: CreatePlaylistDto): Observable<Playlist> {
-    const requestDto = PlaylistMapper.toCreatePlaylistRequestDto(playlist);
-    
-    return this.http.post<PlaylistDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.create}`,
-      requestDto
-    ).pipe(
-      map(response => PlaylistMapper.dtoToEntity(response))
-    );
+    // Verificar si hay una imagen para decidir el tipo de request
+    if (playlist.playlist_img) {
+      const formData = new FormData();
+      formData.append('name', playlist.name);
+      if (playlist.description) {
+        formData.append('description', playlist.description);
+      }
+      formData.append('is_public', playlist.is_public?.toString() || 'false');
+      formData.append('playlist_img', playlist.playlist_img);
+
+      return this.http.post<PlaylistDto>(
+        `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.create}`,
+        formData
+      ).pipe(
+        map(response => PlaylistMapper.dtoToEntity(response))
+      );
+    } else {
+      const requestDto = PlaylistMapper.toCreatePlaylistRequestDto(playlist);
+      
+      return this.http.post<PlaylistDto>(
+        `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.create}`,
+        requestDto
+      ).pipe(
+        map(response => PlaylistMapper.dtoToEntity(response))
+      );
+    }
   }
 
   updatePlaylist(id: string, playlist: UpdatePlaylistDto): Observable<Playlist> {
-    const requestDto = PlaylistMapper.toUpdatePlaylistRequestDto(playlist);
-    
-    return this.http.put<PlaylistDto>(
-      `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.update(id)}`,
-      requestDto
-    ).pipe(
-      map(response => PlaylistMapper.dtoToEntity(response))
-    );
+    // Verificar si hay una imagen para decidir el tipo de request
+    if (playlist.playlist_img !== undefined) {
+      const formData = new FormData();
+      if (playlist.name !== undefined) {
+        formData.append('name', playlist.name);
+      }
+      if (playlist.description !== undefined) {
+        formData.append('description', playlist.description);
+      }
+      if (playlist.is_public !== undefined) {
+        formData.append('is_public', playlist.is_public.toString());
+      }
+      if (playlist.playlist_img) {
+        formData.append('playlist_img', playlist.playlist_img);
+      }
+
+      return this.http.put<PlaylistDto>(
+        `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.update(id)}`,
+        formData
+      ).pipe(
+        map(response => PlaylistMapper.dtoToEntity(response))
+      );
+    } else {
+      const requestDto = PlaylistMapper.toUpdatePlaylistRequestDto(playlist);
+      
+      return this.http.put<PlaylistDto>(
+        `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.update(id)}`,
+        requestDto
+      ).pipe(
+        map(response => PlaylistMapper.dtoToEntity(response))
+      );
+    }
   }
 
   deletePlaylist(id: string): Observable<void> {
