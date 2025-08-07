@@ -47,6 +47,7 @@
 
           <button 
             mat-icon-button 
+            (click)="shufflePlaylist()"
             class="shuffle-btn text-white"
             matTooltip="Reproducir en aleatorio"
           >
@@ -84,17 +85,49 @@
       </div>
     </div>
 
+    <!-- Search Bar for Songs -->
+    <div class="search-section mb-6">
+      <div class="relative max-w-md">
+        <input
+          type="text"
+          placeholder="Buscar canciones en la playlist..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchChange($event)"
+          class="w-full px-4 py-2 pl-10 pr-4 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+        <mat-icon class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">search</mat-icon>
+        <button
+          *ngIf="searchQuery"
+          (click)="clearSearch()"
+          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+        >
+          <mat-icon class="text-sm">close</mat-icon>
+        </button>
+      </div>
+      <p *ngIf="searchQuery" class="text-sm text-gray-400 mt-2">
+        Mostrando {{ filteredSongs().length }} de {{ songs().length }} canciones
+        <button
+          *ngIf="filteredSongs().length > 0"
+          (click)="playFilteredSongs()"
+          class="ml-4 px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-xs rounded-full transition-colors"
+        >
+          <mat-icon class="text-xs mr-1">play_arrow</mat-icon>
+          Reproducir búsqueda
+        </button>
+      </p>
+    </div>
+
 
     <!-- Songs Section usando MusicSectionComponent como en Home -->
     <app-music-section
       title="🎵 Canciones de la Playlist"
-      [songs]="songs()"
+      [songs]="filteredSongs()"
       [loading]="loadingSongs()"
       [type]="currentViewType()"
       loadingMessage="Cargando canciones..."
-      [emptyMessage]="authenticationRequired() ? 'Necesitas iniciar sesión para ver las canciones de esta playlist' : 'No hay canciones en esta playlist'"
+      [emptyMessage]="authenticationRequired() ? 'Necesitas iniciar sesión para ver las canciones de esta playlist' : searchQuery ? 'No se encontraron canciones que coincidan con tu búsqueda' : 'No hay canciones en esta playlist'"
       [showPlayCount]="false"
-      [actionButtons]="hasMoreSongs() && !loadingSongs() ? [
+      [actionButtons]="hasMoreSongs() && !loadingSongs() && !searchQuery ? [
         { icon: 'expand_more', text: 'Cargar más', action: loadMoreSongs.bind(this), ariaLabel: 'Cargar más canciones' }
       ] : []"
       (songSelected)="onSongClick($event)"

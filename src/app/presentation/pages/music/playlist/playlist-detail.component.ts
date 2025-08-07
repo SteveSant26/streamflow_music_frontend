@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,6 +24,7 @@ import { PlaySongUseCase } from '../../../../domain/usecases/song/song.usecases'
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
@@ -53,6 +55,24 @@ export class PlaylistDetailComponent implements OnInit {
   // Para scroll infinito
   currentPage = signal(1);
   hasMoreSongs = signal(true);
+  
+  // Para búsqueda
+  searchQuery = '';
+  
+  // Signal computed para canciones filtradas
+  readonly filteredSongs = computed(() => {
+    const songs = this.songs();
+    if (!this.searchQuery.trim()) {
+      return songs;
+    }
+    
+    const query = this.searchQuery.toLowerCase().trim();
+    return songs.filter(song => 
+      song.title.toLowerCase().includes(query) ||
+      song.artist_name?.toLowerCase().includes(query) ||
+      song.album_name?.toLowerCase().includes(query)
+    );
+  });
   
   // Signal computed para el tipo de vista (igual que en home)
   readonly currentViewType = computed(() => {
@@ -172,15 +192,68 @@ export class PlaylistDetailComponent implements OnInit {
     const songs = this.songs();
     const playlist = this.playlist();
     if (playlist && songs.length > 0) {
-      // Usar PlaySongUseCase para reproducir la primera canción como en search
-      const firstSong = songs[0];
-      this.playSongUseCase.executeSimple(firstSong.id).subscribe({
+      console.log('🎵 Reproduciendo toda la playlist:', playlist.name);
+      
+      // Crear contexto con todas las canciones usando tipo 'album' como alternativa
+      this.playSongUseCase.executeFromContext(
+        songs[0].id, 
+        songs, 
+        `Playlist: ${playlist.name}`, 
+        'album'
+      ).subscribe({
         next: () => {
-          console.log(`Reproduciendo playlist "${playlist.name}": ${songs.length} canciones`);
-          console.log(`Iniciando con: ${firstSong.title} - ${firstSong.artist_name}`);
+          console.log(`✅ Iniciada reproducción de playlist: ${playlist.name}`);
         },
         error: (error) => {
-          console.error('Error al reproducir playlist:', error);
+          console.error('❌ Error reproduciendo playlist:', error);
+          // Fallback al método simple
+          this.playSongUseCase.executeSimple(songs[0].id).subscribe({
+            next: () => {
+              console.log(`✅ Reproduciendo (fallback): ${songs[0].title}`);
+            },
+            error: (fallbackError) => {
+              console.error('❌ Error en fallback:', fallbackError);
+            }
+          });
+        }
+      });
+    }
+  }
+
+  // Método para reproducir la playlist en modo aleatorio
+  shufflePlaylist() {
+    const songs = this.songs();
+    const playlist = this.playlist();
+    if (playlist && songs.length > 0) {
+      console.log('🔀 Reproduciendo playlist en aleatorio:', playlist.name);
+      
+      // Crear una copia aleatoria de las canciones
+      const shuffledSongs = [...songs].sort(() => Math.random() - 0.5);
+      
+      // Habilitar shuffle en el reproductor
+      this.playerUseCase.toggleShuffle();
+      
+      // Iniciar reproducción con la primera canción aleatoria usando tipo 'album'
+      this.playSongUseCase.executeFromContext(
+        shuffledSongs[0].id, 
+        shuffledSongs, 
+        `Playlist (Aleatorio): ${playlist.name}`, 
+        'album'
+      ).subscribe({
+        next: () => {
+          console.log(`✅ Iniciada reproducción aleatoria de playlist: ${playlist.name}`);
+        },
+        error: (error) => {
+          console.error('❌ Error reproduciendo playlist en aleatorio:', error);
+          // Fallback al método simple
+          this.playSongUseCase.executeSimple(shuffledSongs[0].id).subscribe({
+            next: () => {
+              console.log(`✅ Reproduciendo (fallback): ${shuffledSongs[0].title}`);
+            },
+            error: (fallbackError) => {
+              console.error('❌ Error en fallback:', fallbackError);
+            }
+          });
         }
       });
     }
@@ -226,7 +299,13 @@ export class PlaylistDetailComponent implements OnInit {
 
   playNext(song: Song): void {
     console.log('🎵 PlaylistDetail: Reproducir siguiente:', song.title);
-    // Implementar reproducir siguiente
+    try {
+      // Usar el PlayerUseCase para agregar como siguiente en la cola
+      this.playerUseCase.addToQueue(song);
+      console.log('✅ Canción configurada para reproducir siguiente:', song.title);
+    } catch (error) {
+      console.error('❌ Error configurando canción como siguiente:', error);
+    }
   }
 
   showMoreOptions(song: Song) {
@@ -282,6 +361,20 @@ export class PlaylistDetailComponent implements OnInit {
     const mode = this.viewModeService.viewMode();
     console.log('🔍 PlaylistDetail Debug from template - current mode:', mode);
     return mode;
+  }
+
+  // ====================== SEARCH METHODS ======================
+
+  onSearchChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery = input.value;
+    console.log('🔍 Buscando canciones:', this.searchQuery);
+    console.log('🔍 Resultados encontrados:', this.filteredSongs().length);
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    console.log('🔍 Búsqueda limpiada');
   }
 
   formatPlayCount(count: number): string {
