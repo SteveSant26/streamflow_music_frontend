@@ -10,8 +10,19 @@
     <!-- Playlist Header -->
     <div class="playlist-header mb-8 flex flex-col md:flex-row gap-6 items-start">
       <!-- Playlist Cover -->
-      <div class="playlist-cover w-64 h-64 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-xl flex items-center justify-center flex-shrink-0">
-        <mat-icon class="text-white text-8xl">queue_music</mat-icon>
+      <div class="playlist-cover w-64 h-64 rounded-lg shadow-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+        <img 
+          *ngIf="playlist()?.playlist_img; else defaultCover"
+          [src]="playlist()?.playlist_img"
+          [alt]="'Portada de ' + playlist()?.name"
+          class="w-full h-full object-cover"
+          (error)="onImageError($event)"
+        />
+        <ng-template #defaultCover>
+          <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+            <mat-icon class="text-white text-8xl">queue_music</mat-icon>
+          </div>
+        </ng-template>
       </div>
 
       <!-- Playlist Info -->
@@ -131,10 +142,10 @@
         { icon: 'expand_more', text: 'Cargar más', action: loadMoreSongs.bind(this), ariaLabel: 'Cargar más canciones' }
       ] : []"
       (songSelected)="onSongClick($event)"
-      (addToQueueRequest)="addToQueue($event)"
-      (addToPlaylistRequest)="addToPlaylist($event)"
-      (addToFavoritesRequest)="addToFavorites($event)"
-      (moreOptionsRequest)="showMoreOptions($event)"
+      (addToQueueRequest)="onAddToQueue($event)"
+      (addToPlaylistRequest)="onAddToPlaylist($event)"
+      (addToFavoritesRequest)="onAddToFavorites($event)"
+      (moreOptionsRequest)="onMoreOptions($event)"
     ></app-music-section>
 
     <!-- Loading more songs indicator -->

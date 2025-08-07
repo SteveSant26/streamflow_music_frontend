@@ -18,6 +18,8 @@ import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecase
 import { ViewModeService } from '../../../shared/services/view-mode.service';
 import { PlaySongUseCase } from '../../../../domain/usecases/song/song.usecases';
 import { FavoritesUseCase } from '../../../../domain/usecases/favorites/favorites.usecases';
+import { SongMenuService } from '../../../../infrastructure/services/song-menu.service';
+import { FavoritesService } from '../../../../infrastructure/services/favorites.service';
 
 @Component({
   selector: 'app-playlist-detail',
@@ -45,6 +47,8 @@ export class PlaylistDetailComponent implements OnInit {
   private readonly playerUseCase = inject(PlayerUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
   private readonly favoritesUseCase = inject(FavoritesUseCase);
+  private readonly songMenuService = inject(SongMenuService);
+  private readonly favoritesService = inject(FavoritesService);
   readonly viewModeService = inject(ViewModeService);
 
   playlist = signal<PlaylistWithSongs | null>(null);
@@ -287,27 +291,6 @@ export class PlaylistDetailComponent implements OnInit {
     console.log('Agregado a cola:', song.title);
   }
 
-  addToPlaylist(song: Song) {
-    console.log('📋 PlaylistDetail: Add to playlist requested for:', song.title);
-    console.log('Agregando a playlist:', song.title);
-    // Funcionalidad básica implementada
-  }
-
-  addToFavorites(song: Song) {
-    console.log('❤️ PlaylistDetail: Add to favorites requested for:', song.title);
-    
-    this.favoritesUseCase.addToFavorites(song.id).subscribe({
-      next: (favorite) => {
-        console.log('✅ Canción agregada a favoritos exitosamente:', favorite);
-        console.log(`🔔 "${song.title}" se agregó a favoritos`);
-      },
-      error: (error) => {
-        console.error('❌ Error agregando a favoritos:', error);
-        console.log(`🔔 Error: No se pudo agregar "${song.title}" a favoritos`);
-      }
-    });
-  }
-
   playNext(song: Song): void {
     console.log('🎵 PlaylistDetail: Reproducir siguiente:', song.title);
     try {
@@ -317,12 +300,6 @@ export class PlaylistDetailComponent implements OnInit {
     } catch (error) {
       console.error('❌ Error configurando canción como siguiente:', error);
     }
-  }
-
-  showMoreOptions(song: Song) {
-    console.log('⚙️ PlaylistDetail: More options requested for:', song.title);
-    console.log('Más opciones para:', song.title);
-    // Funcionalidad básica implementada
   }
 
   // ====================== PLAYLIST MANAGEMENT ======================
@@ -350,6 +327,47 @@ export class PlaylistDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  // ====================== MÉTODOS PARA MUSIC-SECTION ======================
+
+  onAddToQueue(song: Song) {
+    console.log('🎵 PlaylistDetail: Add to queue requested for:', song.title);
+    this.playerUseCase.addToQueue(song);
+    console.log('✅ Canción agregada a la cola:', song.title);
+  }
+
+  onAddToPlaylist(song: Song) {
+    console.log('📋 PlaylistDetail: Add to playlist requested for:', song.title);
+    const menuOptions = this.songMenuService.getMenuOptions(song);
+    const addToPlaylistOption = menuOptions.find(option => option.id === 'add-to-playlist');
+    if (addToPlaylistOption) {
+      addToPlaylistOption.action();
+    }
+  }
+
+  onAddToFavorites(song: Song) {
+    console.log('❤️ PlaylistDetail: Add to favorites requested for:', song.title);
+    this.favoritesService.addToFavorites(song.id).subscribe({
+      next: () => {
+        console.log('✅ Canción agregada a favoritos:', song.title);
+      },
+      error: (error) => {
+        console.error('❌ Error agregando a favoritos:', error);
+      }
+    });
+  }
+
+  onMoreOptions(song: Song) {
+    console.log('⚙️ PlaylistDetail: More options requested for:', song.title);
+    const menuOptions = this.songMenuService.getMenuOptions(song);
+    console.log('📋 Opciones disponibles:', menuOptions.map(o => o.label));
+    
+    menuOptions.forEach(option => {
+      if (!option.disabled) {
+        console.log(`🔘 ${option.label} (${option.id})`);
+      }
+    });
   }
 
   // ====================== SCROLL INFINITO ======================
@@ -419,5 +437,13 @@ export class PlaylistDetailComponent implements OnInit {
       return `${(count / 1000).toFixed(1)}K`;
     }
     return count.toString();
+  }
+
+  onImageError(event: Event): void {
+    // Ocultar la imagen rota y mostrar el placeholder
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.style.display = 'none';
+    }
   }
 }

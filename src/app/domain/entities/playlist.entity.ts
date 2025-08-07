@@ -9,6 +9,7 @@ export interface Playlist {
   is_default: boolean;
   is_public: boolean;
   total_songs: number;
+  playlist_img?: string;
   created_at: string;
   updated_at: string;
 }
