@@ -61,6 +61,8 @@ export class SearchComponent implements OnInit {
   private readonly playSongUseCase = inject(PlaySongUseCase);
   private readonly favoritesUseCase = inject(FavoritesUseCase);
   private readonly playerUseCase = inject(PlayerUseCase);
+  private readonly songMenuService = inject(SongMenuService);
+  private readonly favoritesService = inject(FavoritesService);
   readonly searchFiltersService = inject(SearchFiltersService);
   readonly viewModeService = inject(ViewModeService);
 
