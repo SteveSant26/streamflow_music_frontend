@@ -73,6 +73,9 @@ export class GlobalPlayerStateService {
         // Set up critical preservation listeners BEFORE setting to PlayerUseCase
         this.setupAudioPreservationListeners();
 
+        // Set up auto-persistence for localStorage
+        this.setupAutoPersistence();
+
         this.playerUseCase.setAudioElement(this.audioElement);
 
         console.log('Audio element created and set to PlayerUseCase');
