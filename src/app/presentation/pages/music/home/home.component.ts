@@ -13,7 +13,6 @@ import { Song } from '../../../../domain/entities/song.entity';
 import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
 import { ViewModeService } from '../../../shared/services/view-mode.service';
 import { MusicSectionComponent } from '../../../components/music-section/music-section';
-import { MusicsTable } from '../../../components/music/musics-table/musics-table';
 import { 
   GetMostPopularSongsUseCase,
   GetRandomSongsUseCase,
@@ -30,8 +29,7 @@ import { GlobalPlayerStateService } from '../../../../infrastructure/services/gl
     MatIconModule,
     MatProgressSpinnerModule,
     TranslateModule,
-    MusicSectionComponent,
-    MusicsTable
+    MusicSectionComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
