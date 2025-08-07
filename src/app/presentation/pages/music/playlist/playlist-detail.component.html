@@ -64,41 +64,30 @@
       </div>
     </div>
 
-    <!-- Songs Section using MusicSectionComponent -->
-    <div class="songs-section">
-      <app-music-section
-        title="Canciones"
-        [songs]="songs()"
-        [loading]="loadingSongs()"
-        type="list"
-        loadingMessage="Cargando canciones..."
-        emptyMessage="No hay canciones en esta playlist"
-        [showPlayCount]="false"
-        (songSelected)="onSongClick($event)"
-        (addToQueueRequest)="addToQueue($event)"
-        (addToPlaylistRequest)="addToPlaylist($event)"
-        (addToFavoritesRequest)="addToFavorites($event)"
-        (moreOptionsRequest)="showMoreOptions($event)"
-      ></app-music-section>
 
-      <!-- Load More Button for Infinite Scroll -->
-      <div *ngIf="hasMoreSongs() && !loadingSongs()" class="load-more-section text-center mt-8">
-        <button 
-          mat-raised-button 
-          color="primary"
-          (click)="loadMoreSongs()"
-          class="load-more-btn"
-        >
-          <mat-icon>expand_more</mat-icon>
-          Cargar más canciones
-        </button>
-      </div>
+    <!-- Songs Section usando MusicSectionComponent como en Home -->
+    <app-music-section
+      title="🎵 Canciones de la Playlist"
+      [songs]="songs()"
+      [loading]="loadingSongs()"
+      [type]="'list'"
+      loadingMessage="Cargando canciones..."
+      emptyMessage="No hay canciones en esta playlist"
+      [showPlayCount]="false"
+      [actionButtons]="[
+        { icon: 'expand_more', text: 'Cargar más', action: loadMoreSongs.bind(this), ariaLabel: 'Cargar más canciones' }
+      ]"
+      (songSelected)="onSongClick($event)"
+      (addToQueueRequest)="addToQueue($event)"
+      (addToPlaylistRequest)="addToPlaylist($event)"
+      (addToFavoritesRequest)="addToFavorites($event)"
+      (moreOptionsRequest)="showMoreOptions($event)"
+    ></app-music-section>
 
-      <!-- Loading more songs indicator -->
-      <div *ngIf="loadingSongs() && songs().length > 0" class="flex justify-center items-center py-4">
-        <mat-progress-spinner diameter="30" mode="indeterminate"></mat-progress-spinner>
-        <span class="ml-3 text-white text-sm">Cargando más canciones...</span>
-      </div>
+    <!-- Loading more songs indicator -->
+    <div *ngIf="loadingSongs() && songs().length > 0" class="flex justify-center items-center py-4">
+      <mat-progress-spinner diameter="30" mode="indeterminate"></mat-progress-spinner>
+      <span class="ml-3 text-white text-sm">Cargando más canciones...</span>
     </div>
   </div>
 
