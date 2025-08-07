@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { Song } from '../../../../domain/entities/song.entity';
 import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
 import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
+import { ViewModeService } from '../../../shared/services/view-mode.service';
 
 @Component({
   selector: 'app-playlist-detail',
@@ -38,6 +39,7 @@ export class PlaylistDetailComponent implements OnInit {
   private readonly audioPlayerService = inject(AudioPlayerService);
   private readonly playlistService = inject(PlaylistService);
   private readonly playerUseCase = inject(PlayerUseCase);
+  readonly viewModeService = inject(ViewModeService);
 
   playlist = signal<PlaylistWithSongs | null>(null);
   songs = signal<Song[]>([]);
@@ -49,6 +51,15 @@ export class PlaylistDetailComponent implements OnInit {
   // Para scroll infinito
   currentPage = signal(1);
   hasMoreSongs = signal(true);
+  
+  // Signal computed para el tipo de vista (igual que en home)
+  readonly currentViewType = computed(() => {
+    const currentMode = this.viewModeService.viewMode();
+    const resultType = currentMode === 'list' ? 'grid' : 'table';
+    console.log('🎯 PlaylistDetail currentViewType: viewMode =', currentMode, '→ resultType =', resultType);
+    console.log('🎯 PlaylistDetail Should show:', resultType === 'grid' ? 'GRID/CARDS' : 'TABLE');
+    return resultType;
+  });
   
   displayedColumns: string[] = ['position', 'title', 'album', 'duration', 'added_at', 'actions'];
 
@@ -233,6 +244,13 @@ export class PlaylistDetailComponent implements OnInit {
   // Método para el actionButton del MusicSection
   onLoadMoreClick() {
     this.loadMoreSongs();
+  }
+
+  // Método para debug - llamar desde el template
+  debugViewMode(): string {
+    const mode = this.viewModeService.viewMode();
+    console.log('🔍 PlaylistDetail Debug from template - current mode:', mode);
+    return mode;
   }
 
   formatPlayCount(count: number): string {

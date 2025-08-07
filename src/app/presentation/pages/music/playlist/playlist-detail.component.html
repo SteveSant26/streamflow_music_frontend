@@ -64,13 +64,33 @@
       </div>
     </div>
 
+    <!-- Debugging Controls para View Mode -->
+    <div class="debug-controls mb-4 p-4 bg-yellow-100 rounded">
+      <p class="text-black"><strong>Current View Mode:</strong> {{ viewModeService.viewMode() }}</p>
+      <p class="text-black"><strong>Computed Type:</strong> {{ currentViewType() }}</p>
+      <div class="flex gap-2 mt-2">
+        <button 
+          class="px-3 py-1 bg-blue-500 text-white rounded text-sm"
+          (click)="viewModeService.setViewMode('list')"
+        >
+          Set to List (Grid)
+        </button>
+        <button 
+          class="px-3 py-1 bg-green-500 text-white rounded text-sm"
+          (click)="viewModeService.setViewMode('table')"
+        >
+          Set to Table
+        </button>
+      </div>
+    </div>
+
 
     <!-- Songs Section usando MusicSectionComponent como en Home -->
     <app-music-section
       title="🎵 Canciones de la Playlist"
       [songs]="songs()"
       [loading]="loadingSongs()"
-      type="list"
+      [type]="currentViewType()"
       loadingMessage="Cargando canciones..."
       [emptyMessage]="authenticationRequired() ? 'Necesitas iniciar sesión para ver las canciones de esta playlist' : 'No hay canciones en esta playlist'"
       [showPlayCount]="false"
