@@ -59,6 +59,23 @@ export class HomePageComponent implements OnInit {
   errorPopular = signal<string | null>(null);
   errorRandom = signal<string | null>(null);
 
+  // Button configurations for music sections
+  popularSongsActionButtons = [
+    {
+      icon: 'refresh',
+      action: () => this.loadMostPopularSongs(),
+      ariaLabel: 'Recargar canciones populares'
+    }
+  ];
+
+  randomSongsActionButtons = [
+    {
+      icon: 'refresh',
+      action: () => this.loadRandomSongs(),
+      ariaLabel: 'Recargar canciones aleatorias'
+    }
+  ];
+
   ngOnInit() {
     this.loadMostPopularSongs();
     this.loadRandomSongs();
@@ -97,6 +114,30 @@ export class HomePageComponent implements OnInit {
   onSongSelect(song: Song) {
     // Navegación a la página de detalles de la canción
     this.router.navigate([ROUTES_CONFIG_MUSIC.SONG.getLinkWithId(song.id)]);
+  }
+
+  onPopularSongSelected(song: Song) {
+    console.log('🎵 Home: Popular song selected:', song.title);
+    this.onPlaySong(song);
+  }
+
+  onRandomSongSelected(song: Song) {
+    console.log('🎵 Home: Random song selected:', song.title);
+    this.onPlaySong(song);
+  }
+
+  onRetryPopularSongs() {
+    console.log('🔄 Home: Retrying popular songs load');
+    this.loadMostPopularSongs();
+  }
+
+  onRetryRandomSongs() {
+    console.log('🔄 Home: Retrying random songs load');
+    this.loadRandomSongs();
+  }
+
+  toggleViewMode() {
+    this.viewModeService.toggleViewMode();
   }
 
   onPlaySong(song: Song) {
