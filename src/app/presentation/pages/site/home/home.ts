@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Card, Greeting } from '@app/presentation/components/ui';
@@ -14,12 +15,15 @@ import {
   PlaySongUseCase
 } from '../../../../domain/usecases/song/song.usecases';
 import { Song } from '../../../../domain/entities/song.entity';
+import { Playlist } from '../../../../domain/entities/playlist.entity';
+import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     Card,
     Greeting,
     PlayListItemCard,
@@ -37,6 +41,7 @@ export class HomeComponent implements OnInit {
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly unifiedPlaylistService = inject(UnifiedPlaylistService);
   readonly viewModeService = inject(ViewModeService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -47,7 +52,9 @@ export class HomeComponent implements OnInit {
   // Signals para el estado del componente
   readonly popularSongs = signal<Song[]>([]);
   readonly randomSongs = signal<Song[]>([]);
+  readonly featuredPlaylists = signal<Playlist[]>([]);
   readonly loading = signal(true);
+  readonly playlistsLoading = signal(true);
 
   // Signal computed para el tipo de vista
   readonly currentViewType = computed(() => {
@@ -58,8 +65,8 @@ export class HomeComponent implements OnInit {
     return resultType;
   });
 
-  // Datos mock para las playlists (mantenemos algunos como ejemplo)
-  featuredPlaylists = [
+  // Datos mock para las playlists (mantenemos algunos como ejemplo - DEPRECATED, usar featuredPlaylists signal)
+  mockPlaylistsData = [
     {
       id: 1,
       title: 'Hits del Rock',
@@ -92,15 +99,82 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadHomeData();
+    this.loadFeaturedPlaylists();
     
     // Effect para debuggear cambios de view mode
     effect(() => {
       const currentMode = this.viewModeService.viewMode();
       console.log('🏠 Home Effect: View mode changed to:', currentMode);
       console.log('🏠 Home Effect: Should show', currentMode === 'list' ? 'GRID/CARDS' : 'TABLE');
-      console.log('🏠 Force change detection...');
-      this.cdr.markForCheck(); // Forzar detección de cambios
     });
+  }
+
+  loadFeaturedPlaylists(): void {
+    this.playlistsLoading.set(true);
+    this.unifiedPlaylistService.getPublicPlaylists(1, 4).subscribe({
+      next: (response) => {
+        console.log('🎵 Featured playlists loaded:', response.results);
+        this.featuredPlaylists.set(response.results);
+        this.playlistsLoading.set(false);
+      },
+      error: (error) => {
+        console.error('❌ Error loading featured playlists:', error);
+        this.playlistsLoading.set(false);
+        // Fallback a playlists mock si hay error
+        this.loadMockPlaylists();
+      }
+    });
+  }
+
+  loadMockPlaylists(): void {
+    // Mock playlists como fallback
+    const mockPlaylists: Playlist[] = [
+      {
+        id: 'mock-1',
+        name: 'Hits del Rock',
+        description: 'Los mejores éxitos del rock de todos los tiempos',
+        user_id: 'system',
+        is_default: false,
+        is_public: true,
+        total_songs: 25,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-2',
+        name: 'Mix Aleatorio',
+        description: 'Una mezcla de géneros para descubrir nueva música',
+        user_id: 'system',
+        is_default: false,
+        is_public: true,
+        total_songs: 30,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-3',
+        name: 'Descubrimientos',
+        description: 'Artistas emergentes y canciones por descubrir',
+        user_id: 'system',
+        is_default: false,
+        is_public: true,
+        total_songs: 20,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 'mock-4',
+        name: 'Tendencias',
+        description: 'Lo más popular en el momento',
+        user_id: 'system',
+        is_default: false,
+        is_public: true,
+        total_songs: 15,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    ];
+    this.featuredPlaylists.set(mockPlaylists);
   }
 
   // Método para debug - llamar desde el template
