@@ -152,6 +152,7 @@
         [songs]="searchResults()"
         [loading]="isSearching()"
         [type]="viewModeService.viewMode()"
+        [actionButtons]="searchActionButtons"
         emptyMessage="{{ 'SEARCH.NO_RESULTS' | translate }}"
         loadingMessage="Buscando canciones..."
         (songSelected)="onSearchSongSelected($event)"

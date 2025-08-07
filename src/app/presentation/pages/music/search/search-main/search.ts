@@ -85,6 +85,15 @@ export class SearchComponent implements OnInit {
   hasMoreResults = computed(() => this.pagination().hasNext);
   isLoading = computed(() => this.isSearching() || this.isLoadingMore());
 
+  // Button configurations for music section
+  searchActionButtons = [
+    {
+      icon: 'play_arrow',
+      action: () => this.playAllSongs(),
+      ariaLabel: 'Reproducir todas las canciones'
+    }
+  ];
+
   ngOnInit() {
     // Solo escuchar cambios para limpiar resultados si el campo se vacía
     this.searchControl.valueChanges
