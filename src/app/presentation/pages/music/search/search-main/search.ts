@@ -23,7 +23,7 @@ import { SearchFiltersComponent } from '@app/presentation/components/music/searc
 import { SearchFiltersService } from '@app/infrastructure/services/search-filters.service';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { InfiniteScrollDirective } from '@app/shared/directives/infinite-scroll.directive';
-import { SongMenuService } from '@app/presentation/services/song-menu.service';
+import { SongMenuService } from '@app/infrastructure/services/song-menu.service';
 import { FavoritesService } from '@app/infrastructure/services/favorites.service';
 
 interface PaginationInfo {
@@ -297,30 +297,37 @@ export class SearchComponent implements OnInit {
   }
 
   addToPlaylist(song: Song): void {
-    // Implementar funcionalidad de agregar a playlist
-    console.log(`Agregando "${song.title}" a playlist`);
-    // Aquí irá la lógica para mostrar modal de playlists o agregar a favoritos
+    console.log(`📋 Search: Agregando "${song.title}" a playlist`);
+    const menuOptions = this.songMenuService.getMenuOptions(song);
+    const addToPlaylistOption = menuOptions.find(option => option.id === 'add-to-playlist');
+    if (addToPlaylistOption) {
+      addToPlaylistOption.action();
+    }
   }
 
   addToFavorites(song: Song): void {
     console.log(`❤️ Search: Agregando "${song.title}" a favoritos`);
     
-    this.favoritesUseCase.addToFavorites(song.id).subscribe({
-      next: (favorite) => {
-        console.log('✅ Canción agregada a favoritos exitosamente:', favorite);
-        console.log(`🔔 "${song.title}" se agregó a favoritos`);
+    this.favoritesService.addToFavorites(song.id).subscribe({
+      next: () => {
+        console.log('✅ Canción agregada a favoritos exitosamente:', song.title);
       },
       error: (error) => {
         console.error('❌ Error agregando a favoritos:', error);
-        console.log(`🔔 Error: No se pudo agregar "${song.title}" a favoritos`);
       }
     });
   }
 
   showMoreOptions(song: Song): void {
-    // Implementar menú de más opciones
-    console.log(`Mostrando más opciones para "${song.title}"`);
-    // Aquí irá la lógica para mostrar menú contextual con más opciones
+    console.log(`⚙️ Search: Mostrando más opciones para "${song.title}"`);
+    const menuOptions = this.songMenuService.getMenuOptions(song);
+    console.log('📋 Opciones disponibles:', menuOptions.map(o => o.label));
+    
+    menuOptions.forEach(option => {
+      if (!option.disabled) {
+        console.log(`🔘 ${option.label} (${option.id})`);
+      }
+    });
   }
 
   // Métodos para MusicSectionComponent
