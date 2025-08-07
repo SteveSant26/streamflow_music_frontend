@@ -21,7 +21,6 @@ import { SearchFiltersComponent } from '@app/presentation/components/music/searc
 import { SearchFiltersService } from '@app/infrastructure/services/search-filters.service';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { InfiniteScrollDirective } from '@app/shared/directives/infinite-scroll.directive';
-import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 
 interface PaginationInfo {
   count: number;
@@ -45,8 +44,7 @@ interface PaginationInfo {
     ReactiveFormsModule, 
     MusicSectionComponent,
     SearchFiltersComponent,
-    InfiniteScrollDirective,
-    ImageFallbackDirective
+    InfiniteScrollDirective
   ],
   templateUrl: './search.html',
   styleUrl: './search.css',
