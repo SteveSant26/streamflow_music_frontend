@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Greeting } from '@app/presentation/components/ui';
-import { MusicSectionButton } from '@app/presentation/components/music-section/music-section';
+import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
@@ -16,6 +16,7 @@ import {
 import { Song } from '../../../../domain/entities/song.entity';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
 import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
+import { PlayListItemCard } from '@app/presentation/components/music/play-list-item-card/play-list-item-card';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +28,8 @@ import { UnifiedPlaylistService } from '../../../../infrastructure/services/unif
     TranslateModule,
     MatIconModule,
     MatButtonModule,
+    MusicSectionComponent,
+    PlayListItemCard,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
