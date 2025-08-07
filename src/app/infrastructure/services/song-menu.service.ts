@@ -19,6 +19,7 @@ export interface SongMenuOption {
 })
 export class SongMenuService {
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
   private readonly downloadUseCase = inject(DownloadSongUseCase);
   private readonly playerUseCase = inject(PlayerUseCase);
 
@@ -29,6 +30,12 @@ export class SongMenuService {
         label: 'Reproducir siguiente',
         icon: 'skip_next',
         action: () => this.playNext(song)
+      },
+      {
+        id: 'add-to-playlist',
+        label: 'Agregar a playlist',
+        icon: 'playlist_add',
+        action: () => this.addToPlaylist(song)
       },
       {
         id: 'go-to-artist',
@@ -70,6 +77,21 @@ export class SongMenuService {
     // Agregar la canción a la cola para reproducir siguiente
     this.playerUseCase.addToQueue(song);
     console.log(`✅ "${song.title}" agregada para reproducir siguiente`);
+  }
+
+  private addToPlaylist(song: Song): void {
+    console.log(`📋 Adding to playlist: ${song.title}`);
+    
+    const dialogRef = this.dialog.open(AddSongToPlaylistDialogComponent, {
+      width: '400px',
+      data: { song }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('✅ Song added to playlist successfully');
+      }
+    });
   }
 
   private goToArtist(song: Song): void {
