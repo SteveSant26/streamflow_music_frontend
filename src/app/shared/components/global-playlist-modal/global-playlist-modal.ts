@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { GlobalPlayerStateService } from '@app/infrastructure/services';
 import { PlaylistService } from '@app/infrastructure/services/playlist.service';
+import { PlayerUseCase } from '@app/domain/usecases/player/player.usecases';
 import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
 import { PlayerState } from '@app/domain/entities/player-state.entity';
 import { Playlist } from '@app/domain/entities/song.entity';
@@ -36,6 +37,7 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
 
   private readonly globalPlayerState = inject(GlobalPlayerStateService);
   private readonly playlistService = inject(PlaylistService);
+  private readonly playerUseCase = inject(PlayerUseCase);
   private readonly modalService = inject(GlobalPlaylistModalService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -349,7 +351,14 @@ export class GlobalPlaylistModalComponent implements OnInit, OnDestroy {
 
   // Método para agregar canción a la cola
   addToQueue(song: any): void {
-    console.log('🎵 Agregando canción a la cola:', song.title);
-    this.playlistService.addSongToCurrentPlaylist(song);
+    console.log('🎵 Agregando canción a la cola desde playlist modal:', song.title);
+    
+    try {
+      // Usar el nuevo método addToQueue del PlayerUseCase
+      this.playerUseCase.addToQueue(song);
+      console.log('✅ Canción agregada a la cola desde modal');
+    } catch (error) {
+      console.error('❌ Error agregando canción a la cola desde modal:', error);
+    }
   }
 }

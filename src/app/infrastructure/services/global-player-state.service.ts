@@ -443,6 +443,20 @@ export class GlobalPlayerStateService {
       const currentState = this.getPlayerState();
       
       if (currentState.currentSong) {
+        // Obtener información de la playlist actual desde PlayerUseCase
+        const currentQueue = this.playerUseCase.getCurrentQueue();
+        const currentQueueIndex = this.playerUseCase.getCurrentQueueIndex();
+        
+        let playlistInfo = null;
+        if (currentQueue.length > 0) {
+          playlistInfo = {
+            id: `queue-${Date.now()}`,
+            name: 'Current Queue',
+            songs: currentQueue,
+            currentIndex: currentQueueIndex
+          };
+        }
+        
         const playbackState: PlaybackState = {
           currentSong: {
             id: currentState.currentSong.id,
@@ -452,7 +466,7 @@ export class GlobalPlayerStateService {
             thumbnail_url: currentState.currentSong.thumbnail_url,
             file_url: currentState.currentSong.file_url
           },
-          currentPlaylist: null, // TODO: Implementar cuando esté disponible en PlayerState
+          currentPlaylist: playlistInfo,
           playbackPosition: {
             currentTime: currentState.currentTime,
             duration: currentState.duration,
@@ -468,6 +482,11 @@ export class GlobalPlayerStateService {
         };
 
         this.playbackPersistence.savePlaybackState(playbackState);
+        console.log('🎵 Estado guardado con playlist:', {
+          song: currentState.currentSong.title,
+          queueLength: currentQueue.length,
+          currentIndex: currentQueueIndex
+        });
       }
     } catch (error) {
       console.error('Error guardando estado:', error);
@@ -486,8 +505,30 @@ export class GlobalPlayerStateService {
         return false;
       }
 
-      // Restaurar la canción usando playSong
-      this.playerUseCase.playSong(persistedState.currentSong as any);
+      console.log('🔄 Restaurando estado persistido:', {
+        song: persistedState.currentSong.title,
+        hasPlaylist: !!persistedState.currentPlaylist,
+        playlistLength: persistedState.currentPlaylist?.songs?.length || 0
+      });
+
+      // Si hay una playlist, restaurarla completa
+      if (persistedState.currentPlaylist && persistedState.currentPlaylist.songs.length > 0) {
+        const songs = persistedState.currentPlaylist.songs;
+        const currentIndex = persistedState.currentPlaylist.currentIndex || 0;
+        
+        console.log(`🎵 Restaurando playlist con ${songs.length} canciones, índice: ${currentIndex}`);
+        
+        // Usar playPlaylist para restaurar la queue completa
+        this.playerUseCase.playPlaylist(
+          songs as any[],
+          currentIndex,
+          persistedState.currentPlaylist.name || 'Restored Playlist'
+        );
+      } else {
+        // Solo restaurar la canción individual
+        console.log('🎵 Restaurando canción individual');
+        this.playerUseCase.playSong(persistedState.currentSong as any);
+      }
 
       // Esperar un momento para que se cargue la canción
       setTimeout(() => {
@@ -502,6 +543,8 @@ export class GlobalPlayerStateService {
           if (this.audioElement.autoplay) {
             this.audioElement.pause();
           }
+          
+          console.log('✅ Estado completo restaurado - canción y posición');
         }
       }, 1000);
 

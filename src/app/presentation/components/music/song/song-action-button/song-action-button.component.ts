@@ -107,7 +107,9 @@ export class SongActionButtonComponent {
 
   addToQueue() {
     try {
-      this.playlistService.addSongToCurrentPlaylist(this.song);
+      // Usar el nuevo método addToQueue del PlayerUseCase
+      this.playerUseCase.addToQueue(this.song);
+      
       console.log('✅ Canción agregada a la cola:', this.song.title);
       
       // Opcional: Mostrar algún feedback visual al usuario
