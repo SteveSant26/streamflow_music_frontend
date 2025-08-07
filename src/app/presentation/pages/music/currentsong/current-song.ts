@@ -57,6 +57,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
+    private readonly dialog: MatDialog,
     private readonly globalPlayerState: GlobalPlayerStateService,
     private readonly playlistService: PlaylistService,
     private readonly globalPlaylistModalService: GlobalPlaylistModalService,
@@ -74,6 +75,9 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     // Fix: Move isDarkTheme$ initialization to constructor or use inject()
     this.setupPlayerStateSubscription();
     this.initializePlayer();
+    
+    // Verificar si hay una sesión guardada y mostrar diálogo
+    this.checkForSavedSession();
 
     // Evitar scroll en el body solo en el navegador
     if (isPlatformBrowser(this.platformId)) {
