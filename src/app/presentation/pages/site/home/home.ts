@@ -15,6 +15,7 @@ import {
 } from '../../../../domain/usecases/song/song.usecases';
 import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 import { FavoritesUseCase } from '../../../../domain/usecases/favorites/favorites.usecases';
+import { SongMenuService } from '../../../../infrastructure/services/song-menu.service';
 import { Song } from '../../../../domain/entities/song.entity';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
 import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
@@ -45,6 +46,7 @@ export class HomeComponent implements OnInit {
   private readonly playerUseCase = inject(PlayerUseCase);
   private readonly unifiedPlaylistService = inject(UnifiedPlaylistService);
   private readonly favoritesUseCase = inject(FavoritesUseCase);
+  private readonly songMenuService = inject(SongMenuService);
   readonly viewModeService = inject(ViewModeService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -250,14 +252,19 @@ export class HomeComponent implements OnInit {
     try {
       console.log('⚙️ Mostrando más opciones para:', song.title);
       
-      // Opciones disponibles:
-      // - Reproducir siguiente
-      // - Ir al artista
-      // - Ir al álbum
-      // - Compartir
-      // - Descargar
-      console.log('✅ Menú de opciones pendiente de implementar completamente');
-      console.log(`🔔 Opciones disponibles para "${song.title}" (función en desarrollo)`);
+      const options = this.songMenuService.getMenuOptions(song);
+      console.log('📋 Opciones disponibles:', options.map(opt => opt.label));
+      
+      // Por ahora, mostrar en consola las opciones disponibles
+      // En el futuro se puede implementar un modal o menú contextual
+      options.forEach((option, index) => {
+        if (!option.disabled) {
+          console.log(`${index + 1}. ${option.label} (${option.icon})`);
+        }
+      });
+      
+      console.log(`✅ Menú de ${options.length} opciones disponibles para "${song.title}"`);
+      console.log('💡 Tip: Se puede implementar un menú contextual aquí');
     } catch (error) {
       console.error('❌ Error mostrando opciones:', error);
     }
