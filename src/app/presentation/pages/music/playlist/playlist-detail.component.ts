@@ -17,6 +17,7 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
 import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 import { ViewModeService } from '../../../shared/services/view-mode.service';
 import { PlaySongUseCase } from '../../../../domain/usecases/song/song.usecases';
+import { FavoritesUseCase } from '../../../../domain/usecases/favorites/favorites.usecases';
 
 @Component({
   selector: 'app-playlist-detail',

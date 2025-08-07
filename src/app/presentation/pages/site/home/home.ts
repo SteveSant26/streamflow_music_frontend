@@ -14,6 +14,7 @@ import {
   PlaySongUseCase
 } from '../../../../domain/usecases/song/song.usecases';
 import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
+import { FavoritesUseCase } from '../../../../domain/usecases/favorites/favorites.usecases';
 import { Song } from '../../../../domain/entities/song.entity';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
 import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
@@ -43,6 +44,7 @@ export class HomeComponent implements OnInit {
   private readonly playSongUseCase = inject(PlaySongUseCase);
   private readonly playerUseCase = inject(PlayerUseCase);
   private readonly unifiedPlaylistService = inject(UnifiedPlaylistService);
+  private readonly favoritesUseCase = inject(FavoritesUseCase);
   readonly viewModeService = inject(ViewModeService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -229,9 +231,16 @@ export class HomeComponent implements OnInit {
     try {
       console.log('❤️ Agregando a favoritos:', song.title);
       
-      // Implementación básica por ahora
-      console.log('✅ Funcionalidad de favoritos pendiente de implementar completamente');
-      console.log(`🔔 "${song.title}" se agregará a favoritos (función en desarrollo)`);
+      this.favoritesUseCase.addToFavorites(song.id).subscribe({
+        next: (favorite) => {
+          console.log('✅ Canción agregada a favoritos exitosamente:', favorite);
+          console.log(`🔔 "${song.title}" se agregó a favoritos`);
+        },
+        error: (error) => {
+          console.error('❌ Error agregando a favoritos:', error);
+          console.log(`🔔 Error: No se pudo agregar "${song.title}" a favoritos`);
+        }
+      });
     } catch (error) {
       console.error('❌ Error agregando a favoritos:', error);
     }
