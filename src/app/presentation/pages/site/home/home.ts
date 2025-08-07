@@ -190,12 +190,34 @@ export class HomeComponent implements OnInit {
     this.viewModeService.setViewMode('list');
   }
 
-  // Método para cambiar manualmente el viewMode (para debug)
+  // Método para toggle manual del viewMode (para debug)
   toggleViewModeManually(): void {
     const current = this.viewModeService.viewMode();
     const newMode = current === 'list' ? 'table' : 'list';
     console.log('🔄 Manual toggle from', current, 'to', newMode);
     this.viewModeService.setViewMode(newMode);
+  }
+
+  // ====================== SONG ACTIONS ======================
+
+  addToQueue(song: Song): void {
+    // TODO: Implementar agregar a cola
+    console.log('Agregando a cola:', song.title);
+  }
+
+  addToPlaylist(song: Song): void {
+    // TODO: Implementar agregar a playlist
+    console.log('Agregando a playlist:', song.title);
+  }
+
+  addToFavorites(song: Song): void {
+    // TODO: Implementar agregar a favoritos
+    console.log('Agregando a favoritos:', song.title);
+  }
+
+  showMoreOptions(song: Song): void {
+    // TODO: Implementar más opciones
+    console.log('Más opciones para:', song.title);
   }
 
   private loadHomeData(): void {
@@ -338,23 +360,4 @@ export class HomeComponent implements OnInit {
       loadingMessage: 'Cargando música...'
     };
   });
-
-  // Métodos para los botones de acción (igual que Search)
-  addToPlaylist(song: Song): void {
-    // Implementar funcionalidad de agregar a playlist
-    console.log(`Agregando "${song.title}" a playlist`);
-    // Aquí irá la lógica para mostrar modal de playlists o agregar a favoritos
-  }
-
-  addToFavorites(song: Song): void {
-    // Implementar funcionalidad de favoritos
-    console.log(`Agregando "${song.title}" a favoritos`);
-    // Aquí irá la lógica para agregar/quitar de favoritos
-  }
-
-  showMoreOptions(song: Song): void {
-    // Implementar menú de más opciones
-    console.log(`Mostrando más opciones para "${song.title}"`);
-    // Aquí irá la lógica para mostrar menú contextual con más opciones
-  }
 }
