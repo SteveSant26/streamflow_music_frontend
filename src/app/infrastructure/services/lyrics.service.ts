@@ -49,13 +49,19 @@ export class LyricsService {
   }
 
   /**
-   * Fuerza la actualización de letras para una canción
+   * "Actualiza" las letras re-obteniendo desde el backend
+   * (El backend auto-busca las letras si no existen)
    */
   updateSongLyrics(songId: string, forceUpdate: boolean = false): Observable<UpdateLyricsResponse> {
-    const url = `${environment.apiUrl}${API_CONFIG_LYRICS.lyrics.updateSongLyrics(songId)}`;
-    const body = { force_update: forceUpdate };
+    console.log('🔄 Re-fetching lyrics for song:', songId);
     
-    return this.http.post<UpdateLyricsResponse>(url, body).pipe(
+    // Usar el mismo endpoint GET que automáticamente busca letras
+    return this.getSongLyrics(songId, true).pipe(
+      map(response => ({
+        ...response,
+        updated: true,
+        message: 'Letras actualizadas correctamente'
+      })),
       catchError(error => {
         console.error('Error updating lyrics:', error);
         throw error;

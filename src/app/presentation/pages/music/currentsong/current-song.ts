@@ -506,6 +506,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       return;
     }
 
+    console.log('📥 Cargando letras para:', this.currentSong.title);
+
     this.currentSong.lyricsLoading = true;
     this.currentSong.lyricsError = undefined;
     this.cdr.detectChanges();
@@ -515,7 +517,13 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (this.currentSong) {
-            this.currentSong.lyrics = response.lyrics || 'Letras no disponibles';
+            if (response.lyrics?.trim()) {
+              this.currentSong.lyrics = response.lyrics;
+              console.log('✅ Letras cargadas exitosamente');
+            } else {
+              this.currentSong.lyrics = '🎵 Letras no disponibles 🎵';
+              console.log('⚠️ No hay letras disponibles para esta canción');
+            }
             this.currentSong.lyricsLoading = false;
             this.cdr.detectChanges();
           }
@@ -523,7 +531,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         error: (error: any) => {
           console.error('Error cargando letras:', error);
           if (this.currentSong) {
-            this.currentSong.lyricsError = 'Error al cargar las letras';
+            this.currentSong.lyricsError = 'Error al cargar las letras. Intenta nuevamente.';
             this.currentSong.lyricsLoading = false;
             this.cdr.detectChanges();
           }
@@ -546,6 +554,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       return;
     }
 
+    console.log('🔄 Refrescando letras para:', this.currentSong.title);
+
     this.currentSong.lyricsLoading = true;
     this.currentSong.lyricsError = undefined;
     this.cdr.detectChanges();
@@ -555,15 +565,21 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (this.currentSong) {
-            this.currentSong.lyrics = response.lyrics || 'Letras no disponibles';
+            if (response.lyrics?.trim()) {
+              this.currentSong.lyrics = response.lyrics;
+              console.log('✅ Letras refrescadas exitosamente');
+            } else {
+              this.currentSong.lyrics = '🎵 Letras no encontradas 🎵';
+              console.log('⚠️ No se encontraron letras después del refresh');
+            }
             this.currentSong.lyricsLoading = false;
             this.cdr.detectChanges();
           }
         },
         error: (error: any) => {
-          console.error('Error actualizando letras:', error);
+          console.error('Error refrescando letras:', error);
           if (this.currentSong) {
-            this.currentSong.lyricsError = 'Error al actualizar las letras';
+            this.currentSong.lyricsError = 'Error al recargar las letras. Intenta nuevamente.';
             this.currentSong.lyricsLoading = false;
             this.cdr.detectChanges();
           }
@@ -572,20 +588,21 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Método para generar letras automáticamente cuando el usuario lo solicita
+   * Método para buscar letras cuando el usuario lo solicita
+   * (El backend automáticamente busca en fuentes externas)
    */
   generateLyrics(): void {
     if (!this.currentSong || this.currentSong.lyricsLoading) {
       return;
     }
 
-    console.log('🤖 Generando letras para:', this.currentSong.title);
+    console.log('🔍 Buscando letras para:', this.currentSong.title);
     
     this.currentSong.lyricsLoading = true;
     this.currentSong.lyricsError = undefined;
     this.cdr.detectChanges();
 
-    // Usar el servicio de actualización con fuerza para generar letras
+    // El backend automáticamente busca en fuentes externas cuando no hay letras
     this.updateSongLyricsUseCase.execute(this.currentSong.id, true)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -593,18 +610,19 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
           if (this.currentSong) {
             if (response.lyrics?.trim()) {
               this.currentSong.lyrics = response.lyrics;
-              console.log('✅ Letras generadas/encontradas para:', this.currentSong.title);
+              console.log('✅ Letras encontradas para:', this.currentSong.title);
             } else {
-              this.currentSong.lyrics = 'No se pudieron generar letras para esta canción';
+              this.currentSong.lyrics = '🎵 No se encontraron letras para esta canción 🎵';
+              console.log('⚠️ No se encontraron letras para:', this.currentSong.title);
             }
             this.currentSong.lyricsLoading = false;
             this.cdr.detectChanges();
           }
         },
         error: (error: any) => {
-          console.error('Error generando letras:', error);
+          console.error('Error buscando letras:', error);
           if (this.currentSong) {
-            this.currentSong.lyricsError = 'Error al generar las letras';
+            this.currentSong.lyricsError = 'Error al buscar las letras. Verifica tu conexión.';
             this.currentSong.lyricsLoading = false;
             this.cdr.detectChanges();
           }
@@ -615,6 +633,9 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   get hasLyrics(): boolean {
     return !!this.currentSong?.lyrics && 
            this.currentSong.lyrics !== 'Letras no disponibles' &&
+           this.currentSong.lyrics !== '🎵 Letras no disponibles 🎵' &&
+           this.currentSong.lyrics !== '🎵 Letras no encontradas 🎵' &&
+           this.currentSong.lyrics !== '🎵 No se encontraron letras para esta canción 🎵' &&
            this.currentSong.lyrics !== '🎵 Lyrics not available yet 🎵' &&
            this.currentSong.lyrics.trim() !== '';
   }
