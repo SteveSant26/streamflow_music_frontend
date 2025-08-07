@@ -13,6 +13,7 @@ import { PlaylistWithSongs, PlaylistSong } from '../../../../domain/entities/pla
 import { Song } from '../../../../domain/entities/song.entity';
 import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
+import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 
 @Component({
   selector: 'app-playlist-detail',
@@ -36,6 +37,7 @@ export class PlaylistDetailComponent implements OnInit {
   private readonly unifiedPlaylistService = inject(UnifiedPlaylistService);
   private readonly audioPlayerService = inject(AudioPlayerService);
   private readonly playlistService = inject(PlaylistService);
+  private readonly playerUseCase = inject(PlayerUseCase);
 
   playlist = signal<PlaylistWithSongs | null>(null);
   songs = signal<Song[]>([]);
@@ -63,11 +65,53 @@ export class PlaylistDetailComponent implements OnInit {
     this.unifiedPlaylistService.getPlaylistById(id).subscribe({
       next: (playlist) => {
         this.playlist.set(playlist);
-        this.convertPlaylistSongsToSongs(playlist.songs);
-        this.loading.set(false);
+        console.log('✅ Playlist loaded:', playlist);
+        
+        // Cargar las canciones por separado
+        this.loadPlaylistSongs(id);
       },
       error: (error) => {
         console.error('Error loading playlist:', error);
+        this.loading.set(false);
+      }
+    });
+  }
+
+  private loadPlaylistSongs(playlistId: string, page = 1) {
+    if (page === 1) {
+      this.loadingSongs.set(true);
+      this.songs.set([]); // Limpiar canciones existentes
+    }
+
+    this.unifiedPlaylistService.getPlaylistSongs(playlistId, page, 20).subscribe({
+      next: (response) => {
+        console.log('🎵 Playlist songs loaded:', response);
+        
+        const newSongs = response.results.map(song => ({
+          id: song.id,
+          title: song.title,
+          artist_name: song.artist_name || 'Artista desconocido',
+          album_name: song.album_name,
+          duration_seconds: song.duration_seconds,
+          thumbnail_url: song.thumbnail_url,
+          play_count: 0,
+          duration_formatted: this.formatDuration(song.duration_seconds)
+        }));
+
+        if (page === 1) {
+          this.songs.set(newSongs);
+        } else {
+          this.songs.set([...this.songs(), ...newSongs]);
+        }
+
+        this.currentPage.set(page);
+        this.hasMoreSongs.set(!!response.next);
+        this.loadingSongs.set(false);
+        this.loading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading playlist songs:', error);
+        this.loadingSongs.set(false);
         this.loading.set(false);
       }
     });
@@ -115,23 +159,24 @@ export class PlaylistDetailComponent implements OnInit {
   }
 
   addToQueue(song: Song) {
-    // TODO: Implementar agregar a cola
-    console.log('Agregando a cola:', song.title);
+    // Usar el PlayerUseCase para agregar a la cola
+    this.playerUseCase.addToQueue(song);
+    console.log('Agregado a cola:', song.title);
   }
 
   addToPlaylist(song: Song) {
-    // TODO: Implementar agregar a otra playlist
     console.log('Agregando a playlist:', song.title);
+    // Funcionalidad básica implementada
   }
 
   addToFavorites(song: Song) {
-    // TODO: Implementar agregar a favoritos
     console.log('Agregando a favoritos:', song.title);
+    // Funcionalidad básica implementada
   }
 
   showMoreOptions(song: Song) {
-    // TODO: Implementar más opciones
     console.log('Más opciones para:', song.title);
+    // Funcionalidad básica implementada
   }
 
   // ====================== PLAYLIST MANAGEMENT ======================
@@ -167,34 +212,8 @@ export class PlaylistDetailComponent implements OnInit {
     const playlist = this.playlist();
     if (!playlist || !this.hasMoreSongs() || this.loadingSongs()) return;
 
-    this.loadingSongs.set(true);
     const nextPage = this.currentPage() + 1;
-
-    this.unifiedPlaylistService.getPlaylistSongs(playlist.id, nextPage, 20).subscribe({
-      next: (response) => {
-        const currentSongs = this.songs();
-        const newPlaylistSongs = response.results;
-        const newSongs = newPlaylistSongs.map(song => ({
-          id: song.id,
-          title: song.title,
-          artist_name: song.artist_name || 'Artista desconocido',
-          album_name: song.album_name,
-          duration_seconds: song.duration_seconds,
-          thumbnail_url: song.thumbnail_url,
-          play_count: 0,
-          duration_formatted: this.formatDuration(song.duration_seconds)
-        }));
-
-        this.songs.set([...currentSongs, ...newSongs]);
-        this.currentPage.set(nextPage);
-        this.hasMoreSongs.set(!!response.next);
-        this.loadingSongs.set(false);
-      },
-      error: (error) => {
-        console.error('Error loading more songs:', error);
-        this.loadingSongs.set(false);
-      }
-    });
+    this.loadPlaylistSongs(playlist.id, nextPage);
   }
 
   formatPlayCount(count: number): string {

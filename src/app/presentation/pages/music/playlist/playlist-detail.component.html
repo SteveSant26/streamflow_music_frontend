@@ -1,0 +1,114 @@
+<div class="playlist-detail-container p-6 min-h-screen bg-gradient-to-br from-gray-900 to-black">
+  <!-- Loading state -->
+  <div *ngIf="loading()" class="flex justify-center items-center py-12">
+    <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+    <span class="ml-4 text-white">Cargando playlist...</span>
+  </div>
+
+  <!-- Playlist content -->
+  <div *ngIf="!loading() && playlist()" class="playlist-content">
+    <!-- Playlist Header -->
+    <div class="playlist-header mb-8 flex flex-col md:flex-row gap-6 items-start">
+      <!-- Playlist Cover -->
+      <div class="playlist-cover w-64 h-64 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-xl flex items-center justify-center flex-shrink-0">
+        <mat-icon class="text-white text-8xl">queue_music</mat-icon>
+      </div>
+
+      <!-- Playlist Info -->
+      <div class="playlist-info flex-1">
+        <p class="text-gray-400 text-sm uppercase tracking-wide mb-2">Playlist</p>
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">{{ playlist()?.name }}</h1>
+        
+        <p *ngIf="playlist()?.description" class="text-gray-300 text-lg mb-4">
+          {{ playlist()?.description }}
+        </p>
+
+        <div class="playlist-stats flex items-center gap-4 text-gray-400 text-sm mb-6">
+          <span class="flex items-center gap-1">
+            <mat-icon class="text-base">queue_music</mat-icon>
+            {{ playlist()?.total_songs }} {{ playlist()?.total_songs === 1 ? 'canción' : 'canciones' }}
+          </span>
+          <span>•</span>
+          <span>{{ playlist()?.created_at | date:'mediumDate' }}</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons flex items-center gap-4">
+          <button 
+            mat-fab 
+            color="primary" 
+            class="play-all-btn"
+            (click)="playAllSongs()"
+            [disabled]="songs().length === 0"
+            matTooltip="Reproducir todas las canciones"
+          >
+            <mat-icon>play_arrow</mat-icon>
+          </button>
+
+          <button 
+            mat-icon-button 
+            class="shuffle-btn text-white"
+            matTooltip="Reproducir en aleatorio"
+          >
+            <mat-icon>shuffle</mat-icon>
+          </button>
+
+          <button 
+            mat-icon-button 
+            class="more-options text-white"
+            matTooltip="Más opciones"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Songs Section using MusicSectionComponent -->
+    <div class="songs-section">
+      <app-music-section
+        title="Canciones"
+        [songs]="songs()"
+        [loading]="loadingSongs()"
+        type="list"
+        loadingMessage="Cargando canciones..."
+        emptyMessage="No hay canciones en esta playlist"
+        [showPlayCount]="false"
+        (songSelected)="onSongClick($event)"
+        (addToQueueRequest)="addToQueue($event)"
+        (addToPlaylistRequest)="addToPlaylist($event)"
+        (addToFavoritesRequest)="addToFavorites($event)"
+        (moreOptionsRequest)="showMoreOptions($event)"
+      ></app-music-section>
+
+      <!-- Load More Button for Infinite Scroll -->
+      <div *ngIf="hasMoreSongs() && !loadingSongs()" class="load-more-section text-center mt-8">
+        <button 
+          mat-raised-button 
+          color="primary"
+          (click)="loadMoreSongs()"
+          class="load-more-btn"
+        >
+          <mat-icon>expand_more</mat-icon>
+          Cargar más canciones
+        </button>
+      </div>
+
+      <!-- Loading more songs indicator -->
+      <div *ngIf="loadingSongs() && songs().length > 0" class="flex justify-center items-center py-4">
+        <mat-progress-spinner diameter="30" mode="indeterminate"></mat-progress-spinner>
+        <span class="ml-3 text-white text-sm">Cargando más canciones...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading() && !playlist()" class="empty-state text-center py-12">
+    <mat-icon class="text-gray-400 text-6xl mb-4">queue_music</mat-icon>
+    <h2 class="text-2xl font-semibold text-white mb-2">Playlist no encontrada</h2>
+    <p class="text-gray-400 mb-6">No se pudo cargar la información de esta playlist.</p>
+    <button mat-raised-button color="primary" routerLink="/library">
+      Volver a la biblioteca
+    </button>
+  </div>
+</div>

@@ -16,7 +16,6 @@ import {
 } from '../../domain/entities/playlist.entity';
 import {
   PlaylistDto,
-  PlaylistWithSongsDto,
   PlaylistSongDto,
   PaginatedPlaylistSongResponseDto
 } from '../../domain/dtos/playlist.dto';
@@ -140,12 +139,28 @@ export class UnifiedPlaylistService {
    * Get playlist details with songs
    */
   getPlaylistById(id: string): Observable<PlaylistWithSongs> {
-    return this.http.get<PlaylistWithSongsDto>(
+    // Primero obtenemos la información básica de la playlist
+    return this.http.get<PlaylistDto>(
       `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.getById(id)}`
     ).pipe(
       map(response => {
         console.log('🎵 Raw API response for playlist detail:', response);
-        return PlaylistMapper.withSongsDtoToEntity(response);
+        
+        // Convertir la respuesta básica a una playlist con canciones vacías inicialmente
+        const playlistWithSongs: PlaylistWithSongs = {
+          id: response.id,
+          name: response.name,
+          description: response.description || '',
+          user_id: response.user_id,
+          is_default: response.is_default || false,
+          is_public: response.is_public || false,
+          total_songs: response.song_count || 0,
+          created_at: response.created_at,
+          updated_at: response.updated_at,
+          songs: [] // Inicialmente vacío, se cargará por separado
+        };
+        
+        return playlistWithSongs;
       }),
       catchError((error: any) => {
         console.error('❌ Error loading playlist detail:', error);
