@@ -85,11 +85,47 @@
               
               <!-- Botones de acción usando SongActionButtonComponent -->
               <div class="flex items-center justify-between">
-                <app-song-action-button
-                  [song]="song"
-                  [showQuickPlay]="false"
-                  size="small"
-                ></app-song-action-button>
+                <div class="flex items-center gap-1">
+                  <!-- Add to queue -->
+                  <button
+                    (click)="addToQueue(song); $event.stopPropagation()"
+                    class="action-btn-small text-gray-400 hover:text-green-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    [attr.aria-label]="'Agregar ' + song.title + ' a cola'"
+                    title="Agregar a cola"
+                  >
+                    <mat-icon class="w-4 h-4">queue_music</mat-icon>
+                  </button>
+                  
+                  <!-- Add to playlist -->
+                  <button
+                    (click)="addToPlaylist(song); $event.stopPropagation()"
+                    class="action-btn-small text-gray-400 hover:text-blue-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
+                    title="Agregar a playlist"
+                  >
+                    <mat-icon class="w-4 h-4">playlist_add</mat-icon>
+                  </button>
+                  
+                  <!-- Add to favorites -->
+                  <button
+                    (click)="addToFavorites(song); $event.stopPropagation()"
+                    class="action-btn-small text-gray-400 hover:text-red-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
+                    title="Agregar a favoritos"
+                  >
+                    <mat-icon class="w-4 h-4">favorite_border</mat-icon>
+                  </button>
+                  
+                  <!-- More options -->
+                  <button
+                    (click)="showMoreOptions(song); $event.stopPropagation()"
+                    class="action-btn-small text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    [attr.aria-label]="'Más opciones para ' + song.title"
+                    title="Más opciones"
+                  >
+                    <mat-icon class="w-4 h-4">more_vert</mat-icon>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -150,11 +186,45 @@
 
             <!-- Acciones adicionales -->
             <div class="song-actions flex items-center gap-2">
-              <app-song-action-button
-                [song]="song"
-                [showQuickPlay]="false"
-                size="medium"
-              ></app-song-action-button>
+              <!-- Add to queue -->
+              <button
+                (click)="addToQueue(song); $event.stopPropagation()"
+                class="action-btn text-gray-400 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                [attr.aria-label]="'Agregar ' + song.title + ' a cola'"
+                title="Agregar a cola"
+              >
+                <mat-icon class="w-5 h-5">queue_music</mat-icon>
+              </button>
+              
+              <!-- Add to playlist -->
+              <button
+                (click)="addToPlaylist(song); $event.stopPropagation()"
+                class="action-btn text-gray-400 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                [attr.aria-label]="'Agregar ' + song.title + ' a playlist'"
+                title="Agregar a playlist"
+              >
+                <mat-icon class="w-5 h-5">playlist_add</mat-icon>
+              </button>
+              
+              <!-- Add to favorites -->
+              <button
+                (click)="addToFavorites(song); $event.stopPropagation()"
+                class="action-btn text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                [attr.aria-label]="'Agregar ' + song.title + ' a favoritos'"
+                title="Agregar a favoritos"
+              >
+                <mat-icon class="w-5 h-5">favorite_border</mat-icon>
+              </button>
+              
+              <!-- More options -->
+              <button
+                (click)="showMoreOptions(song); $event.stopPropagation()"
+                class="action-btn text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                [attr.aria-label]="'Más opciones para ' + song.title"
+                title="Más opciones"
+              >
+                <mat-icon class="w-5 h-5">more_vert</mat-icon>
+              </button>
             </div>
           </div>
         }
