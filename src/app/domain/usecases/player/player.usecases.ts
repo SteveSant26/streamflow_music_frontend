@@ -16,6 +16,13 @@ export interface PlaybackState {
   isLoading: boolean;
 }
 
+export interface PlaylistInfo {
+  id: string;
+  name: string;
+  songs: Song[];
+  currentIndex: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,6 +40,12 @@ export class PlayerUseCase implements OnDestroy {
     isShuffleEnabled: false,
     isLoading: false
   });
+
+  // 🎵 Sistema de Queue/Playlist
+  private currentQueue: Song[] = [];
+  private currentQueueIndex: number = -1;
+  private currentPlaylistInfo: PlaylistInfo | null = null;
+  private readonly currentPlaylist$ = new BehaviorSubject<PlaylistInfo | null>(null);
 
   // Audio element reference - will be set by GlobalPlayerStateService
   private audioElement: HTMLAudioElement | null = null;
@@ -61,6 +74,33 @@ export class PlayerUseCase implements OnDestroy {
 
   getPlaybackState(): Observable<PlaybackState> {
     return this.playbackState$.asObservable();
+  }
+
+  // 🎵 Métodos de Queue/Playlist
+  getCurrentPlaylist(): Observable<PlaylistInfo | null> {
+    return this.currentPlaylist$.asObservable();
+  }
+
+  getCurrentQueue(): Song[] {
+    return [...this.currentQueue];
+  }
+
+  getCurrentQueueIndex(): number {
+    return this.currentQueueIndex;
+  }
+
+  hasNextSong(): boolean {
+    const state = this.playbackState$.value;
+    if (state.repeatMode === 'one') return true;
+    if (state.repeatMode === 'all' && this.currentQueue.length > 0) return true;
+    return this.currentQueueIndex < this.currentQueue.length - 1;
+  }
+
+  hasPreviousSong(): boolean {
+    const state = this.playbackState$.value;
+    if (state.repeatMode === 'one') return true;
+    if (state.repeatMode === 'all' && this.currentQueue.length > 0) return true;
+    return this.currentQueueIndex > 0;
   }
 
   // Set audio element reference
@@ -102,8 +142,99 @@ export class PlayerUseCase implements OnDestroy {
     }
   }
 
+  // 🎵 Métodos de Queue Management
+  
+  /**
+   * Reproduce una canción y la establece como queue actual (solo esa canción)
+   */
   playSong(song: Song): void {
     console.log(`🎵 PlayerUseCase.playSong() recibida:`, song);
+    
+    // Crear una queue con solo esta canción
+    this.setQueue([song], 0, 'single-song');
+    
+    // Reproducir inmediatamente
+    this.playCurrentQueueSong();
+  }
+
+  /**
+   * Establece una playlist/queue completa y reproduce desde un índice específico
+   */
+  playPlaylist(songs: Song[], startIndex: number = 0, playlistName: string = 'Playlist'): void {
+    console.log(`🎵 PlayerUseCase.playPlaylist() - ${songs.length} canciones, empezando en ${startIndex}`);
+    
+    if (songs.length === 0) {
+      console.warn('[Player UseCase] ⚠️ Playlist vacía, no se puede reproducir');
+      return;
+    }
+    
+    if (startIndex < 0 || startIndex >= songs.length) {
+      console.warn('[Player UseCase] ⚠️ Índice inválido, usando 0');
+      startIndex = 0;
+    }
+    
+    // Establecer la queue con la playlist completa
+    this.setQueue(songs, startIndex, playlistName);
+    
+    // Reproducir la canción del índice especificado
+    this.playCurrentQueueSong();
+  }
+
+  /**
+   * Agrega una canción al final de la queue actual
+   */
+  addToQueue(song: Song): void {
+    console.log(`🎵 PlayerUseCase.addToQueue() - Agregando: ${song.title}`);
+    
+    // Si no hay queue, crear una nueva con esta canción
+    if (this.currentQueue.length === 0) {
+      this.playSong(song);
+      return;
+    }
+    
+    // Agregar al final de la queue
+    this.currentQueue.push(song);
+    
+    // Actualizar la información de playlist
+    if (this.currentPlaylistInfo) {
+      this.currentPlaylistInfo.songs = [...this.currentQueue];
+      this.currentPlaylist$.next(this.currentPlaylistInfo);
+    }
+    
+    console.log(`[Player UseCase] ✅ Canción agregada a la cola. Total: ${this.currentQueue.length}`);
+  }
+
+  /**
+   * Establece la queue completa
+   */
+  private setQueue(songs: Song[], startIndex: number, playlistName: string): void {
+    this.currentQueue = [...songs];
+    this.currentQueueIndex = startIndex;
+    
+    // Actualizar información de playlist
+    this.currentPlaylistInfo = {
+      id: `playlist-${Date.now()}`,
+      name: playlistName,
+      songs: [...songs],
+      currentIndex: startIndex
+    };
+    
+    this.currentPlaylist$.next(this.currentPlaylistInfo);
+    
+    console.log(`[Player UseCase] 🎵 Queue establecida: ${songs.length} canciones, índice: ${startIndex}`);
+  }
+
+  /**
+   * Reproduce la canción actual según el índice de la queue
+   */
+  private playCurrentQueueSong(): void {
+    if (this.currentQueueIndex < 0 || this.currentQueueIndex >= this.currentQueue.length) {
+      console.warn('[Player UseCase] ⚠️ Índice de queue inválido');
+      return;
+    }
+    
+    const song = this.currentQueue[this.currentQueueIndex];
+    console.log(`🎵 PlayerUseCase.playCurrentQueueSong() - Reproduciendo: ${song.title} (${this.currentQueueIndex + 1}/${this.currentQueue.length})`);
     
     // Verificar si ya estamos reproduciendo esta canción
     const currentState = this.playbackState$.value;
@@ -125,6 +256,12 @@ export class PlayerUseCase implements OnDestroy {
     // Actualizar la canción actual
     this.currentSong$.next(song);
     this.updatePlaybackState({ currentSong: song });
+    
+    // Actualizar el índice en la información de playlist
+    if (this.currentPlaylistInfo) {
+      this.currentPlaylistInfo.currentIndex = this.currentQueueIndex;
+      this.currentPlaylist$.next(this.currentPlaylistInfo);
+    }
     
     // Reproducir el audio
     this.playAudioUrl(audioUrl);
@@ -871,14 +1008,82 @@ export class PlayerUseCase implements OnDestroy {
 
   // Play previous song
   async playPrevious(): Promise<void> {
-    console.log('[Player UseCase] ⏮️ Play previous (implementation needed)');
-    // TODO: Implement playlist navigation
+    console.log('[Player UseCase] ⏮️ Play previous');
+    
+    const state = this.playbackState$.value;
+    
+    // Si estamos en repeat one, reiniciar la canción actual
+    if (state.repeatMode === 'one') {
+      console.log('[Player UseCase] 🔂 Repeat one - reiniciando canción actual');
+      this.seekTo(0);
+      return;
+    }
+    
+    // Si no hay queue, no podemos ir a anterior
+    if (this.currentQueue.length === 0) {
+      console.log('[Player UseCase] ⚠️ No hay queue, no se puede ir a anterior');
+      return;
+    }
+    
+    let newIndex = this.currentQueueIndex - 1;
+    
+    // Si estamos al principio y tenemos repeat all, ir al final
+    if (newIndex < 0) {
+      if (state.repeatMode === 'all') {
+        newIndex = this.currentQueue.length - 1;
+        console.log('[Player UseCase] 🔁 Repeat all - yendo al final de la queue');
+      } else {
+        console.log('[Player UseCase] ⚠️ Ya estamos en la primera canción');
+        return;
+      }
+    }
+    
+    // Cambiar al índice anterior
+    this.currentQueueIndex = newIndex;
+    console.log(`[Player UseCase] ⏮️ Cambiando a índice ${newIndex} (${this.currentQueue[newIndex].title})`);
+    
+    // Reproducir la canción anterior
+    this.playCurrentQueueSong();
   }
 
   // Play next song
   async playNext(): Promise<void> {
-    console.log('[Player UseCase] ⏭️ Play next (implementation needed)');
-    // TODO: Implement playlist navigation
+    console.log('[Player UseCase] ⏭️ Play next');
+    
+    const state = this.playbackState$.value;
+    
+    // Si estamos en repeat one, reiniciar la canción actual
+    if (state.repeatMode === 'one') {
+      console.log('[Player UseCase] 🔂 Repeat one - reiniciando canción actual');
+      this.seekTo(0);
+      return;
+    }
+    
+    // Si no hay queue, no podemos ir a siguiente
+    if (this.currentQueue.length === 0) {
+      console.log('[Player UseCase] ⚠️ No hay queue, no se puede ir a siguiente');
+      return;
+    }
+    
+    let newIndex = this.currentQueueIndex + 1;
+    
+    // Si estamos al final y tenemos repeat all, ir al principio
+    if (newIndex >= this.currentQueue.length) {
+      if (state.repeatMode === 'all') {
+        newIndex = 0;
+        console.log('[Player UseCase] 🔁 Repeat all - volviendo al principio de la queue');
+      } else {
+        console.log('[Player UseCase] ⚠️ Ya estamos en la última canción');
+        return;
+      }
+    }
+    
+    // Cambiar al índice siguiente
+    this.currentQueueIndex = newIndex;
+    console.log(`[Player UseCase] ⏭️ Cambiando a índice ${newIndex} (${this.currentQueue[newIndex].title})`);
+    
+    // Reproducir la siguiente canción
+    this.playCurrentQueueSong();
   }
 
   // Seek to percentage
@@ -898,19 +1103,31 @@ export class PlayerUseCase implements OnDestroy {
     switch (currentState.repeatMode) {
       case 'one':
         // Repeat current song
+        console.log('[Player UseCase] 🔂 Repeat one - reiniciando canción');
         if (this.audioElement) {
           this.audioElement.currentTime = 0;
           this.audioElement.play().catch(console.error);
         }
         break;
       case 'all':
-        // Play next song (implement when playlist navigation is ready)
-        console.log('[Player UseCase] 🔄 Repeat all - next song (not implemented)');
+        // Play next song in queue
+        console.log('[Player UseCase] 🔄 Repeat all - reproduciendo siguiente canción');
+        this.playNext().catch(error => {
+          console.error('[Player UseCase] ❌ Error al reproducir siguiente canción:', error);
+        });
         break;
       case 'none':
       default:
-        // Stop playback
-        console.log('[Player UseCase] 🛑 Song ended - stopping playback');
+        // Si hay más canciones en la queue, reproducir la siguiente
+        if (this.hasNextSong() && this.currentQueue.length > 1) {
+          console.log('[Player UseCase] ⏭️ Reproduciendo siguiente canción en la queue');
+          this.playNext().catch(error => {
+            console.error('[Player UseCase] ❌ Error al reproducir siguiente canción:', error);
+          });
+        } else {
+          // Stop playback
+          console.log('[Player UseCase] 🛑 Song ended - no hay más canciones, deteniendo reproducción');
+        }
         break;
     }
   }

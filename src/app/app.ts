@@ -4,11 +4,10 @@ import { AuthSessionUseCase } from './domain/usecases';
 import { LanguageService } from '@app/shared/services';
 import { MaterialThemeService } from './shared/services/material-theme.service';
 import { GlobalPlayerStateService } from './infrastructure/services/global-player-state.service';
-import { MiniPlayerComponent } from './shared/components/mini-player/mini-player.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MiniPlayerComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
