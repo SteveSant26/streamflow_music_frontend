@@ -49,18 +49,18 @@ export class PlaylistHttpService implements IPlaylistRepository {
       });
     }
 
-    return this.http.get<PlaylistDto[]>( // Cambiar a array directo
+    return this.http.get<{ count: number; next: string | null; previous: string | null; results: PlaylistDto[] }>(
       `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.list}`,
       { params }
     ).pipe(
       map(response => {
         console.log('Raw API response for user playlists:', response);
-        // Crear una respuesta paginada mock ya que la API devuelve array directo
+        // La API devuelve un objeto paginado
         const paginatedResponse: PaginatedPlaylistResponse = {
-          count: response.length,
-          next: null,
-          previous: null,
-          results: response.map(PlaylistMapper.dtoToEntity)
+          count: response.count,
+          next: response.next,
+          previous: response.previous,
+          results: response.results.map(PlaylistMapper.dtoToEntity)
         };
         return paginatedResponse;
       }),

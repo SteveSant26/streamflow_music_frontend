@@ -1,8 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Song } from '../../domain/entities/song.entity';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { DownloadSongUseCase } from '../../domain/usecases/download/download.usecases';
 import { PlayerUseCase } from '../../domain/usecases/player/player.usecases';
+import { AddSongToPlaylistDialogComponent } from '../../presentation/components/music/playlist/add-song-to-playlist-dialog/add-song-to-playlist-dialog.component';
 
 export interface SongMenuOption {
   id: string;
