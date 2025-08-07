@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
-import { API_CONFIG_LYRICS } from '../../config/end-points';
+import { API_CONFIG_LYRICS } from '../../config/end-points/api-config-lyrics';
 import { environment } from '../../../environments/environment';
 
 export interface SongLyricsResponse {
@@ -13,12 +13,9 @@ export interface SongLyricsResponse {
   source?: string;
 }
 
-export interface UpdateLyricsResponse {
-  song_id: string;
-  title: string;
-  artist: string;
+// Note: Backend doesn't have update endpoint, only GET that auto-searches
+export interface UpdateLyricsResponse extends SongLyricsResponse {
   updated: boolean;
-  lyrics: string | null;
   message: string;
 }
 
