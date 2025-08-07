@@ -25,8 +25,8 @@ import { PlaylistMapper } from '../../domain/mappers/playlist.mapper';
 })
 export class UnifiedPlaylistService {
   private readonly baseUrl = environment.apiUrl;
-  private playlistsCache$ = new BehaviorSubject<Playlist[]>([]);
-  private publicPlaylistsCache$ = new BehaviorSubject<Playlist[]>([]);
+  private readonly playlistsCache$ = new BehaviorSubject<Playlist[]>([]);
+  private readonly publicPlaylistsCache$ = new BehaviorSubject<Playlist[]>([]);
 
   constructor(private readonly http: HttpClient) {}
 
