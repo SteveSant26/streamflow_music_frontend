@@ -14,7 +14,7 @@ import { SearchSongsPaginatedUseCase, PlaySongUseCase } from '@app/domain/usecas
 import { SongSearchParams } from '@app/domain/dtos/song.dto';
 
 // Components
-import { MusicsTable } from '@app/presentation/components/music';
+import { MusicSectionComponent } from '@app/presentation/components/music-section/music-section';
 import { SearchFiltersComponent } from '@app/presentation/components/music/search-filters/search-filters.component';
 
 // Services and Directives
@@ -43,7 +43,7 @@ interface PaginationInfo {
     MatIconModule, 
     MatButtonModule,
     ReactiveFormsModule, 
-    MusicsTable,
+    MusicSectionComponent,
     SearchFiltersComponent,
     InfiniteScrollDirective,
     ImageFallbackDirective
@@ -297,5 +297,31 @@ export class SearchComponent implements OnInit {
     // Implementar menú de más opciones
     console.log(`Mostrando más opciones para "${song.title}"`);
     // Aquí irá la lógica para mostrar menú contextual con más opciones
+  }
+
+  // Métodos para MusicSectionComponent
+  onSearchSongSelected(song: Song) {
+    console.log('🎵 Search: Song selected:', song.title);
+    this.playSong(song);
+  }
+
+  onAddToQueue(song: Song) {
+    console.log('🎵 Search: Add to queue requested for:', song.title);
+    // TODO: Implementar lógica de agregar a cola
+  }
+
+  onAddToPlaylist(song: Song) {
+    console.log('📋 Search: Add to playlist requested for:', song.title);
+    this.addToPlaylist(song);
+  }
+
+  onAddToFavorites(song: Song) {
+    console.log('❤️ Search: Add to favorites requested for:', song.title);
+    this.addToFavorites(song);
+  }
+
+  onMoreOptions(song: Song) {
+    console.log('⚙️ Search: More options requested for:', song.title);
+    this.showMoreOptions(song);
   }
 }
