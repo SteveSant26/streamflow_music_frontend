@@ -134,6 +134,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   private updateCurrentSongView(playerState: PlayerState): void {
     if (playerState.currentSong) {
+      const isNewSong = !this.currentSong || this.currentSong.id !== playerState.currentSong.id;
+      
       this.currentSong = {
         id: playerState.currentSong.id,
         title: playerState.currentSong.title,
@@ -147,8 +149,15 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         isPlaying: playerState.isPlaying,
         isLoading: playerState.isLoading,
-        lyrics: '🎵 Lyrics not available yet 🎵',
+        lyrics: isNewSong ? undefined : this.currentSong?.lyrics,
+        lyricsLoading: isNewSong ? false : this.currentSong?.lyricsLoading,
+        lyricsError: isNewSong ? undefined : this.currentSong?.lyricsError,
       };
+
+      // Si es una nueva canción y el panel de letras está abierto, cargar letras automáticamente
+      if (isNewSong && this.showLyricsPanel && !this.currentSong.lyrics && !this.currentSong.lyricsLoading) {
+        this.loadLyrics();
+      }
     } else {
       this.currentSong = null;
     }
@@ -521,7 +530,10 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   }
 
   get hasLyrics(): boolean {
-    return !!this.currentSong?.lyrics && this.currentSong.lyrics !== 'Letras no disponibles';
+    return !!this.currentSong?.lyrics && 
+           this.currentSong.lyrics !== 'Letras no disponibles' &&
+           this.currentSong.lyrics !== '🎵 Lyrics not available yet 🎵' &&
+           this.currentSong.lyrics.trim() !== '';
   }
 
   get canLoadLyrics(): boolean {
