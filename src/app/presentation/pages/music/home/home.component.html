@@ -48,6 +48,10 @@
           loadingMessage="Cargando canciones populares..."
           (songSelected)="onPopularSongSelected($event)"
           (retryLoad)="onRetryPopularSongs()"
+          (addToQueueRequest)="onAddToQueue($event)"
+          (addToPlaylistRequest)="onAddToPlaylist($event)"
+          (addToFavoritesRequest)="onAddToFavorites($event)"
+          (moreOptionsRequest)="onMoreOptions($event)"
         ></app-music-section>
 
         <!-- Random Songs Section -->
@@ -62,6 +66,10 @@
           loadingMessage="Cargando canciones aleatorias..."
           (songSelected)="onRandomSongSelected($event)"
           (retryLoad)="onRetryRandomSongs()"
+          (addToQueueRequest)="onAddToQueue($event)"
+          (addToPlaylistRequest)="onAddToPlaylist($event)"
+          (addToFavoritesRequest)="onAddToFavorites($event)"
+          (moreOptionsRequest)="onMoreOptions($event)"
         ></app-music-section>
       </div>
     </div>

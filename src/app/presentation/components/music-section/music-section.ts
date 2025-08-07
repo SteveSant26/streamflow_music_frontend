@@ -64,6 +64,10 @@ export class MusicSectionComponent {
   
   @Output() songSelected = new EventEmitter<Song>();
   @Output() retryLoad = new EventEmitter<void>();
+  @Output() addToQueueRequest = new EventEmitter<Song>();
+  @Output() addToPlaylistRequest = new EventEmitter<Song>();
+  @Output() addToFavoritesRequest = new EventEmitter<Song>();
+  @Output() moreOptionsRequest = new EventEmitter<Song>();
 
   onSongClick(song: Song): void {
     console.log('🎵 MusicSection: Song clicked, current type is:', this.type);
@@ -72,6 +76,26 @@ export class MusicSectionComponent {
 
   onRetryClick(): void {
     this.retryLoad.emit();
+  }
+
+  addToQueue(song: Song): void {
+    console.log('🎵 MusicSection: Add to queue requested for:', song.title);
+    this.addToQueueRequest.emit(song);
+  }
+
+  addToPlaylist(song: Song): void {
+    console.log('📋 MusicSection: Add to playlist requested for:', song.title);
+    this.addToPlaylistRequest.emit(song);
+  }
+
+  addToFavorites(song: Song): void {
+    console.log('❤️ MusicSection: Add to favorites requested for:', song.title);
+    this.addToFavoritesRequest.emit(song);
+  }
+
+  showMoreOptions(song: Song): void {
+    console.log('⚙️ MusicSection: More options requested for:', song.title);
+    this.moreOptionsRequest.emit(song);
   }
 
   formatPlayCount(count: number): string {

@@ -138,6 +138,27 @@ export class HomePageComponent implements OnInit {
     this.viewModeService.toggleViewMode();
   }
 
+  // Métodos para acciones de canciones
+  onAddToQueue(song: Song) {
+    console.log('🎵 Home: Add to queue requested for:', song.title);
+    // TODO: Implementar lógica de agregar a cola
+  }
+
+  onAddToPlaylist(song: Song) {
+    console.log('📋 Home: Add to playlist requested for:', song.title);
+    // TODO: Implementar lógica de agregar a playlist
+  }
+
+  onAddToFavorites(song: Song) {
+    console.log('❤️ Home: Add to favorites requested for:', song.title);
+    // TODO: Implementar lógica de agregar a favoritos
+  }
+
+  onMoreOptions(song: Song) {
+    console.log('⚙️ Home: More options requested for:', song.title);
+    // TODO: Implementar menú de más opciones
+  }
+
   onPlaySong(song: Song) {
     // Determinar de qué lista viene la canción y usar ese contexto
     const popularSongs = this.mostPopularSongs();

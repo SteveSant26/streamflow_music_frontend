@@ -149,6 +149,12 @@ export class AsideMenu implements OnInit, OnDestroy {
     this.showThemeOptions = false;
   }
 
+  // View Mode methods
+  setViewMode(mode: 'grid' | 'table' | 'list'): void {
+    console.log('🎨 AsideMenu: Setting view mode to:', mode);
+    this.viewModeService.setViewMode(mode);
+  }
+
   async logout() {
     try {
       console.log('🚪 Iniciando logout...');

@@ -182,6 +182,27 @@ export class DiscoverPageComponent implements OnInit {
     this.viewModeService.toggleViewMode();
   }
 
+  // Métodos para acciones de canciones
+  onAddToQueue(song: Song) {
+    console.log('🎵 Discover: Add to queue requested for:', song.title);
+    // Implementar lógica de agregar a cola
+  }
+
+  onAddToPlaylist(song: Song) {
+    console.log('📋 Discover: Add to playlist requested for:', song.title);
+    // Implementar lógica de agregar a playlist
+  }
+
+  onAddToFavorites(song: Song) {
+    console.log('❤️ Discover: Add to favorites requested for:', song.title);
+    // Implementar lógica de agregar a favoritos
+  }
+
+  onMoreOptions(song: Song) {
+    console.log('⚙️ Discover: More options requested for:', song.title);
+    // Implementar menú de más opciones
+  }
+
   formatDuration(seconds: number): string {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
