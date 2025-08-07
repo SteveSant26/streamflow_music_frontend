@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ import { AudioPlayerService } from '../../../../infrastructure/services/audio-pl
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
 import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 import { ViewModeService } from '../../../shared/services/view-mode.service';
+import { PlaySongUseCase } from '../../../../domain/usecases/song/song.usecases';
 
 @Component({
   selector: 'app-playlist-detail',
@@ -39,6 +40,7 @@ export class PlaylistDetailComponent implements OnInit {
   private readonly audioPlayerService = inject(AudioPlayerService);
   private readonly playlistService = inject(PlaylistService);
   private readonly playerUseCase = inject(PlayerUseCase);
+  private readonly playSongUseCase = inject(PlaySongUseCase);
   readonly viewModeService = inject(ViewModeService);
 
   playlist = signal<PlaylistWithSongs | null>(null);
@@ -69,6 +71,13 @@ export class PlaylistDetailComponent implements OnInit {
       if (playlistId) {
         this.loadPlaylist(playlistId);
       }
+    });
+
+    // Effect para debuggear cambios de view mode (igual que en home)
+    effect(() => {
+      const currentMode = this.viewModeService.viewMode();
+      console.log('🎵 PlaylistDetail Effect: View mode changed to:', currentMode);
+      console.log('🎵 PlaylistDetail Effect: Should show', currentMode === 'list' ? 'GRID/CARDS' : 'TABLE');
     });
   }
 
@@ -163,22 +172,39 @@ export class PlaylistDetailComponent implements OnInit {
     const songs = this.songs();
     const playlist = this.playlist();
     if (playlist && songs.length > 0) {
-      this.playlistService.createPlaylist(songs, playlist.name, 0);
-      console.log(`Reproduciendo ${songs.length} canciones de "${playlist.name}"`);
+      // Usar PlaySongUseCase para reproducir la primera canción como en search
+      const firstSong = songs[0];
+      this.playSongUseCase.executeSimple(firstSong.id).subscribe({
+        next: () => {
+          console.log(`Reproduciendo playlist "${playlist.name}": ${songs.length} canciones`);
+          console.log(`Iniciando con: ${firstSong.title} - ${firstSong.artist_name}`);
+        },
+        error: (error) => {
+          console.error('Error al reproducir playlist:', error);
+        }
+      });
     }
+  }
+
+  // Método para reproducir canción individual (igual que en search)
+  playSong(song: Song): void {
+    this.playSongUseCase.executeSimple(song.id).subscribe({
+      next: () => {
+        console.log(`🎵 PlaylistDetail: Reproduciendo: ${song.title} - ${song.artist_name}`);
+      },
+      error: (error) => {
+        console.error('🎵 PlaylistDetail: Error al reproducir canción:', error);
+      }
+    });
   }
 
   onSongClick(song: Song) {
     console.log('🎵 PlaylistDetail: Song clicked:', song.title);
-    const songs = this.songs();
-    const playlist = this.playlist();
-    if (playlist) {
-      const songIndex = songs.findIndex(s => s.id === song.id);
-      this.playlistService.createPlaylist(songs, playlist.name, songIndex);
-      console.log(`Reproduciendo "${song.title}" desde la playlist`);
-    }
+    // Usar el método playSong que funciona correctamente
+    this.playSong(song);
   }
 
+  // Métodos de acciones adicionales como en home y search (implementados)
   addToQueue(song: Song) {
     console.log('🎵 PlaylistDetail: Add to queue requested for:', song.title);
     // Usar el PlayerUseCase para agregar a la cola
@@ -196,6 +222,11 @@ export class PlaylistDetailComponent implements OnInit {
     console.log('❤️ PlaylistDetail: Add to favorites requested for:', song.title);
     console.log('Agregando a favoritos:', song.title);
     // Funcionalidad básica implementada
+  }
+
+  playNext(song: Song): void {
+    console.log('🎵 PlaylistDetail: Reproducir siguiente:', song.title);
+    // Implementar reproducir siguiente
   }
 
   showMoreOptions(song: Song) {
