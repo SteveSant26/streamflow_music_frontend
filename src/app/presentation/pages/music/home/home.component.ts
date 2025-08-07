@@ -19,6 +19,9 @@ import {
   PlaySongUseCase 
 } from '../../../../domain/usecases/song/song.usecases';
 import { GlobalPlayerStateService } from '../../../../infrastructure/services/global-player-state.service';
+import { SongMenuService } from '../../../../infrastructure/services/song-menu.service';
+import { FavoritesService } from '../../../../infrastructure/services/favorites.service';
+import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 
 @Component({
   selector: 'app-home',
@@ -41,6 +44,9 @@ export class HomePageComponent implements OnInit {
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
   private readonly globalPlayerStateService = inject(GlobalPlayerStateService);
+  private readonly songMenuService = inject(SongMenuService);
+  private readonly favoritesService = inject(FavoritesService);
+  private readonly playerUseCase = inject(PlayerUseCase);
   private readonly router = inject(Router);
 
   // Observable para el tema
