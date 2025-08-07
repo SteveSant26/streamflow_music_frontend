@@ -377,6 +377,30 @@ export class PlaylistDetailComponent implements OnInit {
     console.log('🔍 Búsqueda limpiada');
   }
 
+  playFilteredSongs(): void {
+    const filtered = this.filteredSongs();
+    const playlist = this.playlist();
+    
+    if (filtered.length > 0 && playlist) {
+      console.log('🎵 Reproduciendo canciones filtradas:', filtered.length, 'canciones');
+      
+      // Reproducir la primera canción filtrada con el contexto filtrado
+      this.playSongUseCase.executeFromContext(
+        filtered[0].id,
+        filtered,
+        `Búsqueda: "${this.searchQuery}" en ${playlist.name}`,
+        'search'
+      ).subscribe({
+        next: () => {
+          console.log(`✅ Iniciada reproducción de búsqueda: "${this.searchQuery}"`);
+        },
+        error: (error) => {
+          console.error('❌ Error reproduciendo búsqueda:', error);
+        }
+      });
+    }
+  }
+
   formatPlayCount(count: number): string {
     if (count >= 1000000) {
       return `${(count / 1000000).toFixed(1)}M`;

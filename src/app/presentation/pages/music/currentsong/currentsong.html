@@ -95,6 +95,18 @@
 
     <!-- Controles de reproducción -->
     <div class="player-controls" [class.loading]="currentSong.isLoading">
+      <!-- Shuffle control -->
+      <button
+        (click)="toggleShuffle()"
+        class="control-button secondary"
+        [class.active]="isShuffleEnabled()"
+        [disabled]="currentSong.isLoading"
+        aria-label="Reproducción aleatoria"
+        title="Reproducción aleatoria"
+      >
+        <mat-icon>shuffle</mat-icon>
+      </button>
+
       <button
         (click)="skipPrevious()"
         class="control-button secondary"
@@ -123,6 +135,18 @@
         aria-label="Siguiente canción"
       >
         <mat-icon>skip_next</mat-icon>
+      </button>
+
+      <!-- Repeat control -->
+      <button
+        (click)="toggleRepeat()"
+        class="control-button secondary"
+        [class.active]="getRepeatMode() !== 'none'"
+        [disabled]="currentSong.isLoading"
+        aria-label="Repetir"
+        [title]="getRepeatModeText()"
+      >
+        <mat-icon>{{ getRepeatMode() === 'one' ? 'repeat_one' : 'repeat' }}</mat-icon>
       </button>
     </div>
 
