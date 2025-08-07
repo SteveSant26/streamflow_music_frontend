@@ -627,6 +627,52 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     return index;
   }
 
+  // ========== SHUFFLE AND REPEAT CONTROLS ==========
+
+  toggleShuffle(): void {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.toggleShuffle();
+    console.log('🔀 Shuffle toggled');
+    
+    // Force sync after toggle
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  isShuffleEnabled(): boolean {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    const state = playerUseCase.getCurrentPlayerState();
+    return state.isShuffleEnabled;
+  }
+
+  toggleRepeat(): void {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    playerUseCase.toggleRepeat();
+    console.log('🔁 Repeat mode toggled');
+    
+    // Force sync after toggle
+    this.globalPlayerState.forceSyncAllComponents();
+  }
+
+  getRepeatMode(): 'none' | 'one' | 'all' {
+    const playerUseCase = this.globalPlayerState.getPlayerUseCase();
+    const state = playerUseCase.getCurrentPlayerState();
+    return state.repeatMode;
+  }
+
+  getRepeatModeText(): string {
+    const mode = this.getRepeatMode();
+    switch (mode) {
+      case 'none':
+        return 'Sin repetición';
+      case 'one':
+        return 'Repetir canción actual';
+      case 'all':
+        return 'Repetir playlist';
+      default:
+        return 'Repetir';
+    }
+  }
+
   /**
    * El sistema ahora restaura automáticamente el estado sin diálogos
    * Esta funcionalidad se maneja en GlobalPlayerStateService.initializePlayer()
