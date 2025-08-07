@@ -6,7 +6,7 @@ import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStateService, LanguageService } from '@app/shared/services';
 import { LogoutUseCase } from '@app/domain/usecases';
-import { GetUserPlaylistsUseCase } from '@app/domain/usecases/playlist/playlist.usecases';
+import { GetMyPlaylistsUseCase } from '@app/domain/usecases/playlist/my-playlists.usecases';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -52,7 +52,7 @@ export class AsideMenu implements OnInit, OnDestroy {
   protected readonly ROUTES_CONFIG_USER = ROUTES_CONFIG_USER;
   private readonly authStateService = inject(AuthStateService);
   private readonly logoutUseCase = inject(LogoutUseCase);
-  private readonly getUserPlaylistsUseCase = inject(GetUserPlaylistsUseCase);
+  private readonly getMyPlaylistsUseCase = inject(GetMyPlaylistsUseCase);
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
   private readonly materialThemeService = inject(MaterialThemeService);
@@ -192,13 +192,13 @@ export class AsideMenu implements OnInit, OnDestroy {
     // Limitar a máximo 4 playlists para el sidebar
     const filters = { page: 1, page_size: 4 };
 
-    const subscription = this.getUserPlaylistsUseCase.execute(filters).subscribe({
-      next: (playlists) => {
-        console.log('Playlists recibidas en el componente:', playlists);
-        console.log('Total playlists encontradas:', playlists.length);
+    const subscription = this.getMyPlaylistsUseCase.execute(filters).subscribe({
+      next: (response) => {
+        console.log('Playlists recibidas en el componente:', response);
+        console.log('Total playlists encontradas:', response.results.length);
         
         // Convertir las playlists del dominio al formato del sidebar
-        const sidebarPlaylists: SidebarPlaylist[] = playlists.map(playlist => ({
+        const sidebarPlaylists: SidebarPlaylist[] = response.results.map(playlist => ({
           id: playlist.id,
           name: playlist.name,
           cover: '/assets/playlists/placeholder.jpg', // Por ahora usando placeholder hasta tener campo cover en backend

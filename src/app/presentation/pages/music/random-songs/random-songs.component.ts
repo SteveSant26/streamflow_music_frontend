@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { GetRandomSongsUseCase } from '../../../../domain/usecases/song/song.usecases';
+import { FavoritesUseCase } from '../../../../domain/usecases/favorites/favorites.usecases';
 import { Song } from '../../../../domain/entities/song.entity';
 import { AudioPlayerService } from '../../../../infrastructure/services/audio-player.service';
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
@@ -35,6 +36,7 @@ export class RandomSongsComponent implements OnInit {
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly audioPlayerService = inject(AudioPlayerService);
   private readonly playlistService = inject(PlaylistService);
+  private readonly favoritesUseCase = inject(FavoritesUseCase);
 
   // Signals
   songs = signal<Song[]>([]);
@@ -96,8 +98,18 @@ export class RandomSongsComponent implements OnInit {
   }
 
   addToFavorites(song: Song) {
-    // Implementar lógica para agregar a favoritos
-    console.log('Add to favorites:', song.title);
+    console.log('❤️ RandomSongs: Add to favorites:', song.title);
+    
+    this.favoritesUseCase.addToFavorites(song.id).subscribe({
+      next: (favorite) => {
+        console.log('✅ Canción agregada a favoritos exitosamente:', favorite);
+        console.log(`🔔 "${song.title}" se agregó a favoritos`);
+      },
+      error: (error) => {
+        console.error('❌ Error agregando a favoritos:', error);
+        console.log(`🔔 Error: No se pudo agregar "${song.title}" a favoritos`);
+      }
+    });
   }
 
   addToPlaylist(song: Song) {
