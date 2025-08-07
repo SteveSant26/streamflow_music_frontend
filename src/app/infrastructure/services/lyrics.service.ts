@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
 import { API_CONFIG_LYRICS } from '../../config/end-points';
+import { environment } from '../../../environments/environment';
 
 export interface SongLyricsResponse {
   song_id: string;
@@ -31,7 +32,7 @@ export class LyricsService {
    * Obtiene las letras de una canción específica
    */
   getSongLyrics(songId: string, fetchIfMissing: boolean = true): Observable<SongLyricsResponse> {
-    const url = API_CONFIG_LYRICS.lyrics.getSongLyrics(songId);
+    const url = `${environment.apiUrl}${API_CONFIG_LYRICS.lyrics.getSongLyrics(songId)}`;
     const params = fetchIfMissing ? { fetch_if_missing: 'true' } : { fetch_if_missing: 'false' };
     
     return this.http.get<SongLyricsResponse>(url, { params }).pipe(
@@ -54,7 +55,7 @@ export class LyricsService {
    * Fuerza la actualización de letras para una canción
    */
   updateSongLyrics(songId: string, forceUpdate: boolean = false): Observable<UpdateLyricsResponse> {
-    const url = API_CONFIG_LYRICS.lyrics.updateSongLyrics(songId);
+    const url = `${environment.apiUrl}${API_CONFIG_LYRICS.lyrics.updateSongLyrics(songId)}`;
     const body = { force_update: forceUpdate };
     
     return this.http.post<UpdateLyricsResponse>(url, body).pipe(
