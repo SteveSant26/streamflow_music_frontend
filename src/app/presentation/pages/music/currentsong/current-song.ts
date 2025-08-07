@@ -627,4 +627,67 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
   trackByIndex(index: number): number {
     return index;
   }
+
+  /**
+   * Verifica si hay una sesión guardada y muestra el diálogo para continuar
+   */
+  private checkForSavedSession(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Esperar un momento para que se inicialice el player
+    setTimeout(() => {
+      if (this.globalPlayerState.hasValidPersistedSession()) {
+        const sessionInfo = this.globalPlayerState.getLastSessionInfo();
+        
+        if (sessionInfo) {
+          this.showResumePlaybackDialog(sessionInfo);
+        }
+      }
+    }, 1000);
+  }
+
+  /**
+   * Muestra el diálogo para resumir reproducción
+   */
+  private showResumePlaybackDialog(sessionInfo: any): void {
+    const dialogRef = this.dialog.open(ResumePlaybackDialogComponent, {
+      data: sessionInfo,
+      width: '500px',
+      disableClose: true,
+      panelClass: 'resume-playback-dialog-panel'
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.action === 'resume') {
+        this.resumePlayback();
+      } else if (result?.action === 'start_fresh') {
+        this.startFresh();
+      }
+    });
+  }
+
+  /**
+   * Reanuda la reproducción desde donde se quedó
+   */
+  private async resumePlayback(): Promise<void> {
+    try {
+      const restored = await this.globalPlayerState.restorePersistedState();
+      if (restored) {
+        console.log('🎵 Reproducción reanudada desde sesión guardada');
+        // El estado se restaurará automáticamente
+        this.cdr.detectChanges();
+      }
+    } catch (error) {
+      console.error('Error reanudando reproducción:', error);
+      this.startFresh();
+    }
+  }
+
+  /**
+   * Comienza una sesión nueva y limpia el estado guardado
+   */
+  private startFresh(): void {
+    this.globalPlayerState.clearPersistedState();
+    console.log('🗑️ Iniciando sesión nueva, estado anterior limpiado');
+  }
 }
