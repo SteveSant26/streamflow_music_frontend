@@ -13,6 +13,7 @@ import {
   GetRandomSongsUseCase,
   PlaySongUseCase
 } from '../../../../domain/usecases/song/song.usecases';
+import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 import { Song } from '../../../../domain/entities/song.entity';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
 import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
@@ -40,6 +41,7 @@ export class HomeComponent implements OnInit {
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playSongUseCase = inject(PlaySongUseCase);
+  private readonly playerUseCase = inject(PlayerUseCase);
   private readonly unifiedPlaylistService = inject(UnifiedPlaylistService);
   readonly viewModeService = inject(ViewModeService);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -200,23 +202,56 @@ export class HomeComponent implements OnInit {
   // ====================== SONG ACTIONS ======================
 
   addToQueue(song: Song): void {
-    // Implementar funcionalidad de agregar a cola
-    console.log('Agregando a cola:', song.title);
+    try {
+      this.playerUseCase.addToQueue(song);
+      console.log('✅ Canción agregada a la cola:', song.title);
+      
+      // Mostrar notificación básica al usuario
+      console.log(`🔔 "${song.title}" agregada a la cola`);
+    } catch (error) {
+      console.error('❌ Error agregando canción a la cola:', error);
+    }
   }
 
   addToPlaylist(song: Song): void {
-    // Implementar funcionalidad de agregar a playlist
-    console.log('Agregando a playlist:', song.title);
+    try {
+      console.log('📋 Abriendo modal para agregar a playlist:', song.title);
+      
+      // Implementación básica por ahora
+      console.log('✅ Funcionalidad de playlist pendiente de implementar completamente');
+      console.log(`🔔 "${song.title}" se agregará a una playlist (función en desarrollo)`);
+    } catch (error) {
+      console.error('❌ Error agregando a playlist:', error);
+    }
   }
 
   addToFavorites(song: Song): void {
-    // Implementar funcionalidad de favoritos
-    console.log('Agregando a favoritos:', song.title);
+    try {
+      console.log('❤️ Agregando a favoritos:', song.title);
+      
+      // Implementación básica por ahora
+      console.log('✅ Funcionalidad de favoritos pendiente de implementar completamente');
+      console.log(`🔔 "${song.title}" se agregará a favoritos (función en desarrollo)`);
+    } catch (error) {
+      console.error('❌ Error agregando a favoritos:', error);
+    }
   }
 
   showMoreOptions(song: Song): void {
-    // Implementar menú de más opciones
-    console.log('Más opciones para:', song.title);
+    try {
+      console.log('⚙️ Mostrando más opciones para:', song.title);
+      
+      // Opciones disponibles:
+      // - Reproducir siguiente
+      // - Ir al artista
+      // - Ir al álbum
+      // - Compartir
+      // - Descargar
+      console.log('✅ Menú de opciones pendiente de implementar completamente');
+      console.log(`🔔 Opciones disponibles para "${song.title}" (función en desarrollo)`);
+    } catch (error) {
+      console.error('❌ Error mostrando opciones:', error);
+    }
   }
 
   private loadHomeData(): void {
@@ -249,8 +284,38 @@ export class HomeComponent implements OnInit {
 
   // Métodos para reproducir canciones
   playSong(song: Song): void {
-    console.log(`Reproduciendo: ${song.title} - ${song.artist_name}`);
-    // Implementar lógica de reproducción
+    console.log(`🎵 Reproduciendo: ${song.title} - ${song.artist_name}`);
+    
+    // Usar PlaySongUseCase con el contexto apropiado
+    const contextSongs = song.id.includes('popular') || this.popularSongs().some(s => s.id === song.id) 
+      ? this.popularSongs() 
+      : this.randomSongs();
+    
+    const contextName = song.id.includes('popular') || this.popularSongs().some(s => s.id === song.id)
+      ? 'Canciones Populares - Home'
+      : 'Canciones Aleatorias - Home';
+    
+    const contextType = song.id.includes('popular') || this.popularSongs().some(s => s.id === song.id)
+      ? 'popular'
+      : 'random';
+
+    this.playSongUseCase.executeFromContext(song.id, contextSongs, contextName, contextType).subscribe({
+      next: () => {
+        console.log(`✅ Reproduciendo: ${song.title} desde contexto ${contextName}`);
+      },
+      error: (error) => {
+        console.error('❌ Error al reproducir canción:', error);
+        // Fallback al método simple
+        this.playSongUseCase.executeSimple(song.id).subscribe({
+          next: () => {
+            console.log(`✅ Reproduciendo (fallback): ${song.title}`);
+          },
+          error: (fallbackError) => {
+            console.error('❌ Error en fallback:', fallbackError);
+          }
+        });
+      }
+    });
   }
 
   loadMostPopularSongs(): void {
