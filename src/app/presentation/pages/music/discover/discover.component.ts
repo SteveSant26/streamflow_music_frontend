@@ -18,6 +18,9 @@ import { GetPopularGenresUseCase } from '../../../../domain/usecases/genre.useca
 import { GetRandomSongsUseCase } from '../../../../domain/usecases/song/song.usecases';
 import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
+import { SongMenuService } from '../../../../infrastructure/services/song-menu.service';
+import { FavoritesService } from '../../../../infrastructure/services/favorites.service';
+import { PlayerUseCase } from '../../../../domain/usecases/player/player.usecases';
 
 @Component({
   selector: 'app-discover',
@@ -43,6 +46,9 @@ export class DiscoverPageComponent implements OnInit {
   private readonly getPopularGenresUseCase = inject(GetPopularGenresUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
   private readonly playlistService = inject(PlaylistService);
+  private readonly songMenuService = inject(SongMenuService);
+  private readonly favoritesService = inject(FavoritesService);
+  private readonly playerUseCase = inject(PlayerUseCase);
 
   // Signals
   isDarkTheme = this.themeService._isDarkMode;
@@ -67,7 +73,7 @@ export class DiscoverPageComponent implements OnInit {
     text: 'Ver todas',
     action: () => {
       console.log('🎵 Navigate to all random songs');
-      // TODO: Navigate to random songs page
+      this.loadRandomSongs(); // Recargar canciones aleatorias por ahora
     },
     ariaLabel: 'Ver todas las canciones aleatorias'
   };
@@ -185,22 +191,41 @@ export class DiscoverPageComponent implements OnInit {
   // Métodos para acciones de canciones
   onAddToQueue(song: Song) {
     console.log('🎵 Discover: Add to queue requested for:', song.title);
-    // Implementar lógica de agregar a cola
+    this.playerUseCase.addToQueue(song);
+    console.log('✅ Canción agregada a la cola:', song.title);
   }
 
   onAddToPlaylist(song: Song) {
     console.log('📋 Discover: Add to playlist requested for:', song.title);
-    // Implementar lógica de agregar a playlist
+    const menuOptions = this.songMenuService.getMenuOptions(song);
+    const addToPlaylistOption = menuOptions.find(option => option.id === 'add-to-playlist');
+    if (addToPlaylistOption) {
+      addToPlaylistOption.action();
+    }
   }
 
   onAddToFavorites(song: Song) {
     console.log('❤️ Discover: Add to favorites requested for:', song.title);
-    // Implementar lógica de agregar a favoritos
+    this.favoritesService.addToFavorites(song.id).subscribe({
+      next: () => {
+        console.log('✅ Canción agregada a favoritos:', song.title);
+      },
+      error: (error) => {
+        console.error('❌ Error agregando a favoritos:', error);
+      }
+    });
   }
 
   onMoreOptions(song: Song) {
     console.log('⚙️ Discover: More options requested for:', song.title);
-    // Implementar menú de más opciones
+    const menuOptions = this.songMenuService.getMenuOptions(song);
+    console.log('📋 Opciones disponibles:', menuOptions.map(o => o.label));
+    
+    menuOptions.forEach(option => {
+      if (!option.disabled) {
+        console.log(`🔘 ${option.label} (${option.id})`);
+      }
+    });
   }
 
   formatDuration(seconds: number): string {
