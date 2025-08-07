@@ -300,6 +300,18 @@
   background: white;
 }
 
+/* Active state for shuffle and repeat buttons */
+.control-button.active {
+  background: rgba(34, 197, 94, 0.8) !important;
+  color: white !important;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+}
+
+.control-button.active:hover {
+  background: rgba(34, 197, 94, 0.9) !important;
+  transform: scale(1.05);
+}
+
 /* Control de volumen */
 .volume-section {
   width: 100%;

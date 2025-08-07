@@ -790,6 +790,28 @@ export class PlayerUseCase implements OnDestroy {
     this.updatePlaybackState({ isShuffleEnabled: !currentState.isShuffleEnabled });
   }
 
+  toggleRepeat(): void {
+    const currentState = this.playbackState$.value;
+    let nextMode: 'none' | 'one' | 'all';
+    
+    switch (currentState.repeatMode) {
+      case 'none':
+        nextMode = 'all';
+        break;
+      case 'all':
+        nextMode = 'one';
+        break;
+      case 'one':
+        nextMode = 'none';
+        break;
+      default:
+        nextMode = 'all';
+    }
+    
+    console.log(`[Player UseCase] 🔁 Repeat mode changed from ${currentState.repeatMode} to ${nextMode}`);
+    this.updatePlaybackState({ repeatMode: nextMode });
+  }
+
   private updatePlaybackState(state: Partial<PlaybackState>): void {
     const currentState = this.playbackState$.value;
     this.playbackState$.next({ ...currentState, ...state });
