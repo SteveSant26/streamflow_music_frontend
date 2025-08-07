@@ -70,9 +70,9 @@
       title="🎵 Canciones de la Playlist"
       [songs]="songs()"
       [loading]="loadingSongs()"
-      [type]="'list'"
+      type="list"
       loadingMessage="Cargando canciones..."
-      emptyMessage="No hay canciones en esta playlist"
+      [emptyMessage]="authenticationRequired() ? 'Necesitas iniciar sesión para ver las canciones de esta playlist' : 'No hay canciones en esta playlist'"
       [showPlayCount]="false"
       [actionButtons]="hasMoreSongs() && !loadingSongs() ? [
         { icon: 'expand_more', text: 'Cargar más', action: loadMoreSongs.bind(this), ariaLabel: 'Cargar más canciones' }

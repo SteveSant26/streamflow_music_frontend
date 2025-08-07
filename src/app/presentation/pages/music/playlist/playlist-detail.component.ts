@@ -44,6 +44,7 @@ export class PlaylistDetailComponent implements OnInit {
   loading = signal(false);
   loadingSongs = signal(false);
   removingTask = signal<string | null>(null);
+  authenticationRequired = signal(false);
   
   // Para scroll infinito
   currentPage = signal(1);
@@ -108,9 +109,17 @@ export class PlaylistDetailComponent implements OnInit {
         this.hasMoreSongs.set(!!response.next);
         this.loadingSongs.set(false);
         this.loading.set(false);
+        
+        console.log('🎵 Songs mapped for MusicSection:', newSongs);
+        console.log('🎵 Total songs in signal:', this.songs().length);
       },
       error: (error) => {
         console.error('Error loading playlist songs:', error);
+        if (error.status === 401) {
+          console.warn('⚠️ Usuario no autenticado - no se pueden cargar las canciones');
+          this.authenticationRequired.set(true);
+          // Mostrar mensaje de que necesita autenticarse
+        }
         this.loadingSongs.set(false);
         this.loading.set(false);
       }
@@ -149,6 +158,7 @@ export class PlaylistDetailComponent implements OnInit {
   }
 
   onSongClick(song: Song) {
+    console.log('🎵 PlaylistDetail: Song clicked:', song.title);
     const songs = this.songs();
     const playlist = this.playlist();
     if (playlist) {
@@ -159,22 +169,26 @@ export class PlaylistDetailComponent implements OnInit {
   }
 
   addToQueue(song: Song) {
+    console.log('🎵 PlaylistDetail: Add to queue requested for:', song.title);
     // Usar el PlayerUseCase para agregar a la cola
     this.playerUseCase.addToQueue(song);
     console.log('Agregado a cola:', song.title);
   }
 
   addToPlaylist(song: Song) {
+    console.log('📋 PlaylistDetail: Add to playlist requested for:', song.title);
     console.log('Agregando a playlist:', song.title);
     // Funcionalidad básica implementada
   }
 
   addToFavorites(song: Song) {
+    console.log('❤️ PlaylistDetail: Add to favorites requested for:', song.title);
     console.log('Agregando a favoritos:', song.title);
     // Funcionalidad básica implementada
   }
 
   showMoreOptions(song: Song) {
+    console.log('⚙️ PlaylistDetail: More options requested for:', song.title);
     console.log('Más opciones para:', song.title);
     // Funcionalidad básica implementada
   }
