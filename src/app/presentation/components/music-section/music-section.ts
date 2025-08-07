@@ -70,11 +70,12 @@ export class MusicSectionComponent {
   @Output() moreOptionsRequest = new EventEmitter<Song>();
 
   onSongClick(song: Song): void {
-    console.log('🎵 MusicSection: Song clicked, current type is:', this.type);
+    console.log('🎵 MusicSection: Song clicked:', song.title, 'current type is:', this.type);
     this.songSelected.emit(song);
   }
 
   onRetryClick(): void {
+    console.log('🔄 MusicSection: Retry clicked');
     this.retryLoad.emit();
   }
 

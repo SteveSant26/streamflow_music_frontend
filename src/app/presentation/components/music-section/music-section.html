@@ -50,21 +50,23 @@
         @for (song of songs; track song.id) {
           <div class="song-card bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden group">
             <!-- Imagen con overlay de botones -->
-            <div class="relative bg-gray-200 rounded-t-lg overflow-hidden">
+            <div class="relative bg-gray-200 rounded-t-lg overflow-hidden aspect-square">
               <img 
                 [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
                 [alt]="song.title"
-                class="w-full aspect-square object-cover"
-                appImageFallback="assets/images/default-album-small.svg"
+                class="w-full h-full object-cover"
+                appImageFallback="assets/images/default-album.jpg"
+                loading="lazy"
               />
               <!-- Overlay con botón de play -->
-              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
+              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
                 <button
-                  (click)="onSongClick(song)"
-                  class="opacity-0 group-hover:opacity-100 bg-green-500 hover:bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 transform scale-75 group-hover:scale-100 shadow-lg"
+                  (click)="onSongClick(song); $event.stopPropagation()"
+                  class="play-overlay-btn opacity-0 group-hover:opacity-100 bg-green-500 hover:bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 transform scale-75 group-hover:scale-100 shadow-xl z-10"
                   [attr.aria-label]="'Reproducir ' + song.title"
+                  type="button"
                 >
-                  <mat-icon class="text-2xl">play_arrow</mat-icon>
+                  <mat-icon class="text-3xl">play_arrow</mat-icon>
                 </button>
               </div>
             </div>
@@ -147,17 +149,19 @@
                 [src]="song.thumbnail_url || 'assets/images/default-album.jpg'" 
                 [alt]="song.title + ' - ' + song.artist_name"
                 class="w-full h-full object-cover"
-                appImageFallback="assets/images/default-album-small.svg"
+                appImageFallback="assets/images/default-album.jpg"
+                loading="lazy"
               />
             </div>
 
             <!-- Botón de reproducción individual -->
             <button
-              (click)="onSongClick(song)"
-              class="play-btn bg-green-500 hover:bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-md"
+              (click)="onSongClick(song); $event.stopPropagation()"
+              class="play-btn bg-green-500 hover:bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-md z-10"
               [attr.aria-label]="'Reproducir ' + song.title"
+              type="button"
             >
-              <mat-icon class="w-6 h-6">play_arrow</mat-icon>
+              <mat-icon class="text-xl">play_arrow</mat-icon>
             </button>
 
             <!-- Información de la canción -->
