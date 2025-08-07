@@ -91,6 +91,9 @@ export class GlobalPlayerStateService {
       // Las playlists se crearán cuando el usuario reproduzca música
       console.log('🎧 Reproductor listo para recibir música del contexto');
 
+      // Intentar restaurar estado persistido automáticamente
+      this.tryAutoRestoreState();
+
       this.isInitialized = true;
       console.log('Global player state initialized');
     } catch (error) {
@@ -529,6 +532,58 @@ export class GlobalPlayerStateService {
    */
   clearPersistedState(): void {
     this.playbackPersistence.clearPersistedState();
+  }
+
+  /**
+   * Intenta restaurar automáticamente el estado al inicializar
+   */
+  private tryAutoRestoreState(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Esperar un momento para que se inicialice completamente
+    setTimeout(() => {
+      if (this.hasValidPersistedSession()) {
+        console.log('🔄 Estado persistido encontrado, restaurando automáticamente...');
+        this.restorePersistedStateQuietly();
+      }
+    }, 500);
+  }
+
+  /**
+   * Restaura el estado sin mostrar diálogos ni reproducir automáticamente
+   */
+  private async restorePersistedStateQuietly(): Promise<void> {
+    try {
+      const persistedState = this.playbackPersistence.getPersistedState();
+      if (!persistedState?.currentSong) {
+        return;
+      }
+
+      // Restaurar la canción sin reproducir
+      this.playerUseCase.playSong(persistedState.currentSong as any);
+
+      // Esperar a que se cargue y configurar
+      setTimeout(() => {
+        if (this.audioElement) {
+          // Restaurar posición de reproducción
+          this.audioElement.currentTime = persistedState.playbackPosition.currentTime;
+          
+          // Restaurar configuración
+          this.playerUseCase.setVolume(persistedState.playerSettings.volume);
+          
+          // Asegurar que NO se reproduzca automáticamente
+          this.audioElement.pause();
+          
+          // Actualizar el estado visual
+          this.playerUseCase.forceStateSync();
+          
+          console.log('🎵 Estado restaurado silenciosamente desde localStorage');
+        }
+      }, 1000);
+
+    } catch (error) {
+      console.error('Error restaurando estado silenciosamente:', error);
+    }
   }
 
   /**
