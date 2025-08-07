@@ -243,7 +243,12 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     // CRITICAL: Preserve state before navigation
     this.globalPlayerState.preserveStateForNavigation();
 
-    this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
+    // Si hay historial, regresar a la página anterior
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      this.router.navigate([ROUTES_CONFIG_SITE.HOME.link]);
+    }
   }
 
   skipPrevious() {
