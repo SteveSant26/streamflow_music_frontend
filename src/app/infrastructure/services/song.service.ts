@@ -71,6 +71,14 @@ export class SongService {
     return this.http.get<PaginatedResponse<SongListDto>>(`${this.baseUrl}${API_CONFIG_SONGS.songs.list}`, { params });
   }
 
+  /**
+   * Get lyrics for a song
+   * GET /api/songs/{id}/lyrics/
+   */
+  getLyrics(songId: string): Observable<{ lyrics: string }> {
+    return this.http.get<{ lyrics: string }>(`${this.baseUrl}${API_CONFIG_SONGS.songs.getLyrics(songId)}`);
+  }
+
   private buildSearchParams(searchParams: SongSearchParams): HttpParams {
     let params = new HttpParams();
     

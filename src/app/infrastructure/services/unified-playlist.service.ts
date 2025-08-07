@@ -40,12 +40,27 @@ export class UnifiedPlaylistService {
       .set('page', page.toString())
       .set('page_size', pageSize.toString());
 
-    return this.http.get<PlaylistDto[]>(
+    return this.http.get<any>(
       `${this.baseUrl}${API_CONFIG_PLAYLISTS.myPlaylists.list}`,
       { params }
     ).pipe(
       map(response => {
         console.log('📋 Raw API response for user playlists:', response);
+        
+        // Si la respuesta es paginada
+        if (response.results) {
+          const playlists = response.results.map(PlaylistMapper.dtoToEntity);
+          this.playlistsCache$.next(playlists);
+          
+          return {
+            count: response.count,
+            next: response.next,
+            previous: response.previous,
+            results: playlists
+          };
+        }
+        
+        // Si la respuesta es un array directo
         const playlists = response.map(PlaylistMapper.dtoToEntity);
         this.playlistsCache$.next(playlists);
         
