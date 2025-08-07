@@ -467,14 +467,8 @@ export class GlobalPlayerStateService {
             file_url: currentState.currentSong.file_url
           },
           currentPlaylist: playlistInfo,
-          playbackPosition: {
-            currentTime: currentState.currentTime,
-            duration: currentState.duration,
-            progress: currentState.progress
-          },
           playerSettings: {
             volume: currentState.volume,
-            isPlaying: currentState.isPlaying,
             isShuffle: currentState.isShuffleEnabled,
             isRepeat: currentState.repeatMode !== 'none'
           },
@@ -530,21 +524,18 @@ export class GlobalPlayerStateService {
         this.playerUseCase.playSong(persistedState.currentSong as any);
       }
 
-      // Esperar un momento para que se cargue la canción
+      // Esperar un momento para que se cargue la canción y restaurar solo la configuración
       setTimeout(() => {
         if (this.audioElement) {
-          // Restaurar posición de reproducción
-          this.audioElement.currentTime = persistedState.playbackPosition.currentTime;
-          
-          // Restaurar configuración
+          // Restaurar solo configuración básica (volumen)
           this.playerUseCase.setVolume(persistedState.playerSettings.volume);
           
-          // No auto-reproducir hasta que el usuario confirme
+          // No auto-reproducir - la música queda pausada
           if (this.audioElement.autoplay) {
             this.audioElement.pause();
           }
           
-          console.log('✅ Estado completo restaurado - canción y posición');
+          console.log('✅ Estado restaurado - canción y configuración');
         }
       }, 1000);
 
@@ -608,10 +599,7 @@ export class GlobalPlayerStateService {
       // Esperar a que se cargue y configurar
       setTimeout(() => {
         if (this.audioElement) {
-          // Restaurar posición de reproducción
-          this.audioElement.currentTime = persistedState.playbackPosition.currentTime;
-          
-          // Restaurar configuración
+          // Solo restaurar configuración básica (no posición de tiempo)
           this.playerUseCase.setVolume(persistedState.playerSettings.volume);
           
           // Asegurar que NO se reproduzca automáticamente
@@ -635,10 +623,10 @@ export class GlobalPlayerStateService {
   private setupAutoPersistence(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    // Guardar estado cada vez que cambie algo significativo
+    // Guardar estado cuando hay cambios significativos
     this.playerUseCase.getPlayerState().subscribe((state: PlayerState) => {
-      // Solo guardar si hay una canción reproduciéndose
-      if (state.currentSong && state.currentTime > 5) { // Después de 5 segundos
+      // Solo guardar si hay una canción cargada
+      if (state.currentSong) {
         this.saveCurrentState();
       }
     });
@@ -647,16 +635,5 @@ export class GlobalPlayerStateService {
     window.addEventListener('beforeunload', () => {
       this.saveCurrentState();
     });
-
-    // Guardar estado periódicamente durante la reproducción
-    setInterval(() => {
-      const state = this.getPlayerState();
-      if (state.isPlaying && state.currentTime > 0) {
-        this.playbackPersistence.savePlaybackPosition(
-          state.currentTime,
-          state.duration
-        );
-      }
-    }, 10000); // Cada 10 segundos
   }
 }

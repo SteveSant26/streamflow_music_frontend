@@ -19,14 +19,8 @@ export interface PlaybackState {
     songs: any[];
     currentIndex: number;
   } | null;
-  playbackPosition: {
-    currentTime: number;
-    duration: number;
-    progress: number;
-  };
   playerSettings: {
     volume: number;
-    isPlaying: boolean;
     isShuffle: boolean;
     isRepeat: boolean;
   };
@@ -64,29 +58,10 @@ export class PlaybackPersistenceService {
       console.log('🎵 Estado de reproducción guardado:', {
         song: state.currentSong?.title,
         playlist: state.currentPlaylist?.name,
-        time: this.formatTime(state.playbackPosition.currentTime)
+        queueLength: state.currentPlaylist?.songs?.length || 0
       });
     } catch (error) {
       console.error('Error guardando estado de reproducción:', error);
-    }
-  }
-
-  /**
-   * Guarda solo la posición de reproducción actual
-   */
-  savePlaybackPosition(currentTime: number, duration: number): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    const currentState = this.getPersistedState();
-    if (currentState) {
-      currentState.playbackPosition = {
-        currentTime,
-        duration,
-        progress: duration > 0 ? (currentTime / duration) * 100 : 0
-      };
-      currentState.timestamp = Date.now();
-      
-      this.savePlaybackState(currentState);
     }
   }
 
@@ -170,21 +145,18 @@ export class PlaybackPersistenceService {
    */
   hasValidSession(): boolean {
     const state = this.getPersistedState();
-    return state !== null && 
-           state.currentSong !== null && 
-           state.playbackPosition.currentTime > 0;
+    return state?.currentSong !== null;
   }
 
   /**
    * Obtiene información de la última sesión para mostrar al usuario
    */
-  getLastSessionInfo(): { song: string; time: string; playlist?: string } | null {
+  getLastSessionInfo(): { song: string; playlist?: string } | null {
     const state = this.getPersistedState();
-    if (!state || !state.currentSong) return null;
+    if (!state?.currentSong) return null;
 
     return {
       song: `${state.currentSong.artist_name} - ${state.currentSong.title}`,
-      time: this.formatTime(state.playbackPosition.currentTime),
       playlist: state.currentPlaylist?.name
     };
   }
@@ -221,29 +193,12 @@ export class PlaybackPersistenceService {
     return {
       currentSong: null,
       currentPlaylist: null,
-      playbackPosition: {
-        currentTime: 0,
-        duration: 0,
-        progress: 0
-      },
       playerSettings: {
         volume: 0.5,
-        isPlaying: false,
         isShuffle: false,
         isRepeat: false
       },
       timestamp: Date.now()
     };
-  }
-
-  /**
-   * Formatea tiempo en formato mm:ss
-   */
-  private formatTime(seconds: number): string {
-    if (!seconds || isNaN(seconds)) return '0:00';
-    
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 }
