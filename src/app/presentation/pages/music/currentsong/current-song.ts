@@ -154,9 +154,12 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
         lyricsError: isNewSong ? undefined : this.currentSong?.lyricsError,
       };
 
-      // Si es una nueva canción y el panel de letras está abierto, cargar letras automáticamente
-      if (isNewSong && this.showLyricsPanel && !this.currentSong.lyrics && !this.currentSong.lyricsLoading) {
-        this.loadLyrics();
+      // ✅ NUEVA FUNCIONALIDAD: Auto-cargar letras cuando es una nueva canción
+      if (isNewSong) {
+        // Cargar letras automáticamente después de un pequeño retraso
+        setTimeout(() => {
+          this.autoLoadLyrics();
+        }, 1000);
       }
     } else {
       this.currentSong = null;
@@ -202,8 +205,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       this.showLyricsPanel ? 'Abierto' : 'Cerrado',
     );
 
-    // Si se abre el panel y no hay letras, intentar cargarlas
-    if (this.showLyricsPanel && this.currentSong && !this.currentSong.lyrics && !this.currentSong.lyricsLoading) {
+    // Si se abre el panel y no hay letras, intentar cargarlas con fuerza
+    if (this.showLyricsPanel && this.currentSong && !this.hasLyrics && !this.currentSong.lyricsLoading) {
       this.loadLyrics();
     }
   }
@@ -459,6 +462,40 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
 
   // ========== LYRICS METHODS ==========
   
+  /**
+   * Método para cargar letras automáticamente en segundo plano
+   * cuando se reproduce una nueva canción
+   */
+  private autoLoadLyrics(): void {
+    if (!this.currentSong || this.currentSong.lyricsLoading || this.currentSong.lyrics) {
+      return;
+    }
+
+    console.log('🎵 Auto-cargando letras para:', this.currentSong.title);
+    
+    // Cargar letras en silencio (sin mostrar loading en la UI)
+    this.getSongLyricsUseCase.execute(this.currentSong.id, true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (this.currentSong) {
+            if (response.lyrics?.trim()) {
+              this.currentSong.lyrics = response.lyrics;
+              console.log('✅ Letras cargadas automáticamente para:', this.currentSong.title);
+            } else {
+              this.currentSong.lyrics = undefined;
+              console.log('⚠️ No se encontraron letras para:', this.currentSong.title);
+            }
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error: any) => {
+          console.log('❌ Error auto-cargando letras:', error);
+          // No mostrar error en auto-load, solo log
+        }
+      });
+  }
+  
   loadLyrics(): void {
     if (!this.currentSong || this.currentSong.lyricsLoading) {
       return;
@@ -522,6 +559,47 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
           console.error('Error actualizando letras:', error);
           if (this.currentSong) {
             this.currentSong.lyricsError = 'Error al actualizar las letras';
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        }
+      });
+  }
+
+  /**
+   * Método para generar letras automáticamente cuando el usuario lo solicita
+   */
+  generateLyrics(): void {
+    if (!this.currentSong || this.currentSong.lyricsLoading) {
+      return;
+    }
+
+    console.log('🤖 Generando letras para:', this.currentSong.title);
+    
+    this.currentSong.lyricsLoading = true;
+    this.currentSong.lyricsError = undefined;
+    this.cdr.detectChanges();
+
+    // Usar el servicio de actualización con fuerza para generar letras
+    this.updateSongLyricsUseCase.execute(this.currentSong.id, true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (this.currentSong) {
+            if (response.lyrics?.trim()) {
+              this.currentSong.lyrics = response.lyrics;
+              console.log('✅ Letras generadas/encontradas para:', this.currentSong.title);
+            } else {
+              this.currentSong.lyrics = 'No se pudieron generar letras para esta canción';
+            }
+            this.currentSong.lyricsLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error: any) => {
+          console.error('Error generando letras:', error);
+          if (this.currentSong) {
+            this.currentSong.lyricsError = 'Error al generar las letras';
             this.currentSong.lyricsLoading = false;
             this.cdr.detectChanges();
           }

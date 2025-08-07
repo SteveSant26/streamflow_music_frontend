@@ -253,13 +253,24 @@
       <div *ngIf="!hasLyrics && !currentSong?.lyricsLoading && !currentSong?.lyricsError" class="no-lyrics">
         <mat-icon>music_note</mat-icon>
         <p>No hay letras disponibles para esta canción</p>
-        <button 
-          (click)="loadLyrics()" 
-          class="search-lyrics-button"
-          [disabled]="!canLoadLyrics"
-        >
-          Buscar letras
-        </button>
+        <div class="lyrics-buttons">
+          <button 
+            (click)="loadLyrics()" 
+            class="search-lyrics-button"
+            [disabled]="!canLoadLyrics"
+          >
+            Buscar letras
+          </button>
+          <button 
+            (click)="generateLyrics()" 
+            class="generate-lyrics-button"
+            [disabled]="!canLoadLyrics"
+            title="Generar letras usando IA"
+          >
+            <mat-icon>auto_awesome</mat-icon>
+            Generar letras
+          </button>
+        </div>
       </div>
     </div>
   </div>
