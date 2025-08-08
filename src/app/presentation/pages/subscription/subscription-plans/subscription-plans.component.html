@@ -1,91 +1,204 @@
-<div class="subscription-plans-container">
-  <div class="plans-header">
-    <h1>Elige tu plan</h1>
-    <p>Disfruta de música sin límites con nuestros planes premium</p>
+
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+  <!-- Header Section -->
+  <div class="max-w-7xl mx-auto text-center mb-16">
+    <div class="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+      <mat-icon class="text-base">star</mat-icon>
+      <span>{{ 'SUBSCRIPTION.TITLE' | translate }}</span>
+    </div>
+    
+    <h1 class="text-5xl font-bold text-gray-900 mb-4">
+      {{ 'SUBSCRIPTION.TITLE' | translate }}
+    </h1>
+    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+      {{ 'SUBSCRIPTION.SUBTITLE' | translate }}
+    </p>
   </div>
 
-  <div class="billing-toggle" *ngIf="plans().length > 0">
-    <button
-      [class.active]="billingPeriod() === 'month'"
-      (click)="setBillingPeriod('month')"
-    >
-      Mensual
-    </button>
-    <button
-      [class.active]="billingPeriod() === 'year'"
-      (click)="setBillingPeriod('year')"
-    >
-      Anual
-      <span class="discount-badge">Ahorra 20%</span>
-    </button>
-  </div>
+  <!-- Fixed Plans Grid -->
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- FREE PLAN -->
+      <mat-card class="relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+        <mat-card-content class="p-8">
+          <!-- Plan Header -->
+          <div class="text-center mb-8">
+            <div class="mb-4">
+              <mat-icon class="text-5xl text-gray-600">music_note</mat-icon>
+            </div>
+            
+            <h3 class="text-2xl font-bold mb-2">{{ 'SUBSCRIPTION.FREE_PLAN.NAME' | translate }}</h3>
+            
+            <div class="mb-4">
+              <span class="text-4xl font-bold text-gray-900">{{ 'SUBSCRIPTION.FREE_PLAN.PRICE' | translate }}</span>
+              <span class="text-lg text-gray-500">{{ 'SUBSCRIPTION.FREE_PLAN.PERIOD' | translate }}</span>
+            </div>
+            
+            <p class="text-sm text-gray-600">
+              {{ 'SUBSCRIPTION.FREE_PLAN.DESCRIPTION' | translate }}
+            </p>
+          </div>
 
-  <div class="plans-grid" *ngIf="!loading(); else loadingTemplate">
-    <div
-      *ngFor="let plan of filteredPlans()"
-      class="plan-card"
-      [class.current-plan]="isCurrentPlan(plan.id)"
-      [class.recommended]="plan.name.toLowerCase().includes('premium')"
-    >
-      <div class="plan-header">
-        <h3>{{ plan.name }}</h3>
-        <div class="plan-price">
-          <span class="amount">{{ formatPrice(plan.price) }}</span>
-          <span class="period"
-            >/{{ plan.interval === 'month' ? 'mes' : 'año' }}</span
-          >
+          <!-- Features List -->
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center gap-3" *ngFor="let feature of ['SUBSCRIPTION.FREE_PLAN.FEATURES.0', 'SUBSCRIPTION.FREE_PLAN.FEATURES.1', 'SUBSCRIPTION.FREE_PLAN.FEATURES.2', 'SUBSCRIPTION.FREE_PLAN.FEATURES.3', 'SUBSCRIPTION.FREE_PLAN.FEATURES.4']">
+              <div class="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
+                <mat-icon class="text-sm text-gray-600">check</mat-icon>
+              </div>
+              <span class="text-sm text-gray-700">{{ feature | translate }}</span>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="text-center">
+            <button
+              mat-raised-button
+              class="w-full bg-gray-200 text-gray-700 font-bold py-3 cursor-not-allowed"
+              disabled
+            >
+              <mat-icon class="mr-2">check_circle</mat-icon>
+              {{ 'SUBSCRIPTION.FREE_PLAN.CURRENT' | translate }}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- MONTHLY PLAN -->
+      <mat-card class="relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+        <mat-card-content class="p-8">
+          <!-- Plan Header -->
+          <div class="text-center mb-8">
+            <div class="mb-4">
+              <mat-icon class="text-5xl text-blue-600">calendar_month</mat-icon>
+            </div>
+            
+            <h3 class="text-2xl font-bold mb-2">{{ 'SUBSCRIPTION.MONTHLY_PLAN.NAME' | translate }}</h3>
+            
+            <div class="mb-4">
+              <span class="text-4xl font-bold text-gray-900">{{ 'SUBSCRIPTION.MONTHLY_PLAN.PRICE' | translate }}</span>
+              <span class="text-lg text-gray-500">{{ 'SUBSCRIPTION.MONTHLY_PLAN.PERIOD' | translate }}</span>
+            </div>
+            
+            <p class="text-sm text-gray-600">
+              {{ 'SUBSCRIPTION.MONTHLY_PLAN.DESCRIPTION' | translate }}
+            </p>
+          </div>
+
+          <!-- Features List -->
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center gap-3" *ngFor="let feature of ['SUBSCRIPTION.MONTHLY_PLAN.FEATURES.0', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.1', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.2', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.3', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.4', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.5']">
+              <div class="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                <mat-icon class="text-sm text-green-600">check</mat-icon>
+              </div>
+              <span class="text-sm text-gray-700">{{ feature | translate }}</span>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="text-center">
+            <button
+              mat-raised-button
+              class="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold py-3"
+              (click)="selectMonthlyPlan()"
+            >
+              <mat-icon class="mr-2">rocket_launch</mat-icon>
+              {{ 'SUBSCRIPTION.MONTHLY_PLAN.BUTTON' | translate }}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- YEARLY PLAN (BEST VALUE) -->
+      <mat-card class="relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <!-- Best Value Badge -->
+        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+          <div class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-semibold shadow-lg">
+            <mat-icon class="text-xs mr-1">local_offer</mat-icon>
+            {{ 'SUBSCRIPTION.YEARLY_PLAN.RECOMMENDED' | translate }}
+          </div>
         </div>
-        <p class="plan-description">{{ plan.description }}</p>
+
+        <mat-card-content class="p-8 pt-10">
+          <!-- Plan Header -->
+          <div class="text-center mb-8">
+            <div class="mb-4">
+              <mat-icon class="text-5xl text-blue-600">star</mat-icon>
+            </div>
+            
+            <h3 class="text-2xl font-bold mb-2 text-gray-900">{{ 'SUBSCRIPTION.YEARLY_PLAN.NAME' | translate }}</h3>
+            
+            <div class="mb-2">
+              <span class="text-4xl font-bold text-gray-900">{{ 'SUBSCRIPTION.YEARLY_PLAN.PRICE' | translate }}</span>
+              <span class="text-lg text-gray-500">{{ 'SUBSCRIPTION.YEARLY_PLAN.PERIOD' | translate }}</span>
+            </div>
+            
+            <div class="mb-4">
+              <span class="text-sm text-gray-400 line-through">{{ 'SUBSCRIPTION.YEARLY_PLAN.ORIGINAL_PRICE' | translate }}</span>
+              <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                <mat-icon class="text-xs mr-1">savings</mat-icon>
+                {{ 'SUBSCRIPTION.YEARLY_PLAN.SAVE' | translate }}
+              </span>
+            </div>
+            
+            <p class="text-sm text-gray-600">
+              {{ 'SUBSCRIPTION.YEARLY_PLAN.DESCRIPTION' | translate }}
+            </p>
+          </div>
+
+          <!-- Features List -->
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center gap-3" *ngFor="let feature of ['SUBSCRIPTION.YEARLY_PLAN.FEATURES.0', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.1', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.2', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.3', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.4', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.5', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.6', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.7']">
+              <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                <mat-icon class="text-sm text-blue-600">check</mat-icon>
+              </div>
+              <span class="text-sm text-gray-700">{{ feature | translate }}</span>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="text-center">
+            <button
+              mat-raised-button
+              class="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold py-3 shadow-lg hover:shadow-xl transition-all duration-200"
+              (click)="selectYearlyPlan()"
+            >
+              <mat-icon class="mr-2">star</mat-icon>
+              {{ 'SUBSCRIPTION.YEARLY_PLAN.BUTTON' | translate }}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Trust Indicators -->
+  <div class="max-w-4xl mx-auto mt-16 text-center">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="flex flex-col items-center gap-2">
+        <mat-icon class="text-3xl text-gray-600">security</mat-icon>
+        <span class="text-sm text-gray-600">{{ 'SUBSCRIPTION.TRUST_INDICATORS.SECURE_PAYMENT' | translate }}</span>
       </div>
-
-      <div class="plan-features">
-        <ul>
-          <li *ngFor="let feature of plan.features">
-            <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                fill-rule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            {{ feature }}
-          </li>
-        </ul>
+      <div class="flex flex-col items-center gap-2">
+        <mat-icon class="text-3xl text-gray-600">cancel</mat-icon>
+        <span class="text-sm text-gray-600">{{ 'SUBSCRIPTION.TRUST_INDICATORS.CANCEL_ANYTIME' | translate }}</span>
       </div>
-
-      <div class="plan-action">
-        <button
-          *ngIf="!isCurrentPlan(plan.id)"
-          class="subscribe-btn"
-          [class.loading]="loading()"
-          [disabled]="loading()"
-          (click)="selectPlan(plan)"
-        >
-          {{
-            hasActiveSubscription() ? 'Cambiar plan' : 'Seleccionar plan'
-          }}
-        </button>
-
-        <button
-          *ngIf="isCurrentPlan(plan.id)"
-          class="current-plan-btn"
-          disabled
-        >
-          Plan actual
-        </button>
+      <div class="flex flex-col items-center gap-2">
+        <mat-icon class="text-3xl text-gray-600">support</mat-icon>
+        <span class="text-sm text-gray-600">{{ 'SUBSCRIPTION.TRUST_INDICATORS.SUPPORT' | translate }}</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <mat-icon class="text-3xl text-gray-600">high_quality</mat-icon>
+        <span class="text-sm text-gray-600">{{ 'SUBSCRIPTION.TRUST_INDICATORS.PREMIUM_QUALITY' | translate }}</span>
       </div>
     </div>
   </div>
 
-  <ng-template #loadingTemplate>
-    <div class="loading-state">
-      <div class="loading-spinner"></div>
-      <p>Cargando planes...</p>
+  <!-- Loading overlay -->
+  <div *ngIf="loading()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 text-center">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-black mx-auto mb-4"></div>
+      <p class="text-gray-700">{{ 'SUBSCRIPTION.LOADING' | translate }}</p>
     </div>
-  </ng-template>
-
-  <div class="error-state" *ngIf="error()">
-    <p>{{ error() }}</p>
-    <button (click)="loadPlans()">Reintentar</button>
   </div>
 </div>

@@ -284,5 +284,76 @@
     "MESSAGE_GENRE": "Could not load popular genres",
     "MESSAGE_POPULAR_SONG": "Could not load popular songs",
     "MESSAGE_RANDOM_SONG": "Could not load random songs"
+  },
+  "SUBSCRIPTION": {
+    "TITLE": "Choose your perfect plan",
+    "SUBTITLE": "Unlock the full power of StreamFlow Music with unlimited access to millions of songs, premium quality and exclusive features.",
+    "MONTHLY": "Monthly",
+    "YEARLY": "Yearly",
+    "SAVE_DISCOUNT": "Save 20%",
+    "FREE_PLAN": {
+      "NAME": "Free",
+      "DESCRIPTION": "Perfect to get started",
+      "PRICE": "€0",
+      "PERIOD": "/month",
+      "FEATURES": [
+        "Limited library access",
+        "Ads between songs",
+        "Standard audio quality",
+        "No offline downloads",
+        "Basic player"
+      ],
+      "BUTTON": "Current Plan",
+      "CURRENT": "Your current plan"
+    },
+    "MONTHLY_PLAN": {
+      "NAME": "Premium Monthly",
+      "DESCRIPTION": "No long-term commitments",
+      "PRICE": "€9.99",
+      "PERIOD": "/month",
+      "FEATURES": [
+        "Full library access",
+        "No ads",
+        "Premium audio quality",
+        "Unlimited offline downloads",
+        "Advanced player",
+        "Synchronized lyrics"
+      ],
+      "BUTTON": "Select Plan"
+    },
+    "YEARLY_PLAN": {
+      "NAME": "Premium Yearly",
+      "DESCRIPTION": "Best value - more savings",
+      "PRICE": "€99.99",
+      "PERIOD": "/year",
+      "ORIGINAL_PRICE": "€119.88",
+      "FEATURES": [
+        "Full library access",
+        "No ads",
+        "Premium audio quality",
+        "Unlimited offline downloads",
+        "Advanced player",
+        "Synchronized lyrics",
+        "Priority support",
+        "Exclusive beta features"
+      ],
+      "BUTTON": "Select Plan",
+      "RECOMMENDED": "RECOMMENDED",
+      "SAVE": "Save €19.89/year"
+    },
+    "TRUST_INDICATORS": {
+      "SECURE_PAYMENT": "Secure Payment",
+      "CANCEL_ANYTIME": "Cancel Anytime",
+      "SUPPORT": "24/7 Support",
+      "PREMIUM_QUALITY": "Premium Quality"
+    },
+    "ACTIONS": {
+      "CHANGE_PLAN": "Change Plan",
+      "SELECT_PLAN": "Select Plan",
+      "CURRENT_PLAN": "Current Plan",
+      "RETRY": "Retry"
+    },
+    "LOADING": "Loading plans...",
+    "ERROR": "Oops! Something went wrong"
   }
 }

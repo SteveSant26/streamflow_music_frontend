@@ -39,7 +39,6 @@
         <!-- Popular Songs Section -->
         <app-music-section
           title="{{ 'HOME.POPULAR_SONGS' | translate }}"
-          titleIcon="📈"
           [songs]="mostPopularSongs()"
           [loading]="isLoadingPopular()"
           [type]="viewMode()"
@@ -57,7 +56,6 @@
         <!-- Random Songs Section -->
         <app-music-section
           title="{{ 'HOME.RANDOM_SONGS' | translate }}"
-          titleIcon="🎲"
           [songs]="randomSongs()"
           [loading]="isLoadingRandom()"
           [type]="viewMode()"

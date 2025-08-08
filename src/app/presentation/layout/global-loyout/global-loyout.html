@@ -7,17 +7,9 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div
-          class="w-8 h-8 bg-black rounded-full flex items-center justify-center"
+          class="w-8 h-8 bg-white rounded-full flex items-center justify-center"
         >
-          <svg
-            class="w-5 h-5 text-white"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
-            />
-          </svg>
+          <mat-icon class="text-white text-lg">music_note</mat-icon>
         </div>
         <h1 class="font-bold text-xl">StreamFlow</h1>
       </div>
@@ -36,7 +28,9 @@
             >{{ 'HEADER.EXPLORE' | translate }}</a
           >
 
-          <a href="/subscription-plans" class="btn-spotify">{{ 'HEADER.SUBSCRIPTION_PLANS' | translate }}</a>
+          <a href="/subscription-plans" 
+          class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
+          >{{ 'HEADER.SUBSCRIPTION_PLANS' | translate }}</a>
         </nav>
       </div>
     </div>
@@ -74,9 +68,7 @@
         class="flex flex-col items-center gap-1 text-base hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full bg-tinted">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-          </svg>
+          <mat-icon class="text-lg">home</mat-icon>
         </div>
         <span class="text-xs font-medium">Inicio</span>
       </a>
@@ -86,19 +78,7 @@
         class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full hover-bg-tinted">
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <mat-icon class="text-lg">search</mat-icon>
         </div>
         <span class="text-xs font-medium">{{ 'HEADER.SEARCH' | translate }}</span>
       </a>
@@ -108,19 +88,7 @@
         class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full hover-bg-tinted">
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"
-            />
-          </svg>
+          <mat-icon class="text-lg">explore</mat-icon>
         </div>
         <span class="text-xs font-medium">{{ 'HEADER.EXPLORE' | translate }}</span>
       </a>
@@ -130,19 +98,7 @@
         class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full hover-bg-tinted">
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-            />
-          </svg>
+          <mat-icon class="text-lg">payment</mat-icon>
         </div>
         <span class="text-xs font-medium">Planes</span>
       </a>
@@ -152,19 +108,7 @@
         class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full hover-bg-tinted">
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-            />
-          </svg>
+          <mat-icon class="text-lg">library_music</mat-icon>
         </div>
         <span class="text-xs font-medium">Biblioteca</span>
       </a>

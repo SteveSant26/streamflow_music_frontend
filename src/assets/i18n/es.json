@@ -285,5 +285,76 @@
     "MESSAGE_GENRE": "No se pudieron cargar los géneros populares",
     "MESSAGE_POPULAR_SONG": "No se pudieron cargar las canciones populares",
     "MESSAGE_RANDOM_SONG": "No se pudieron cargar las canciones aleatorias"
+  },
+  "SUBSCRIPTION": {
+    "TITLE": "Elige tu plan perfecto",
+    "SUBTITLE": "Desbloquea el poder completo de StreamFlow Music con acceso ilimitado a millones de canciones, calidad premium y funciones exclusivas.",
+    "MONTHLY": "Mensual",
+    "YEARLY": "Anual",
+    "SAVE_DISCOUNT": "Ahorra 20%",
+    "FREE_PLAN": {
+      "NAME": "Gratis",
+      "DESCRIPTION": "Perfecto para empezar",
+      "PRICE": "€0",
+      "PERIOD": "/mes",
+      "FEATURES": [
+        "Acceso limitado a la biblioteca",
+        "Anuncios entre canciones",
+        "Calidad de audio estándar",
+        "Sin descargas offline",
+        "Reproductor básico"
+      ],
+      "BUTTON": "Plan Actual",
+      "CURRENT": "Tu plan actual"
+    },
+    "MONTHLY_PLAN": {
+      "NAME": "Premium Mensual",
+      "DESCRIPTION": "Sin compromisos a largo plazo",
+      "PRICE": "€9.99",
+      "PERIOD": "/mes",
+      "FEATURES": [
+        "Acceso completo a toda la biblioteca",
+        "Sin anuncios",
+        "Calidad de audio premium",
+        "Descargas offline ilimitadas",
+        "Reproductor avanzado",
+        "Letras sincronizadas"
+      ],
+      "BUTTON": "Seleccionar Plan"
+    },
+    "YEARLY_PLAN": {
+      "NAME": "Premium Anual",
+      "DESCRIPTION": "El mejor valor - más ahorro",
+      "PRICE": "€99.99",
+      "PERIOD": "/año",
+      "ORIGINAL_PRICE": "€119.88",
+      "FEATURES": [
+        "Acceso completo a toda la biblioteca",
+        "Sin anuncios",
+        "Calidad de audio premium",
+        "Descargas offline ilimitadas",
+        "Reproductor avanzado",
+        "Letras sincronizadas",
+        "Soporte prioritario",
+        "Funciones exclusivas beta"
+      ],
+      "BUTTON": "Seleccionar Plan",
+      "RECOMMENDED": "RECOMENDADO",
+      "SAVE": "Ahorra €19.89/año"
+    },
+    "TRUST_INDICATORS": {
+      "SECURE_PAYMENT": "Pago Seguro",
+      "CANCEL_ANYTIME": "Cancela Cuando Quieras",
+      "SUPPORT": "Soporte 24/7",
+      "PREMIUM_QUALITY": "Calidad Premium"
+    },
+    "ACTIONS": {
+      "CHANGE_PLAN": "Cambiar Plan",
+      "SELECT_PLAN": "Seleccionar Plan",
+      "CURRENT_PLAN": "Plan Actual",
+      "RETRY": "Reintentar"
+    },
+    "LOADING": "Cargando planes...",
+    "ERROR": "¡Oops! Algo salió mal"
   }
 }
