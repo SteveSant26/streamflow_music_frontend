@@ -6,8 +6,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
 import { MusicSectionComponent } from '../../../components/music-section/music-section';
 import { ViewModeService } from '../../../shared/services/view-mode.service';
+import { SkeletonGroupComponent } from '../../../shared/components/skeleton-group/skeleton-group.component';
+import { SkeletonService } from '../../../shared/services/skeleton.service';
+import type { SkeletonGroupConfig } from '../../../shared/components/skeleton-group/skeleton-group.component';
 import { AlbumListItem } from '../../../../domain/entities/album.entity';
 import { ArtistListItem } from '../../../../domain/entities/artist.entity';
 import { GenreListItem } from '../../../../domain/entities/genre.entity';
@@ -30,7 +34,9 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
     MatIconModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MusicSectionComponent
+    TranslateModule,
+    MusicSectionComponent,
+    SkeletonGroupComponent
   ],
   templateUrl: './discover.component.html',
   styleUrl: './discover.component.css'
@@ -38,6 +44,7 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
 export class DiscoverPageComponent implements OnInit {
   private readonly themeService = inject(MaterialThemeService);
   private readonly viewModeService = inject(ViewModeService);
+  private readonly skeletonService = inject(SkeletonService);
   private readonly getPopularAlbumsUseCase = inject(GetPopularAlbumsUseCase);
   private readonly getPopularArtistsUseCase = inject(GetPopularArtistsUseCase);
   private readonly getPopularGenresUseCase = inject(GetPopularGenresUseCase);
@@ -62,12 +69,17 @@ export class DiscoverPageComponent implements OnInit {
   genresError = signal<string | null>(null);
   randomSongsError = signal<string | null>(null);
 
+  // Skeleton configurations
+  albumsSkeletonConfig: SkeletonGroupConfig = this.skeletonService.getPreset('albums');
+  artistsSkeletonConfig: SkeletonGroupConfig = this.skeletonService.getPreset('artists');
+  genresSkeletonConfig: SkeletonGroupConfig = this.skeletonService.getPreset('genres');
+
   // Button configurations for music section
   randomSongsPrimaryButton = {
     text: 'Ver todas',
     action: () => {
       console.log('🎵 Navigate to all random songs');
-      // TODO: Navigate to random songs page
+      // Navigate to songs page - will be implemented when songs page is ready
     },
     ariaLabel: 'Ver todas las canciones aleatorias'
   };
