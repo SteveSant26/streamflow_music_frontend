@@ -19,21 +19,13 @@ export class MaterialThemeService {
   // Señal para detectar si el sistema prefiere modo oscuro
   private readonly _systemPrefersDark = signal<boolean>(false);
 
-  // Control para evitar aplicaciones duplicadas
-  private _lastAppliedTheme: string | null = null;
-
   constructor() {
     this.initializeTheme();
     this.setupSystemThemeListener();
     
     // Effect reactivo para aplicar el tema automáticamente cuando cambia
     effect(() => {
-      const effectiveTheme = this.effectiveTheme();
-      // Solo aplicar si es diferente al último aplicado
-      if (this._lastAppliedTheme !== effectiveTheme) {
-        this.applyTheme();
-        this._lastAppliedTheme = effectiveTheme;
-      }
+      this.applyTheme();
     });
   }
 
@@ -75,15 +67,6 @@ export class MaterialThemeService {
    * Establece un nuevo tema
    */
   setTheme(themeType: 'light' | 'dark' | 'system'): void {
-    // Evitar cambios duplicados del mismo tema
-    const currentTheme = this._currentTheme();
-    if (currentTheme.type === themeType) {
-      console.log(`🎨 Theme ${themeType} already active, skipping...`);
-      return;
-    }
-    
-    console.log(`🎨 Setting theme to: ${themeType}`);
-    
     let newTheme: ThemeEntity;
     
     switch (themeType) {
@@ -100,12 +83,8 @@ export class MaterialThemeService {
         newTheme = ThemeEntity.createSystem();
     }
     
-    console.log(`🎨 New theme entity:`, newTheme);
-    
     this._currentTheme.set(newTheme);
     this.themeRepository.saveTheme(newTheme);
-    
-    console.log(`🎨 Theme updated successfully`);
     // applyTheme() se ejecutará automáticamente por el effect
   }
 

@@ -22,7 +22,8 @@
     "RESULTS_FOR": "Resultados para: \"{{query}}\"",
     "CLEAR": "Limpiar búsqueda",
     "IMPLEMENTING": "Implementando búsqueda...",
-    "RESULTS_SOON": "Los resultados de búsqueda aparecerán aquí próximamente"
+    "RESULTS_SOON": "Los resultados de búsqueda aparecerán aquí próximamente",
+    "SONGS": "Canciones encontradas"
   },
   "GENRES": {
     "ROCK": "Rock",

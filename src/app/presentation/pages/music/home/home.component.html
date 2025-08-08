@@ -1,12 +1,20 @@
-    <div class="min-h-screen bg-surface text-on-surface p-6" appTheme>
+    <div class="min-h-screen bg-gray-50 text-gray-900 p-6" appTheme>
       <div class="max-w-7xl mx-auto space-y-8">
         <!-- Header -->
         <div class="flex items-center justify-between">
           <div class="text-center space-y-4 flex-1">
-            <h1 class="text-4xl font-bold text-on-surface">
+            <h1 
+              [class]="(isDarkTheme$ | async) 
+                ? 'text-4xl font-bold text-white' 
+                : 'text-4xl font-bold text-gray-900'"
+            >
               {{ 'HOME.TITLE' | translate }}
             </h1>
-            <p class="text-lg text-on-surface-variant">
+            <p 
+              [class]="(isDarkTheme$ | async) 
+                ? 'text-lg text-gray-300' 
+                : 'text-lg text-gray-600'"
+            >
               {{ 'HOME.SUBTITLE' | translate }}
             </p>
           </div>
@@ -14,11 +22,11 @@
           <!-- View Mode Toggle -->
           <div class="flex items-center gap-2">
             <button mat-icon-button (click)="toggleViewMode()" 
-                    class="text-on-surface">
+                    [class]="(isDarkTheme$ | async) ? 'text-white' : 'text-gray-900'">
               <mat-icon>{{ viewMode() === 'grid' ? 'view_list' : viewMode() === 'table' ? 'view_module' : 'grid_view' }}</mat-icon>
             </button>
             <button mat-icon-button (click)="toggleTheme()"
-                    class="text-on-surface">
+                    [class]="(isDarkTheme$ | async) ? 'text-white' : 'text-gray-900'">
               <mat-icon>{{ (isDarkTheme$ | async) ? 'light_mode' : 'dark_mode' }}</mat-icon>
             </button>
           </div>

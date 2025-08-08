@@ -20,67 +20,45 @@ export interface MaterialThemeConfig {
 }
 
 export const LIGHT_THEME: MaterialThemeConfig = {
-  // Primary colors - Púrpura elegante más refinado
-  primary: '#6366f1',
-  onPrimary: '#ffffff',
-  primaryContainer: '#e0e7ff',
-  onPrimaryContainer: '#1e1b4b',
-
-  // Secondary colors - Azul celeste premium
-  secondary: '#0ea5e9',
-  onSecondary: '#ffffff',
-  secondaryContainer: '#e0f2fe',
-  onSecondaryContainer: '#0c4a6e',
-
-  // Surface colors - Blancos y grises más refinados
+  primary: '#1DB954',
+  secondary: '#1ED760',
   surface: '#ffffff',
-  onSurface: '#1e293b',
-  surfaceVariant: '#f8fafc',
-  onSurfaceVariant: '#64748b',
-
-  // Background colors - Fondo premium
-  background: '#fefefe',
-  onBackground: '#0f172a',
-
-  // Error colors - Rojo elegante
-  error: '#dc2626',
+  background: '#fafafa',
+  error: '#ff5252',
+  onPrimary: '#ffffff',
+  onSecondary: '#000000',
+  onSurface: '#1a1a1a',
+  onBackground: '#1a1a1a',
   onError: '#ffffff',
-
-  // Outline colors - Contornos sutiles y elegantes
-  outline: '#e2e8f0',
-  outlineVariant: '#f1f5f9',
+  surfaceVariant: '#f5f5f5',
+  onSurfaceVariant: '#666666',
+  outline: '#e0e0e0',
+  outlineVariant: '#f0f0f0',
+  primaryContainer: '#e8f7ee',
+  onPrimaryContainer: '#0a4d1a',
+  secondaryContainer: '#e9f8ec',
+  onSecondaryContainer: '#0b4f1c',
 };
 
 export const DARK_THEME: MaterialThemeConfig = {
-  // Primary colors - Sophisticated indigo with depth
-  primary: '#6366f1',
+  primary: '#1DB954',
+  secondary: '#1ED760',
+  surface: '#1a1a1a',
+  background: '#121212',
+  error: '#ff5252',
   onPrimary: '#ffffff',
-  primaryContainer: '#1e1b4b',
-  onPrimaryContainer: '#c7d2fe',
-
-  // Secondary colors - Refined purple accent
-  secondary: '#a855f7',
-  onSecondary: '#ffffff',
-  secondaryContainer: '#2e1065',
-  onSecondaryContainer: '#e9d5ff',
-
-  // Surface colors - Deep blacks with sophisticated contrast
-  surface: '#111111',
-  onSurface: '#f8fafc',
-  surfaceVariant: '#1a1a1a',
-  onSurfaceVariant: '#d1d5db',
-
-  // Background colors - Pure black foundation with elegance
-  background: '#0a0a0a',
-  onBackground: '#f9fafb',
-
-  // Error colors - Refined red with sophistication
-  error: '#f87171',
+  onSecondary: '#000000',
+  onSurface: '#ffffff',
+  onBackground: '#ffffff',
   onError: '#ffffff',
-
-  // Outline colors - Subtle and elegant boundaries
-  outline: '#374151',
-  outlineVariant: '#1f2937',
+  surfaceVariant: '#2a2a2a',
+  onSurfaceVariant: '#cccccc',
+  outline: '#404040',
+  outlineVariant: '#333333',
+  primaryContainer: '#0a4d1a',
+  onPrimaryContainer: '#e8f7ee',
+  secondaryContainer: '#0b4f1c',
+  onSecondaryContainer: '#e9f8ec',
 };
 
 export const MATERIAL_THEMES = {

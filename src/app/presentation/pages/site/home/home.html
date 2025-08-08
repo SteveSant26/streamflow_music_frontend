@@ -9,11 +9,11 @@
   <!-- Playlists Recomendadas -->
   <div class="music-section mb-8">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-on-surface">
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">
         🎵 Playlists Recomendadas
       </h2>
       <button 
-        class="text-on-surface hover:text-primary text-sm font-medium transition-colors"
+        class="text-white hover:text-gray-300 text-sm font-medium"
         (click)="loadFeaturedPlaylists()"
         [disabled]="playlistsLoading()"
       >
@@ -23,8 +23,8 @@
     
     <!-- Loading state for playlists -->
     <div *ngIf="playlistsLoading()" class="flex justify-center items-center py-8">
-      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-      <span class="ml-3 text-on-surface text-sm">Cargando playlists...</span>
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+      <span class="ml-3 text-white text-sm">Cargando playlists...</span>
     </div>
     
     <!-- Playlists grid - máximo 4 items -->
@@ -56,9 +56,9 @@
           
           <!-- Playlist Info -->
           <div class="p-4">
-            <h3 class="font-semibold text-on-surface text-sm truncate mb-1">{{ playlist.name }}</h3>
-            <p class="text-on-surface-variant text-xs truncate mb-2">{{ playlist.description || 'Playlist sin descripción' }}</p>
-            <div class="flex items-center text-xs text-on-surface-variant">
+            <h3 class="font-semibold text-gray-900 text-sm truncate mb-1">{{ playlist.name }}</h3>
+            <p class="text-gray-600 text-xs truncate mb-2">{{ playlist.description || 'Playlist sin descripción' }}</p>
+            <div class="flex items-center text-xs text-gray-500">
               <mat-icon class="w-3 h-3 mr-1">queue_music</mat-icon>
               <span>{{ playlist.total_songs }} {{ playlist.total_songs === 1 ? 'canción' : 'canciones' }}</span>
             </div>
@@ -69,13 +69,13 @@
     
     <!-- Empty state for playlists -->
     <div *ngIf="!playlistsLoading() && featuredPlaylists().length === 0" class="text-center py-8">
-      <mat-icon class="text-on-surface-variant text-4xl mb-2">queue_music</mat-icon>
-      <p class="text-on-surface-variant">No hay playlists disponibles</p>
+      <mat-icon class="text-gray-400 text-4xl mb-2">queue_music</mat-icon>
+      <p class="text-gray-400">No hay playlists disponibles</p>
       <button 
-        class="mt-4 px-4 py-2 bg-primary text-on-primary rounded-lg hover:bg-surface-variant transition-colors"
+        class="mt-4 px-4 py-2 bg-white text-black rounded-lg hover:bg-blue-700 transition-colors"
         (click)="loadFeaturedPlaylists()"
       >
-        Recargar
+        gola
       </button>
     </div>
   </div>
@@ -102,18 +102,18 @@
   </div>
 
   <!-- Debugging Controls -->
-  <div class="debug-controls mb-4 p-4 bg-surface-variant rounded">
-    <p class="text-on-surface"><strong>Current View Mode:</strong> {{ debugViewMode() }}</p>
-    <p class="text-on-surface"><strong>Computed Type:</strong> {{ currentViewType() }}</p>
+  <div class="debug-controls mb-4 p-4 bg-yellow-100 rounded">
+    <p class="text-black"><strong>Current View Mode:</strong> {{ debugViewMode() }}</p>
+    <p class="text-black"><strong>Computed Type:</strong> {{ currentViewType() }}</p>
     <div class="flex gap-2 mt-2">
       <button 
-        class="px-3 py-1 bg-primary text-on-primary rounded text-sm hover:bg-surface-container transition-colors"
+        class="px-3 py-1 bg-blue-500 text-white rounded text-sm"
         (click)="resetViewMode()"
       >
         Reset to List
       </button>
       <button 
-        class="px-3 py-1 bg-secondary text-on-secondary rounded text-sm hover:bg-surface-container transition-colors"
+        class="px-3 py-1 bg-green-500 text-white rounded text-sm"
         (click)="toggleViewModeManually()"
       >
         Toggle Mode

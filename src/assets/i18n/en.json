@@ -22,7 +22,9 @@
     "RESULTS_FOR": "Results for: \"{{query}}\"",
     "CLEAR": "Clear search",
     "IMPLEMENTING": "Implementing search...",
-    "RESULTS_SOON": "Search results will appear here soon"
+    "RESULTS_SOON": "Search results will appear here soon",
+    "SONGS": "Songs found"
+
   },
   "GENRES": {
     "ROCK": "Rock",

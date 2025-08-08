@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { TranslateModule } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 import { 
   GetSubscriptionPlansUseCase, 
   GetUserSubscriptionUseCase, 
@@ -13,7 +14,6 @@ import {
 } from '@app/domain/usecases';
 import { PaymentStateService, AuthStateService } from '@app/shared/services';
 import { SubscriptionPlan } from '@app/domain/entities/payment.entity';
-import { ThemeDirective } from '@app/shared/directives/theme.directive';
 
 @Component({
   selector: 'app-subscription-plans',
@@ -24,8 +24,7 @@ import { ThemeDirective } from '@app/shared/directives/theme.directive';
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
-    TranslateModule,
-    ThemeDirective
+    TranslateModule
   ],
   templateUrl: './subscription-plans.component.html',
   styleUrl: './subscription-plans.component.css'
@@ -126,62 +125,46 @@ export class SubscriptionPlansComponent implements OnInit {
     this.createMockCheckoutSession('yearly');
   }
 
-  private createMockCheckoutSession(planType: string): void {
+  private createMockCheckoutSession(planType: 'monthly' | 'yearly'): void {
+    // Mostrar un loader local o usar el servicio de estado
     console.log(`Processing ${planType} plan selection...`);
     
+    // Simular una llamada a la API
     setTimeout(() => {
-      let mockCheckoutUrl: string;
-      let planName: string;
-      
-      switch(planType) {
-        case 'yearly':
-          mockCheckoutUrl = 'https://checkout.stripe.com/c/pay/cs_test_yearly_plan';
-          planName = 'anual';
-          break;
-        case 'monthly':
-          mockCheckoutUrl = 'https://checkout.stripe.com/c/pay/cs_test_monthly_plan';
-          planName = 'mensual';
-          break;
-        case 'duo':
-          mockCheckoutUrl = 'https://checkout.stripe.com/c/pay/cs_test_duo_plan';
-          planName = 'Duo';
-          break;
-        case 'family':
-          mockCheckoutUrl = 'https://checkout.stripe.com/c/pay/cs_test_family_plan';
-          planName = 'Familiar';
-          break;
-        default:
-          mockCheckoutUrl = 'https://checkout.stripe.com/c/pay/cs_test_plan';
-          planName = planType;
-      }
+      // En un caso real, aquí redirigirías a Stripe Checkout
+      const mockCheckoutUrl = planType === 'yearly' 
+        ? 'https://checkout.stripe.com/c/pay/cs_test_yearly_plan'
+        : 'https://checkout.stripe.com/c/pay/cs_test_monthly_plan';
       
       console.log(`Redirecting to: ${mockCheckoutUrl}`);
-      alert(`Redirigiendo al checkout para el plan ${planName}...`);
+      
+      // Por ahora solo mostramos un mensaje
+      alert(`Redirigiendo al checkout para el plan ${planType === 'yearly' ? 'anual' : 'mensual'}...`);
       
       // En producción, descomenta esta línea:
       // window.location.href = mockCheckoutUrl;
     }, 1000);
   }
 
-  async selectPlan(planType: string): Promise<void> {
+  async selectPlan(plan: SubscriptionPlan): Promise<void> {
     try {
-      console.log(`Plan selected: ${planType}`);
-      
-      switch(planType) {
-        case 'free':
-          console.log('Plan gratuito seleccionado');
-          break;
-        case 'premium-individual':
-          this.createMockCheckoutSession('monthly');
-          break;
-        case 'premium-yearly':
-          this.createMockCheckoutSession('yearly');
-          break;
-        default:
-          console.warn('Unknown plan type:', planType);
+      const currentUrl = window.location.origin;
+      const checkoutData = {
+        planId: plan.id,
+        successUrl: `${currentUrl}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${currentUrl}/subscription/plans`,
+        allowPromotionCodes: true,
+      };
+
+      const result = await firstValueFrom(
+        this.createCheckoutSessionUseCase.execute(checkoutData),
+      );
+
+      if (result?.url) {
+        window.location.href = result.url;
       }
     } catch (error) {
-      console.error('Error al seleccionar plan:', error);
+      console.error('Error al crear sesión de checkout:', error);
     }
   }
 }

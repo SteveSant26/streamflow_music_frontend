@@ -1,30 +1,35 @@
 <!-- Layout principal para páginas normales -->
-<div class="flex flex-col h-screen bg-surface" appTheme>
+<div class="flex flex-col h-screen bg-gradient-to-br">
   <!-- Header Bar -->
   <header
-    class="bg-surface-container backdrop-blur-md border-b border-outline-variant p-4 shadow-md"
+    class="backdrop-white backdrop-blur-md border-b border-base p-4 shadow-base"
   >
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div
-          class="w-8 h-8 bg-primary rounded-full flex items-center justify-center"
+          class="w-8 h-8 bg-white rounded-full flex items-center justify-center"
         >
-          <mat-icon class="text-on-surface text-lg">music_note</mat-icon>
+          <mat-icon class="text-white text-lg">music_note</mat-icon>
         </div>
-        <h1 class="font-bold text-xl text-on-surface">StreamFlow</h1>
+        <h1 class="font-bold text-xl">StreamFlow</h1>
       </div>
 
       <div class="hidden lg:flex items-center gap-4">
         <nav class="flex gap-3" aria-label="Main Navigation">
           <a
-            routerLink="/"
-            class="px-4 py-2 bg-surface-container backdrop-blur-sm rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant transition-all duration-200 shadow-md font-medium"
+            href="/"
+            class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
             >{{ 'HEADER.INITIAL' | translate }}</a
           >
 
+          <a
+            href="/explore"
+            class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
+            >{{ 'HEADER.EXPLORE' | translate }}</a
+          >
 
-          <a routerLink="/subscription" 
-          class="px-4 py-2 bg-surface-container backdrop-blur-sm rounded-lg border border-outline-variant text-on-surface hover:bg-surface-variant transition-all duration-200 shadow-md font-medium"
+          <a href="/subscription-plans" 
+          class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
           >{{ 'HEADER.SUBSCRIPTION_PLANS' | translate }}</a>
         </nav>
       </div>
@@ -35,19 +40,19 @@
   <div class="flex flex-col lg:flex-row flex-1 overflow-hidden">
     <!-- Aside menu - hidden on mobile, visible on lg+ -->
     <div
-      class="hidden lg:block w-64 bg-surface-container backdrop-blur-sm border-r border-outline-variant"
+      class="hidden lg:block w-64 bg-elevated backdrop-blur-sm border-r border-base"
     >
       <app-aside-menu></app-aside-menu>
     </div>
 
-    <main class="flex-1 p-3 sm:p-4 md:p-6 overflow-y-auto bg-surface">
+    <main class="flex-1 p-3 sm:p-4 md:p-6 overflow-y-auto bg-gradient-to-br">
       <router-outlet />
     </main>
   </div>
 
   <!-- Reproductor fijo en la parte inferior -->
   <footer
-    class="bg-surface-container backdrop-blur-md border-t border-outline-variant p-2 sm:p-3 md:p-4 shadow-md"
+    class="backdrop-white backdrop-blur-md border-t border-base p-2 sm:p-3 md:p-4 shadow-elevated"
   >
     <app-player></app-player>
   </footer>
@@ -55,54 +60,54 @@
   <!-- Mobile bottom navigation -->
   <nav
     aria-label="Mobile Navigation"
-    class="lg:hidden bg-surface-container backdrop-blur-md border-t border-outline-variant px-4 py-3 shadow-md"
+    class="lg:hidden backdrop-white backdrop-blur-md border-t border-base px-4 py-3 shadow-elevated"
   >
     <div class="flex justify-around items-center">
       <a
-        routerLink="/"
-        class="flex flex-col items-center gap-1 text-on-surface hover:text-primary transition-colors"
+        href="/"
+        class="flex flex-col items-center gap-1 text-base hover:text-accent transition-colors"
       >
-        <div class="p-2 rounded-full bg-primary">
-          <mat-icon class="text-lg text-on-primary">home</mat-icon>
+        <div class="p-2 rounded-full bg-tinted">
+          <mat-icon class="text-lg">home</mat-icon>
         </div>
         <span class="text-xs font-medium">Inicio</span>
       </a>
 
       <a
-        routerLink="/search"
-        class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors"
+        href="/search"
+        class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
-        <div class="p-2 rounded-full hover:bg-surface-variant">
+        <div class="p-2 rounded-full hover-bg-tinted">
           <mat-icon class="text-lg">search</mat-icon>
         </div>
         <span class="text-xs font-medium">{{ 'HEADER.SEARCH' | translate }}</span>
       </a>
 
       <a
-        routerLink="/explore"
-        class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors"
+        href="/explore"
+        class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
-        <div class="p-2 rounded-full hover:bg-surface-variant">
+        <div class="p-2 rounded-full hover-bg-tinted">
           <mat-icon class="text-lg">explore</mat-icon>
         </div>
         <span class="text-xs font-medium">{{ 'HEADER.EXPLORE' | translate }}</span>
       </a>
 
       <a
-        routerLink="/subscription"
-        class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors"
+        href="/subscription-plans"
+        class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
-        <div class="p-2 rounded-full hover:bg-surface-variant">
+        <div class="p-2 rounded-full hover-bg-tinted">
           <mat-icon class="text-lg">payment</mat-icon>
         </div>
         <span class="text-xs font-medium">Planes</span>
       </a>
 
       <a
-        routerLink="/library"
-        class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors"
+        href="/library"
+        class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
-        <div class="p-2 rounded-full hover:bg-surface-variant">
+        <div class="p-2 rounded-full hover-bg-tinted">
           <mat-icon class="text-lg">library_music</mat-icon>
         </div>
         <span class="text-xs font-medium">Biblioteca</span>
