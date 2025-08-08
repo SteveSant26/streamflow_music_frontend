@@ -232,6 +232,13 @@
     "DARK": "Tema oscuro",
     "SYSTEM": "Tema del sistema"
   },
+  "HEADER": {
+    "INITIAL": "Inicio",
+    "EXPLORE": "Explorar",
+    "SUBSCRIPTION_PLANS": "Planes",
+    "SEARCH": "Buscar"
+  },
+
   "PROFILE": {
     "TITLE": "Mi Perfil",
     "SUBTITLE": "Personaliza tu información y mantén tu perfil actualizado",
@@ -252,7 +259,10 @@
     "NOT_FOUND": "No encontrado",
     "UNAUTHORIZED": "No autorizado",
     "FORBIDDEN": "Acceso denegado",
-    "GENERAL_ERROR": "Ha ocurrido un error"
+    "GENERAL_ERROR": "Ha ocurrido un error",
+    "LOAD_ALBUMS": "Cargando álbumes",
+    "LOAD_ARTISTS": "Cargando artistas",
+    "LOAD_GENRES": "Cargando géneros"
   },
   "COMMON": {
     "LOADING": "Cargando...",
@@ -268,5 +278,12 @@
     "BACK": "Atrás",
     "NEXT": "Siguiente",
     "PREVIOUS": "Anterior"
+  },
+  "DISCOVER": {
+    "MESSAGE_ALBUM": "No se pudieron cargar los álbumes populares",
+    "MESSAGE_ARTIST": "No se pudieron cargar los artistas populares",
+    "MESSAGE_GENRE": "No se pudieron cargar los géneros populares",
+    "MESSAGE_POPULAR_SONG": "No se pudieron cargar las canciones populares",
+    "MESSAGE_RANDOM_SONG": "No se pudieron cargar las canciones aleatorias"
   }
 }

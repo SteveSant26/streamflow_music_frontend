@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
-import { Observable, finalize } from 'rxjs';
+import {  finalize } from 'rxjs';
 import { Router } from '@angular/router';
 import { ROUTES_CONFIG_MUSIC } from '@app/config';
 
@@ -19,7 +19,6 @@ import {
   PlaySongUseCase 
 } from '../../../../domain/usecases/song/song.usecases';
 import { GlobalPlayerStateService } from '../../../../infrastructure/services/global-player-state.service';
-
 @Component({
   selector: 'app-home',
   imports: [
@@ -29,7 +28,7 @@ import { GlobalPlayerStateService } from '../../../../infrastructure/services/gl
     MatIconModule,
     MatProgressSpinnerModule,
     TranslateModule,
-    MusicSectionComponent
+    MusicSectionComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'

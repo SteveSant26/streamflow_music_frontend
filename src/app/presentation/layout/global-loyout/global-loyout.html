@@ -7,7 +7,7 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div
-          class="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center"
+          class="w-8 h-8 bg-black rounded-full flex items-center justify-center"
         >
           <svg
             class="w-5 h-5 text-white"
@@ -19,7 +19,7 @@
             />
           </svg>
         </div>
-        <h1 class="text-base font-bold text-xl">StreamFlow</h1>
+        <h1 class="font-bold text-xl">StreamFlow</h1>
       </div>
 
       <div class="hidden lg:flex items-center gap-4">
@@ -27,16 +27,16 @@
           <a
             href="/"
             class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
-            >Inicio</a
+            >{{ 'HEADER.INITIAL' | translate }}</a
           >
 
           <a
             href="/explore"
             class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
-            >Explorar</a
+            >{{ 'HEADER.EXPLORE' | translate }}</a
           >
 
-          <a href="/subscription-plans" class="btn-spotify">Planes</a>
+          <a href="/subscription-plans" class="btn-spotify">{{ 'HEADER.SUBSCRIPTION_PLANS' | translate }}</a>
         </nav>
       </div>
     </div>
@@ -100,7 +100,7 @@
             />
           </svg>
         </div>
-        <span class="text-xs font-medium">Buscar</span>
+        <span class="text-xs font-medium">{{ 'HEADER.SEARCH' | translate }}</span>
       </a>
 
       <a
@@ -122,7 +122,7 @@
             />
           </svg>
         </div>
-        <span class="text-xs font-medium">Explorar</span>
+        <span class="text-xs font-medium">{{ 'HEADER.EXPLORE' | translate }}</span>
       </a>
 
       <a

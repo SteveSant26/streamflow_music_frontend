@@ -205,6 +205,12 @@
     "SEE_ALL": "See All",
     "TRENDING": "Trending Now"
   },
+  "HEADER": {
+    "INITIAL": "Home",
+    "EXPLORE": "Explore",
+    "SUBSCRIPTION_PLANS": "Plans",
+    "SEARCH": "Search"
+  },
   "SIDEBAR": {
     "HOME": "Home",
     "SEARCH": "Search",
@@ -252,7 +258,10 @@
     "NOT_FOUND": "Not found",
     "UNAUTHORIZED": "Unauthorized",
     "FORBIDDEN": "Access denied",
-    "GENERAL_ERROR": "An error occurred"
+    "GENERAL_ERROR": "An error occurred",
+    "LOAD_ALBUMS": "Loading albums",
+    "LOAD_ARTISTS": "Loading artists",
+    "LOAD_GENRES": "Loading genres"
   },
   "COMMON": {
     "LOADING": "Loading...",
@@ -268,5 +277,12 @@
     "BACK": "Back",
     "NEXT": "Next",
     "PREVIOUS": "Previous"
+  },
+  "DISCOVER": {
+    "MESSAGE_ALBUM": "Could not load popular albums",
+    "MESSAGE_ARTIST": "Could not load popular artists",
+    "MESSAGE_GENRE": "Could not load popular genres",
+    "MESSAGE_POPULAR_SONG": "Could not load popular songs",
+    "MESSAGE_RANDOM_SONG": "Could not load random songs"
   }
 }

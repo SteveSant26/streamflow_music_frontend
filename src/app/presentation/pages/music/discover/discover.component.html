@@ -125,7 +125,6 @@
   <section class="discover-section">
     <app-music-section
       [title]="'HOME.POPULAR_SONGS' | translate"
-      titleIcon="🔥"
       [songs]="popularSongs()"
       [loading]="isLoadingPopularSongs()"
       [type]="viewMode()"
@@ -146,7 +145,6 @@
   <section class="discover-section">
     <app-music-section
       [title]="'HOME.RANDOM_SONGS' | translate"
-      titleIcon="🎲"
       [songs]="randomSongs()"
       [loading]="isLoadingRandomSongs()"
       [type]="viewMode()"
