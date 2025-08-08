@@ -231,7 +231,8 @@
       "QUOTE_4": "La música conecta corazones y culturas",
       "QUOTE_5": "Tu playlist perfecta te está esperando",
       "QUOTE_6": "Explora géneros y encuentra tu sonido ideal"
-    }
+    },
+    "MUSICAL_GENRE": "Género Musical"
   },
   "SIDEBAR": {
     "HOME": "Inicio",
@@ -312,7 +313,8 @@
     "MESSAGE_ARTIST": "No se pudieron cargar los artistas populares",
     "MESSAGE_GENRE": "No se pudieron cargar los géneros populares",
     "MESSAGE_POPULAR_SONG": "No se pudieron cargar las canciones populares",
-    "MESSAGE_RANDOM_SONG": "No se pudieron cargar las canciones aleatorias"
+    "MESSAGE_RANDOM_SONG": "No se pudieron cargar las canciones aleatorias",
+    "MUSICAL_GENRE": "Género Musical"
   },
   "SUBSCRIPTION": {
     "TITLE": "Elige tu plan perfecto",

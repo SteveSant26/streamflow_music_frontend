@@ -232,7 +232,8 @@
       "QUOTE_4": "Music connects hearts and cultures",
       "QUOTE_5": "Your perfect playlist is waiting for you",
       "QUOTE_6": "Explore genres and find your ideal sound"
-    }
+    },
+    "MUSICAL_GENRE": "Musical Genre"
   },
   "HEADER": {
     "INITIAL": "Home",
@@ -312,7 +313,8 @@
     "MESSAGE_ARTIST": "Could not load popular artists",
     "MESSAGE_GENRE": "Could not load popular genres",
     "MESSAGE_POPULAR_SONG": "Could not load popular songs",
-    "MESSAGE_RANDOM_SONG": "Could not load random songs"
+    "MESSAGE_RANDOM_SONG": "Could not load random songs",
+    "MUSICAL.GENRE": "Musical Genre"
   },
   "SUBSCRIPTION": {
     "TITLE": "Choose your perfect plan",

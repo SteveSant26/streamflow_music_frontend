@@ -146,8 +146,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       this.currentSong = {
         id: playerState.currentSong.id,
         title: playerState.currentSong.title,
-        artist: this.artistEnrichmentService.getArtistName(playerState.currentSong),
-        album: playerState.currentSong.album?.title || playerState.currentSong.album_title || 'Unknown Album',
+        artist: playerState.currentSong.artist_name || playerState.currentSong.artist?.name || 'Artista Desconocido',
+        album: playerState.currentSong.album?.title || playerState.currentSong.album_title || 'Sin Álbum',
         duration: this.formatTime(playerState.duration),
         currentTime: this.formatTime(playerState.currentTime),
         progress: playerState.progress,
