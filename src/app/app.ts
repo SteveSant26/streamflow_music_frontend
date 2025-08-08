@@ -21,7 +21,7 @@ export class App implements OnInit {
     // Initialize Material theme (se inicializa automáticamente)
     this.initializeMaterialTheme();
 
-    // Initialize language service
+    // Initializek language service
     this.initializeLanguage();
 
     // Initialize auth session
@@ -37,10 +37,12 @@ export class App implements OnInit {
   }
 
   private initializeLanguage() {
-    // Initialize language service and set default language
+    // Simplemente verificar que el servicio de idioma esté inicializado
+    // El LanguageRepository ya maneja la inicialización automática
+    console.log('🌐 Language service initialized');
+    
     this.languageService.getCurrentLanguage().subscribe((currentLang) => {
-      // Force a manual translation update to ensure UI reflects the language
-      this.languageService.changeLanguage(currentLang as 'en' | 'es');
+      console.log('📍 Current language:', currentLang);
     });
   }
 

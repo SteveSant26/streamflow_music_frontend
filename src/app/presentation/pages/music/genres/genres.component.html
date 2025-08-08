@@ -1,29 +1,29 @@
 <div class="genres-container">
   <!-- Header -->
   <div class="genres-header">
-    <h1>Géneros Musicales</h1>
-    <p class="subtitle">Explora la música por género y encuentra tu sonido favorito</p>
+    <h1>{{ 'PAGES.GENRES.TITLE' | translate }}</h1>
+    <p class="subtitle">{{ 'PAGES.GENRES.SUBTITLE' | translate }}</p>
   </div>
 
   <!-- Controls -->
   <div class="genres-controls">
     <div class="genres-filters">
       <mat-form-field class="search-field">
-        <mat-label>Buscar géneros</mat-label>
+        <mat-label>{{ 'SEARCH.SEARCH_GENRES' | translate }}</mat-label>
         <input matInput 
                [value]="searchTerm()" 
                (input)="onSearchChange($event.target.value)"
-               placeholder="Escribe el nombre del género...">
+               placeholder="{{ 'SEARCH.GENRE_PLACEHOLDER' | translate }}">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
 
       <mat-form-field class="sort-field">
-        <mat-label>Ordenar por</mat-label>
+        <mat-label>{{ 'SORTING.SORT_BY' | translate }}</mat-label>
         <mat-select [value]="sortBy()" (selectionChange)="onSortChange($event.value)">
-          <mat-option value="name">Nombre A-Z</mat-option>
-          <mat-option value="-name">Nombre Z-A</mat-option>
-          <mat-option value="-popularity_score">Más populares</mat-option>
-          <mat-option value="popularity_score">Menos populares</mat-option>
+          <mat-option value="name">{{ 'SORTING.NAME_AZ' | translate }}</mat-option>
+          <mat-option value="-name">{{ 'SORTING.NAME_ZA' | translate }}</mat-option>
+          <mat-option value="-popularity_score">{{ 'SORTING.MOST_POPULAR' | translate }}</mat-option>
+          <mat-option value="popularity_score">{{ 'SORTING.LEAST_POPULAR' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

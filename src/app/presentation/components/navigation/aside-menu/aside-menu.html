@@ -147,6 +147,7 @@
     <!-- Language Selector -->
     <div class="language-selector">
       <h4>{{ "SIDEBAR.LANGUAGE" | translate }}</h4>
+      <p>{{ "TEST" | translate }}</p>
       <div class="language-buttons">
         @for (lang of getAvailableLanguages() | async; track lang.code) {
           <button

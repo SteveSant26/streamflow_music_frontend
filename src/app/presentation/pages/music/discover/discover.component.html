@@ -1,7 +1,7 @@
 <div class="discover-container" [class.dark-theme]="isDarkTheme()">
   <!-- Header -->
   <div class="discover-header">
-    <h1>Descubrir Música</h1>
+    <h1>{{ 'HOME.TITLE' | translate }}</h1>
     <div class="flex items-center gap-2">
       <!-- View Mode Toggle -->
       <button mat-icon-button (click)="toggleViewMode()" class="text-white">
@@ -16,12 +16,12 @@
   <!-- Albums Populares -->
   <section class="discover-section">
     <div class="section-header">
-      <h2>Álbumes Populares</h2>
+      <h2>{{ 'HOME.POPULAR_ALBUMS' | translate }}</h2>
       <button mat-button 
               color="primary" 
               routerLink="/albums"
               class="view-all-btn">
-        Ver todos
+        {{ 'HOME.VIEW_ALL' | translate }}
         <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
@@ -29,7 +29,7 @@
       <mat-spinner diameter="40"></mat-spinner>
     </div>
     <div class="error-message" *ngIf="albumsError()">
-      Error al cargar álbumes: {{ albumsError() }}
+      {{ 'ERRORS.LOAD_ALBUMS' | translate }}: {{ albumsError() }}
     </div>
     <div class="albums-grid" *ngIf="!isLoadingAlbums() && !albumsError()">
       <mat-card *ngFor="let album of popularAlbums()" class="album-card">
@@ -54,12 +54,12 @@
   <!-- Artistas Populares -->
   <section class="discover-section">
     <div class="section-header">
-      <h2>Artistas Populares</h2>
+      <h2>{{ 'HOME.POPULAR_ARTISTS' | translate }}</h2>
       <button mat-button 
               color="primary" 
               routerLink="/artists"
               class="view-all-btn">
-        Ver todos
+        {{ 'HOME.VIEW_ALL' | translate }}
         <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
@@ -67,7 +67,7 @@
       <mat-spinner diameter="40"></mat-spinner>
     </div>
     <div class="error-message" *ngIf="artistsError()">
-      Error al cargar artistas: {{ artistsError() }}
+      {{ 'ERRORS.LOAD_ARTISTS' | translate }}: {{ artistsError() }}
     </div>
     <div class="artists-grid" *ngIf="!isLoadingArtists() && !artistsError()">
       <mat-card *ngFor="let artist of popularArtists()" class="artist-card">
@@ -89,12 +89,12 @@
   <!-- Géneros Populares -->
   <section class="discover-section">
     <div class="section-header">
-      <h2>Géneros Populares</h2>
+      <h2>{{ 'HOME.POPULAR_GENRES' | translate }}</h2>
       <button mat-button 
               color="primary" 
               routerLink="/genres"
               class="view-all-btn">
-        Ver todos
+        {{ 'HOME.VIEW_ALL' | translate }}
         <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
@@ -102,7 +102,7 @@
       <mat-spinner diameter="40"></mat-spinner>
     </div>
     <div class="error-message" *ngIf="genresError()">
-      Error al cargar géneros: {{ genresError() }}
+      {{ 'ERRORS.LOAD_GENRES' | translate }}: {{ genresError() }}
     </div>
     <div class="genres-container" *ngIf="!isLoadingGenres() && !genresError()">
       <mat-chip-set>
@@ -125,7 +125,7 @@
       [type]="viewMode()"
       [primaryButton]="randomSongsPrimaryButton"
       [actionButtons]="randomSongsActionButtons"
-      emptyMessage="No se pudieron cargar las canciones aleatorias"
+      emptyMessage="{{ 'ERRORS.RANDOM_SONGS_FAILED_SHORT' | translate }}"
       loadingMessage="Cargando música aleatoria..."
       (songSelected)="onRandomSongSelected($event)"
       (retryLoad)="onRetryRandomSongs()"

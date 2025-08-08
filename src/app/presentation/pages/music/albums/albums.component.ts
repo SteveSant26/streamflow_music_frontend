@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { GetAllAlbumsUseCase } from '../../../../domain/usecases/album.usecases';
 import { AlbumListItem } from '../../../../domain/entities/album.entity';
@@ -27,13 +28,15 @@ import { ROUTES_CONFIG_MUSIC } from '../../../../config/routes-config/routes-mus
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ],
   templateUrl: './albums.component.html',
   styleUrl: './albums.component.css'
 })
 export class AlbumsComponent implements OnInit {
   private readonly getAllAlbumsUseCase = inject(GetAllAlbumsUseCase);
+  private readonly translateService = inject(TranslateService);
 
   // Signals
   albums = signal<AlbumListItem[]>([]);
@@ -73,7 +76,7 @@ export class AlbumsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading albums:', error);
-        this.error.set('Error al cargar los álbumes. Por favor, inténtalo de nuevo.');
+        this.error.set(this.translateService.instant('ERRORS.LOAD_ALBUMS_FULL'));
         this.loading.set(false);
       }
     });

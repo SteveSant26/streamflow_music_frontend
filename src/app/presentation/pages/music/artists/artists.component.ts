@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { GetAllArtistsUseCase } from '../../../../domain/usecases/artist.usecases';
 import { ArtistListItem } from '../../../../domain/entities/artist.entity';
@@ -29,13 +30,15 @@ import { ROUTES_CONFIG_MUSIC } from '../../../../config/routes-config/routes-mus
     MatInputModule,
     MatSelectModule,
     MatChipsModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ],
   templateUrl: './artists.component.html',
   styleUrl: './artists.component.css'
 })
 export class ArtistsComponent implements OnInit {
   private readonly getAllArtistsUseCase = inject(GetAllArtistsUseCase);
+  private readonly translateService = inject(TranslateService);
 
   // Signals
   artists = signal<ArtistListItem[]>([]);
@@ -84,7 +87,7 @@ export class ArtistsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading artists:', error);
-        this.error.set('Error al cargar los artistas. Por favor, inténtalo de nuevo.');
+        this.error.set(this.translateService.instant('ERRORS.LOAD_ARTISTS_FULL'));
         this.loading.set(false);
       }
     });

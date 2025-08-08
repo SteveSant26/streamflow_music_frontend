@@ -15,6 +15,7 @@
   "PLAYLIST": {
     "TYPE": "Playlist"
   },
+  "TEST": "Translation test working",
   "SEARCH": {
     "TITLE": "Search",
     "PLACEHOLDER": "Search songs, artists, albums...",
@@ -22,7 +23,21 @@
     "RESULTS_FOR": "Results for: \"{{query}}\"",
     "CLEAR": "Clear search",
     "IMPLEMENTING": "Implementing search...",
-    "RESULTS_SOON": "Search results will appear here soon"
+    "RESULTS_SOON": "Search results will appear here soon",
+    "ADVANCED_FILTERS": "Advanced Filters",
+    "CLEAR_FILTERS": "Clear Filters",
+    "GENERAL_SEARCH": "General Search",
+    "CONTENT": "Content",
+    "QUALITY_SOURCE": "Quality and Source",
+    "DURATION": "Duration", 
+    "POPULARITY": "Popularity",
+    "CHARACTERISTICS": "Characteristics",
+    "SORTING": "Sorting",
+    "SEARCH_ALBUMS_ARTISTS": "Search albums or artists",
+    "SEARCH_ARTISTS": "Search artists",
+    "SEARCH_GENRES": "Search genres",
+    "ARTIST_PLACEHOLDER": "Type the artist's name...",
+    "NO_ARTISTS_MATCH": "No artists match \"{{term}}\". Try different search terms."
   },
   "GENRES": {
     "ROCK": "Rock",
@@ -61,8 +76,8 @@
   },
   "PLANS": {
     "HEADER": {
-      "TITLE": "Choose Your StreamFlow Plan",
-      "SUBTITLE": "Enjoy the best music without limits"
+      "TITLE": "Choose Your StreamFlow Plan", 
+      "SUBTITLE": "Enjoy unlimited music with our premium plans"
     },
     "MOST_POPULAR": "MOST POPULAR",
     "MONTHLY_EQUIVALENT": "month",
@@ -183,7 +198,11 @@
     "BUTTON": "Send Reset Link"
   },
   "HOME": {
+    "TITLE": "Discover Music",
+    "SUBTITLE": "Find your next favorite song",
     "DISCOVER": "Discover",
+    "POPULAR_SONGS": "Popular Songs",
+    "RANDOM_SONGS": "Random Songs",
     "PLAY_ALL": "Play All",
     "CARD1_TITLE": "New Releases",
     "CARD1_BODY": "Check out the latest music releases",
@@ -193,19 +212,59 @@
     "CARD3_BODY": "Explore music by genre",
     "MIXES": "Your Mixes",
     "SEE_ALL": "See All",
-    "TRENDING": "Trending Now"
+    "VIEW_ALL": "View all",
+    "TRENDING": "Trending Now",
+    "POPULAR_ALBUMS": "Popular Albums",
+    "POPULAR_ARTISTS": "Popular Artists",
+    "POPULAR_GENRES": "Popular Genres",
+    "NO_POPULAR_SONGS": "Could not load random songs",
+    "NO_RANDOM_SONGS": "Could not load random songs",
+    "RETRY": "Retry"
+  },
+  "ERRORS": {
+    "LOAD_ALBUMS": "Error loading albums",
+    "LOAD_ARTISTS": "Error loading artists",
+    "LOAD_GENRES": "Error loading genres",
+    "LOAD_SONGS": "Error loading songs",
+    "LOAD_PLAYLISTS": "Error loading playlists",
+    "LOAD_CONTENT": "Error loading content",
+    "TRY_AGAIN": "Please try again",
+    "TRY_AGAIN_SHORT": "Try again",
+    "RETRY": "Retry",
+    "RANDOM_SONGS_FAILED": "Could not load random songs at this time",
+    "POPULAR_ALBUMS_FAILED": "Could not load popular albums",
+    "POPULAR_ARTISTS_FAILED": "Could not load popular artists",
+    "POPULAR_GENRES_FAILED": "Could not load popular genres",
+    "POPULAR_SONGS_FAILED": "Could not load popular songs",
+    "RANDOM_SONGS_FAILED_SHORT": "Could not load random songs",
+    "LOAD_ALBUMS_FULL": "Error loading albums. Please try again",
+    "LOAD_ARTISTS_FULL": "Error loading artists. Please try again",
+    "LOAD_GENRES_FULL": "Error loading genres. Please try again"
+  },
+  "SORTING": {
+    "SORT_BY": "Sort by",
+    "TITLE_AZ": "Title A-Z",
+    "TITLE_ZA": "Title Z-A",
+    "NAME_AZ": "Name A-Z", 
+    "NAME_ZA": "Name Z-A",
+    "DATE_NEW": "Newest",
+    "DATE_OLD": "Oldest",
+    "POPULARITY": "Popularity",
+    "VERIFIED_ONLY": "Verified only"
   },
   "SIDEBAR": {
     "HOME": "Home",
     "SEARCH": "Search",
+    "DISCOVER": "Discover",
     "LIBRARY": "Your Library",
     "MY_PLAYLISTS": "My Playlists",
     "PLAYLISTS": "Playlists",
     "LIKED_SONGS": "Liked Songs",
     "RECENTLY_PLAYED": "Recently Played",
     "CREATE_PLAYLIST": "Create Playlist",
-    "PODCAST": "Podcasts",
     "LANGUAGE": "Language",
+    "PODCAST": "Podcasts",
+    "MUSIC_VIEW": "Music View",
     "THEME": "Theme",
     "SPANISH": "Spanish",
     "ENGLISH": "English",
@@ -232,5 +291,32 @@
     "EMAIL_INVALID": "Please enter a valid email",
     "SAVE_BUTTON": "Save Changes",
     "CANCEL_BUTTON": "Cancel"
+  },
+"PAGES": {
+    "ARTISTS": {
+      "TITLE": "Artists",
+      "SUBTITLE": "Discover amazing artists from all genres"
+    },
+    "ALBUMS": {
+      "TITLE": "Albums",
+      "SUBTITLE": "Explore our entire collection of albums"
+    },
+    "GENRES": {
+      "TITLE": "Genres",
+      "SUBTITLE": "Explore music by genre and find your favorite sound"
+    }
+  },
+  "ARTIST": {
+    "VIEW_PROFILE": "View profile",
+    "VERIFIED": "Verified artist",
+    "FOLLOWERS": "followers",
+    "FOLLOW": "Follow artist",
+    "NO_VERIFIED_AVAILABLE": "No verified artists available at this time.",
+    "NO_ARTISTS_LIBRARY": "No artists available in the library yet."
+  },
+  "COMMON": {
+    "LOADING_ARTISTS": "Loading artists...",
+    "RETRY": "Retry",
+    "NO_ARTISTS_FOUND": "No artists found"
   }
 }
