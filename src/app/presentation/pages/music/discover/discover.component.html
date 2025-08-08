@@ -34,22 +34,37 @@
       {{ 'ERRORS.LOAD_ALBUMS' | translate }}: {{ albumsError() }}
     </div>
     <div class="albums-grid" *ngIf="!isLoadingAlbums() && !albumsError()">
-      <mat-card *ngFor="let album of popularAlbums()" class="album-card">
-        <img mat-card-image [src]="album.cover_url || '/assets/default-album.png'" 
-             [alt]="album.title" class="album-cover">
-        <mat-card-content>
-          <h3>{{ album.title }}</h3>
-          <p>{{ album.artist_name }}</p>
-          <p class="album-info">{{ album.total_tracks }} canciones</p>
-          <p class="release-date">{{ album.release_date | date:'MMM yyyy' }}</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button color="primary" [routerLink]="['/album', album.id]">
-            <mat-icon>play_arrow</mat-icon>
-            Reproducir
-          </button>
-        </mat-card-actions>
-      </mat-card>
+      <div *ngFor="let album of popularAlbums()" class="song-card group cursor-pointer">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:scale-105 overflow-hidden">
+          <div class="relative aspect-square overflow-hidden rounded-t-2xl">
+            <img 
+              [src]="album.cover_url || '/assets/default-album.png'"
+              [alt]="album.title"
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="absolute bottom-4 right-4">
+                <button
+                  (click)="$event.stopPropagation(); router.navigate(['/album', album.id])"
+                  class="w-12 h-12 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg"
+                  [attr.aria-label]="'Reproducir ' + album.title"
+                >
+                  <mat-icon class="text-xl">play_arrow</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white text-sm truncate mb-1">{{ album.title }}</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-xs truncate mb-2">{{ album.artist_name }}</p>
+            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              <span>{{ album.total_tracks }} canciones</span>
+              <span>{{ album.release_date | date:'MMM yyyy' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -74,19 +89,35 @@
       {{ 'ERRORS.LOAD_ARTISTS' | translate }}: {{ artistsError() }}
     </div>
     <div class="artists-grid" *ngIf="!isLoadingArtists() && !artistsError()">
-      <mat-card *ngFor="let artist of popularArtists()" class="artist-card">
-        <img mat-card-image [src]="artist.image_url || '/assets/default-artist.png'" 
-             [alt]="artist.name" class="artist-image">
-        <mat-card-content>
-          <h3>{{ artist.name }}
-            <mat-icon *ngIf="artist.is_verified" class="verified-icon">verified</mat-icon>
-          </h3>
-          <p class="artist-info">{{ artist.followers_count | number }} seguidores</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button color="primary" [routerLink]="['/artist', artist.id]">Ver Perfil</button>
-        </mat-card-actions>
-      </mat-card>
+      <div *ngFor="let artist of popularArtists()" class="song-card group cursor-pointer">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:scale-105 overflow-hidden">
+          <div class="relative aspect-square overflow-hidden rounded-t-2xl">
+            <img 
+              [src]="artist.image_url || '/assets/default-artist.png'"
+              [alt]="artist.name"
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="absolute bottom-4 right-4">
+                <button
+                  (click)="$event.stopPropagation(); router.navigate(['/artist', artist.id])"
+                  class="w-12 h-12 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg"
+                  [attr.aria-label]="'Ver perfil de ' + artist.name"
+                >
+                  <mat-icon class="text-xl">person</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold text-gray-900 dark:text-white text-sm truncate mb-1">{{ artist.name }}
+              <mat-icon *ngIf="artist.is_verified" class="verified-icon">verified</mat-icon>
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 text-xs truncate mb-2">{{ artist.followers_count | number }} seguidores</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -123,22 +154,85 @@
 
   <!-- Canciones Populares -->
   <section class="discover-section">
-    <app-music-section
-      [title]="'HOME.POPULAR_SONGS' | translate"
-      [songs]="popularSongs()"
-      [loading]="isLoadingPopularSongs()"
-      [type]="viewMode()"
-      [primaryButton]="popularSongsPrimaryButton"
-      [actionButtons]="popularSongsActionButtons"
-      [emptyMessage]="'HOME.NO_POPULAR_SONGS' | translate"
-      [loadingMessage]="'COMMON.LOADING' | translate"
-      (songSelected)="onPopularSongSelected($event)"
-      (retryLoad)="onRetryPopularSongs()"
-      (addToQueueRequest)="onAddToQueue($event)"
-      (addToPlaylistRequest)="onAddToPlaylist($event)"
-      (addToFavoritesRequest)="onAddToFavorites($event)"
-      (moreOptionsRequest)="onMoreOptions($event)"
-    ></app-music-section>
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white">{{ 'HOME.POPULAR_SONGS' | translate }}</h2>
+      <button 
+        class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors duration-200"
+        (click)="onRetryPopularSongs()"
+        [disabled]="isLoadingPopularSongs()"
+      >
+        {{ isLoadingPopularSongs() ? ('HOME.LOADING' | translate) : ('HOME.REFRESH' | translate) }}
+      </button>
+    </div>
+    <!-- Loading state para canciones -->
+    <div *ngIf="isLoadingPopularSongs()" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div *ngFor="let item of [1,2,3,4,5]" class="animate-pulse">
+        <div class="bg-gray-200 dark:bg-gray-700 rounded-2xl aspect-square mb-3"></div>
+        <div class="bg-gray-200 dark:bg-gray-700 h-4 rounded-lg mb-2"></div>
+        <div class="bg-gray-200 dark:bg-gray-700 h-3 rounded-lg w-3/4"></div>
+      </div>
+    </div>
+    <!-- Cards de canciones elegantes -->
+    <div *ngIf="!isLoadingPopularSongs() && popularSongs().length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      @for (song of popularSongs().slice(0, 10); track song.id) {
+        <div class="song-card group cursor-pointer">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:scale-105 overflow-hidden">
+            <div class="relative aspect-square overflow-hidden rounded-t-2xl">
+              <img 
+                [src]="song.thumbnail_url || song.albumCover || 'https://picsum.photos/300/300?random=' + song.id"
+                [alt]="song.title"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                loading="lazy"
+                (error)="$event.target.src = 'https://picsum.photos/300/300?random=' + song.id"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="absolute bottom-4 right-4">
+                  <button
+                    (click)="playSong(song)"
+                    class="w-12 h-12 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg"
+                    [attr.aria-label]="'Reproducir ' + song.title"
+                  >
+                    <mat-icon class="text-xl">play_arrow</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-gray-900 dark:text-white text-sm truncate mb-1">{{ song.title }}</h3>
+              <p class="text-gray-600 dark:text-gray-400 text-xs truncate mb-2">{{ song.artist_name || 'Artista desconocido' }}</p>
+              <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                <div class="flex items-center">
+                  <mat-icon class="w-3 h-3 mr-1">play_circle</mat-icon>
+                  <span>{{ song.play_count || 0 | number }} plays</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button
+                    (click)="addToFavorites(song); $event.stopPropagation()"
+                    class="hover:text-red-500 transition-colors"
+                    [attr.aria-label]="'Agregar a favoritos ' + song.title"
+                  >
+                    <mat-icon class="w-4 h-4">favorite_border</mat-icon>
+                  </button>
+                  <button
+                    (click)="showMoreOptions(song); $event.stopPropagation()"
+                    class="hover:text-blue-500 transition-colors"
+                    [attr.aria-label]="'Más opciones para ' + song.title"
+                  >
+                    <mat-icon class="w-4 h-4">more_vert</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+    <!-- Empty state elegante -->
+    <div *ngIf="!isLoadingPopularSongs() && popularSongs().length === 0" class="text-center py-12">
+      <mat-icon class="text-6xl text-gray-400 dark:text-gray-600 mb-4">music_note</mat-icon>
+      <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">{{ 'HOME.NO_POPULAR_SONGS' | translate }}</h3>
+      <p class="text-gray-500 dark:text-gray-400 mb-4">Las canciones aparecerán aquí cuando estén disponibles</p>
+    </div>
   </section>
 
   <!-- Música Aleatoria -->

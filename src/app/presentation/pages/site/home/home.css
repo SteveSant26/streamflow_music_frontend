@@ -29,6 +29,7 @@
 
 .animated-text {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--md-sys-color-on-surface, #1e293b);
   font-weight: 500;
   letter-spacing: 0.025em;
   text-align: center;
@@ -40,7 +41,13 @@
   animation: letterFadeIn 0.6s ease-out forwards;
   display: inline-block;
   position: relative;
-  color: inherit !important; /* Asegurar que herede el color del padre */
+  color: var(--md-sys-color-on-surface, #1e293b) !important;
+body.dark .animated-text,
+body.dark .letter,
+.dark .animated-text,
+.dark .letter {
+  color: var(--md-sys-color-on-surface-dark, #f8fafc) !important;
+}
 }
 
 @keyframes letterFadeIn {
@@ -154,7 +161,7 @@
 
 .song-card .bg-white {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: none;
 }
 
 :host-context(body.dark) .song-card .bg-white {
@@ -177,7 +184,7 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: none;
 }
 
 :host-context(body.dark) .playlist-card {
@@ -201,7 +208,7 @@
   border-radius: 1.5rem;
   padding: 2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: none;
   transition: all 0.3s ease;
 }
 
