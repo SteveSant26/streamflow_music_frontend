@@ -6,6 +6,7 @@ export interface Artist {
   image_url?: string;
   followers_count: number;
   is_verified: boolean;
+  verified?: boolean; // Alias para compatibilidad
   created_at: Date;
   updated_at: Date;
 }
@@ -16,4 +17,5 @@ export interface ArtistListItem {
   image_url?: string;
   followers_count: number;
   is_verified: boolean;
+  verified?: boolean; // Alias para compatibilidad
 }

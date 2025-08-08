@@ -22,7 +22,11 @@
     "RESULTS_FOR": "Resultados para: \"{{query}}\"",
     "CLEAR": "Limpiar búsqueda",
     "IMPLEMENTING": "Implementando búsqueda...",
-    "RESULTS_SOON": "Los resultados de búsqueda aparecerán aquí próximamente"
+    "RESULTS_SOON": "Los resultados de búsqueda aparecerán aquí próximamente",
+    "SONGS": "Canciones encontradas",
+    "NO_RESULTS": "No se encontraron resultados",
+    "TRY_DIFFERENT": "Intenta con palabras clave diferentes",
+    "SEARCHING": "Buscando..."
   },
   "GENRES": {
     "ROCK": "Rock",
@@ -183,8 +187,18 @@
     "BUTTON": "Enviar Enlace de Restablecimiento"
   },
   "HOME": {
+    "TITLE": "Descubrir Música",
+    "SUBTITLE": "Descubre la mejor música para ti",
     "DISCOVER": "Descubrir",
     "PLAY_ALL": "Reproducir Todo",
+    "POPULAR_SONGS": "Canciones Populares",
+    "NO_POPULAR_SONGS": "No hay canciones populares disponibles",
+    "RANDOM_SONGS": "Canciones Aleatorias", 
+    "NO_RANDOM_SONGS": "No hay canciones aleatorias disponibles",
+    "POPULAR_ALBUMS": "Álbumes Populares",
+    "POPULAR_ARTISTS": "Artistas Populares",
+    "POPULAR_GENRES": "Géneros Populares",
+    "VIEW_ALL": "Ver todos",
     "CARD1_TITLE": "Nuevos Lanzamientos",
     "CARD1_BODY": "Descubre los últimos lanzamientos musicales",
     "CARD2_TITLE": "Top Charts",
@@ -193,12 +207,39 @@
     "CARD3_BODY": "Explora música por género",
     "MIXES": "Tus Mezclas",
     "SEE_ALL": "Ver Todo",
-    "TRENDING": "Tendencias Ahora"
+    "TRENDING": "Tendencias Ahora",
+    "NEW_RELEASES": "Nuevos Lanzamientos",
+    "NEW_RELEASES_DESC": "Descubre los últimos lanzamientos musicales",
+    "TOP_CHARTS": "Top Charts",
+    "TOP_CHARTS_DESC": "Las canciones más populares ahora",
+    "GENRES": "Géneros",
+    "GENRES_DESC": "Explora música por género",
+    "FEATURED_PLAYLISTS": "Playlists Destacadas",
+    "LOADING": "Cargando...",
+    "REFRESH": "Actualizar",
+    "NO_PLAYLISTS": "No hay playlists disponibles",
+    "NO_PLAYLISTS_DESC": "Las playlists aparecerán aquí cuando estén disponibles",
+    "RETRY": "Intentar de nuevo",
+    "NO_DESCRIPTION": "Sin descripción",
+    "SONG": "canción",
+    "SONGS": "canciones",
+    "DISCOVER_NEW_MUSIC": "Descubre Música Nueva",
+    "MOST_POPULAR": "Más Populares",
+    "MOTIVATIONAL_QUOTES": {
+      "QUOTE_1": "La música es el lenguaje universal del alma",
+      "QUOTE_2": "Cada canción cuenta una historia única",
+      "QUOTE_3": "Descubre tu próxima canción favorita aquí",
+      "QUOTE_4": "La música conecta corazones y culturas",
+      "QUOTE_5": "Tu playlist perfecta te está esperando",
+      "QUOTE_6": "Explora géneros y encuentra tu sonido ideal"
+    },
+    "MUSICAL_GENRE": "Género Musical"
   },
   "SIDEBAR": {
     "HOME": "Inicio",
     "SEARCH": "Buscar",
     "LIBRARY": "Tu Biblioteca",
+    "DISCOVER":"Descubrir",
     "MY_PLAYLISTS": "Mis Playlists",
     "PLAYLISTS": "Listas de Reproducción",
     "LIKED_SONGS": "Canciones que te Gustan",
@@ -221,6 +262,13 @@
     "DARK": "Tema oscuro",
     "SYSTEM": "Tema del sistema"
   },
+  "HEADER": {
+    "INITIAL": "Inicio",
+    "EXPLORE": "Explorar",
+    "SUBSCRIPTION_PLANS": "Planes",
+    "SEARCH": "Buscar"
+  },
+
   "PROFILE": {
     "TITLE": "Mi Perfil",
     "SUBTITLE": "Personaliza tu información y mantén tu perfil actualizado",
@@ -232,5 +280,116 @@
     "EMAIL_INVALID": "Por favor ingresa un correo electrónico válido",
     "SAVE_BUTTON": "Guardar Cambios",
     "CANCEL_BUTTON": "Cancelar"
+  },
+  "ERRORS": {
+    "NETWORK_ERROR": "Error de conexión",
+    "SERVER_ERROR": "Error del servidor",
+    "LOADING_ERROR": "Error al cargar",
+    "AUDIO_ERROR": "Error de audio",
+    "NOT_FOUND": "No encontrado",
+    "UNAUTHORIZED": "No autorizado",
+    "FORBIDDEN": "Acceso denegado",
+    "GENERAL_ERROR": "Ha ocurrido un error",
+    "LOAD_ALBUMS": "Cargando álbumes",
+    "LOAD_ARTISTS": "Cargando artistas",
+    "LOAD_GENRES": "Cargando géneros"
+  },
+  "COMMON": {
+    "LOADING": "Cargando...",
+    "RETRY": "Reintentar",
+    "OK": "Aceptar",
+    "CANCEL": "Cancelar",
+    "YES": "Sí",
+    "NO": "No",
+    "SAVE": "Guardar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "CLOSE": "Cerrar",
+    "BACK": "Atrás",
+    "NEXT": "Siguiente",
+    "PREVIOUS": "Anterior"
+  },
+  "DISCOVER": {
+    "MESSAGE_ALBUM": "No se pudieron cargar los álbumes populares",
+    "MESSAGE_ARTIST": "No se pudieron cargar los artistas populares",
+    "MESSAGE_GENRE": "No se pudieron cargar los géneros populares",
+    "MESSAGE_POPULAR_SONG": "No se pudieron cargar las canciones populares",
+    "MESSAGE_RANDOM_SONG": "No se pudieron cargar las canciones aleatorias",
+    "MUSICAL_GENRE": "Género Musical"
+  },
+  "SUBSCRIPTION": {
+    "TITLE": "Elige tu plan perfecto",
+    "SUBTITLE": "Desbloquea el poder completo de StreamFlow Music con acceso ilimitado a millones de canciones, calidad premium y funciones exclusivas.",
+    "AVAILABLE_PLANS": "Suscripciones disponibles",
+    "MORE_INFO": "Más información",
+    "TERMS": "Términos de la oferta",
+    "SUBSCRIBE": "Suscribirse",
+    "MONTHLY": "Mensual",
+    "YEARLY": "Anual",
+    "SAVE_DISCOUNT": "Ahorra 20%",
+    "FREE_PLAN": {
+      "NAME": "Gratis",
+      "DESCRIPTION": "Perfecto para empezar",
+      "PRICE": "€0",
+      "PERIOD": "/mes",
+      "FEATURES": [
+        "Acceso limitado a la biblioteca",
+        "Anuncios entre canciones",
+        "Calidad de audio estándar",
+        "Sin descargas offline",
+        "Reproductor básico"
+      ],
+      "BUTTON": "Plan Actual",
+      "CURRENT": "Tu plan actual"
+    },
+    "MONTHLY_PLAN": {
+      "NAME": "Premium Mensual",
+      "DESCRIPTION": "Sin compromisos a largo plazo",
+      "PRICE": "€9.99",
+      "PERIOD": "/mes",
+      "FEATURES": [
+        "Acceso completo a toda la biblioteca",
+        "Sin anuncios",
+        "Calidad de audio premium",
+        "Descargas offline ilimitadas",
+        "Reproductor avanzado",
+        "Letras sincronizadas"
+      ],
+      "BUTTON": "Seleccionar Plan"
+    },
+    "YEARLY_PLAN": {
+      "NAME": "Premium Anual",
+      "DESCRIPTION": "El mejor valor - más ahorro",
+      "PRICE": "€99.99",
+      "PERIOD": "/año",
+      "ORIGINAL_PRICE": "€119.88",
+      "FEATURES": [
+        "Acceso completo a toda la biblioteca",
+        "Sin anuncios",
+        "Calidad de audio premium",
+        "Descargas offline ilimitadas",
+        "Reproductor avanzado",
+        "Letras sincronizadas",
+        "Soporte prioritario",
+        "Funciones exclusivas beta"
+      ],
+      "BUTTON": "Seleccionar Plan",
+      "RECOMMENDED": "RECOMENDADO",
+      "SAVE": "Ahorra €19.89/año"
+    },
+    "TRUST_INDICATORS": {
+      "SECURE_PAYMENT": "Pago Seguro",
+      "CANCEL_ANYTIME": "Cancela Cuando Quieras",
+      "SUPPORT": "Soporte 24/7",
+      "PREMIUM_QUALITY": "Calidad Premium"
+    },
+    "ACTIONS": {
+      "CHANGE_PLAN": "Cambiar Plan",
+      "SELECT_PLAN": "Seleccionar Plan",
+      "CURRENT_PLAN": "Plan Actual",
+      "RETRY": "Reintentar"
+    },
+    "LOADING": "Cargando planes...",
+    "ERROR": "¡Oops! Algo salió mal"
   }
 }

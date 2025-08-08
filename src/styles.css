@@ -192,3 +192,39 @@ select:focus {
 .pulse-gentle {
   animation: pulse-gentle 2s ease-in-out infinite;
 }
+
+/* Global border improvements for elegance */
+.border-white {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.border-gray-200 {
+  border-color: rgba(229, 231, 235, 0.3) !important;
+}
+
+.border-gray-300 {
+  border-color: rgba(209, 213, 219, 0.3) !important;
+}
+
+/* Dark theme border improvements */
+:root {
+  --border-subtle-light: rgba(255, 255, 255, 0.08);
+  --border-subtle-dark: rgba(0, 0, 0, 0.08);
+  --border-accent-light: rgba(99, 102, 241, 0.2);
+  --border-accent-dark: rgba(167, 139, 250, 0.2);
+}
+
+/* Apply subtle borders to common components */
+.backdrop-blur-md,
+.backdrop-blur-sm,
+.bg-white\/20,
+.bg-black\/20 {
+  border-color: var(--border-subtle-light) !important;
+}
+
+:host-context(body.dark) .backdrop-blur-md,
+:host-context(body.dark) .backdrop-blur-sm,
+:host-context(body.dark) .bg-white\/20,
+:host-context(body.dark) .bg-black\/20 {
+  border-color: var(--border-subtle-dark) !important;
+}

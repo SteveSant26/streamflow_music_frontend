@@ -1,6 +1,7 @@
-<nav class="flex flex-col flex-1 gap-4 p-4">
+<nav class="flex flex-col flex-1 gap-4 p-4 overflow-y-auto" appTheme>
   <div
-    class="bg-white backdrop-blur-sm rounded-xl p-4 border border-black/10 shadow-md"
+    class="backdrop-blur-sm rounded-xl p-4 border shadow-md"
+    style="background-color: var(--md-sys-color-surface); border-color: var(--md-sys-color-outline);"
   >
     <ul class="space-y-2">
 
@@ -96,53 +97,6 @@
       </div>
     }
 
-    <!-- View Mode Options -->
-    <div class="view-mode-selector mb-4">
-      <div class="text-black font-semibold flex items-center gap-2 mb-3">
-        <mat-icon>view_comfy</mat-icon>
-        Vista de Música
-      </div>
-      <div class="grid grid-cols-3 gap-1 bg-gray-100 rounded-lg p-1">
-        <!-- Grid View -->
-        <button
-          (click)="setViewMode('grid')"
-          [class]="viewModeService.viewMode() === 'grid' 
-            ? 'bg-white text-black shadow-sm' 
-            : 'text-gray-600 hover:text-black'"
-          class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
-          title="Vista de tarjetas"
-        >
-          <mat-icon class="text-sm">grid_view</mat-icon>
-          <span>Cards</span>
-        </button>
-        
-        <!-- Table View -->
-        <button
-          (click)="setViewMode('table')"
-          [class]="viewModeService.viewMode() === 'table' 
-            ? 'bg-white text-black shadow-sm' 
-            : 'text-gray-600 hover:text-black'"
-          class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
-          title="Vista de tabla"
-        >
-          <mat-icon class="text-sm">view_list</mat-icon>
-          <span>Tabla</span>
-        </button>
-        
-        <!-- List View -->
-        <button
-          (click)="setViewMode('list')"
-          [class]="viewModeService.viewMode() === 'list' 
-            ? 'bg-white text-black shadow-sm' 
-            : 'text-gray-600 hover:text-black'"
-          class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
-          title="Vista de lista"
-        >
-          <mat-icon class="text-sm">view_module</mat-icon>
-          <span>Lista</span>
-        </button>
-      </div>
-    </div>
 
     <!-- Language Selector -->
     <div class="language-selector">
@@ -164,50 +118,7 @@
     <!-- Theme Selector -->
     <div class="theme-selector">
       <h4>{{ "SIDEBAR.THEME" | translate }}</h4>
-      <div class="theme-toggle-container">
-        <!-- Botón principal para mostrar opciones -->
-        <button
-          mat-icon-button
-          (click)="toggleThemeOptions()"
-          [attr.aria-label]="'THEME.TOGGLE' | translate"
-          class="theme-toggle-button"
-        >
-          <mat-icon>{{ themeIcon() }}</mat-icon>
-        </button>
-
-        <!-- Menú desplegable para opciones de tema -->
-        <div class="theme-options" [class.show]="showThemeOptions">
-          <button
-            mat-button
-            (click)="setLightTheme()"
-            [class.active]="isLightActive()"
-            class="theme-option"
-          >
-            <mat-icon>wb_sunny</mat-icon>
-            <span>{{ 'THEME.LIGHT' | translate }}</span>
-          </button>
-
-          <button
-            mat-button
-            (click)="setDarkTheme()"
-            [class.active]="isDarkActive()"
-            class="theme-option"
-          >
-            <mat-icon>nights_stay</mat-icon>
-            <span>{{ 'THEME.DARK' | translate }}</span>
-          </button>
-
-          <button
-            mat-button
-            (click)="setSystemTheme()"
-            [class.active]="isSystemActive()"
-            class="theme-option"
-          >
-            <mat-icon>settings_brightness</mat-icon>
-            <span>{{ 'THEME.SYSTEM' | translate }}</span>
-          </button>
-        </div>
-      </div>
+      <app-theme-switcher></app-theme-switcher>
     </div>
 
   </div>

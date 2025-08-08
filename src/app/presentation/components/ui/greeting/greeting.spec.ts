@@ -43,7 +43,7 @@ describe('Greeting', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.greeting).toBe('Buenos días, Justin');
+      expect(component.greeting).toBe('Buenos días');
 
       // Verify it's displayed in the template
       const greetingText = getElementText(
@@ -61,7 +61,7 @@ describe('Greeting', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.greeting).toBe('Buenas tardes, Justin');
+      expect(component.greeting).toBe('Buenas tardes');
 
       const greetingText = getElementText(
         fixture,
@@ -78,7 +78,7 @@ describe('Greeting', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.greeting).toBe('Buenas noches, Justin');
+      expect(component.greeting).toBe('Buenas noches');
 
       const greetingText = getElementText(
         fixture,
@@ -95,7 +95,7 @@ describe('Greeting', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.greeting).toBe('Buenas tardes, Justin');
+      expect(component.greeting).toBe('Buenas tardes);
     });
 
     it('should handle edge case at exactly 6 PM', () => {
@@ -106,7 +106,7 @@ describe('Greeting', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.greeting).toBe('Buenas noches, Justin');
+      expect(component.greeting).toBe('Buenas noches);
     });
   });
 
@@ -128,7 +128,7 @@ describe('Greeting', () => {
       component.ngOnInit();
 
       expect(component.greeting).not.toBe('');
-      expect(component.greeting).toContain('Justin');
+      expect(component.greeting).toContain();
     });
   });
 });

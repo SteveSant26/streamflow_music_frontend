@@ -1,7 +1,6 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
-import { isPlatformBrowser } from '@angular/common';
+import { LANGUAGE_REPOSITORY_TOKEN } from '../../repositories/i-language.repository';
 
 export type Language = 'en' | 'es';
 
@@ -9,23 +8,11 @@ export type Language = 'en' | 'es';
   providedIn: 'root'
 })
 export class GetCurrentLanguageUseCase {
-  constructor(
-    private readonly translateService: TranslateService,
-    @Inject(PLATFORM_ID) private readonly platformId: object
-  ) {}
+  private readonly languageRepository = inject(LANGUAGE_REPOSITORY_TOKEN);
 
   execute(): Observable<string> {
-    let currentLang = 'en'; // Default language
-    
-    // Only access localStorage in browser environment
-    if (isPlatformBrowser(this.platformId)) {
-      currentLang = localStorage.getItem('streamflow_language') || 'en';
-    }
-    
-    // Asegurar que el TranslateService use el idioma correcto
-    this.translateService.use(currentLang).subscribe();
-    
-    return of(currentLang);
+    const currentLanguage = this.languageRepository.getCurrentLanguage();
+    return of(currentLanguage);
   }
 }
 
@@ -33,11 +20,24 @@ export class GetCurrentLanguageUseCase {
   providedIn: 'root'
 })
 export class GetAvailableLanguagesUseCase {
+  private readonly languageRepository = inject(LANGUAGE_REPOSITORY_TOKEN);
+
   execute(): Observable<{ code: Language; name: string }[]> {
-    return of([
-      { code: 'en', name: 'English' },
-      { code: 'es', name: 'Español' }
-    ]);
+    const availableLanguages = this.languageRepository.getAvailableLanguages();
+    const languagesWithNames = availableLanguages.map((code: string) => ({
+      code: code as Language,
+      name: this.getLanguageDisplayName(code)
+    }));
+    
+    return of(languagesWithNames);
+  }
+
+  private getLanguageDisplayName(code: string): string {
+    const displayNames: Record<string, string> = {
+      'en': 'English',
+      'es': 'Español'
+    };
+    return displayNames[code] || code;
   }
 }
 
@@ -45,24 +45,17 @@ export class GetAvailableLanguagesUseCase {
   providedIn: 'root'
 })
 export class ChangeLanguageUseCase {
-  constructor(
-    private readonly translateService: TranslateService,
-    @Inject(PLATFORM_ID) private readonly platformId: object
-  ) {}
+  private readonly languageRepository = inject(LANGUAGE_REPOSITORY_TOKEN);
 
   execute(language: Language): Observable<void> {
     return new Observable(observer => {
-      this.translateService.use(language).subscribe({
-        next: () => {
-          // Only access localStorage in browser environment
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('streamflow_language', language);
-          }
-          observer.next();
-          observer.complete();
-        },
-        error: (error) => observer.error(error)
-      });
+      try {
+        this.languageRepository.setLanguage(language);
+        observer.next();
+        observer.complete();
+      } catch (error) {
+        observer.error(error);
+      }
     });
   }
 }

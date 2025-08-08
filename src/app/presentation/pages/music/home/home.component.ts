@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
-import { Observable, finalize } from 'rxjs';
+import {  finalize } from 'rxjs';
 import { Router } from '@angular/router';
 import { ROUTES_CONFIG_MUSIC } from '@app/config';
 
@@ -19,6 +19,7 @@ import {
   PlaySongUseCase 
 } from '../../../../domain/usecases/song/song.usecases';
 import { GlobalPlayerStateService } from '../../../../infrastructure/services/global-player-state.service';
+import { ThemeDirective } from '../../../../shared/directives/theme.directive';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,8 @@ import { GlobalPlayerStateService } from '../../../../infrastructure/services/gl
     MatIconModule,
     MatProgressSpinnerModule,
     TranslateModule,
-    MusicSectionComponent
+    MusicSectionComponent,
+    ThemeDirective,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -138,7 +140,6 @@ export class HomePageComponent implements OnInit {
     this.viewModeService.toggleViewMode();
   }
 
-  // Métodos para acciones de canciones
   onAddToQueue(song: Song) {
     console.log('🎵 Home: Add to queue requested for:', song.title);
     // TODO: Implementar lógica de agregar a cola

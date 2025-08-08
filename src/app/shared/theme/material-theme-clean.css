@@ -1,0 +1,98 @@
+/* Variables CSS para temas Material Design */
+:root {
+  /* Variables por defecto (tema claro) */
+  --md-sys-color-primary: #1DB954;
+  --md-sys-color-secondary: #1ED760;
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-background: #fafafa;
+  --md-sys-color-error: #ff5252;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-on-secondary: #000000;
+  --md-sys-color-on-surface: #1a1a1a;
+  --md-sys-color-on-background: #1a1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-surface-variant: #f5f5f5;
+  --md-sys-color-on-surface-variant: #666666;
+  --md-sys-color-outline: #e0e0e0;
+  --md-sys-color-outline-variant: #f0f0f0;
+}
+
+/* Tema claro específico */
+.light-theme,
+[data-theme="light"] {
+  --md-sys-color-primary: #1DB954;
+  --md-sys-color-secondary: #1ED760;
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-background: #fafafa;
+  --md-sys-color-error: #ff5252;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-on-secondary: #000000;
+  --md-sys-color-on-surface: #1a1a1a;
+  --md-sys-color-on-background: #1a1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-surface-variant: #f5f5f5;
+  --md-sys-color-on-surface-variant: #666666;
+  --md-sys-color-outline: #e0e0e0;
+  --md-sys-color-outline-variant: #f0f0f0;
+}
+
+/* Tema oscuro específico */
+.dark-theme,
+[data-theme="dark"] {
+  --md-sys-color-primary: #1DB954;
+  --md-sys-color-secondary: #1ED760;
+  --md-sys-color-surface: #1e1e1e;
+  --md-sys-color-background: #121212;
+  --md-sys-color-error: #ff5252;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-on-secondary: #000000;
+  --md-sys-color-on-surface: #ffffff;
+  --md-sys-color-on-background: #ffffff;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-surface-variant: #2a2a2a;
+  --md-sys-color-on-surface-variant: #cccccc;
+  --md-sys-color-outline: #404040;
+  --md-sys-color-outline-variant: #333333;
+}
+
+/* Aplicación global del tema */
+html,
+body {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Clases de utilidad para usar en componentes */
+.surface {
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+.primary {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.secondary {
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+
+/* Componentes con directiva appTheme */
+[appTheme] {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+}
+
+/* Buttons Material */
+.mat-icon-button {
+  color: var(--md-sys-color-on-background) !important;
+}
+
+/* Cards y superficies */
+.mat-card,
+.surface {
+  background-color: var(--md-sys-color-surface) !important;
+  color: var(--md-sys-color-on-surface) !important;
+}

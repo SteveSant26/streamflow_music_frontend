@@ -10,7 +10,8 @@
       />
       <div class="song-details">
         <h4 class="song-title">{{ state.currentSong.title }}</h4>
-        <p class="artist-name">{{ state.currentSong.artist_name }}</p>
+        <p class="artist-name">{{ state.currentSong.artist_name || state.currentSong.artist?.name || 'Artista Desconocido' }}</p>
+        <p class="album-name">{{ state.currentSong.album_title || state.currentSong.album?.title || 'Sin Álbum' }}</p>
       </div>
     </div>
 
@@ -113,7 +114,8 @@
         <img [src]="song.thumbnail_url" [alt]="song.title" class="item-thumbnail">
         <div class="item-info">
           <div class="item-title">{{ song.title }}</div>
-          <div class="item-artist">{{ song.artist_name }}</div>
+          <div class="item-artist">{{ song.artist_name || 'Artista Desconocido' }}</div>
+          <div class="item-album">{{ song.album_title || song.album?.title || 'Sin Álbum' }}</div>
         </div>
         <div class="item-duration">{{ song.duration_formatted || formatTime(song.duration_seconds || 0) }}</div>
       </div>

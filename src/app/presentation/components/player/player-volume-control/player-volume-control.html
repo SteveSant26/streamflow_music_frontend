@@ -23,10 +23,16 @@
             aria-label="Barra de volumen">
       <!-- Volume Fill -->
       <div 
-        [class]="(isDarkTheme$ | async) ? 'h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full transition-all duration-300 ease-out relative' : 'h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out relative'"
+        [class]="(isDarkTheme$ | async) 
+          ? 'h-full bg-white rounded-full transition-all duration-300 ease-out relative' 
+          : 'h-full bg-gray-800 rounded-full transition-all duration-300 ease-out relative'"
         [style.width.%]="volumePercentage">
         <!-- Volume Thumb -->
-        <div [class]="(isDarkTheme$ | async) ? 'absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg border border-purple-400 opacity-0 hover:opacity-100 transition-opacity duration-200 progress-thumb' : 'absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg border border-blue-500 opacity-0 hover:opacity-100 transition-opacity duration-200 progress-thumb'"></div>
+        <div 
+          [class]="(isDarkTheme$ | async) 
+            ? 'absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg border border-gray-300 opacity-0 hover:opacity-100 transition-opacity duration-200 progress-thumb'
+            : 'absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-gray-800 rounded-full shadow-lg border border-gray-600 opacity-0 hover:opacity-100 transition-opacity duration-200 progress-thumb'">
+        </div>
       </div>
     </button>
     <!-- Hidden range input for accessibility -->

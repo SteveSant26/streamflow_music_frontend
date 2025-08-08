@@ -4,6 +4,7 @@ import {
   inject,
   OnInit,
   signal,
+  computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,6 +15,7 @@ import {
 import { User } from '@app/domain/entities/user.entity';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 
 @Component({
   selector: 'app-user-perfil',
@@ -25,6 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class UserPerfilComponent implements OnInit {
   showImageModal = false;
+  
   openImageModal(): void {
     if (this.profileImageUrl()) {
       this.showImageModal = true;
@@ -34,12 +37,17 @@ export class UserPerfilComponent implements OnInit {
   closeImageModal(): void {
     this.showImageModal = false;
   }
+
   readonly fb: FormBuilder = inject(FormBuilder);
+  private readonly themeService = inject(MaterialThemeService);
   private readonly getUserProfileUseCase: GetUserProfileUseCase = inject(
     GetUserProfileUseCase,
   );
   private readonly uploadProfilePictureUseCase: UploadProfilePictureUseCase =
     inject(UploadProfilePictureUseCase);
+
+  // Theme computed
+  readonly isDarkMode = computed(() => this.themeService.currentTheme().isDark);
 
   // Solo trabajamos con la entidad User
   currentUser = signal<User | null>(null);
@@ -58,6 +66,10 @@ export class UserPerfilComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserData();
+    console.log('🎨 Estado del tema en perfil:', {
+      currentTheme: this.themeService.currentTheme(),
+      isDarkMode: this.isDarkMode()
+    });
   }
 
   loadUserData(): void {
@@ -152,7 +164,6 @@ export class UserPerfilComponent implements OnInit {
       }
     }
   }
-
 
   get email() {
     return this.profileForm.get('email');

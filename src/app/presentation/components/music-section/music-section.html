@@ -1,7 +1,11 @@
 <div class="music-section mb-8">
   <!-- Header -->
   <div class="flex items-center justify-between mb-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
+    <h2 
+      [class]="(isDarkTheme$ | async) 
+        ? 'text-2xl sm:text-3xl font-bold text-white flex items-center gap-2' 
+        : 'text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2'"
+    >
       @if (titleIcon) {
         <span>{{ titleIcon }}</span>
       }
@@ -12,34 +16,70 @@
       <!-- Primary button (like "Ver todas") -->
       @if (primaryButton) {
         <button 
-          class="text-black hover:text-gray-700 text-sm font-medium"
+          [class]="(isDarkTheme$ | async)
+            ? 'text-white hover:text-gray-300 text-sm font-medium' 
+            : 'text-gray-900 hover:text-gray-700 text-sm font-medium'"
           (click)="primaryButton.action()"
           [attr.aria-label]="primaryButton.ariaLabel"
         >
-          {{ primaryButton.text }}
+          {{ primaryButton.text | translate }}
         </button>
       }
       
       <!-- Action buttons (like refresh, play) -->
       @for (button of actionButtons; track $index) {
         <button 
-          class="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+          [class]="(isDarkTheme$ | async)
+            ? 'p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors' 
+            : 'p-2 bg-gray-200/80 hover:bg-gray-300/80 rounded-full transition-colors'"
           (click)="button.action()"
           [attr.aria-label]="button.ariaLabel"
         >
-          <mat-icon class="text-white text-base">{{ button.icon }}</mat-icon>
+          <mat-icon 
+            [class]="(isDarkTheme$ | async)
+              ? 'text-white text-base' 
+              : 'text-gray-900 text-base'"
+          >{{ button.icon }}</mat-icon>
         </button>
       }
     </div>
   </div>
   
-  <!-- Loading state -->
-  <div *ngIf="loading" class="flex justify-center items-center py-8">
-    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-    @if (loadingMessage) {
-      <span class="ml-3 text-white">{{ loadingMessage }}</span>
+  <!-- Loading state with skeletons -->
+  @if (loading) {
+    <!-- Grid layout skeletons -->
+    @if (type === 'grid') {
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+        <app-skeleton-group [config]="{
+          type: 'song',
+          count: 6,
+          layout: 'grid'
+        }"></app-skeleton-group>
+      </div>
     }
-  </div>
+    
+    <!-- Table layout skeletons -->
+    @if (type === 'table') {
+      <div class="space-y-3">
+        <app-skeleton-group [config]="{
+          type: 'song',
+          count: 6,
+          layout: 'list'
+        }"></app-skeleton-group>
+      </div>
+    }
+    
+    <!-- List layout skeletons -->
+    @if (type === 'list') {
+      <div class="space-y-3">
+        <app-skeleton-group [config]="{
+          type: 'song',
+          count: 6,
+          layout: 'list'
+        }"></app-skeleton-group>
+      </div>
+    }
+  }
   
   <!-- Content based on type -->
   <!-- DEBUG: MusicSection type = {{ type }} -->

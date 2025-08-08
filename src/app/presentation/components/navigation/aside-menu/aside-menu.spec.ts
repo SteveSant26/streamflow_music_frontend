@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { CommonModule, AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { SideMenuItem } from '../side-menu-item/side-menu-item';
 import { SideMenuCard } from '../side-menu-card/side-menu-card';
 import { AuthStatusUseCase, LogoutUseCase } from '@app/domain/usecases';
@@ -16,7 +16,6 @@ import { TranslateModule } from '@ngx-translate/core';
     SideMenuItem,
     SideMenuCard,
     CommonModule,
-    AsyncPipe,
     MatIconModule,
     TranslateModule,
   ],

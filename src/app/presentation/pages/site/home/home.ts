@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed, effect, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, OnDestroy, signal, computed, effect, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Greeting } from '@app/presentation/components/ui';
 import { MusicSectionComponent, MusicSectionButton } from '@app/presentation/components/music-section/music-section';
 import { ViewModeService } from '@app/presentation/shared/services/view-mode.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ROUTES_CONFIG_SITE, ROUTES_CONFIG_MUSIC } from '@app/config/routes-config';
 import { 
   GetMostPopularSongsUseCase, 
@@ -19,7 +19,7 @@ import { SongMenuService } from '../../../../infrastructure/services/song-menu.s
 import { Song } from '../../../../domain/entities/song.entity';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
 import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
-import { PlayListItemCard } from '@app/presentation/components/music/play-list-item-card/play-list-item-card';
+import { ThemeDirective } from '@app/shared/directives/theme.directive';
 
 @Component({
   selector: 'app-home',
@@ -31,14 +31,13 @@ import { PlayListItemCard } from '@app/presentation/components/music/play-list-i
     TranslateModule,
     MatIconModule,
     MatButtonModule,
-    MusicSectionComponent,
-    PlayListItemCard,
+    ThemeDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   // Servicios inyectados
   private readonly getMostPopularUseCase = inject(GetMostPopularSongsUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
@@ -49,6 +48,7 @@ export class HomeComponent implements OnInit {
   private readonly songMenuService = inject(SongMenuService);
   readonly viewModeService = inject(ViewModeService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly translateService = inject(TranslateService);
 
   // Route configs
   protected readonly ROUTES_CONFIG_SITE = ROUTES_CONFIG_SITE;
@@ -60,6 +60,13 @@ export class HomeComponent implements OnInit {
   readonly featuredPlaylists = signal<Playlist[]>([]);
   readonly loading = signal(true);
   readonly playlistsLoading = signal(true);
+
+  // Propiedades para frases motivacionales
+  motivationalQuotes: string[] = [];
+  currentQuoteIndex = 0;
+  currentQuoteLetters: string[] = [];
+  private quoteInterval?: number;
+  private letterInterval?: number;
 
   // Signal computed para el tipo de vista
   readonly currentViewType = computed(() => {
@@ -75,28 +82,28 @@ export class HomeComponent implements OnInit {
     {
       id: 1,
       title: 'Hits del Rock',
-      cover: '/assets/playlists/playlist1.jpg',
+      cover: 'assets/playlists/playlist1.jpg',
       artists: ['Queen', 'Led Zeppelin', 'The Beatles'],
       action: () => this.loadMostPopularSongs()
     },
     {
       id: 2,
       title: 'Mix Aleatorio',
-      cover: '/assets/playlists/playlist2.webp',
+      cover: 'assets/playlists/playlist2.webp',
       artists: ['Varios Artistas'],
       action: () => this.loadRandomSongs()
     },
     {
       id: 3,
       title: 'Descubrimientos',
-      cover: '/assets/playlists/playlist3.jpg',
+      cover: 'assets/playlists/playlist3.jpg',
       artists: ['Nuevos Artistas'],
       action: () => this.loadRandomSongs()
     },
     {
       id: 4,
       title: 'Tendencias',
-      cover: '/assets/playlists/playlist4.jpg',
+      cover: 'assets/playlists/playlist4.jpg',
       artists: ['Top Charts'],
       action: () => this.loadMostPopularSongs()
     },
@@ -105,6 +112,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadHomeData();
     this.loadFeaturedPlaylists();
+    this.initializeMotivationalQuotes();
     
     // Effect para debuggear cambios de view mode
     effect(() => {
@@ -112,6 +120,109 @@ export class HomeComponent implements OnInit {
       console.log('🏠 Home Effect: View mode changed to:', currentMode);
       console.log('🏠 Home Effect: Should show', currentMode === 'list' ? 'GRID/CARDS' : 'TABLE');
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.quoteInterval) {
+      clearInterval(this.quoteInterval);
+    }
+    if (this.letterInterval) {
+      clearInterval(this.letterInterval);
+    }
+  }
+
+  // Inicializar frases motivacionales
+  initializeMotivationalQuotes(): void {
+    // Frases fallback en caso de que las traducciones no funcionen
+    const fallbackQuotes = [
+      'La música es el lenguaje universal del alma',
+      'Cada canción cuenta una historia única',
+      'Descubre tu próxima canción favorita aquí',
+      'La música conecta corazones y culturas',
+      'Tu playlist perfecta te está esperando',
+      'Explora géneros y encuentra tu sonido ideal'
+    ];
+
+    // Obtener las frases traducidas
+    this.translateService.get([
+      'HOME.MOTIVATIONAL_QUOTES.QUOTE_1',
+      'HOME.MOTIVATIONAL_QUOTES.QUOTE_2',
+      'HOME.MOTIVATIONAL_QUOTES.QUOTE_3',
+      'HOME.MOTIVATIONAL_QUOTES.QUOTE_4',
+      'HOME.MOTIVATIONAL_QUOTES.QUOTE_5',
+      'HOME.MOTIVATIONAL_QUOTES.QUOTE_6'
+    ]).subscribe({
+      next: (translations) => {
+        console.log('🔤 Traducciones recibidas:', translations);
+        const translatedQuotes = Object.values(translations) as string[];
+        
+        // Verificar si las traducciones están correctas
+        const hasValidTranslations = translatedQuotes.every(quote => 
+          typeof quote === 'string' && quote.trim() !== '' && !quote.startsWith('HOME.')
+        );
+
+        if (hasValidTranslations) {
+          this.motivationalQuotes = translatedQuotes;
+          console.log('✅ Usando traducciones:', this.motivationalQuotes);
+        } else {
+          console.log('⚠️ Traducciones no válidas, usando fallback');
+          this.motivationalQuotes = fallbackQuotes;
+        }
+        
+        this.startQuoteAnimation();
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar traducciones:', error);
+        console.log('🔄 Usando frases fallback');
+        this.motivationalQuotes = fallbackQuotes;
+        this.startQuoteAnimation();
+      }
+    });
+  }
+
+  // Iniciar animación de frases
+  startQuoteAnimation(): void {
+    if (this.motivationalQuotes.length === 0) return;
+    
+    this.showCurrentQuote();
+    
+    // Cambiar frase cada 4 segundos
+    this.quoteInterval = window.setInterval(() => {
+      this.currentQuoteIndex = (this.currentQuoteIndex + 1) % this.motivationalQuotes.length;
+      this.showCurrentQuote();
+    }, 4000);
+  }
+
+  // Mostrar frase actual con animación letra por letra
+  showCurrentQuote(): void {
+    this.currentQuoteLetters = [];
+    const currentQuote = this.motivationalQuotes[this.currentQuoteIndex];
+    
+    if (!currentQuote) return;
+    
+    const letters = currentQuote.split('');
+    let letterIndex = 0;
+    
+    // Limpiar interval anterior si existe
+    if (this.letterInterval) {
+      clearInterval(this.letterInterval);
+    }
+    
+    // Animar letra por letra
+    this.letterInterval = window.setInterval(() => {
+      if (letterIndex < letters.length) {
+        this.currentQuoteLetters.push(letters[letterIndex]);
+        letterIndex++;
+        this.cdr.detectChanges();
+      } else {
+        clearInterval(this.letterInterval!);
+      }
+    }, 50); // 50ms entre cada letra
+  }
+
+  // TrackBy function para optimizar el *ngFor
+  trackByIndex(index: number): number {
+    return index;
   }
 
   loadFeaturedPlaylists(): void {
@@ -129,6 +240,18 @@ export class HomeComponent implements OnInit {
         this.loadMockPlaylists();
       }
     });
+  }
+
+  // Convertir playlists de dominio al formato que espera el componente card
+  get playlistsForCards() {
+    return this.featuredPlaylists().map(playlist => ({
+      id: Number(playlist.id), // Convertir string a number como espera la interfaz del card
+      title: playlist.name,
+      cover: playlist.playlist_img || 'assets/playlists/placeholder.jpg',
+      playlist_img: playlist.playlist_img, // Incluir la imagen de la DB
+      artists: ['Varios Artistas'], // Por ahora, podrías obtener esto de las canciones
+      color: '#1f2937' // Color por defecto
+    }));
   }
 
   loadMockPlaylists(): void {
@@ -440,4 +563,12 @@ export class HomeComponent implements OnInit {
       loadingMessage: 'Cargando música...'
     };
   });
+
+  // Función para manejar errores de imagen
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img) {
+      img.src = 'assets/images/default-playlist.jpg';
+    }
+  }
 }

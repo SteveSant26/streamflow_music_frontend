@@ -22,7 +22,12 @@
     "RESULTS_FOR": "Results for: \"{{query}}\"",
     "CLEAR": "Clear search",
     "IMPLEMENTING": "Implementing search...",
-    "RESULTS_SOON": "Search results will appear here soon"
+    "RESULTS_SOON": "Search results will appear here soon",
+    "SONGS": "Songs found",
+    "NO_RESULTS": "No results found",
+    "TRY_DIFFERENT": "Try different keywords",
+    "SEARCHING": "Searching..."
+
   },
   "GENRES": {
     "ROCK": "Rock",
@@ -183,8 +188,18 @@
     "BUTTON": "Send Reset Link"
   },
   "HOME": {
+    "TITLE": "Discover Music",
+    "SUBTITLE": "Discover the best music for you",
     "DISCOVER": "Discover",
     "PLAY_ALL": "Play All",
+    "POPULAR_SONGS": "Popular Songs",
+    "NO_POPULAR_SONGS": "No popular songs available",
+    "RANDOM_SONGS": "Random Songs",
+    "NO_RANDOM_SONGS": "No random songs available", 
+    "POPULAR_ALBUMS": "Popular Albums",
+    "POPULAR_ARTISTS": "Popular Artists",
+    "POPULAR_GENRES": "Popular Genres",
+    "VIEW_ALL": "View all",
     "CARD1_TITLE": "New Releases",
     "CARD1_BODY": "Check out the latest music releases",
     "CARD2_TITLE": "Top Charts",
@@ -193,12 +208,45 @@
     "CARD3_BODY": "Explore music by genre",
     "MIXES": "Your Mixes",
     "SEE_ALL": "See All",
-    "TRENDING": "Trending Now"
+    "TRENDING": "Trending Now",
+    "NEW_RELEASES": "New Releases",
+    "NEW_RELEASES_DESC": "Check out the latest music releases",
+    "TOP_CHARTS": "Top Charts",
+    "TOP_CHARTS_DESC": "Most popular songs right now",
+    "GENRES": "Genres",
+    "GENRES_DESC": "Explore music by genre",
+    "FEATURED_PLAYLISTS": "Featured Playlists",
+    "LOADING": "Loading...",
+    "REFRESH": "Refresh",
+    "NO_PLAYLISTS": "No playlists available",
+    "NO_PLAYLISTS_DESC": "Playlists will appear here when available",
+    "RETRY": "Try again",
+    "NO_DESCRIPTION": "No description",
+    "SONG": "song",
+    "SONGS": "songs",
+    "DISCOVER_NEW_MUSIC": "Discover New Music",
+    "MOST_POPULAR": "Most Popular",
+    "MOTIVATIONAL_QUOTES": {
+      "QUOTE_1": "Music is the universal language of the soul",
+      "QUOTE_2": "Every song tells a unique story",
+      "QUOTE_3": "Discover your next favorite song here",
+      "QUOTE_4": "Music connects hearts and cultures",
+      "QUOTE_5": "Your perfect playlist is waiting for you",
+      "QUOTE_6": "Explore genres and find your ideal sound"
+    },
+    "MUSICAL_GENRE": "Musical Genre"
+  },
+  "HEADER": {
+    "INITIAL": "Home",
+    "EXPLORE": "Explore",
+    "SUBSCRIPTION_PLANS": "Plans",
+    "SEARCH": "Search"
   },
   "SIDEBAR": {
     "HOME": "Home",
     "SEARCH": "Search",
     "LIBRARY": "Your Library",
+    "DISCOVER":"Discover",
     "MY_PLAYLISTS": "My Playlists",
     "PLAYLISTS": "Playlists",
     "LIKED_SONGS": "Liked Songs",
@@ -232,5 +280,116 @@
     "EMAIL_INVALID": "Please enter a valid email",
     "SAVE_BUTTON": "Save Changes",
     "CANCEL_BUTTON": "Cancel"
+  },
+  "ERRORS": {
+    "NETWORK_ERROR": "Network error",
+    "SERVER_ERROR": "Server error",
+    "LOADING_ERROR": "Loading error",
+    "AUDIO_ERROR": "Audio error",
+    "NOT_FOUND": "Not found",
+    "UNAUTHORIZED": "Unauthorized",
+    "FORBIDDEN": "Access denied",
+    "GENERAL_ERROR": "An error occurred",
+    "LOAD_ALBUMS": "Loading albums",
+    "LOAD_ARTISTS": "Loading artists",
+    "LOAD_GENRES": "Loading genres"
+  },
+  "COMMON": {
+    "LOADING": "Loading...",
+    "RETRY": "Retry",
+    "OK": "OK",
+    "CANCEL": "Cancel",
+    "YES": "Yes",
+    "NO": "No",
+    "SAVE": "Save",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "CLOSE": "Close",
+    "BACK": "Back",
+    "NEXT": "Next",
+    "PREVIOUS": "Previous"
+  },
+  "DISCOVER": {
+    "MESSAGE_ALBUM": "Could not load popular albums",
+    "MESSAGE_ARTIST": "Could not load popular artists",
+    "MESSAGE_GENRE": "Could not load popular genres",
+    "MESSAGE_POPULAR_SONG": "Could not load popular songs",
+    "MESSAGE_RANDOM_SONG": "Could not load random songs",
+    "MUSICAL.GENRE": "Musical Genre"
+  },
+  "SUBSCRIPTION": {
+    "TITLE": "Choose your perfect plan",
+    "SUBTITLE": "Unlock the full power of StreamFlow Music with unlimited access to millions of songs, premium quality and exclusive features.",
+    "AVAILABLE_PLANS": "Available subscriptions",
+    "MORE_INFO": "More information",
+    "TERMS": "Terms of offer",
+    "SUBSCRIBE": "Subscribe",
+    "MONTHLY": "Monthly",
+    "YEARLY": "Yearly",
+    "SAVE_DISCOUNT": "Save 20%",
+    "FREE_PLAN": {
+      "NAME": "Free",
+      "DESCRIPTION": "Perfect to get started",
+      "PRICE": "€0",
+      "PERIOD": "/month",
+      "FEATURES": [
+        "Limited library access",
+        "Ads between songs",
+        "Standard audio quality",
+        "No offline downloads",
+        "Basic player"
+      ],
+      "BUTTON": "Current Plan",
+      "CURRENT": "Your current plan"
+    },
+    "MONTHLY_PLAN": {
+      "NAME": "Premium Monthly",
+      "DESCRIPTION": "No long-term commitments",
+      "PRICE": "€9.99",
+      "PERIOD": "/month",
+      "FEATURES": [
+        "Full library access",
+        "No ads",
+        "Premium audio quality",
+        "Unlimited offline downloads",
+        "Advanced player",
+        "Synchronized lyrics"
+      ],
+      "BUTTON": "Select Plan"
+    },
+    "YEARLY_PLAN": {
+      "NAME": "Premium Yearly",
+      "DESCRIPTION": "Best value - more savings",
+      "PRICE": "€99.99",
+      "PERIOD": "/year",
+      "ORIGINAL_PRICE": "€119.88",
+      "FEATURES": [
+        "Full library access",
+        "No ads",
+        "Premium audio quality",
+        "Unlimited offline downloads",
+        "Advanced player",
+        "Synchronized lyrics",
+        "Priority support",
+        "Exclusive beta features"
+      ],
+      "BUTTON": "Select Plan",
+      "RECOMMENDED": "RECOMMENDED",
+      "SAVE": "Save €19.89/year"
+    },
+    "TRUST_INDICATORS": {
+      "SECURE_PAYMENT": "Secure Payment",
+      "CANCEL_ANYTIME": "Cancel Anytime",
+      "SUPPORT": "24/7 Support",
+      "PREMIUM_QUALITY": "Premium Quality"
+    },
+    "ACTIONS": {
+      "CHANGE_PLAN": "Change Plan",
+      "SELECT_PLAN": "Select Plan",
+      "CURRENT_PLAN": "Current Plan",
+      "RETRY": "Retry"
+    },
+    "LOADING": "Loading plans...",
+    "ERROR": "Oops! Something went wrong"
   }
 }

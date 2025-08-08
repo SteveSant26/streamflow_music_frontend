@@ -61,8 +61,8 @@
     <!-- Información de la canción -->
     <div class="song-info" [class.loading]="currentSong.isLoading">
       <h2 class="song-title">{{ currentSong.title }}</h2>
-      <p class="song-artist">{{ currentSong.artist }}</p>
-      <p class="song-album">{{ currentSong.album }}</p>
+      <p class="song-artist">{{ currentSong.artist || 'Artista Desconocido' }}</p>
+      <p class="song-album">{{ currentSong.album || 'Sin Álbum' }}</p>
     </div>
 
     <!-- Barra de progreso -->

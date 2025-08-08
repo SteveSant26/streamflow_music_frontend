@@ -1,5 +1,10 @@
 .playlist-item {
   cursor: pointer;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .playlist-item:hover {
@@ -15,11 +20,62 @@
   object-position: center;
   display: block;
   border-radius: 0.5rem;
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+  background-color: #374151;
+}
+
+/* Contenedor de imagen con aspect ratio fijo */
+picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #374151;
+}
+
+/* Fallback para imágenes que no cargan */
+.playlist-item img[src=""],
+.playlist-item img[src*="placeholder"] {
+  background: linear-gradient(135deg, #374151, #6b7280);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: #9ca3af;
+}
+
+.playlist-item img[src=""]::after,
+.playlist-item img[src*="placeholder"]::after {
+  content: "♪";
+  font-size: 4rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Estado de carga de imagen */
+.playlist-item img {
+  background-color: #374151;
+  background-image: 
+    linear-gradient(45deg, #4b5563 25%, transparent 25%), 
+    linear-gradient(-45deg, #4b5563 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #4b5563 75%), 
+    linear-gradient(-45deg, transparent 75%, #4b5563 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
 
 /* Efecto de sombra más pronunciado en hover */
 .group:hover {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transform: scale(1.05);
 }
 
 /* Transiciones suaves para todos los elementos */
@@ -30,11 +86,12 @@
 /* Mejora visual en hover del grupo */
 .group:hover .playlist-item img {
   transform: scale(1.05);
+  opacity: 0.9;
 }
 
 /* Efecto de hover en el título */
 .group:hover h4 {
-  color: rgb(62, 12, 69); /* text-purple-500 */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Fallback para imágenes que no cargan */
@@ -42,17 +99,168 @@
   background: linear-gradient(45deg, #374151, #6b7280);
 }
 
-/* Centrado perfecto de la imagen */
-picture {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
 .playlist-item picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center center;
+}
+
+/* Estilos específicos para temas */
+:host {
+  --card-bg: var(--md-sys-color-surface);
+  --card-text: var(--md-sys-color-on-surface);
+  --card-text-secondary: var(--md-sys-color-on-surface-variant);
+  --card-button-bg: var(--md-sys-color-surface-variant);
+  --card-button-text: var(--md-sys-color-on-surface-variant);
+}
+
+/* Clases personalizadas para el tema */
+.theme-card {
+  background-color: var(--md-sys-color-surface) !important;
+  color: var(--md-sys-color-on-surface) !important;
+  border: 1px solid var(--md-sys-color-outline) !important;
+}
+
+.theme-card-text {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+.theme-card-text-secondary {
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+.theme-card-button {
+  background-color: var(--md-sys-color-surface-variant) !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+.theme-card-link {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+/* Override para el artículo principal */
+article {
+  background-color: var(--card-bg) !important;
+  color: var(--card-text) !important;
+  border: 1px solid var(--md-sys-color-outline);
+}
+
+/* Override para textos */
+h4,
+.playlist-item {
+  color: var(--card-text) !important;
+}
+
+span {
+  color: var(--card-text-secondary) !important;
+}
+
+/* Override para el botón de play */
+.group div div {
+  background-color: var(--card-button-bg) !important;
+  color: var(--card-button-text) !important;
+}
+
+/* Mejorar el hover en modo oscuro */
+:host-context(.dark-theme) .group:hover,
+:host-context([data-theme="dark"]) .group:hover {
+  box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1);
+}
+
+:host-context(.light-theme) .group:hover,
+:host-context([data-theme="light"]) .group:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+}
+
+/* Overrides más específicos para sobrescribir Tailwind */
+article.theme-card {
+  background: var(--md-sys-color-surface) !important;
+  background-color: var(--md-sys-color-surface) !important;
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+/* Sobrescribir cualquier gradiente específico */
+article.theme-card.bg-gradient-to-br,
+article.theme-card[class*="bg-gradient"],
+article.theme-card[class*="from-"],
+article.theme-card[class*="to-"] {
+  background: var(--md-sys-color-surface) !important;
+  background-color: var(--md-sys-color-surface) !important;
+  background-image: none !important;
+}
+
+/* Forzar colores de texto */
+.theme-card-text,
+.theme-card h4,
+.theme-card .theme-card-text {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+.theme-card-text-secondary,
+.theme-card span,
+.theme-card .theme-card-text-secondary {
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+.theme-card-link,
+.theme-card a,
+.theme-card .theme-card-link {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+/* Sobrescribir clases específicas de Tailwind */
+.theme-card.text-white,
+.theme-card .text-white,
+.theme-card [class*="text-white"] {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+.theme-card.text-gray-200,
+.theme-card .text-gray-200,
+.theme-card [class*="text-gray"] {
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+/* Forzar colores según tema dentro de theme-card */
+.theme-card,
+.theme-card * {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Texto principal (título) */
+.theme-card .theme-card-text,
+.theme-card h4.theme-card-text,
+.theme-card .theme-card-link .theme-card-text {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+/* Texto secundario (artistas) */
+.theme-card .theme-card-text-secondary,
+.theme-card span.theme-card-text-secondary,
+.theme-card .theme-card-link .theme-card-text-secondary {
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+/* Forzar herencia de color para cualquier texto con clases personalizadas */
+.theme-card *[class*="theme-card-text"],
+.theme-card *[class*="theme-card-text-secondary"] {
+  color: inherit !important;
+}
+
+/* Botón de play adaptado al tema */
+.theme-card .theme-card-button {
+  background-color: var(--md-sys-color-surface-variant) !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+/* Hover con sombras adaptadas al tema */
+:host-context(.dark-theme) .theme-card.group:hover,
+:host-context([data-theme="dark"]) .theme-card.group:hover {
+  box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1);
+}
+
+:host-context(.light-theme) .theme-card.group:hover,
+:host-context([data-theme="light"]) .theme-card.group:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
 }

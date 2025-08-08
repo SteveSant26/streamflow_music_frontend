@@ -34,6 +34,7 @@ export class PlaylistMapper {
       is_default: dto.is_default,
       is_public: dto.is_public,
       total_songs: dto.song_count, // Mapear song_count del DTO a total_songs de la entidad
+      playlist_img: dto.playlist_img, // Incluir la imagen de la playlist
       created_at: dto.created_at,
       updated_at: dto.updated_at
     };
@@ -115,7 +116,7 @@ export class PlaylistMapper {
       id: playlist.id,
       name: playlist.name,
       description: playlist.description,
-      coverImage: this.generateCoverImage(playlist.id),
+      coverImage: playlist.playlist_img || this.generateCoverImage(playlist.id), // Usar imagen de DB o fallback
       isPublic: playlist.is_public,
       createdDate: playlist.created_at,
       songCount: playlist.total_songs,

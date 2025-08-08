@@ -1,0 +1,243 @@
+/* Variables CSS para temas Material Design */
+:root {
+  /* Variables por defecto (tema claro) */
+  --md-sys-color-primary: #1DB954;
+  --md-sys-color-secondary: #1ED760;
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-background: #fafafa;
+  --md-sys-color-error: #ff5252;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-on-secondary: #000000;
+  --md-sys-color-on-surface: #1a1a1a;
+  --md-sys-color-on-background: #1a1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-surface-variant: #f5f5f5;
+  --md-sys-color-on-surface-variant: #666666;
+  --md-sys-color-outline: #e0e0e0;
+  --md-sys-color-outline-variant: #f0f0f0;
+}
+
+/* Tema claro específico */
+.light-theme,
+[data-theme="light"] {
+  --md-sys-color-primary: #1DB954;
+  --md-sys-color-secondary: #1ED760;
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-background: #fafafa;
+  --md-sys-color-error: #ff5252;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-on-secondary: #000000;
+  --md-sys-color-on-surface: #1a1a1a;
+  --md-sys-color-on-background: #1a1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-surface-variant: #f5f5f5;
+  --md-sys-color-on-surface-variant: #666666;
+  --md-sys-color-outline: #e0e0e0;
+  --md-sys-color-outline-variant: #f0f0f0;
+}
+
+/* Tema oscuro específico */
+.dark-theme,
+[data-theme="dark"] {
+  --md-sys-color-primary: #1DB954;
+  --md-sys-color-secondary: #1ED760;
+  --md-sys-color-surface: #1a1a1a;
+  --md-sys-color-background: #121212;
+  --md-sys-color-error: #ff5252;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-on-secondary: #000000;
+  --md-sys-color-on-surface: #ffffff;
+  --md-sys-color-on-background: #ffffff;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-surface-variant: #2a2a2a;
+  --md-sys-color-on-surface-variant: #cccccc;
+  --md-sys-color-outline: #404040;
+  --md-sys-color-outline-variant: #333333;
+}
+
+/* Aplicación global del tema */
+html,
+body {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Clases de utilidad para usar en componentes */
+.surface {
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+.primary {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.secondary {
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+
+/* Override para Tailwind CSS según el tema */
+.dark-theme .bg-gray-50,
+[data-theme="dark"] .bg-gray-50 {
+  background-color: var(--md-sys-color-background) !important;
+}
+
+.dark-theme .bg-white,
+[data-theme="dark"] .bg-white {
+  background-color: var(--md-sys-color-surface) !important;
+}
+
+.dark-theme .text-gray-900,
+[data-theme="dark"] .text-gray-900 {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+.light-theme .bg-gray-800,
+[data-theme="light"] .bg-gray-800 {
+  background-color: var(--md-sys-color-surface) !important;
+}
+
+.light-theme .text-white,
+[data-theme="light"] .text-white {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+/* Asegurar que los componentes principales usen las variables del tema */
+.min-h-screen {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+}
+
+/* Navegación lateral */
+nav[appTheme] {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+}
+
+/* Componentes con directiva appTheme */
+[appTheme] {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+}
+
+/* Buttons Material */
+.mat-icon-button {
+  color: var(--md-sys-color-on-background) !important;
+}
+
+/* Cards y superficies */
+.mat-card,
+.surface {
+  background-color: var(--md-sys-color-surface) !important;
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+/* ===== OVERRIDES ROBUSTOS PARA TODAS LAS CLASES TAILWIND ===== */
+
+/* OVERRIDES ADICIONALES PARA TEMA OSCURO */
+.dark-theme .bg-gray-400,
+.dark-theme .bg-gray-500,
+.dark-theme .bg-gray-600,
+[data-theme="dark"] .bg-gray-400,
+[data-theme="dark"] .bg-gray-500,
+[data-theme="dark"] .bg-gray-600 {
+  background-color: var(--md-sys-color-surface-variant) !important;
+}
+
+.dark-theme .text-gray-400,
+.dark-theme .text-gray-300,
+[data-theme="dark"] .text-gray-400,
+[data-theme="dark"] .text-gray-300 {
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+
+/* Tablas y elementos de tabla */
+.dark-theme table,
+.dark-theme thead,
+.dark-theme tbody,
+.dark-theme tr,
+.dark-theme th,
+.dark-theme td,
+[data-theme="dark"] table,
+[data-theme="dark"] thead,
+[data-theme="dark"] tbody,
+[data-theme="dark"] tr,
+[data-theme="dark"] th,
+[data-theme="dark"] td {
+  background-color: var(--md-sys-color-surface) !important;
+  color: var(--md-sys-color-on-surface) !important;
+  border-color: var(--md-sys-color-outline) !important;
+}
+
+/* Overrides para hover states */
+.dark-theme .hover\\:bg-gray-200:hover,
+.dark-theme .hover\\:bg-gray-300:hover,
+.dark-theme .hover\\:bg-gray-100:hover,
+[data-theme="dark"] .hover\\:bg-gray-200:hover,
+[data-theme="dark"] .hover\\:bg-gray-300:hover,
+[data-theme="dark"] .hover\\:bg-gray-100:hover {
+  background-color: var(--md-sys-color-surface-variant) !important;
+}
+
+/* Inputs y formularios específicos */
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select,
+.dark-theme .mat-form-field,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .mat-form-field {
+  background-color: var(--md-sys-color-surface) !important;
+  color: var(--md-sys-color-on-surface) !important;
+  border-color: var(--md-sys-color-outline) !important;
+}
+
+/* Elementos específicos para el layout */
+.dark-theme .backdrop-blur-sm,
+.dark-theme .shadow-md,
+.dark-theme .shadow-lg,
+.dark-theme .rounded-xl,
+[data-theme="dark"] .backdrop-blur-sm,
+[data-theme="dark"] .shadow-md,
+[data-theme="dark"] .shadow-lg,
+[data-theme="dark"] .rounded-xl {
+  background-color: var(--md-sys-color-surface) !important;
+}
+
+/* Override para todos los elementos con fondo */
+.dark-theme [class*="bg-"],
+[data-theme="dark"] [class*="bg-"] {
+  background-color: var(--md-sys-color-surface) !important;
+}
+
+/* Override para todos los elementos con texto */
+.dark-theme [class*="text-gray"],
+.dark-theme [class*="text-black"],
+[data-theme="dark"] [class*="text-gray"],
+[data-theme="dark"] [class*="text-black"] {
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+/* Asegurar que el router-outlet y su contenido tengan el tema correcto */
+router-outlet + *,
+.router-outlet-container {
+  background-color: var(--md-sys-color-background) !important;
+  color: var(--md-sys-color-on-background) !important;
+}
+
+/* Override global para todos los elementos dentro de temas */
+.dark-theme,
+[data-theme="dark"] {
+  background-color: var(--md-sys-color-background) !important;
+  color: var(--md-sys-color-on-background) !important;
+}
+
+.light-theme,
+[data-theme="light"] {
+  background-color: var(--md-sys-color-background) !important;
+  color: var(--md-sys-color-on-background) !important;
+}

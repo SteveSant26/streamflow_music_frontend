@@ -1,5 +1,19 @@
 /* Estilos específicos para el componente de perfil de usuario */
 
+/* Contenedor principal del perfil - Forzar colores específicos */
+.profile-container {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+/* Modo oscuro */
+:host-context(.dark) .profile-container,
+:host-context(body.dark) .profile-container,
+[data-theme="dark"] .profile-container {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
 /* Animaciones para transiciones suaves */
 .profile-transition {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

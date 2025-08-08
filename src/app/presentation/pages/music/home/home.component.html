@@ -1,24 +1,12 @@
-    <div 
-      [class]="(isDarkTheme$ | async) 
-        ? 'min-h-screen bg-gray-900 text-white p-6' 
-        : 'min-h-screen bg-gray-50 text-gray-900 p-6'"
-    >
+    <div class="min-h-screen p-6" appTheme style="background-color: var(--md-sys-color-background); color: var(--md-sys-color-on-background);">
       <div class="max-w-7xl mx-auto space-y-8">
         <!-- Header -->
         <div class="flex items-center justify-between">
           <div class="text-center space-y-4 flex-1">
-            <h1 
-              [class]="(isDarkTheme$ | async) 
-                ? 'text-4xl font-bold text-white' 
-                : 'text-4xl font-bold text-gray-900'"
-            >
+            <h1 class="text-4xl font-bold" style="color: var(--md-sys-color-on-background);">
               {{ 'HOME.TITLE' | translate }}
             </h1>
-            <p 
-              [class]="(isDarkTheme$ | async) 
-                ? 'text-lg text-gray-300' 
-                : 'text-lg text-gray-600'"
-            >
+            <p class="text-lg" style="color: var(--md-sys-color-on-surface-variant);">
               {{ 'HOME.SUBTITLE' | translate }}
             </p>
           </div>
@@ -26,11 +14,11 @@
           <!-- View Mode Toggle -->
           <div class="flex items-center gap-2">
             <button mat-icon-button (click)="toggleViewMode()" 
-                    [class]="(isDarkTheme$ | async) ? 'text-white' : 'text-gray-900'">
+                    style="color: var(--md-sys-color-on-background);">
               <mat-icon>{{ viewMode() === 'grid' ? 'view_list' : viewMode() === 'table' ? 'view_module' : 'grid_view' }}</mat-icon>
             </button>
             <button mat-icon-button (click)="toggleTheme()"
-                    [class]="(isDarkTheme$ | async) ? 'text-white' : 'text-gray-900'">
+                    style="color: var(--md-sys-color-on-background);">
               <mat-icon>{{ (isDarkTheme$ | async) ? 'light_mode' : 'dark_mode' }}</mat-icon>
             </button>
           </div>
@@ -39,7 +27,6 @@
         <!-- Popular Songs Section -->
         <app-music-section
           title="{{ 'HOME.POPULAR_SONGS' | translate }}"
-          titleIcon="📈"
           [songs]="mostPopularSongs()"
           [loading]="isLoadingPopular()"
           [type]="viewMode()"
@@ -57,7 +44,6 @@
         <!-- Random Songs Section -->
         <app-music-section
           title="{{ 'HOME.RANDOM_SONGS' | translate }}"
-          titleIcon="🎲"
           [songs]="randomSongs()"
           [loading]="isLoadingRandom()"
           [type]="viewMode()"

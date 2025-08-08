@@ -110,6 +110,15 @@ export const routes: Routes = [
         path: 'subscription',
         children: SUBSCRIPTION_ROUTES,
       },
+
+      // Ruta directa para subscription-plans (para compatibilidad)
+      {
+        path: 'subscription-plans',
+        loadComponent: () =>
+          import('./presentation/pages/subscription/subscription-plans/subscription-plans.component').then(
+            (m) => m.SubscriptionPlansComponent,
+          ),
+      },
     ],
   },
 

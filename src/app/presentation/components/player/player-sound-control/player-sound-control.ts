@@ -18,7 +18,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-player-sound-control',
   imports: [TranslateModule, CommonModule],
   templateUrl: './player-sound-control.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./player-sound-control.css'],
+  changeDetection: ChangeDetectionStrategy.Default, // Cambiar de OnPush a Default
   styles: [`
     .progress-bar-enhanced {
       position: relative;
@@ -50,6 +51,7 @@ import { CommonModule } from '@angular/common';
       transition: height 0.2s ease-in-out;
       border: none !important;
       outline: none !important;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
     }
     
     .progress-control:focus {
@@ -58,7 +60,8 @@ import { CommonModule } from '@angular/common';
     }
     
     .group:hover .progress-control {
-      height: 1.75rem !important;
+      height: 2.25rem !important;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
     }
     
     .progress-bar-enhanced:hover .progress-thumb {
@@ -71,14 +74,30 @@ import { CommonModule } from '@angular/common';
       z-index: 10;
     }
     
-    /* Asegurar que la barra sea visible */
+    /* Asegurar que la barra sea visible y funcional */
     .progress-control {
-      min-height: 1.5rem;
-      background-color: rgba(255, 255, 255, 0.2) !important;
+      min-height: 2rem;
+      background-color: rgba(255, 255, 255, 0.15) !important;
     }
     
     .progress-control:hover {
-      background-color: rgba(255, 255, 255, 0.3) !important;
+      background-color: rgba(255, 255, 255, 0.25) !important;
+    }
+    
+    /* Mejorar la visibilidad del fill */
+    .progress-control > div {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .progress-control {
+        min-height: 1.75rem;
+      }
+      
+      .group:hover .progress-control {
+        height: 2rem !important;
+      }
     }
   `]
 })
@@ -140,7 +159,7 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
         this.playerState = state;
         this.currentTime = state.currentTime;
         this.duration = state.duration;
-        this.cdr.detectChanges(); // Force change detection for OnPush
+        this.cdr.detectChanges(); // Force change detection
       });
   }
 
