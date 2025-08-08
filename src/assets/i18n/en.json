@@ -1,22 +1,144 @@
 {
-  "SIDEBAR": {
-    "HOME": "Home",
-    "DISCOVER": "Discover",
-    "SEARCH": "Search",
-    "SUBSCRIPTIONS": "Subscriptions",
-    "PROFILE": "Profile",
-    "LOGOUT": "Logout",
-    "LOGIN": "Login",
-    "REGISTER": "Register",
-    "MY_PLAYLISTS": "My playlists",
-    "LANGUAGE": "Language",
-    "THEME": "Theme"
+  "GREETING": {
+    "GOOD_MORNING": "Good morning, {{name}}",
+    "GOOD_AFTERNOON": "Good afternoon, {{name}}",
+    "GOOD_EVENING": "Good evening, {{name}}"
   },
-  "THEME": {
-    "LIGHT": "Light",
-    "DARK": "Dark",
-    "SYSTEM": "System",
-    "TOGGLE": "Toggle theme"
+  "PLAYER": {
+    "NO_SONG": "No song",
+    "SELECT_SONG": "Select a song"
+  },
+  "TABLE": {
+    "TITLE": "Title",
+    "ALBUM": "Album"
+  },
+  "PLAYLIST": {
+    "TYPE": "Playlist"
+  },
+  "SEARCH": {
+    "TITLE": "Search",
+    "PLACEHOLDER": "Search songs, artists, albums...",
+    "BROWSE_GENRES": "Browse by genre",
+    "RESULTS_FOR": "Results for: \"{{query}}\"",
+    "CLEAR": "Clear search",
+    "IMPLEMENTING": "Implementing search...",
+    "RESULTS_SOON": "Search results will appear here soon"
+  },
+  "GENRES": {
+    "ROCK": "Rock",
+    "ROCK_DESC": "Classic and modern",
+    "POP": "Pop",
+    "POP_DESC": "Current hits",
+    "HIP_HOP": "Hip Hop",
+    "HIP_HOP_DESC": "Rap and urban beats",
+    "ELECTRONIC": "Electronic",
+    "ELECTRONIC_DESC": "EDM and synthwave",
+    "JAZZ": "Jazz",
+    "JAZZ_DESC": "Smooth and classic",
+    "REGGAETON": "Reggaeton",
+    "REGGAETON_DESC": "Latin rhythms",
+    "CLASSICAL": "Classical",
+    "CLASSICAL_DESC": "Classical music",
+    "ALTERNATIVE": "Alternative",
+    "ALTERNATIVE_DESC": "Indie and alternative"
+  },
+  "LIBRARY": {
+    "TITLE": "Your Library",
+    "CREATE_PLAYLIST": "Create Playlist",
+    "PLAYLISTS": "Playlists",
+    "ARTISTS": "Artists",
+    "ALBUMS": "Albums",
+    "SONG_COUNT": "{{count}} songs",
+    "CREATE_NEW_PLAYLIST": "Create new playlist",
+    "CLOSE_MODAL": "Close modal",
+    "CANCEL": "Cancel",
+    "CREATE": "Create",
+    "PLAYLIST_NAME": "Playlist name",
+    "PLAYLIST_NAME_PLACEHOLDER": "My playlist #1",
+    "DESCRIPTION": "Description",
+    "DESCRIPTION_PLACEHOLDER": "Add an optional description",
+    "PLAYLIST_IMAGE": "Playlist image"
+  },
+  "PLANS": {
+    "HEADER": {
+      "TITLE": "Choose Your StreamFlow Plan",
+      "SUBTITLE": "Enjoy the best music without limits"
+    },
+    "MOST_POPULAR": "MOST POPULAR",
+    "MONTHLY_EQUIVALENT": "month",
+    "WHY_CHOOSE": "Why choose StreamFlow?",
+    "FREE": {
+      "NAME": "Free Plan",
+      "PERIOD": "forever",
+      "BUTTON": "Start Free",
+      "FEATURE_1": "Playback with ads",
+      "FEATURE_2": "Standard quality",
+      "FEATURE_3": "Basic library access",
+      "FEATURE_4": "No offline downloads",
+      "FEATURE_5": "1 device session"
+    },
+    "MONTHLY": {
+      "NAME": "Monthly Plan",
+      "PERIOD": "month",
+      "BUTTON": "Subscribe Monthly",
+      "FEATURE_1": "No ads",
+      "FEATURE_2": "High audio quality",
+      "FEATURE_3": "Complete library",
+      "FEATURE_4": "Unlimited offline downloads",
+      "FEATURE_5": "Up to 5 device sessions",
+      "FEATURE_6": "Personalized playlists"
+    },
+    "ANNUAL": {
+      "NAME": "Annual Plan",
+      "PERIOD": "year",
+      "BUTTON": "Subscribe Annually",
+      "FEATURE_1": "Everything from monthly plan",
+      "FEATURE_2": "2 free months (save $20)",
+      "FEATURE_3": "Premium audio quality",
+      "FEATURE_4": "Early access to new features",
+      "FEATURE_5": "Priority support",
+      "FEATURE_6": "Unlimited device sessions"
+    },
+    "BENEFITS": {
+      "TITLE": "Why choose StreamFlow Premium?",
+      "BENEFIT_1": {
+        "TITLE": "Massive Library",
+        "DESCRIPTION": "Over 50 million songs available"
+      },
+      "BENEFIT_2": {
+        "TITLE": "Offline",
+        "DESCRIPTION": "Download your music to listen without internet"
+      },
+      "BENEFIT_3": {
+        "TITLE": "Premium Quality",
+        "DESCRIPTION": "High fidelity audio up to 320kbps"
+      },
+      "BENEFIT_4": {
+        "TITLE": "Multiplatform",
+        "DESCRIPTION": "Available on web, mobile and desktop"
+      },
+      "BENEFIT_5": {
+        "TITLE": "Personalized Playlists",
+        "DESCRIPTION": "Discover new music with personalized recommendations"
+      },
+      "BENEFIT_6": {
+        "TITLE": "Priority Support",
+        "DESCRIPTION": "Get quick help when you need it"
+      }
+    },
+    "FAQ": {
+      "TITLE": "Frequently Asked Questions",
+      "QUESTION_1": "Can I change my plan at any time?",
+      "ANSWER_1": "Yes, you can change your plan at any time from your account settings. Changes will apply on your next billing cycle.",
+      "QUESTION_2": "Is there a free trial available?",
+      "ANSWER_2": "Yes, we offer a 30-day free trial for new StreamFlow Premium users. No credit card required.",
+      "QUESTION_3": "Can I cancel my subscription?",
+      "ANSWER_3": "Of course. You can cancel your subscription at any time from your account settings. You'll keep premium access until the end of your current billing period.",
+      "QUESTION_4": "Does offline music work?",
+      "ANSWER_4": "Yes, with StreamFlow Premium you can download up to 10,000 songs on up to 5 devices for offline listening.",
+      "QUESTION_5": "What payment methods do you accept?",
+      "ANSWER_5": "We accept credit cards, debit cards, PayPal, and other local payment options depending on your region."
+    }
   },
   "LOGIN": {
     "TITLE": "Sign In",
@@ -29,145 +151,122 @@
     "BUTTON": "Sign In",
     "NO_ACCOUNT": "Don't have an account?",
     "REGISTER_LINK": "Sign up here",
-    "GOOGLE": "Continue with Google",
-    "GITHUB": "Continue with GitHub",
-    "TWITTER": "Continue with Twitter",
-    "DISCORD": "Continue with Discord",
+    "GOOGLE": "Sign in with Google",
+    "GITHUB": "Sign in with GitHub",
+    "TWITTER": "Sign in with Twitter",
+    "DISCORD": "Sign in with Discord",
     "RIGHTS": "All rights reserved."
   },
   "REGISTER": {
     "TITLE": "Create Account",
-    "NAME": "Full name",
+    "NAME": "Full Name",
     "NAME_PLACEHOLDER": "Enter your full name",
     "EMAIL": "Email",
     "EMAIL_PLACEHOLDER": "Enter your email",
     "PASSWORD": "Password",
-    "PASSWORD_PLACEHOLDER": "Create a secure password",
-    "CONFIRM_PASSWORD": "Confirm password",
-    "CONFIRM_PASSWORD_PLACEHOLDER": "Confirm your password",
-    "TERMS": "I accept the terms and conditions",
+    "ACCEPT": "I accept the",
+    "TERMS": "Terms and Conditions",
     "LOADING": "Creating account...",
     "BUTTON": "Create Account",
     "HAVE_ACCOUNT": "Already have an account?",
-    "LOGIN_LINK": "Sign in here"
+    "LOGIN_LINK": "Sign in here",
+    "GOOGLE": "Sign up with Google",
+    "GITHUB": "Sign up with GitHub",
+    "TWITTER": "Sign up with Twitter",
+    "DISCORD": "Sign up with Discord"
   },
   "RESET": {
     "TITLE": "Reset Password",
     "EMAIL": "Email",
     "EMAIL_PLACEHOLDER": "Enter your email",
     "LOADING": "Sending...",
-    "BUTTON": "Send reset link"
+    "BUTTON": "Send Reset Link"
   },
   "HOME": {
-    "TITLE": "Welcome to StreamFlow Music",
-    "SUBTITLE": "Discover amazing music",
+    "TITLE": "Discover Music",
+    "SUBTITLE": "Discover the best music for you",
+    "DISCOVER": "Discover",
+    "PLAY_ALL": "Play All",
     "POPULAR_SONGS": "Popular Songs",
     "NO_POPULAR_SONGS": "No popular songs available",
     "RANDOM_SONGS": "Random Songs",
-    "NO_RANDOM_SONGS": "No random songs available",
-    "MIXES": "Mixes for you",
-    "SEE_ALL": "See all",
-    "LOADING": "Loading..."
+    "NO_RANDOM_SONGS": "No random songs available", 
+    "POPULAR_ALBUMS": "Popular Albums",
+    "POPULAR_ARTISTS": "Popular Artists",
+    "POPULAR_GENRES": "Popular Genres",
+    "VIEW_ALL": "View all",
+    "CARD1_TITLE": "New Releases",
+    "CARD1_BODY": "Check out the latest music releases",
+    "CARD2_TITLE": "Top Charts",
+    "CARD2_BODY": "Most popular songs right now",
+    "CARD3_TITLE": "Genres",
+    "CARD3_BODY": "Explore music by genre",
+    "MIXES": "Your Mixes",
+    "SEE_ALL": "See All",
+    "TRENDING": "Trending Now"
   },
-  "SEARCH": {
-    "TITLE": "Search music",
-    "PLACEHOLDER": "Search songs, artists, albums...",
-    "NO_RESULTS": "No results found",
-    "TRY_DIFFERENT": "Try different keywords.",
-    "CLEAR": "Clear search",
-    "RESULTS_FOR": "Results for \"{{query}}\"",
-    "SONGS": "Songs",
-    "SEARCHING": "Searching...",
-    "BROWSE_GENRES": "Browse genres"
+  "SIDEBAR": {
+    "HOME": "Home",
+    "SEARCH": "Search",
+    "LIBRARY": "Your Library",
+    "DISCOVER":"Discover",
+    "MY_PLAYLISTS": "My Playlists",
+    "PLAYLISTS": "Playlists",
+    "LIKED_SONGS": "Liked Songs",
+    "RECENTLY_PLAYED": "Recently Played",
+    "CREATE_PLAYLIST": "Create Playlist",
+    "PODCAST": "Podcasts",
+    "LANGUAGE": "Language",
+    "THEME": "Theme",
+    "SPANISH": "Spanish",
+    "ENGLISH": "English",
+    "SUBSCRIPTIONS": "Subscriptions",
+    "PROFILE": "My Profile",
+    "LOGOUT": "Log Out",
+    "LOGIN": "Log In",
+    "REGISTER": "Sign Up"
   },
-  "PLAYER": {
-    "NO_SONG": "No song selected",
-    "SELECT_SONG": "Select a song to start",
-    "PLAY": "Play",
-    "PAUSE": "Pause",
-    "NEXT": "Next",
-    "PREVIOUS": "Previous",
-    "VOLUME": "Volume",
-    "MUTE": "Mute",
-    "UNMUTE": "Unmute"
+  "THEME": {
+    "TOGGLE": "Toggle theme",
+    "LIGHT": "Light theme",
+    "DARK": "Dark theme",
+    "SYSTEM": "System theme"
   },
   "PROFILE": {
     "TITLE": "My Profile",
-    "SUBTITLE": "Manage your personal information",
-    "USER_DESCRIPTION": "User information",
-    "EDIT": "Edit profile",
-    "SAVE": "Save changes",
-    "CANCEL": "Cancel"
-  },
-  "PLAYLIST": {
-    "TYPE": "Playlist type",
-    "CREATE": "Create playlist",
-    "ADD_TO_PLAYLIST": "Add to playlist",
-    "REMOVE_FROM_PLAYLIST": "Remove from playlist",
-    "PUBLIC": "Public",
-    "PRIVATE": "Private",
-    "COLLABORATIVE": "Collaborative"
-  },
-  "PLANS": {
-    "HEADER": {
-      "TITLE": "Choose Your Plan",
-      "SUBTITLE": "Unlock the full potential of StreamFlow Music"
-    },
-    "MOST_POPULAR": "Most popular",
-    "MONTHLY_EQUIVALENT": "monthly equivalent",
-    "BENEFITS": {
-      "TITLE": "Premium Benefits",
-      "BENEFIT_1": {
-        "TITLE": "High Quality Audio",
-        "DESCRIPTION": "Enjoy music in lossless and high fidelity quality"
-      },
-      "BENEFIT_2": {
-        "TITLE": "Ad-Free",
-        "DESCRIPTION": "Listen to your favorite music without ads interruptions"
-      },
-      "BENEFIT_3": {
-        "TITLE": "Offline Downloads",
-        "DESCRIPTION": "Download your favorite songs and listen offline"
-      },
-      "BENEFIT_4": {
-        "TITLE": "Unlimited Playlists",
-        "DESCRIPTION": "Create and manage as many playlists as you want"
-      }
-    },
-    "FAQ": {
-      "TITLE": "Frequently Asked Questions",
-      "QUESTION_1": "Can I cancel my subscription anytime?",
-      "ANSWER_1": "Yes, you can cancel your subscription anytime from your profile.",
-      "QUESTION_2": "Is there a free trial period?",
-      "ANSWER_2": "Yes, we offer 30 days free trial for new users.",
-      "QUESTION_3": "What payment methods do you accept?",
-      "ANSWER_3": "We accept credit cards, debit cards, and PayPal.",
-      "QUESTION_4": "Can I use my account on multiple devices?",
-      "ANSWER_4": "Yes, you can use your account on up to 5 devices simultaneously.",
-      "QUESTION_5": "Are there student discounts?",
-      "ANSWER_5": "Yes, we offer 50% discount for verified students."
-    }
+    "SUBTITLE": "Customize your information and keep your profile updated",
+    "USER_DESCRIPTION": "Music lover",
+    "EDIT_BUTTON": "Edit Profile",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_PLACEHOLDER": "Enter your email",
+    "EMAIL_REQUIRED": "Email is required",
+    "EMAIL_INVALID": "Please enter a valid email",
+    "SAVE_BUTTON": "Save Changes",
+    "CANCEL_BUTTON": "Cancel"
   },
   "ERRORS": {
-    "NETWORK": "Connection error. Check your internet.",
-    "UNAUTHORIZED": "You are not authorized to perform this action.",
-    "NOT_FOUND": "The requested resource was not found.",
-    "SERVER_ERROR": "Internal server error. Try again later.",
-    "VALIDATION": "Please verify the entered data.",
-    "GENERIC": "An unexpected error occurred."
+    "NETWORK_ERROR": "Network error",
+    "SERVER_ERROR": "Server error",
+    "LOADING_ERROR": "Loading error",
+    "AUDIO_ERROR": "Audio error",
+    "NOT_FOUND": "Not found",
+    "UNAUTHORIZED": "Unauthorized",
+    "FORBIDDEN": "Access denied",
+    "GENERAL_ERROR": "An error occurred"
   },
   "COMMON": {
     "LOADING": "Loading...",
-    "SAVE": "Save",
+    "RETRY": "Retry",
+    "OK": "OK",
     "CANCEL": "Cancel",
-    "DELETE": "Delete",
-    "EDIT": "Edit",
-    "ADD": "Add",
-    "REMOVE": "Remove",
-    "CONFIRM": "Confirm",
     "YES": "Yes",
     "NO": "No",
-    "OK": "OK",
-    "CLOSE": "Close"
+    "SAVE": "Save",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "CLOSE": "Close",
+    "BACK": "Back",
+    "NEXT": "Next",
+    "PREVIOUS": "Previous"
   }
 }
