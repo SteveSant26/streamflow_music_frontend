@@ -14,6 +14,7 @@ import {
 } from '@app/domain/usecases';
 import { PaymentStateService, AuthStateService } from '@app/shared/services';
 import { SubscriptionPlan } from '@app/domain/entities/payment.entity';
+import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 
 @Component({
   selector: 'app-subscription-plans',
@@ -39,6 +40,7 @@ export class SubscriptionPlansComponent implements OnInit {
     private readonly paymentStateService: PaymentStateService,
     private readonly authStateService: AuthStateService,
     private readonly router: Router,
+    private readonly themeService: MaterialThemeService,
   ) {}
 
   // Computed properties
@@ -51,6 +53,10 @@ export class SubscriptionPlansComponent implements OnInit {
   readonly hasActiveSubscription = computed(() =>
     this.paymentStateService.hasActiveSubscription(),
   );
+  
+  // Theme properties
+  readonly isDarkMode = computed(() => this.themeService._isDarkMode());
+  readonly currentTheme = computed(() => this.themeService.effectiveTheme());
 
   readonly filteredPlans = computed(() => {
     const allPlans = this.plans();

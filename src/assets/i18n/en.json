@@ -23,7 +23,9 @@
     "CLEAR": "Clear search",
     "IMPLEMENTING": "Implementing search...",
     "RESULTS_SOON": "Search results will appear here soon",
-    "SONGS": "Songs found"
+    "SONGS": "Songs found",
+    "NO_RESULTS": "No results found",
+    "TRY_DIFFERENT": "Try different keywords"
 
   },
   "GENRES": {
@@ -290,6 +292,10 @@
   "SUBSCRIPTION": {
     "TITLE": "Choose your perfect plan",
     "SUBTITLE": "Unlock the full power of StreamFlow Music with unlimited access to millions of songs, premium quality and exclusive features.",
+    "AVAILABLE_PLANS": "Available subscriptions",
+    "MORE_INFO": "More information",
+    "TERMS": "Terms of offer",
+    "SUBSCRIBE": "Subscribe",
     "MONTHLY": "Monthly",
     "YEARLY": "Yearly",
     "SAVE_DISCOUNT": "Save 20%",

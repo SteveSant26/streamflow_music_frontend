@@ -1,16 +1,21 @@
 <article
-  [class]="(isDarkTheme$ | async) 
-    ? 'group relative bg-gray-800 hover:bg-gray-700 shadow-lg hover:shadow-xl rounded-2xl transition-all duration-300 hover:scale-105 border border-gray-700' 
-    : 'group relative bg-white hover:bg-gray-50 shadow-md hover:shadow-lg rounded-2xl transition-all duration-300 hover:scale-105 border border-gray-200'"
+  class="group relative p-6 rounded-xl cursor-pointer hover:scale-105 transition-transform shadow-lg hover:shadow-xl"
+  [ngStyle]="{
+    'background-color': 'var(--md-sys-color-surface)',
+    'color': 'var(--md-sys-color-on-surface)',
+    'border': '1px solid var(--md-sys-color-outline)'
+  }"
 >
   <!-- Botón de reproducción que aparece en hover -->
   <div
     class="absolute right-3 sm:right-4 bottom-16 sm:bottom-20 translate-y-4 transition-all duration-500 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 z-10"
   >
     <div 
-      [class]="(isDarkTheme$ | async) 
-        ? 'bg-green-500 hover:bg-green-400 rounded-full p-2 shadow-lg hover:shadow-xl' 
-        : 'bg-green-600 hover:bg-green-500 rounded-full p-2 shadow-lg hover:shadow-xl'"
+      class="rounded-full p-2 shadow-lg hover:shadow-xl"
+      [ngStyle]="{
+        'background-color': 'var(--md-sys-color-surface-variant)',
+        'color': 'var(--md-sys-color-on-surface-variant)'
+      }"
     >
       <app-card-play-button [id]="playlist.id" size="small">
       </app-card-play-button>
@@ -20,9 +25,10 @@
   <!-- Link principal de la playlist -->
   <a
     [routerLink]="ROUTES_CONFIG_MUSIC.PLAYLIST.getLinkWithId(playlist.id.toString())"
-    [class]="(isDarkTheme$ | async) 
-      ? 'playlist-item transition-all duration-300 flex relative p-3 sm:p-4 overflow-hidden gap-3 pb-4 sm:pb-6 rounded-2xl w-full sm:w-44 flex-col hover:bg-gray-700 text-white' 
-      : 'playlist-item transition-all duration-300 flex relative p-3 sm:p-4 overflow-hidden gap-3 pb-4 sm:pb-6 rounded-2xl w-full sm:w-44 flex-col hover:bg-gray-50 text-gray-900'"
+    class="playlist-item transition-all duration-300 flex relative p-3 sm:p-4 overflow-hidden gap-3 pb-4 sm:pb-6 rounded-xl w-full sm:w-44 flex-col"
+    [ngStyle]="{
+      'color': 'var(--md-sys-color-on-surface)'
+    }"
   >
     <!-- Imagen de la playlist -->
     <picture
@@ -39,17 +45,19 @@
     <!-- Información de la playlist -->
     <div class="flex flex-auto flex-col px-1 sm:px-2">
       <h4 
-        [class]="(isDarkTheme$ | async) 
-          ? 'text-base sm:text-base font-semibold mb-1 line-clamp-2 text-white' 
-          : 'text-base sm:text-base font-semibold mb-1 line-clamp-2 text-gray-900'"
+        class="text-base sm:text-base font-semibold mb-1 line-clamp-2"
+        [ngStyle]="{
+          'color': 'var(--md-sys-color-on-surface)'
+        }"
       >
         {{ playlist.title }}
       </h4>
 
       <span 
-        [class]="(isDarkTheme$ | async) 
-          ? 'text-xs sm:text-sm line-clamp-1 text-gray-300' 
-          : 'text-xs sm:text-sm line-clamp-1 text-gray-600'"
+        class="text-xs sm:text-sm line-clamp-1"
+        [ngStyle]="{
+          'color': 'var(--md-sys-color-on-surface-variant)'
+        }"
       >
         {{ artistsString }}
       </span>

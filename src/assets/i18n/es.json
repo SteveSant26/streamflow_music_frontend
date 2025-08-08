@@ -23,7 +23,9 @@
     "CLEAR": "Limpiar búsqueda",
     "IMPLEMENTING": "Implementando búsqueda...",
     "RESULTS_SOON": "Los resultados de búsqueda aparecerán aquí próximamente",
-    "SONGS": "Canciones encontradas"
+    "SONGS": "Canciones encontradas",
+    "NO_RESULTS": "No se encontraron resultados",
+    "TRY_DIFFERENT": "Intenta con palabras clave diferentes"
   },
   "GENRES": {
     "ROCK": "Rock",
@@ -290,6 +292,10 @@
   "SUBSCRIPTION": {
     "TITLE": "Elige tu plan perfecto",
     "SUBTITLE": "Desbloquea el poder completo de StreamFlow Music con acceso ilimitado a millones de canciones, calidad premium y funciones exclusivas.",
+    "AVAILABLE_PLANS": "Suscripciones disponibles",
+    "MORE_INFO": "Más información",
+    "TERMS": "Términos de la oferta",
+    "SUBSCRIBE": "Suscribirse",
     "MONTHLY": "Mensual",
     "YEARLY": "Anual",
     "SAVE_DISCOUNT": "Ahorra 20%",

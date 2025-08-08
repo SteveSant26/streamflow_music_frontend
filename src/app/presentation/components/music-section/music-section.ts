@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
@@ -6,6 +6,7 @@ import { Song } from '@app/domain/entities/song.entity';
 import { MusicsTable } from '@app/presentation/components/music/musics-table/musics-table';
 import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
 import { SkeletonGroupComponent } from '@app/presentation/shared/components/skeleton-group/skeleton-group.component';
+import { MaterialThemeService } from '@app/shared/services/material-theme.service';
 
 export type MusicSectionType = 'grid' | 'table' | 'list';
 
@@ -25,10 +26,15 @@ export interface MusicSectionButton {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MusicSectionComponent {
+  private readonly themeService = inject(MaterialThemeService);
+  
   @Input() title = '';
   @Input() titleIcon = '';
   @Input() songs: Song[] = [];
   @Input() loading = false;
+  
+  // Theme observable - usar el mismo patrón que otros componentes
+  readonly isDarkTheme$ = this.themeService.isDarkMode();
   
   private _type: MusicSectionType = 'grid';
   @Input() 

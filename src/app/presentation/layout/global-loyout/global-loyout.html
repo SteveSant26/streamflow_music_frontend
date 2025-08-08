@@ -1,35 +1,32 @@
 <!-- Layout principal para páginas normales -->
-<div class="flex flex-col h-screen bg-gradient-to-br">
+<div class="flex flex-col h-screen" appTheme style="background: var(--md-sys-color-background); color: var(--md-sys-color-on-background);">
   <!-- Header Bar -->
   <header
-    class="backdrop-white backdrop-blur-md border-b border-base p-4 shadow-base"
+    class="backdrop-blur-md border-b p-4 shadow-base"
+    style="background-color: var(--md-sys-color-surface); border-color: var(--md-sys-color-outline);"
   >
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div
-          class="w-8 h-8 bg-white rounded-full flex items-center justify-center"
+          class="w-8 h-8 rounded-full flex items-center justify-center"
+          style="background-color: var(--md-sys-color-primary);"
         >
-          <mat-icon class="text-white text-lg">music_note</mat-icon>
+          <mat-icon class="text-lg" style="color: var(--md-sys-color-on-primary);">music_note</mat-icon>
         </div>
-        <h1 class="font-bold text-xl">StreamFlow</h1>
+        <h1 class="font-bold text-xl" style="color: var(--md-sys-color-on-surface);">StreamFlow</h1>
       </div>
 
       <div class="hidden lg:flex items-center gap-4">
         <nav class="flex gap-3" aria-label="Main Navigation">
           <a
-            href="/"
-            class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
+            routerLink="/"
+            class="px-4 py-2 backdrop-blur-sm rounded-lg border transition-all duration-200 shadow-base font-medium"
+            style="background-color: var(--md-sys-color-surface); border-color: var(--md-sys-color-outline); color: var(--md-sys-color-on-surface);"
             >{{ 'HEADER.INITIAL' | translate }}</a
           >
-
-          <a
-            href="/explore"
-            class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
-            >{{ 'HEADER.EXPLORE' | translate }}</a
-          >
-
-          <a href="/subscription-plans" 
-          class="px-4 py-2 bg-elevated backdrop-blur-sm rounded-lg border border-base text-base hover-bg-elevated transition-all duration-200 shadow-base font-medium"
+          <a routerLink="/subscription-plans" 
+          class="px-4 py-2 backdrop-blur-sm rounded-lg border transition-all duration-200 shadow-base font-medium"
+          style="background-color: var(--md-sys-color-surface); border-color: var(--md-sys-color-outline); color: var(--md-sys-color-on-surface);"
           >{{ 'HEADER.SUBSCRIPTION_PLANS' | translate }}</a>
         </nav>
       </div>
@@ -64,7 +61,7 @@
   >
     <div class="flex justify-around items-center">
       <a
-        href="/"
+        routerLink="/"
         class="flex flex-col items-center gap-1 text-base hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full bg-tinted">
@@ -74,7 +71,7 @@
       </a>
 
       <a
-        href="/search"
+        routerLink="/search"
         class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full hover-bg-tinted">
@@ -84,17 +81,7 @@
       </a>
 
       <a
-        href="/explore"
-        class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
-      >
-        <div class="p-2 rounded-full hover-bg-tinted">
-          <mat-icon class="text-lg">explore</mat-icon>
-        </div>
-        <span class="text-xs font-medium">{{ 'HEADER.EXPLORE' | translate }}</span>
-      </a>
-
-      <a
-        href="/subscription-plans"
+        routerLink="/subscription-plans"
         class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full hover-bg-tinted">
@@ -104,7 +91,7 @@
       </a>
 
       <a
-        href="/library"
+        routerLink="/library"
         class="flex flex-col items-center gap-1 text-subdued hover:text-accent transition-colors"
       >
         <div class="p-2 rounded-full hover-bg-tinted">
