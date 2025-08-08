@@ -19,7 +19,6 @@ import { SongMenuService } from '../../../../infrastructure/services/song-menu.s
 import { Song } from '../../../../domain/entities/song.entity';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
 import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
-import { PlayListItemCard } from '@app/presentation/components/music/play-list-item-card/play-list-item-card';
 import { ThemeDirective } from '@app/shared/directives/theme.directive';
 
 @Component({
@@ -32,7 +31,6 @@ import { ThemeDirective } from '@app/shared/directives/theme.directive';
     TranslateModule,
     MatIconModule,
     MatButtonModule,
-    MusicSectionComponent,
     ThemeDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
