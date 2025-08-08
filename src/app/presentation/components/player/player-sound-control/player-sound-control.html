@@ -1,56 +1,51 @@
-<div class="flex items-center gap-3 w-full max-w-2xl group">
+<div class="flex items-center gap-3 w-full max-w-2xl">
   <!-- Current Time -->
-  <span [class]="(isDarkTheme$ | async) ? 'text-white text-sm font-medium min-w-[45px]' : 'text-gray-800 text-sm font-medium min-w-[45px]'"> 
-    {{ formatTime(currentTime) }} 
+  <span [class]="(isDarkTheme$ | async) ? 'text-white text-sm font-medium min-w-[45px] text-right' : 'text-gray-800 text-sm font-medium min-w-[45px] text-right'">
+    {{ formatTime(currentTime) }}
   </span>
 
-  <!-- Progress Bar Container - más ancho y visible -->
-  <div class="flex-1 relative progress-bar-enhanced mx-2">
-    <button 
-      [class]="(isDarkTheme$ | async) 
-        ? 'w-full h-8 bg-white/20 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-9 transition-all duration-200 border-2 border-white/10' 
-        : 'w-full h-8 bg-gray-300 rounded-full cursor-pointer border-none p-0 relative overflow-hidden progress-control hover:h-9 transition-all duration-200 border-2 border-gray-400'" 
+  <!-- Progress Bar Container - SIEMPRE VISIBLE -->
+  <div class="flex-1 relative mx-2 h-10 flex items-center">
+    <div 
+      class="w-full h-6 rounded-full cursor-pointer relative overflow-hidden group hover:h-7 transition-all duration-200 border-2"
+      [class]="(isDarkTheme$ | async) ? 'bg-gray-700 border-gray-500' : 'bg-gray-200 border-gray-400'"
       (click)="onProgressClick($event)"
-      [disabled]="playerState?.isLoading"
-      aria-label="Barra de progreso">
+      [attr.aria-label]="'Progreso: ' + progressPercentage + '%'">
       
       <!-- Loading indicator -->
-      <div *ngIf="playerState?.isLoading" 
-           class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent loading-shimmer">
+      <div *ngIf="playerState?.isLoading"
+        [class]="(isDarkTheme$ | async) ? 'absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent loading-shimmer' : 'absolute inset-0 bg-gradient-to-r from-transparent via-gray-500/50 to-transparent loading-shimmer'">
       </div>
       
-      <!-- Progress Fill -->
+      <!-- Progress Fill - SIEMPRE CON COLOR SÓLIDO -->
       <div 
-        [class]="(isDarkTheme$ | async) 
-          ? 'h-full bg-white rounded-full transition-all duration-300 ease-out relative min-w-1 shadow-lg' 
-          : 'h-full bg-gray-800 rounded-full transition-all duration-300 ease-out relative min-w-1 shadow-lg'"
-        [style.width.%]="progressPercentage"
-        [class.pulse-gentle]="playerState?.isLoading">
+        class="h-full rounded-full transition-all duration-300 ease-out relative"
+        [class]="(isDarkTheme$ | async) ? 'bg-blue-500' : 'bg-blue-600'"
+        [style.width.%]="progressPercentage">
         
         <!-- Progress Thumb -->
         <div 
-          [class]="(isDarkTheme$ | async) 
-            ? 'absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 w-6 h-6 bg-white rounded-full shadow-lg border-2 border-gray-300 opacity-0 group-hover:opacity-100 transition-all duration-200 progress-thumb'
-            : 'absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 w-6 h-6 bg-gray-800 rounded-full shadow-lg border-2 border-gray-600 opacity-0 group-hover:opacity-100 transition-all duration-200 progress-thumb'">
+          class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 w-6 h-6 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-200 border-2 border-white"
+          [class]="(isDarkTheme$ | async) ? 'bg-blue-400' : 'bg-blue-700'">
         </div>
       </div>
-    </button>
-    
-    <!-- Hidden range input for accessibility -->
-    <input
-      type="range"
-      min="0"
-      max="100"
-      [value]="progressPercentage"
-      (input)="onSeek($event)"
-      [disabled]="playerState?.isLoading"
-      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer progress-control"
-      aria-label="Progreso de la canción"
-    />
+      
+      <!-- Hidden range input for accessibility -->
+      <input 
+        type="range"
+        min="0"
+        max="100"
+        [value]="progressPercentage"
+        (input)="onSeek($event)"
+        [disabled]="playerState?.isLoading"
+        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        aria-label="Progreso de la canción"
+      />
+    </div>
   </div>
 
   <!-- Total Duration -->
-  <span [class]="(isDarkTheme$ | async) ? 'text-white text-sm font-medium min-w-[45px]' : 'text-gray-800 text-sm font-medium min-w-[45px]'"> 
-    {{ formatTime(duration) }} 
+  <span [class]="(isDarkTheme$ | async) ? 'text-white text-sm font-medium min-w-[45px] text-left' : 'text-gray-800 text-sm font-medium min-w-[45px] text-left'">
+    {{ formatTime(duration) }}
   </span>
 </div>

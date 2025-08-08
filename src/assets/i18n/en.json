@@ -25,7 +25,8 @@
     "RESULTS_SOON": "Search results will appear here soon",
     "SONGS": "Songs found",
     "NO_RESULTS": "No results found",
-    "TRY_DIFFERENT": "Try different keywords"
+    "TRY_DIFFERENT": "Try different keywords",
+    "SEARCHING": "Searching..."
 
   },
   "GENRES": {

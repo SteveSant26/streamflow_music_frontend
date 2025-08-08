@@ -18,7 +18,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-player-sound-control',
   imports: [TranslateModule, CommonModule],
   templateUrl: './player-sound-control.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./player-sound-control.css'],
+  changeDetection: ChangeDetectionStrategy.Default, // Cambiar de OnPush a Default
   styles: [`
     .progress-bar-enhanced {
       position: relative;
@@ -158,7 +159,7 @@ export class PlayerSoundControl implements OnInit, OnDestroy {
         this.playerState = state;
         this.currentTime = state.currentTime;
         this.duration = state.duration;
-        this.cdr.detectChanges(); // Force change detection for OnPush
+        this.cdr.detectChanges(); // Force change detection
       });
   }
 

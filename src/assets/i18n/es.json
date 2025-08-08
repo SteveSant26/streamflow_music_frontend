@@ -25,7 +25,8 @@
     "RESULTS_SOON": "Los resultados de búsqueda aparecerán aquí próximamente",
     "SONGS": "Canciones encontradas",
     "NO_RESULTS": "No se encontraron resultados",
-    "TRY_DIFFERENT": "Intenta con palabras clave diferentes"
+    "TRY_DIFFERENT": "Intenta con palabras clave diferentes",
+    "SEARCHING": "Buscando..."
   },
   "GENRES": {
     "ROCK": "Rock",

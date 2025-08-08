@@ -148,7 +148,6 @@
     <div *ngIf="hasResults(); else noResults" class="results-container">
       <app-music-section
         title="{{ 'SEARCH.SONGS' | translate }}"
-        titleIcon="🔍"
         [songs]="searchResults()"
         [loading]="isSearching()"
         [type]="viewModeService.viewMode()"
