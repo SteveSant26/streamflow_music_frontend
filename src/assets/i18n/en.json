@@ -207,7 +207,32 @@
     "CARD3_BODY": "Explore music by genre",
     "MIXES": "Your Mixes",
     "SEE_ALL": "See All",
-    "TRENDING": "Trending Now"
+    "TRENDING": "Trending Now",
+    "NEW_RELEASES": "New Releases",
+    "NEW_RELEASES_DESC": "Check out the latest music releases",
+    "TOP_CHARTS": "Top Charts",
+    "TOP_CHARTS_DESC": "Most popular songs right now",
+    "GENRES": "Genres",
+    "GENRES_DESC": "Explore music by genre",
+    "FEATURED_PLAYLISTS": "Featured Playlists",
+    "LOADING": "Loading...",
+    "REFRESH": "Refresh",
+    "NO_PLAYLISTS": "No playlists available",
+    "NO_PLAYLISTS_DESC": "Playlists will appear here when available",
+    "RETRY": "Try again",
+    "NO_DESCRIPTION": "No description",
+    "SONG": "song",
+    "SONGS": "songs",
+    "DISCOVER_NEW_MUSIC": "Discover New Music",
+    "MOST_POPULAR": "Most Popular",
+    "MOTIVATIONAL_QUOTES": {
+      "QUOTE_1": "Music is the universal language of the soul",
+      "QUOTE_2": "Every song tells a unique story",
+      "QUOTE_3": "Discover your next favorite song here",
+      "QUOTE_4": "Music connects hearts and cultures",
+      "QUOTE_5": "Your perfect playlist is waiting for you",
+      "QUOTE_6": "Explore genres and find your ideal sound"
+    }
   },
   "HEADER": {
     "INITIAL": "Home",

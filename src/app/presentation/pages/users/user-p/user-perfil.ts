@@ -14,11 +14,12 @@ import {
 import { User } from '@app/domain/entities/user.entity';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { ThemeDirective } from '@app/shared/directives/theme.directive';
 
 @Component({
   selector: 'app-user-perfil',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, MatIconModule, ThemeDirective],
   templateUrl: './user-perfil.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./user-perfil.css'],

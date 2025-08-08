@@ -1,45 +1,267 @@
+/* Home Container */
 .home-container {
-  padding: 1.5rem;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
   transition: all 0.3s ease;
 }
 
+:host-context(body.dark) .home-container {
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+}
+
+/* Hero Section */
 .hero-section {
-  text-align: center;
   margin-bottom: 3rem;
-  transition: color 0.3s ease;
 }
 
-/* Hero section text styles */
-.hero-section {
-  color: #111827;
+/* Motivational Quotes Styling */
+.motivational-quotes {
+  margin-bottom: 2rem;
 }
 
-.hero-description {
-  color: #374151;
-  margin-top: 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  transition: color 0.3s ease;
+.animated-text-container {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Dark mode hero styles */
-:host-context(body.dark) .hero-section {
-  color: #f8fafc !important;
+.animated-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  text-align: center;
+  position: relative;
 }
 
-:host-context(body.dark) .hero-description {
-  color: #cbd5e1 !important;
+.letter {
+  opacity: 0;
+  animation: letterFadeIn 0.6s ease-out forwards;
+  display: inline-block;
+  position: relative;
+  color: inherit !important; /* Asegurar que herede el color del padre */
 }
 
-@media (min-width: 640px) {
-  .hero-description {
-    font-size: 1rem;
+@keyframes letterFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.05);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
   }
 }
 
-@media (min-width: 1024px) {
-  .hero-section {
-    text-align: left;
+/* Indicadores de frase */
+.quote-indicator {
+  transition: all 0.3s ease;
+}
+
+.quote-indicator .w-2 {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quote-indicator .bg-blue-500 {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+/* Efectos adicionales - COMENTADO TEMPORALMENTE
+.animated-text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 3s infinite;
+}
+
+:host-context(body.dark) .animated-text::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+*/
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .animated-text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .animated-text-container {
+    min-height: 2.5rem;
+    padding: 0 1rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .animated-text {
+    font-size: 1.125rem;
+  }
+}
+
+/* Quick Access Grid */
+.quick-access-grid {
+  margin-bottom: 3rem;
+}
+
+.quick-access-card {
+  height: 100%;
+}
+
+/* Playlists Section */
+.playlists-section {
+  margin-bottom: 3rem;
+}
+
+.playlists-grid {
+  gap: 1.5rem;
+}
+
+/* Songs Section */
+.songs-section {
+  margin-bottom: 3rem;
+}
+
+/* Song Card Styling */
+.song-card {
+  height: 100%;
+}
+
+.song-card .bg-white {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+:host-context(body.dark) .song-card .bg-white {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.song-card:hover .bg-white {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+:host-context(body.dark) .song-card:hover .bg-white {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* Playlist Card Enhancements */
+.playlist-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+:host-context(body.dark) .playlist-card {
+  background: #1f2937;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+.playlist-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+:host-context(body.dark) .playlist-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Music Section Styling */
+.music-section {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+:host-context(body.dark) .music-section {
+  background: #1f2937;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading States */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Enhanced Hover Effects */
+.group:hover .group-hover\:scale-105 {
+  transform: scale(1.05);
+}
+
+.group:hover .group-hover\:shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Line Clamp Utility */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .home-container {
+    padding: 1rem;
+  }
+  
+  .quick-access-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .playlists-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .music-section {
+    padding: 1.5rem;
+    border-radius: 1rem;
   }
 }
 

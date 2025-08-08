@@ -157,7 +157,7 @@ export class AsideMenu implements OnInit, OnDestroy {
         const sidebarPlaylists: SidebarPlaylist[] = response.results.map(playlist => ({
           id: playlist.id,
           name: playlist.name,
-          cover: '/assets/playlists/placeholder.jpg', // Por ahora usando placeholder hasta tener campo cover en backend
+          cover: 'assets/playlists/placeholder.jpg', // Por ahora usando placeholder hasta tener campo cover en backend
           total_songs: playlist.total_songs || 0,
           is_public: playlist.is_public
         }));

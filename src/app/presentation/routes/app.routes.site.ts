@@ -4,12 +4,12 @@ export const SITE_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('../pages/music/home/home.component').then((m) => m.HomePageComponent),
+      import('../pages/site/home/home').then((m) => m.HomeComponent),
   },
   {
     path: 'home',
     loadComponent: () =>
-      import('../pages/music/home/home.component').then((m) => m.HomePageComponent),
+      import('../pages/site/home/home').then((m) => m.HomeComponent),
   },
   {
     path: 'explore',

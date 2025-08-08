@@ -206,7 +206,32 @@
     "CARD3_BODY": "Explora música por género",
     "MIXES": "Tus Mezclas",
     "SEE_ALL": "Ver Todo",
-    "TRENDING": "Tendencias Ahora"
+    "TRENDING": "Tendencias Ahora",
+    "NEW_RELEASES": "Nuevos Lanzamientos",
+    "NEW_RELEASES_DESC": "Descubre los últimos lanzamientos musicales",
+    "TOP_CHARTS": "Top Charts",
+    "TOP_CHARTS_DESC": "Las canciones más populares ahora",
+    "GENRES": "Géneros",
+    "GENRES_DESC": "Explora música por género",
+    "FEATURED_PLAYLISTS": "Playlists Destacadas",
+    "LOADING": "Cargando...",
+    "REFRESH": "Actualizar",
+    "NO_PLAYLISTS": "No hay playlists disponibles",
+    "NO_PLAYLISTS_DESC": "Las playlists aparecerán aquí cuando estén disponibles",
+    "RETRY": "Intentar de nuevo",
+    "NO_DESCRIPTION": "Sin descripción",
+    "SONG": "canción",
+    "SONGS": "canciones",
+    "DISCOVER_NEW_MUSIC": "Descubre Música Nueva",
+    "MOST_POPULAR": "Más Populares",
+    "MOTIVATIONAL_QUOTES": {
+      "QUOTE_1": "La música es el lenguaje universal del alma",
+      "QUOTE_2": "Cada canción cuenta una historia única",
+      "QUOTE_3": "Descubre tu próxima canción favorita aquí",
+      "QUOTE_4": "La música conecta corazones y culturas",
+      "QUOTE_5": "Tu playlist perfecta te está esperando",
+      "QUOTE_6": "Explora géneros y encuentra tu sonido ideal"
+    }
   },
   "SIDEBAR": {
     "HOME": "Inicio",

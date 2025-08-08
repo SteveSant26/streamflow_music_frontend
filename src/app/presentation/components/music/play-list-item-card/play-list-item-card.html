@@ -32,13 +32,14 @@
   >
     <!-- Imagen de la playlist -->
     <picture
-      class="aspect-square w-full h-auto flex-none flex items-center justify-center"
+      class="aspect-square w-full h-auto flex-none flex items-center justify-center rounded-xl overflow-hidden"
     >
       <img
-        [src]="playlist.cover"
+        [src]="imageUrl"
         [alt]="'Cover of ' + playlist.title + ' by ' + artistsString"
-        class="object-contain w-full h-full rounded-xl mx-auto shadow-lg"
+        class="object-cover w-full h-full shadow-lg"
         (error)="onImageError($event)"
+        loading="lazy"
       />
     </picture>
 
