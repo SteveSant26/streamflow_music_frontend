@@ -47,17 +47,19 @@
     </main>
   </div>
 
-  <!-- Reproductor fijo en la parte inferior -->
-  <footer
-    class="backdrop-white backdrop-blur-md border-t border-base p-2 sm:p-3 md:p-4 shadow-elevated"
-  >
-    <app-player></app-player>
-  </footer>
+    <!-- Reproductor fijo en la parte inferior - Oculto en current-song -->
+    <footer
+      class="backdrop-white backdrop-blur-md border-t border-base p-2 sm:p-3 md:p-4 shadow-elevated"
+      *ngIf="!isCurrentSong"
+    >
+      <app-player></app-player>
+    </footer>
 
-  <!-- Mobile bottom navigation -->
+  <!-- Mobile bottom navigation - Oculto en current-song -->
   <nav
     aria-label="Mobile Navigation"
     class="lg:hidden backdrop-white backdrop-blur-md border-t border-base px-4 py-3 shadow-elevated"
+    *ngIf="!isCurrentSong"
   >
     <div class="flex justify-around items-center">
       <a

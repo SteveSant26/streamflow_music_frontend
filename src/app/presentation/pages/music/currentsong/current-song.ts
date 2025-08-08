@@ -19,6 +19,7 @@ import { GlobalPlaylistModalComponent } from '@app/shared/components/global-play
 import { PlayerState } from '../../../../domain/entities/player-state.entity';
 import { Subject, takeUntil } from 'rxjs';
 import { MaterialThemeService } from '@app/shared/services/material-theme.service';
+import { ArtistEnrichmentService } from '@app/infrastructure/services/artist-enrichment.service';
 
 interface CurrentSongView {
   id: string;
@@ -63,6 +64,7 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
     private readonly materialThemeService: MaterialThemeService,
     private readonly getSongLyricsUseCase: GetSongLyricsUseCase,
     private readonly updateSongLyricsUseCase: UpdateSongLyricsUseCase,
+    private readonly artistEnrichmentService: ArtistEnrichmentService,
     @Inject(DOCUMENT) private readonly document: Document,
     @Inject(PLATFORM_ID) private readonly platformId: object,
   ) {
@@ -144,8 +146,8 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       this.currentSong = {
         id: playerState.currentSong.id,
         title: playerState.currentSong.title,
-        artist: playerState.currentSong.artist_name || 'Unknown Artist',
-        album: playerState.currentSong.album?.title || 'Unknown Album', // Fixed: Use album title
+        artist: this.artistEnrichmentService.getArtistName(playerState.currentSong),
+        album: playerState.currentSong.album?.title || playerState.currentSong.album_title || 'Unknown Album',
         duration: this.formatTime(playerState.duration),
         currentTime: this.formatTime(playerState.currentTime),
         progress: playerState.progress,
@@ -365,6 +367,33 @@ export class CurrentSongComponent implements OnInit, OnDestroy {
       // Toggle volume when using keyboard
       this.toggleVolume();
     }
+  }
+
+  // Navegación al artista
+  goToArtistDetail() {
+    if (this.currentSong && this.getCurrentArtistId()) {
+      this.router.navigate(['/artist', this.getCurrentArtistId()]);
+    }
+  }
+
+  // Obtener ID del artista actual
+  private getCurrentArtistId(): string | null {
+    if (!this.currentSong) return null;
+    
+    // Obtener el estado actual del player para acceder a la información completa
+    const currentState = this.globalPlayerState.getPlayerState();
+    if (currentState.currentSong) {
+      return this.artistEnrichmentService.getArtistId(currentState.currentSong);
+    }
+    
+    return null;
+  }
+
+  // Verificar si el artista tiene verificación
+  hasVerifiedArtist(): boolean {
+    const currentState = this.globalPlayerState.getPlayerState();
+    return currentState.currentSong ? 
+      this.artistEnrichmentService.isArtistVerified(currentState.currentSong) : false;
   }
 
   private extractColorsFromImage(img: HTMLImageElement) {

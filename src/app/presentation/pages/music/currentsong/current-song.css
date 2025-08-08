@@ -191,11 +191,44 @@
   line-height: 1.2;
 }
 
+.artist-info-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .song-artist {
   font-size: min(1.25rem, 5vw);
   font-weight: 500;
-  margin: 0 0 0.25rem 0;
+  margin: 0;
   opacity: 0.9;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.song-artist:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.verified-icon {
+  font-size: 1.2rem;
+  color: #1db954;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
 .song-album {

@@ -35,7 +35,6 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
     MatChipsModule,
     MatProgressSpinnerModule,
     TranslateModule,
-    MusicSectionComponent,
     SkeletonGroupComponent
   ],
   templateUrl: './discover.component.html',
