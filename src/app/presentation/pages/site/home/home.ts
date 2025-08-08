@@ -20,6 +20,7 @@ import { Song } from '../../../../domain/entities/song.entity';
 import { Playlist } from '../../../../domain/entities/playlist.entity';
 import { UnifiedPlaylistService } from '../../../../infrastructure/services/unified-playlist.service';
 import { PlayListItemCard } from '@app/presentation/components/music/play-list-item-card/play-list-item-card';
+import { ThemeDirective } from '@app/shared/directives/theme.directive';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +34,7 @@ import { PlayListItemCard } from '@app/presentation/components/music/play-list-i
     MatButtonModule,
     MusicSectionComponent,
     PlayListItemCard,
+    ThemeDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',

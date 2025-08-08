@@ -19,6 +19,8 @@ import {
   PlaySongUseCase 
 } from '../../../../domain/usecases/song/song.usecases';
 import { GlobalPlayerStateService } from '../../../../infrastructure/services/global-player-state.service';
+import { ThemeDirective } from '../../../../shared/directives/theme.directive';
+
 @Component({
   selector: 'app-home',
   imports: [
@@ -29,6 +31,7 @@ import { GlobalPlayerStateService } from '../../../../infrastructure/services/gl
     MatProgressSpinnerModule,
     TranslateModule,
     MusicSectionComponent,
+    ThemeDirective,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'

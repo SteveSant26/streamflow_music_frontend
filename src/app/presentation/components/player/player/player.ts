@@ -23,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { ROUTES_CONFIG_MUSIC } from '@app/config';
 import { GlobalPlaylistModalService } from '@app/shared/services/global-playlist-modal.service';
+import { ThemeDirective } from '@app/shared/directives/theme.directive';
 
 interface Song {
   id: number;
@@ -57,6 +58,7 @@ interface CurrentMusic {
     TranslateModule,
     CommonModule,
     MatIconModule,
+    ThemeDirective,
   ],
   templateUrl: './player.html',
   changeDetection: ChangeDetectionStrategy.Default,

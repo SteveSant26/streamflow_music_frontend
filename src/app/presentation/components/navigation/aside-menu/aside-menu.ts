@@ -19,6 +19,7 @@ import {
   ROUTES_CONFIG_USER
 } from '@app/config/routes-config';
 import { TranslateModule } from '@ngx-translate/core';
+import { ThemeSwitcherComponent } from '@app/shared/components/theme-switcher/theme-switcher.component';
 
 // Interfaz simple para las playlists del sidebar
 interface SidebarPlaylist {
@@ -39,6 +40,7 @@ interface SidebarPlaylist {
     MatIconModule,
     MatButtonModule,
     TranslateModule,
+    ThemeSwitcherComponent,
   ],
   templateUrl: './aside-menu.html',
   styleUrls: ['./aside-menu.css'],
@@ -86,35 +88,8 @@ export class AsideMenu implements OnInit, OnDestroy {
     });
   }
 
-  // Theme properties
-  showThemeOptions = false;
-  readonly isDarkMode = this.materialThemeService.isDarkMode;
-  readonly currentTheme = this.materialThemeService.currentTheme;
-  readonly effectiveTheme = this.materialThemeService.effectiveTheme;
-
-  // Computed para obtener el ícono apropiado del tema
-  readonly themeIcon = computed(() => {
-    const theme = this.currentTheme();
-    if (theme.isSystemTheme()) {
-      return 'settings_brightness';
-    }
-    return theme.isDark ? 'nights_stay' : 'wb_sunny';
-  });
-
-  // Computed para saber qué opción está activa
-  readonly isLightActive = computed(() => {
-    const theme = this.currentTheme();
-    return !theme.isSystemTheme() && !theme.isDark;
-  });
-
-  readonly isDarkActive = computed(() => {
-    const theme = this.currentTheme();
-    return !theme.isSystemTheme() && theme.isDark;
-  });
-
-  readonly isSystemActive = computed(() => {
-    return this.currentTheme().isSystemTheme();
-  });
+  // Theme properties (simplificado, usando componente dedicado)
+  readonly isDarkMode = this.materialThemeService._isDarkMode;
 
   // Language methods
   getCurrentLanguage() {
@@ -129,26 +104,7 @@ export class AsideMenu implements OnInit, OnDestroy {
     this.languageService.changeLanguage(language);
   }
 
-  // Theme methods
-  toggleThemeOptions(): void {
-    this.showThemeOptions = !this.showThemeOptions;
-  }
-
-  setLightTheme(): void {
-    this.materialThemeService.setTheme('light');
-    this.showThemeOptions = false;
-  }
-
-  setDarkTheme(): void {
-    this.materialThemeService.setTheme('dark');
-    this.showThemeOptions = false;
-  }
-
-  setSystemTheme(): void {
-    this.materialThemeService.setTheme('system');
-    this.showThemeOptions = false;
-  }
-
+  // Language methods
   // View Mode methods
   setViewMode(mode: 'grid' | 'table' | 'list'): void {
     console.log('🎨 AsideMenu: Setting view mode to:', mode);
