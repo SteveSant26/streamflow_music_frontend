@@ -231,8 +231,8 @@
       <img [src]="profileImageUrl()" alt="Foto de perfil completa" 
            class="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain rounded-2xl shadow-2xl border-4" 
            [ngClass]="{
-             'border-white': !isDarkMode(),
-             'border-gray-300': isDarkMode()
+             'border-white/30': !isDarkMode(),
+             'border-gray-300/30': isDarkMode()
            }" 
            (click)="$event.stopPropagation()" />
       <button (click)="closeImageModal()" 
