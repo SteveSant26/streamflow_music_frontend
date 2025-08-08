@@ -1,16 +1,16 @@
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+<div class="min-h-screen bg-surface py-12 px-4" appTheme>
   <!-- Header Section -->
   <div class="max-w-7xl mx-auto text-center mb-16">
-    <div class="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
+    <div class="inline-flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
       <mat-icon class="text-base">star</mat-icon>
       <span>{{ 'SUBSCRIPTION.TITLE' | translate }}</span>
     </div>
     
-    <h1 class="text-5xl font-bold text-gray-900 mb-4">
+    <h1 class="text-5xl font-bold text-on-surface mb-4">
       {{ 'SUBSCRIPTION.TITLE' | translate }}
     </h1>
-    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+    <p class="text-xl text-on-surface-variant max-w-3xl mx-auto">
       {{ 'SUBSCRIPTION.SUBTITLE' | translate }}
     </p>
   </div>
@@ -20,12 +20,12 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       
       <!-- FREE PLAN -->
-      <mat-card class="relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      <mat-card class="relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-surface-container">
         <mat-card-content class="p-8">
           <!-- Plan Header -->
           <div class="text-center mb-8">
             <div class="mb-4">
-              <mat-icon class="text-5xl text-gray-600">music_note</mat-icon>
+              <mat-icon class="text-5xl text-on-surface-variant">music_note</mat-icon>
             </div>
             
             <h3 class="text-2xl font-bold mb-2">{{ 'SUBSCRIPTION.FREE_PLAN.NAME' | translate }}</h3>

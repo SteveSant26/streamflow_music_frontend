@@ -52,18 +52,18 @@
 
     @if (user()) {
       <div
-        class="flex items-center justify-between mb-4 hover:bg-black/5 transition-colors duration-300"
+        class="flex items-center justify-between mb-4 hover:bg-surface-variant transition-colors duration-300"
       >
         <a
           routerLink="/my-playlists"
-          class="text-black font-semibold flex items-center gap-2 mt-4 mb-2 hover:bg-black/5 transition-colors duration-300 cursor-pointer"
+          class="text-on-surface font-semibold flex items-center gap-2 mt-4 mb-2 hover:bg-surface-variant transition-colors duration-300 cursor-pointer"
         >
           <mat-icon>library_music</mat-icon>
           {{ "SIDEBAR.MY_PLAYLISTS" | translate }}
         </a>
         <button 
           (click)="openCreatePlaylistDialog()"
-          class="text-black hover:text-black transition-colors mt-4 mb-2"
+          class="text-on-surface hover:text-primary transition-colors mt-4 mb-2"
           title="Crear nueva playlist">
           <mat-icon>add</mat-icon>
         </button>
@@ -72,19 +72,19 @@
       <div class="space-y-2 mb-4">
         @if (isLoadingPlaylists()) {
           <div class="flex items-center justify-center py-4">
-            <div class="text-sm text-gray-500">Cargando playlists...</div>
+            <div class="text-sm text-on-surface-variant">Cargando playlists...</div>
           </div>
         } @else if (playlistsError()) {
           <div class="flex items-center justify-center py-4">
-            <div class="text-sm text-red-500">{{ playlistsError() }}</div>
+            <div class="text-sm text-error">{{ playlistsError() }}</div>
           </div>
         } @else if (showEmptyState()) {
           <div class="flex flex-col items-center justify-center py-6 text-center">
-            <mat-icon class="text-gray-400 mb-2 text-3xl">queue_music</mat-icon>
-            <div class="text-sm text-gray-500 mb-2">No tienes playlists aún</div>
+            <mat-icon class="text-on-surface-variant mb-2 text-3xl">queue_music</mat-icon>
+            <div class="text-sm text-on-surface-variant mb-2">No tienes playlists aún</div>
             <button 
               (click)="openCreatePlaylistDialog()"
-              class="text-xs text-blue-600 hover:text-blue-800 transition-colors">
+              class="text-xs text-primary hover:text-on-surface transition-colors">
               Crea tu primera playlist
             </button>
           </div>
@@ -98,17 +98,17 @@
 
     <!-- View Mode Options -->
     <div class="view-mode-selector mb-4">
-      <div class="text-black font-semibold flex items-center gap-2 mb-3">
+      <div class="text-on-surface font-semibold flex items-center gap-2 mb-3">
         <mat-icon>view_comfy</mat-icon>
         Vista de Música
       </div>
-      <div class="grid grid-cols-3 gap-1 bg-gray-100 rounded-lg p-1">
+      <div class="grid grid-cols-3 gap-1 bg-surface-variant rounded-lg p-1">
         <!-- Grid View -->
         <button
           (click)="setViewMode('grid')"
           [class]="viewModeService.viewMode() === 'grid' 
-            ? 'bg-white text-black shadow-sm' 
-            : 'text-gray-600 hover:text-black'"
+            ? 'bg-primary text-on-primary shadow-sm' 
+            : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'"
           class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
           title="Vista de tarjetas"
         >
@@ -117,11 +117,13 @@
         </button>
         
         <!-- Table View -->
+        
+        <!-- Table View -->
         <button
           (click)="setViewMode('table')"
           [class]="viewModeService.viewMode() === 'table' 
-            ? 'bg-white text-black shadow-sm' 
-            : 'text-gray-600 hover:text-black'"
+            ? 'bg-primary text-on-primary shadow-sm' 
+            : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'"
           class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
           title="Vista de tabla"
         >
@@ -133,8 +135,8 @@
         <button
           (click)="setViewMode('list')"
           [class]="viewModeService.viewMode() === 'list' 
-            ? 'bg-white text-black shadow-sm' 
-            : 'text-gray-600 hover:text-black'"
+            ? 'bg-primary text-on-primary shadow-sm' 
+            : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container'"
           class="flex flex-col items-center gap-1 py-2 px-1 rounded-md text-xs font-medium transition-all duration-200"
           title="Vista de lista"
         >

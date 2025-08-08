@@ -14,6 +14,7 @@ import {
 } from '@app/domain/usecases';
 import { PaymentStateService, AuthStateService } from '@app/shared/services';
 import { SubscriptionPlan } from '@app/domain/entities/payment.entity';
+import { ThemeDirective } from '@app/shared/directives/theme.directive';
 
 @Component({
   selector: 'app-subscription-plans',
@@ -24,7 +25,8 @@ import { SubscriptionPlan } from '@app/domain/entities/payment.entity';
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
-    TranslateModule
+    TranslateModule,
+    ThemeDirective
   ],
   templateUrl: './subscription-plans.component.html',
   styleUrl: './subscription-plans.component.css'
