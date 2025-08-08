@@ -121,18 +121,39 @@
     </div>
   </section>
 
+  <!-- Canciones Populares -->
+  <section class="discover-section">
+    <app-music-section
+      [title]="'HOME.POPULAR_SONGS' | translate"
+      titleIcon="🔥"
+      [songs]="popularSongs()"
+      [loading]="isLoadingPopularSongs()"
+      [type]="viewMode()"
+      [primaryButton]="popularSongsPrimaryButton"
+      [actionButtons]="popularSongsActionButtons"
+      [emptyMessage]="'HOME.NO_POPULAR_SONGS' | translate"
+      [loadingMessage]="'COMMON.LOADING' | translate"
+      (songSelected)="onPopularSongSelected($event)"
+      (retryLoad)="onRetryPopularSongs()"
+      (addToQueueRequest)="onAddToQueue($event)"
+      (addToPlaylistRequest)="onAddToPlaylist($event)"
+      (addToFavoritesRequest)="onAddToFavorites($event)"
+      (moreOptionsRequest)="onMoreOptions($event)"
+    ></app-music-section>
+  </section>
+
   <!-- Música Aleatoria -->
   <section class="discover-section">
     <app-music-section
-      title="Música Aleatoria"
+      [title]="'HOME.RANDOM_SONGS' | translate"
       titleIcon="🎲"
       [songs]="randomSongs()"
       [loading]="isLoadingRandomSongs()"
       [type]="viewMode()"
       [primaryButton]="randomSongsPrimaryButton"
       [actionButtons]="randomSongsActionButtons"
-      emptyMessage="No se pudieron cargar las canciones aleatorias"
-      loadingMessage="Cargando música aleatoria..."
+      [emptyMessage]="'HOME.NO_RANDOM_SONGS' | translate"
+      [loadingMessage]="'COMMON.LOADING' | translate"
       (songSelected)="onRandomSongSelected($event)"
       (retryLoad)="onRetryRandomSongs()"
       (addToQueueRequest)="onAddToQueue($event)"

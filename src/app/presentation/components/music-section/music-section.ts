@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Song } from '@app/domain/entities/song.entity';
 import { MusicsTable } from '@app/presentation/components/music/musics-table/musics-table';
 import { ImageFallbackDirective } from '@app/presentation/shared/directives/image-fallback.directive';
+import { SkeletonGroupComponent } from '@app/presentation/shared/components/skeleton-group/skeleton-group.component';
 
 export type MusicSectionType = 'grid' | 'table' | 'list';
 
@@ -18,7 +19,7 @@ export interface MusicSectionButton {
 @Component({
   selector: 'app-music-section',
   standalone: true,
-  imports: [CommonModule, MatIconModule, TranslateModule, MusicsTable, ImageFallbackDirective],
+  imports: [CommonModule, MatIconModule, TranslateModule, MusicsTable, ImageFallbackDirective, SkeletonGroupComponent],
   templateUrl: './music-section.html',
   styleUrls: ['./music-section.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

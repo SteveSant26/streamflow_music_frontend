@@ -19,7 +19,7 @@ import { Song } from '../../../../domain/entities/song.entity';
 import { GetPopularAlbumsUseCase } from '../../../../domain/usecases/album.usecases';
 import { GetPopularArtistsUseCase } from '../../../../domain/usecases/artist.usecases';
 import { GetPopularGenresUseCase } from '../../../../domain/usecases/genre.usecases';
-import { GetRandomSongsUseCase } from '../../../../domain/usecases/song/song.usecases';
+import { GetRandomSongsUseCase, GetMostPopularSongsUseCase } from '../../../../domain/usecases/song/song.usecases';
 import { MaterialThemeService } from '../../../../shared/services/material-theme.service';
 import { PlaylistService } from '../../../../infrastructure/services/playlist.service';
 
@@ -49,6 +49,7 @@ export class DiscoverPageComponent implements OnInit {
   private readonly getPopularArtistsUseCase = inject(GetPopularArtistsUseCase);
   private readonly getPopularGenresUseCase = inject(GetPopularGenresUseCase);
   private readonly getRandomSongsUseCase = inject(GetRandomSongsUseCase);
+  private readonly getMostPopularSongsUseCase = inject(GetMostPopularSongsUseCase);
   private readonly playlistService = inject(PlaylistService);
 
   // Signals
@@ -57,26 +58,47 @@ export class DiscoverPageComponent implements OnInit {
   popularAlbums = signal<AlbumListItem[]>([]);
   popularArtists = signal<ArtistListItem[]>([]);
   popularGenres = signal<GenreListItem[]>([]);
+  popularSongs = signal<Song[]>([]);
   randomSongs = signal<Song[]>([]);
   
   isLoadingAlbums = signal(false);
   isLoadingArtists = signal(false);
   isLoadingGenres = signal(false);
+  isLoadingPopularSongs = signal(false);
   isLoadingRandomSongs = signal(false);
   
   albumsError = signal<string | null>(null);
   artistsError = signal<string | null>(null);
   genresError = signal<string | null>(null);
+  popularSongsError = signal<string | null>(null);
   randomSongsError = signal<string | null>(null);
 
   // Skeleton configurations
   albumsSkeletonConfig: SkeletonGroupConfig = this.skeletonService.getPreset('albums');
   artistsSkeletonConfig: SkeletonGroupConfig = this.skeletonService.getPreset('artists');
   genresSkeletonConfig: SkeletonGroupConfig = this.skeletonService.getPreset('genres');
+  songsSkeletonConfig: SkeletonGroupConfig = this.skeletonService.getPreset('songs');
 
   // Button configurations for music section
+  popularSongsPrimaryButton = {
+    text: 'HOME.VIEW_ALL',
+    action: () => {
+      console.log('🎵 Navigate to all popular songs');
+      // Navigate to songs page - will be implemented when songs page is ready
+    },
+    ariaLabel: 'Ver todas las canciones populares'
+  };
+
+  popularSongsActionButtons = [
+    {
+      icon: 'refresh',
+      action: () => this.loadPopularSongs(),
+      ariaLabel: 'Recargar canciones populares'
+    }
+  ];
+
   randomSongsPrimaryButton = {
-    text: 'Ver todas',
+    text: 'HOME.VIEW_ALL',
     action: () => {
       console.log('🎵 Navigate to all random songs');
       // Navigate to songs page - will be implemented when songs page is ready
@@ -96,6 +118,7 @@ export class DiscoverPageComponent implements OnInit {
     this.loadPopularAlbums();
     this.loadPopularArtists();
     this.loadPopularGenres();
+    this.loadPopularSongs();
     this.loadRandomSongs();
   }
 
@@ -156,6 +179,23 @@ export class DiscoverPageComponent implements OnInit {
     });
   }
 
+  private loadPopularSongs() {
+    this.isLoadingPopularSongs.set(true);
+    this.popularSongsError.set(null);
+
+    this.getMostPopularSongsUseCase.execute(1, 6).subscribe({
+      next: (songs) => {
+        this.popularSongs.set(songs);
+        this.isLoadingPopularSongs.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading popular songs:', error);
+        this.popularSongsError.set('No se pudieron cargar las canciones populares');
+        this.isLoadingPopularSongs.set(false);
+      }
+    });
+  }
+
   private loadRandomSongs() {
     this.isLoadingRandomSongs.set(true);
     this.randomSongsError.set(null);
@@ -173,11 +213,28 @@ export class DiscoverPageComponent implements OnInit {
     });
   }
 
+  playPopularSong(song: Song) {
+    const playlist = this.popularSongs();
+    const songIndex = playlist.findIndex(s => s.id === song.id);
+    this.playlistService.createPlaylist(playlist, 'Canciones Populares', songIndex);
+    this.playlistService.togglePlayback();
+  }
+
   playRandomSong(song: Song) {
     const playlist = this.randomSongs();
     const songIndex = playlist.findIndex(s => s.id === song.id);
     this.playlistService.createPlaylist(playlist, 'Música Aleatoria', songIndex);
     this.playlistService.togglePlayback();
+  }
+
+  onPopularSongSelected(song: Song) {
+    console.log('🎵 Discover: Popular song selected:', song.title);
+    this.playPopularSong(song);
+  }
+
+  onRetryPopularSongs() {
+    console.log('🔄 Discover: Retrying popular songs load');
+    this.loadPopularSongs();
   }
 
   onRandomSongSelected(song: Song) {
