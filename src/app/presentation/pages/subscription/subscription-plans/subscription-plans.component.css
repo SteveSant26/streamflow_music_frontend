@@ -1,6 +1,296 @@
-/* All styles are now handled by Tailwind CSS classes in the template */
-/* This file is kept for any custom animations or overrides if needed */
+/* Estilos elegantes y refinados para las subscription cards */
 
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+/* Variables CSS para temas elegantes */
+:root {
+  --card-shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --card-shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --card-hover-shadow-light: 0 12px 40px rgba(0, 0, 0, 0.15);
+  --card-hover-shadow-dark: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Animaciones elegantes de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmerGlow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
+  }
+}
+
+/* Estilos base para las cards */
+.plan-card {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: fadeInUp 0.6s ease-out forwards;
+  box-shadow: var(--card-shadow-light);
+}
+
+[data-theme="dark"] .plan-card {
+  box-shadow: var(--card-shadow-dark);
+}
+
+/* Efecto shimmer al hacer hover */
+.plan-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.8s ease;
+  z-index: 1;
+}
+
+.plan-card:hover::before {
+  left: 100%;
+}
+
+/* Hover elegante para las cards */
+.plan-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--card-hover-shadow-light);
+}
+
+[data-theme="dark"] .plan-card:hover {
+  box-shadow: var(--card-hover-shadow-dark);
+}
+
+/* Animaciones escalonadas para elementos de lista */
+.feature-list li {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+.feature-list li:nth-child(1) { animation-delay: 0.1s; }
+.feature-list li:nth-child(2) { animation-delay: 0.2s; }
+.feature-list li:nth-child(3) { animation-delay: 0.3s; }
+.feature-list li:nth-child(4) { animation-delay: 0.4s; }
+
+/* Botones con efectos elegantes */
+.plan-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 2;
+}
+
+.plan-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: -1;
+}
+
+.plan-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.plan-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Iconos con animaciones suaves */
+.group:hover mat-icon {
+  transform: scale(1.1) rotate(5deg);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Card destacada (recomendada) */
+.featured-card {
+  position: relative;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.featured-card::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    rgba(124, 58, 237, 0.5), 
+    rgba(6, 182, 212, 0.5), 
+    rgba(124, 58, 237, 0.5)
+  );
+  border-radius: inherit;
+  z-index: -1;
+  animation: shimmerGlow 3s linear infinite;
+}
+
+/* Transiciones de colores para el cambio de tema */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Mejoras para dispositivos móviles */
+@media (max-width: 768px) {
+  .plan-card {
+    animation-delay: 0.2s;
+  }
+  
+  .plan-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+/* Glassmorphism para un look más moderno */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .glass-effect {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Improved hover effects */
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
+}
+
+.group:hover .group-hover\:rotate-6 {
+  transform: rotate(6deg);
+}
+
+/* Custom gradient animations */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+/* Popular badge pulse animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.8);
+    transform: scale(1.05);
+  }
+}
+
+.popular-badge {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Card stack effect */
+.card-stack::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 1.5rem;
+  z-index: -1;
+  transform: rotate(1deg);
+}
+
+.card-stack::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 1.5rem;
+  z-index: -1;
+  transform: rotate(-0.5deg);
+}
+
+/* Feature icon bounce animation */
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.feature-icon {
+  animation: bounce-in 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.feature-icon:nth-child(1) { animation-delay: 0.1s; }
+.feature-icon:nth-child(2) { animation-delay: 0.2s; }
+.feature-icon:nth-child(3) { animation-delay: 0.3s; }
+.feature-icon:nth-child(4) { animation-delay: 0.4s; }
+.feature-icon:nth-child(5) { animation-delay: 0.5s; }

@@ -20,7 +20,6 @@ import { MaterialThemeService } from '../../services/material-theme.service';
     <button 
       mat-icon-button 
       [matMenuTriggerFor]="themeMenu"
-      [attr.aria-label]="'THEME.TOGGLE' | translate"
       class="theme-switcher-button"
       [class.dark-active]="isDarkMode()"
     >
@@ -34,7 +33,7 @@ import { MaterialThemeService } from '../../services/material-theme.service';
         [class.active]="isLightActive()"
       >
         <mat-icon>wb_sunny</mat-icon>
-        <span>{{ 'THEME.LIGHT' | translate }}</span>
+        <span>Tema Claro</span>
       </button>
 
       <button 
@@ -43,7 +42,7 @@ import { MaterialThemeService } from '../../services/material-theme.service';
         [class.active]="isDarkActive()"
       >
         <mat-icon>nights_stay</mat-icon>
-        <span>{{ 'THEME.DARK' | translate }}</span>
+        <span>Tema Oscuro</span>
       </button>
 
       <button 
@@ -52,7 +51,7 @@ import { MaterialThemeService } from '../../services/material-theme.service';
         [class.active]="isSystemActive()"
       >
         <mat-icon>settings_brightness</mat-icon>
-        <span>{{ 'THEME.SYSTEM' | translate }}</span>
+        <span>Sistema</span>
       </button>
     </mat-menu>
   `,
@@ -121,14 +120,29 @@ export class ThemeSwitcherComponent {
 
   // Métodos para cambiar tema
   setLightTheme(): void {
+    // Evitar clics múltiples rápidos
+    if (this.currentTheme().type === 'light' && !this.currentTheme().isSystemTheme()) {
+      return;
+    }
+    console.log('🔄 User clicked: Setting light theme');
     this.themeService.setTheme('light');
   }
 
   setDarkTheme(): void {
+    // Evitar clics múltiples rápidos
+    if (this.currentTheme().type === 'dark' && !this.currentTheme().isSystemTheme()) {
+      return;
+    }
+    console.log('🔄 User clicked: Setting dark theme');
     this.themeService.setTheme('dark');
   }
 
   setSystemTheme(): void {
+    // Evitar clics múltiples rápidos
+    if (this.currentTheme().isSystemTheme()) {
+      return;
+    }
+    console.log('🔄 User clicked: Setting system theme');
     this.themeService.setTheme('system');
   }
 }

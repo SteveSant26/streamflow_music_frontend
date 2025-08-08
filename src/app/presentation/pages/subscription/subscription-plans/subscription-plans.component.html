@@ -1,204 +1,180 @@
-
-<div class="min-h-screen bg-surface py-12 px-4" appTheme>
+<div class="subscription-plans-container bg-background text-on-background min-h-screen" appTheme>
   <!-- Header Section -->
-  <div class="max-w-7xl mx-auto text-center mb-16">
-    <div class="inline-flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
-      <mat-icon class="text-base">star</mat-icon>
-      <span>{{ 'SUBSCRIPTION.TITLE' | translate }}</span>
+  <div class="relative overflow-hidden bg-gradient-to-br from-surface via-surface-variant/20 to-background">
+    <div class="absolute inset-0 opacity-30">
+      <div class="w-full h-full bg-gradient-to-br from-transparent via-surface-variant/10 to-transparent"></div>
     </div>
     
-    <h1 class="text-5xl font-bold text-on-surface mb-4">
-      {{ 'SUBSCRIPTION.TITLE' | translate }}
-    </h1>
-    <p class="text-xl text-on-surface-variant max-w-3xl mx-auto">
-      {{ 'SUBSCRIPTION.SUBTITLE' | translate }}
-    </p>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 py-16 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-on-surface mb-6">
+        Elige tu Plan Perfecto
+      </h1>
+      <p class="text-xl text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
+        Disfruta de música ilimitada con la calidad que mereces. Encuentra el plan que mejor se adapte a tu estilo de vida.
+      </p>
+    </div>
   </div>
 
-  <!-- Fixed Plans Grid -->
-  <div class="max-w-7xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+  <!-- Plans Section -->
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
       
-      <!-- FREE PLAN -->
-      <mat-card class="relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-surface-container">
-        <mat-card-content class="p-8">
-          <!-- Plan Header -->
-          <div class="text-center mb-8">
-            <div class="mb-4">
-              <mat-icon class="text-5xl text-on-surface-variant">music_note</mat-icon>
-            </div>
-            
-            <h3 class="text-2xl font-bold mb-2">{{ 'SUBSCRIPTION.FREE_PLAN.NAME' | translate }}</h3>
-            
-            <div class="mb-4">
-              <span class="text-4xl font-bold text-gray-900">{{ 'SUBSCRIPTION.FREE_PLAN.PRICE' | translate }}</span>
-              <span class="text-lg text-gray-500">{{ 'SUBSCRIPTION.FREE_PLAN.PERIOD' | translate }}</span>
-            </div>
-            
-            <p class="text-sm text-gray-600">
-              {{ 'SUBSCRIPTION.FREE_PLAN.DESCRIPTION' | translate }}
-            </p>
+      <!-- Plan Gratis -->
+      <div class="plan-card bg-surface text-on-surface rounded-2xl border border-outline p-8 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+        <div class="text-center">
+          <h3 class="text-2xl font-bold text-on-surface mb-2">Gratis</h3>
+          <div class="mb-6">
+            <span class="text-4xl font-bold text-primary">$0</span>
+            <span class="text-on-surface-variant">/mes</span>
           </div>
+          
+          <ul class="space-y-3 mb-8 text-left">
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Acceso limitado a música</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Anuncios entre canciones</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Calidad estándar</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-on-surface-variant mr-3">close</mat-icon>
+              <span class="text-on-surface-variant">Sin descargas offline</span>
+            </li>
+          </ul>
 
-          <!-- Features List -->
-          <div class="space-y-4 mb-8">
-            <div class="flex items-center gap-3" *ngFor="let feature of ['SUBSCRIPTION.FREE_PLAN.FEATURES.0', 'SUBSCRIPTION.FREE_PLAN.FEATURES.1', 'SUBSCRIPTION.FREE_PLAN.FEATURES.2', 'SUBSCRIPTION.FREE_PLAN.FEATURES.3', 'SUBSCRIPTION.FREE_PLAN.FEATURES.4']">
-              <div class="flex-shrink-0 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
-                <mat-icon class="text-sm text-gray-600">check</mat-icon>
-              </div>
-              <span class="text-sm text-gray-700">{{ feature | translate }}</span>
-            </div>
-          </div>
-
-          <!-- Action Button -->
-          <div class="text-center">
-            <button
-              mat-raised-button
-              class="w-full bg-gray-200 text-gray-700 font-bold py-3 cursor-not-allowed"
-              disabled
-            >
-              <mat-icon class="mr-2">check_circle</mat-icon>
-              {{ 'SUBSCRIPTION.FREE_PLAN.CURRENT' | translate }}
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <!-- MONTHLY PLAN -->
-      <mat-card class="relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-        <mat-card-content class="p-8">
-          <!-- Plan Header -->
-          <div class="text-center mb-8">
-            <div class="mb-4">
-              <mat-icon class="text-5xl text-blue-600">calendar_month</mat-icon>
-            </div>
-            
-            <h3 class="text-2xl font-bold mb-2">{{ 'SUBSCRIPTION.MONTHLY_PLAN.NAME' | translate }}</h3>
-            
-            <div class="mb-4">
-              <span class="text-4xl font-bold text-gray-900">{{ 'SUBSCRIPTION.MONTHLY_PLAN.PRICE' | translate }}</span>
-              <span class="text-lg text-gray-500">{{ 'SUBSCRIPTION.MONTHLY_PLAN.PERIOD' | translate }}</span>
-            </div>
-            
-            <p class="text-sm text-gray-600">
-              {{ 'SUBSCRIPTION.MONTHLY_PLAN.DESCRIPTION' | translate }}
-            </p>
-          </div>
-
-          <!-- Features List -->
-          <div class="space-y-4 mb-8">
-            <div class="flex items-center gap-3" *ngFor="let feature of ['SUBSCRIPTION.MONTHLY_PLAN.FEATURES.0', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.1', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.2', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.3', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.4', 'SUBSCRIPTION.MONTHLY_PLAN.FEATURES.5']">
-              <div class="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                <mat-icon class="text-sm text-green-600">check</mat-icon>
-              </div>
-              <span class="text-sm text-gray-700">{{ feature | translate }}</span>
-            </div>
-          </div>
-
-          <!-- Action Button -->
-          <div class="text-center">
-            <button
-              mat-raised-button
-              class="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold py-3"
-              (click)="selectMonthlyPlan()"
-            >
-              <mat-icon class="mr-2">rocket_launch</mat-icon>
-              {{ 'SUBSCRIPTION.MONTHLY_PLAN.BUTTON' | translate }}
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <!-- YEARLY PLAN (BEST VALUE) -->
-      <mat-card class="relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
-        <!-- Best Value Badge -->
-        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-          <div class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-semibold shadow-lg">
-            <mat-icon class="text-xs mr-1">local_offer</mat-icon>
-            {{ 'SUBSCRIPTION.YEARLY_PLAN.RECOMMENDED' | translate }}
-          </div>
+          <button 
+            mat-flat-button 
+            color="primary"
+            class="w-full py-3 text-lg font-semibold"
+            (click)="selectPlan('free')">
+            Comenzar Gratis
+          </button>
         </div>
+      </div>
 
-        <mat-card-content class="p-8 pt-10">
-          <!-- Plan Header -->
-          <div class="text-center mb-8">
-            <div class="mb-4">
-              <mat-icon class="text-5xl text-blue-600">star</mat-icon>
-            </div>
-            
-            <h3 class="text-2xl font-bold mb-2 text-gray-900">{{ 'SUBSCRIPTION.YEARLY_PLAN.NAME' | translate }}</h3>
-            
-            <div class="mb-2">
-              <span class="text-4xl font-bold text-gray-900">{{ 'SUBSCRIPTION.YEARLY_PLAN.PRICE' | translate }}</span>
-              <span class="text-lg text-gray-500">{{ 'SUBSCRIPTION.YEARLY_PLAN.PERIOD' | translate }}</span>
-            </div>
-            
-            <div class="mb-4">
-              <span class="text-sm text-gray-400 line-through">{{ 'SUBSCRIPTION.YEARLY_PLAN.ORIGINAL_PRICE' | translate }}</span>
-              <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                <mat-icon class="text-xs mr-1">savings</mat-icon>
-                {{ 'SUBSCRIPTION.YEARLY_PLAN.SAVE' | translate }}
-              </span>
-            </div>
-            
-            <p class="text-sm text-gray-600">
-              {{ 'SUBSCRIPTION.YEARLY_PLAN.DESCRIPTION' | translate }}
-            </p>
+      <!-- Plan Individual Mensual -->
+      <div class="plan-card bg-primary-container text-on-primary-container rounded-2xl border-2 border-primary p-8 transition-all duration-300 hover:scale-105 hover:shadow-xl relative">
+        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+          <span class="bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-semibold">
+            Más Popular
+          </span>
+        </div>
+        
+        <div class="text-center">
+          <h3 class="text-2xl font-bold text-on-primary-container mb-2">Individual</h3>
+          <div class="mb-6">
+            <span class="text-4xl font-bold text-primary">$9.99</span>
+            <span class="text-on-primary-container/70">/mes</span>
           </div>
+          
+          <ul class="space-y-3 mb-8 text-left">
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Música ilimitada sin anuncios</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Descargas offline</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Calidad Premium</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Saltar canciones ilimitadas</span>
+            </li>
+          </ul>
 
-          <!-- Features List -->
-          <div class="space-y-4 mb-8">
-            <div class="flex items-center gap-3" *ngFor="let feature of ['SUBSCRIPTION.YEARLY_PLAN.FEATURES.0', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.1', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.2', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.3', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.4', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.5', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.6', 'SUBSCRIPTION.YEARLY_PLAN.FEATURES.7']">
-              <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                <mat-icon class="text-sm text-blue-600">check</mat-icon>
-              </div>
-              <span class="text-sm text-gray-700">{{ feature | translate }}</span>
-            </div>
-          </div>
+          <button 
+            mat-flat-button 
+            color="primary"
+            class="w-full py-3 text-lg font-semibold"
+            (click)="selectPlan('premium-individual')">
+            Empezar Plan Individual
+          </button>
+        </div>
+      </div>
 
-          <!-- Action Button -->
-          <div class="text-center">
-            <button
-              mat-raised-button
-              class="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold py-3 shadow-lg hover:shadow-xl transition-all duration-200"
-              (click)="selectYearlyPlan()"
-            >
-              <mat-icon class="mr-2">star</mat-icon>
-              {{ 'SUBSCRIPTION.YEARLY_PLAN.BUTTON' | translate }}
-            </button>
+      <!-- Plan Anual -->
+      <div class="plan-card bg-surface text-on-surface rounded-2xl border border-outline p-8 transition-all duration-300 hover:scale-105 hover:shadow-lg relative">
+        <div class="absolute -top-4 right-4">
+          <span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-semibold">
+            Ahorra 20%
+          </span>
+        </div>
+        
+        <div class="text-center">
+          <h3 class="text-2xl font-bold text-on-surface mb-2">Premium Anual</h3>
+          <div class="mb-2">
+            <span class="text-4xl font-bold text-primary">$99.99</span>
+            <span class="text-on-surface-variant">/año</span>
           </div>
-        </mat-card-content>
-      </mat-card>
+          <div class="mb-6">
+            <span class="text-sm text-on-surface-variant line-through">$119.88</span>
+            <span class="text-sm text-secondary font-semibold ml-2">Ahorras $19.89</span>
+          </div>
+          
+          <ul class="space-y-3 mb-8 text-left">
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Todo lo del plan Individual</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>20% de descuento anual</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Acceso prioritario a nuevas funciones</span>
+            </li>
+            <li class="flex items-center">
+              <mat-icon class="text-primary mr-3">check</mat-icon>
+              <span>Soporte premium</span>
+            </li>
+          </ul>
+
+          <button 
+            mat-flat-button 
+            color="primary"
+            class="w-full py-3 text-lg font-semibold"
+            (click)="selectPlan('premium-yearly')">
+            Empezar Plan Anual
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- Trust Indicators -->
-  <div class="max-w-4xl mx-auto mt-16 text-center">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-      <div class="flex flex-col items-center gap-2">
-        <mat-icon class="text-3xl text-gray-600">security</mat-icon>
-        <span class="text-sm text-gray-600">{{ 'SUBSCRIPTION.TRUST_INDICATORS.SECURE_PAYMENT' | translate }}</span>
+  <!-- Footer Section -->
+  <div class="bg-surface-variant/30 py-12">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-on-surface mb-4">
+        ¿Por qué elegir StreamFlow Music?
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+        <div class="text-center">
+          <mat-icon class="text-primary text-5xl mb-4">music_note</mat-icon>
+          <h3 class="font-semibold text-on-surface mb-2">Millones de Canciones</h3>
+          <p class="text-on-surface-variant">Accede a la biblioteca musical más grande del mundo</p>
+        </div>
+        <div class="text-center">
+          <mat-icon class="text-primary text-5xl mb-4">high_quality</mat-icon>
+          <h3 class="font-semibold text-on-surface mb-2">Calidad Premium</h3>
+          <p class="text-on-surface-variant">Disfruta de audio en alta definición sin interrupciones</p>
+        </div>
+        <div class="text-center">
+          <mat-icon class="text-primary text-5xl mb-4">offline_bolt</mat-icon>
+          <h3 class="font-semibold text-on-surface mb-2">Descarga Offline</h3>
+          <p class="text-on-surface-variant">Lleva tu música favorita contigo a cualquier lugar</p>
+        </div>
       </div>
-      <div class="flex flex-col items-center gap-2">
-        <mat-icon class="text-3xl text-gray-600">cancel</mat-icon>
-        <span class="text-sm text-gray-600">{{ 'SUBSCRIPTION.TRUST_INDICATORS.CANCEL_ANYTIME' | translate }}</span>
-      </div>
-      <div class="flex flex-col items-center gap-2">
-        <mat-icon class="text-3xl text-gray-600">support</mat-icon>
-        <span class="text-sm text-gray-600">{{ 'SUBSCRIPTION.TRUST_INDICATORS.SUPPORT' | translate }}</span>
-      </div>
-      <div class="flex flex-col items-center gap-2">
-        <mat-icon class="text-3xl text-gray-600">high_quality</mat-icon>
-        <span class="text-sm text-gray-600">{{ 'SUBSCRIPTION.TRUST_INDICATORS.PREMIUM_QUALITY' | translate }}</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Loading overlay -->
-  <div *ngIf="loading()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-8 text-center">
-      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-black mx-auto mb-4"></div>
-      <p class="text-gray-700">{{ 'SUBSCRIPTION.LOADING' | translate }}</p>
     </div>
   </div>
 </div>
