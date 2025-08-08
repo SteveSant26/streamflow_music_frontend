@@ -2,7 +2,7 @@
   <div class="filters-header">
     <h3 class="filters-title">
       <mat-icon>tune</mat-icon>
-      {{ 'SEARCH.ADVANCED_FILTERS' | translate }}
+      Filtros Avanzados
       <span 
         *ngIf="hasActiveFilters()" 
         class="active-count"
@@ -20,7 +20,7 @@
       class="clear-button"
     >
       <mat-icon>clear_all</mat-icon>
-      {{ 'SEARCH.CLEAR_FILTERS' | translate }}
+      Limpiar Filtros
     </button>
   </div>
 
@@ -89,7 +89,7 @@
 
           <!-- Range -->
           <div *ngIf="filter.type === 'range'" class="range-filter">
-            <label class="range-label" >{{ filter.name }}</label>
+            <label class="range-label">{{ filter.name }}</label>
             <input 
               type="range" 
               [min]="filter.min || 0" 

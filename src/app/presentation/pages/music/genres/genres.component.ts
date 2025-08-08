@@ -11,7 +11,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { GetAllGenresUseCase } from '../../../../domain/usecases/genre.usecases';
 import { GenreListItem } from '../../../../domain/entities/genre.entity';
@@ -32,15 +31,13 @@ import { ROUTES_CONFIG_MUSIC } from '../../../../config/routes-config/routes-mus
     MatSelectModule,
     MatChipsModule,
     MatTooltipModule,
-    FormsModule,
-    TranslateModule
+    FormsModule
   ],
   templateUrl: './genres.component.html',
   styleUrl: './genres.component.css'
 })
 export class GenresComponent implements OnInit {
   private readonly getAllGenresUseCase = inject(GetAllGenresUseCase);
-  private readonly translateService = inject(TranslateService);
 
   // Signals
   genres = signal<GenreListItem[]>([]);
@@ -83,7 +80,7 @@ export class GenresComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading genres:', error);
-        this.error.set(this.translateService.instant('ERRORS.LOAD_GENRES_FULL'));
+        this.error.set('Error al cargar los géneros. Por favor, inténtalo de nuevo.');
         this.loading.set(false);
       }
     });

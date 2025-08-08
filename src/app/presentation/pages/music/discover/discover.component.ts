@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MusicSectionComponent } from '../../../components/music-section/music-section';
 import { ViewModeService } from '../../../shared/services/view-mode.service';
 import { AlbumListItem } from '../../../../domain/entities/album.entity';
@@ -31,7 +30,6 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
     MatIconModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    TranslateModule,
     MusicSectionComponent
   ],
   templateUrl: './discover.component.html',
@@ -40,7 +38,6 @@ import { PlaylistService } from '../../../../infrastructure/services/playlist.se
 export class DiscoverPageComponent implements OnInit {
   private readonly themeService = inject(MaterialThemeService);
   private readonly viewModeService = inject(ViewModeService);
-  private readonly translateService = inject(TranslateService);
   private readonly getPopularAlbumsUseCase = inject(GetPopularAlbumsUseCase);
   private readonly getPopularArtistsUseCase = inject(GetPopularArtistsUseCase);
   private readonly getPopularGenresUseCase = inject(GetPopularGenresUseCase);
@@ -107,7 +104,7 @@ export class DiscoverPageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading popular albums:', error);
-        this.albumsError.set(this.translateService.instant('ERRORS.POPULAR_ALBUMS_FAILED'));
+        this.albumsError.set('No se pudieron cargar los álbumes populares');
         this.isLoadingAlbums.set(false);
       }
     });
@@ -124,7 +121,7 @@ export class DiscoverPageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading popular artists:', error);
-        this.artistsError.set(this.translateService.instant('ERRORS.POPULAR_ARTISTS_FAILED'));
+        this.artistsError.set('No se pudieron cargar los artistas populares');
         this.isLoadingArtists.set(false);
       }
     });
@@ -141,7 +138,7 @@ export class DiscoverPageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading popular genres:', error);
-        this.genresError.set(this.translateService.instant('ERRORS.POPULAR_GENRES_FAILED'));
+        this.genresError.set('No se pudieron cargar los géneros populares');
         this.isLoadingGenres.set(false);
       }
     });
@@ -158,7 +155,7 @@ export class DiscoverPageComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading random songs:', error);
-        this.randomSongsError.set(this.translateService.instant('ERRORS.RANDOM_SONGS_FAILED_SHORT'));
+        this.randomSongsError.set('No se pudieron cargar las canciones aleatorias');
         this.isLoadingRandomSongs.set(false);
       }
     });

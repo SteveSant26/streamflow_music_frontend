@@ -1,0 +1,208 @@
+/* ================================
+   SKELETON BASE STYLES
+   ================================ */
+
+.skeleton-element {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--skeleton-base-color);
+  border-radius: 4px;
+}
+
+/* Animation */
+.skeleton-animated {
+  background: linear-gradient(90deg, 
+    var(--skeleton-base-color) 25%, 
+    var(--skeleton-highlight-color) 50%, 
+    var(--skeleton-base-color) 75%);
+  background-size: 200px 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* ================================
+   THEME VARIABLES
+   ================================ */
+
+/* Light Theme */
+.skeleton-light {
+  --skeleton-base-color: #f0f0f0;
+  --skeleton-highlight-color: #e0e0e0;
+}
+
+/* Dark Theme */
+.skeleton-dark {
+  --skeleton-base-color: #333;
+  --skeleton-highlight-color: #444;
+}
+
+/* Auto Theme (uses CSS custom properties) */
+.skeleton-auto {
+  --skeleton-base-color: var(--skeleton-bg, #f0f0f0);
+  --skeleton-highlight-color: var(--skeleton-highlight, #e0e0e0);
+}
+
+/* ================================
+   SKELETON TYPES
+   ================================ */
+
+/* Text Skeleton */
+.skeleton-text {
+  height: 1em;
+  margin: 0.5em 0;
+}
+
+.skeleton-text.skeleton-small {
+  height: 0.8em;
+}
+
+.skeleton-text.skeleton-large {
+  height: 1.2em;
+}
+
+/* Card Skeleton */
+.skeleton-card {
+  border-radius: 8px;
+  background-color: var(--card-background, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.skeleton-card.skeleton-small {
+  height: 150px;
+}
+
+.skeleton-card.skeleton-medium {
+  height: 200px;
+}
+
+.skeleton-card.skeleton-large {
+  height: 300px;
+}
+
+/* Avatar Skeleton */
+.skeleton-avatar {
+  border-radius: 50%;
+}
+
+.skeleton-avatar.skeleton-small {
+  width: 40px;
+  height: 40px;
+}
+
+.skeleton-avatar.skeleton-medium {
+  width: 60px;
+  height: 60px;
+}
+
+.skeleton-avatar.skeleton-large {
+  width: 80px;
+  height: 80px;
+}
+
+/* Button Skeleton */
+.skeleton-button {
+  border-radius: 4px;
+}
+
+.skeleton-button.skeleton-small {
+  height: 28px;
+  width: 80px;
+}
+
+.skeleton-button.skeleton-medium {
+  height: 36px;
+  width: 120px;
+}
+
+.skeleton-button.skeleton-large {
+  height: 48px;
+  width: 160px;
+}
+
+/* Chip Skeleton */
+.skeleton-chip {
+  border-radius: 16px;
+}
+
+.skeleton-chip.skeleton-small {
+  height: 24px;
+  width: 60px;
+}
+
+.skeleton-chip.skeleton-medium {
+  height: 32px;
+  width: 80px;
+}
+
+.skeleton-chip.skeleton-large {
+  height: 40px;
+  width: 100px;
+}
+
+/* Image Skeleton */
+.skeleton-image {
+  border-radius: 4px;
+}
+
+.skeleton-image.skeleton-small {
+  height: 100px;
+}
+
+.skeleton-image.skeleton-medium {
+  height: 200px;
+}
+
+.skeleton-image.skeleton-large {
+  height: 300px;
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+   ================================ */
+
+@media (max-width: 768px) {
+  .skeleton-card.skeleton-medium {
+    height: 150px;
+  }
+  
+  .skeleton-image.skeleton-medium {
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .skeleton-card.skeleton-medium {
+    height: 120px;
+  }
+  
+  .skeleton-image.skeleton-medium {
+    height: 120px;
+  }
+  
+  .skeleton-button.skeleton-medium {
+    width: 100px;
+  }
+}
+
+/* ================================
+   DARK THEME INTEGRATION
+   ================================ */
+
+:host-context(.dark-theme) .skeleton-auto {
+  --skeleton-base-color: #333;
+  --skeleton-highlight-color: #444;
+}
+
+:host-context(.dark-theme) .skeleton-card {
+  background-color: var(--card-background, #1e1e1e);
+  border-color: var(--border-color, #333);
+}

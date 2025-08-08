@@ -1,7 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { 
   GetSubscriptionPlansUseCase, 
@@ -14,7 +13,7 @@ import { SubscriptionPlan } from '@app/domain/entities/payment.entity';
 @Component({
   selector: 'app-subscription-plans',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule],
   templateUrl: './subscription-plans.component.html',
   styleUrl: './subscription-plans.component.css'
 })

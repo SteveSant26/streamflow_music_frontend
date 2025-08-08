@@ -1,258 +1,173 @@
 {
-  "GREETING": {
-    "GOOD_MORNING": "Buenos días, {{name}}",
-    "GOOD_AFTERNOON": "Buenas tardes, {{name}}",
-    "GOOD_EVENING": "Buenas noches, {{name}}"
-  },
-  "PLAYER": {
-    "NO_SONG": "No hay canción",
-    "SELECT_SONG": "Selecciona una canción"
-  },
-  "TABLE": {
-    "TITLE": "Título",
-    "ALBUM": "Álbum"
-  },
-  "PLAYLIST": {
-    "TYPE": "Playlist"
-  },
   "SIDEBAR": {
     "HOME": "Inicio",
-    "SEARCH": "Buscar",
     "DISCOVER": "Descubrir",
-    "LIBRARY": "Tu Biblioteca",
-    "MY_PLAYLISTS": "Mis Playlists",
-    "PLAYLISTS": "Playlists",
-    "LIKED_SONGS": "Canciones que te gustan",
-    "RECENTLY_PLAYED": "Reproducidas recientemente",
-    "CREATE_PLAYLIST": "Crear Playlist",
-    "LANGUAGE": "Idioma",
-    "PODCAST": "Podcasts",
-    "MUSIC_VIEW": "Vista de Música",
-    "THEME": "Tema",
-    "SPANISH": "Español",
-    "ENGLISH": "Inglés",
+    "SEARCH": "Buscar",
     "SUBSCRIPTIONS": "Suscripciones",
-    "PROFILE": "Mi Perfil",
-    "LOGOUT": "Cerrar Sesión",
-    "LOGIN": "Iniciar Sesión",
-    "REGISTER": "Registrarse"
+    "PROFILE": "Perfil",
+    "LOGOUT": "Cerrar sesión",
+    "LOGIN": "Iniciar sesión",
+    "REGISTER": "Registrarse",
+    "MY_PLAYLISTS": "Mis playlists",
+    "LANGUAGE": "Idioma",
+    "THEME": "Tema"
   },
-  "TEST": "Prueba de traducción funcionando",
-  "SEARCH": {
-    "TITLE": "Buscar",
-    "PLACEHOLDER": "Buscar canciones, artistas, álbumes...",
-    "BROWSE_GENRES": "Buscar por género",
-    "RESULTS_FOR": "Resultados para: \"{{query}}\"",
-    "CLEAR": "Limpiar búsqueda",
-    "IMPLEMENTING": "Implementando búsqueda...",
-    "RESULTS_SOON": "Los resultados de búsqueda aparecerán aquí próximamente",
-    "ADVANCED_FILTERS": "Filtros Avanzados",
-    "CLEAR_FILTERS": "Limpiar Filtros",
-    "GENERAL_SEARCH": "Búsqueda General",
-    "CONTENT": "Contenido",
-    "QUALITY_SOURCE": "Calidad y Fuente", 
-    "DURATION": "Duración",
-    "POPULARITY": "Popularidad",
-    "CHARACTERISTICS": "Características",
-    "SORTING": "Ordenamiento",
-    "SEARCH_ALBUMS_ARTISTS": "Buscar álbumes o artistas",
-    "SEARCH_ARTISTS": "Buscar artistas",
-    "SEARCH_GENRES": "Buscar géneros",
-    "ARTIST_PLACEHOLDER": "Escribe el nombre del artista...",
-    "ALBUM_PLACEHOLDER": "Escribe aquí para buscar...",
-    "GENRE_PLACEHOLDER": "Escribe el nombre del género...",
-    "NO_ARTISTS_MATCH": "No hay artistas que coincidan con \"{{term}}\". Intenta con otros términos de búsqueda."
-  },
-  "GENRES": {
-    "ROCK": "Rock",
-    "ROCK_DESC": "Clásicos y modernos",
-    "POP": "Pop",
-    "POP_DESC": "Los hits del momento",
-    "HIP_HOP": "Hip Hop",
-    "HIP_HOP_DESC": "Rap y beats urbanos",
-    "ELECTRONIC": "Electronic",
-    "ELECTRONIC_DESC": "EDM y synthwave",
-    "JAZZ": "Jazz",
-    "JAZZ_DESC": "Smooth y clásico",
-    "REGGAETON": "Reggaeton",
-    "REGGAETON_DESC": "Ritmos latinos",
-    "CLASSICAL": "Clásica",
-    "CLASSICAL_DESC": "Música orquestal",
-    "INDIE": "Indie",
-    "INDIE_DESC": "Alternativo y único",
-    "R_AND_B": "R&B",
-    "R_AND_B_DESC": "Soul y groove",
-    "COUNTRY": "Country",
-    "COUNTRY_DESC": "Americana y folk",
-    "LATIN": "Latino",
-    "LATIN_DESC": "Sabor tropical",
-    "BLUES": "Blues",
-    "BLUES_DESC": "Raw y auténtico"
-  },
-  "SORTING": {
-    "SORT_BY": "Ordenar por",
-    "NAME_AZ": "Nombre A-Z",
-    "NAME_ZA": "Nombre Z-A",
-    "TITLE_AZ": "Título A-Z",
-    "TITLE_ZA": "Título Z-A",
-    "ARTIST_AZ": "Artista A-Z",
-    "ARTIST_ZA": "Artista Z-A",
-    "MOST_POPULAR": "Más populares",
-    "LEAST_POPULAR": "Menos populares",
-    "NEWEST": "Más recientes",
-    "OLDEST": "Más antiguos",
-    "VERIFIED_ONLY": "Solo verificados"
-  },
-  "ERRORS": {
-    "LOAD_ALBUMS": "Error al cargar álbumes",
-    "LOAD_ARTISTS": "Error al cargar artistas",
-    "LOAD_GENRES": "Error al cargar géneros",
-    "LOAD_ALBUMS_FULL": "Error al cargar los álbumes. Por favor, inténtalo de nuevo más tarde.",
-    "LOAD_ARTISTS_FULL": "Error al cargar los artistas. Por favor, inténtalo de nuevo más tarde.",
-    "LOAD_GENRES_FULL": "Error al cargar los géneros. Por favor, inténtalo de nuevo más tarde.",
-    "RETRY": "Reintentar"
-  },
-  "PLANS": {
-    "CHOOSE_PLAN": "Elige tu plan",
-    "MONTHLY": "Mensual",
-    "ANNUAL": "Anual",
-    "BASIC": {
-      "TITLE": "Basic",
-      "PRICE_MONTHLY": "$4.99/mes",
-      "PRICE_ANNUAL": "$49.99/año",
-      "FEATURE_1": "Música con anuncios",
-      "FEATURE_2": "Audio estándar",
-      "FEATURE_3": "Reproductor web únicamente"
-    },
-    "PREMIUM": {
-      "TITLE": "Premium",
-      "PRICE_MONTHLY": "$9.99/mes",
-      "PRICE_ANNUAL": "$99.99/año",
-      "FEATURE_1": "Música sin anuncios",
-      "FEATURE_2": "Audio de alta calidad",
-      "FEATURE_3": "Descarga para escuchar offline",
-      "FEATURE_4": "Todas las plataformas"
-    },
-    "FAMILY": {
-      "TITLE": "Family",
-      "PRICE_MONTHLY": "$14.99/mes",
-      "PRICE_ANNUAL": "$149.99/año",
-      "FEATURE_1": "Todas las funciones Premium",
-      "FEATURE_2": "6 cuentas familiares",
-      "FEATURE_3": "Mix familiar personalizado",
-      "FEATURE_4": "Control parental",
-      "FEATURE_5": "Gestión fácil desde una cuenta"
-    },
-    "START_TRIAL": "Iniciar prueba gratuita",
-    "CHOOSE": "Elegir plan",
-    "FAQ": {
-      "TITLE": "Preguntas Frecuentes",
-      "QUESTION_1": "¿Qué incluye la prueba gratuita?",
-      "ANSWER_1": "La prueba gratuita incluye acceso completo a StreamFlow Premium durante 30 días sin costo alguno.",
-      "QUESTION_2": "¿Puedo cancelar en cualquier momento?",
-      "ANSWER_2": "Sí, puedes cancelar tu suscripción en cualquier momento desde tu perfil. No hay compromisos a largo plazo.",
-      "QUESTION_3": "¿Cómo funciona el plan familiar?",
-      "ANSWER_3": "El plan familiar permite hasta 6 cuentas individuales bajo una sola suscripción, cada una con su propia biblioteca y recomendaciones.",
-      "QUESTION_4": "¿Funciona la música offline?",
-      "ANSWER_4": "Sí, con StreamFlow Premium puedes descargar hasta 10,000 canciones en hasta 5 dispositivos para escuchar offline.",
-      "QUESTION_5": "¿Qué métodos de pago aceptan?",
-      "ANSWER_5": "Aceptamos tarjetas de crédito, débito, PayPal y otras opciones de pago locales según tu región."
-    }
+  "THEME": {
+    "LIGHT": "Claro",
+    "DARK": "Oscuro",
+    "SYSTEM": "Sistema",
+    "TOGGLE": "Cambiar tema"
   },
   "LOGIN": {
     "TITLE": "Iniciar Sesión",
-    "EMAIL": "Correo Electrónico",
+    "EMAIL": "Correo electrónico",
     "EMAIL_PLACEHOLDER": "Ingresa tu correo electrónico",
     "PASSWORD": "Contraseña",
     "REMEMBER": "Recordarme",
     "FORGOT": "¿Olvidaste tu contraseña?",
     "LOADING": "Iniciando sesión...",
     "BUTTON": "Iniciar Sesión",
-    "NO_ACCOUNT": "¿No tienes una cuenta?",
+    "NO_ACCOUNT": "¿No tienes cuenta?",
     "REGISTER_LINK": "Regístrate aquí",
-    "GOOGLE": "Iniciar sesión con Google",
-    "GITHUB": "Iniciar sesión con GitHub",
-    "TWITTER": "Iniciar sesión con Twitter",
-    "DISCORD": "Iniciar sesión con Discord",
+    "GOOGLE": "Continuar con Google",
+    "GITHUB": "Continuar con GitHub",
+    "TWITTER": "Continuar con Twitter",
+    "DISCORD": "Continuar con Discord",
     "RIGHTS": "Todos los derechos reservados."
   },
   "REGISTER": {
     "TITLE": "Crear Cuenta",
-    "NAME": "Nombre Completo",
+    "NAME": "Nombre completo",
     "NAME_PLACEHOLDER": "Ingresa tu nombre completo",
-    "EMAIL": "Correo Electrónico",
+    "EMAIL": "Correo electrónico",
     "EMAIL_PLACEHOLDER": "Ingresa tu correo electrónico",
     "PASSWORD": "Contraseña",
-    "ACCEPT": "Acepto los",
-    "TERMS": "Términos y Condiciones",
+    "PASSWORD_PLACEHOLDER": "Crea una contraseña segura",
+    "CONFIRM_PASSWORD": "Confirmar contraseña",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "Confirma tu contraseña",
+    "TERMS": "Acepto los términos y condiciones",
     "LOADING": "Creando cuenta...",
     "BUTTON": "Crear Cuenta",
-    "HAVE_ACCOUNT": "¿Ya tienes una cuenta?",
-    "LOGIN_LINK": "Inicia sesión aquí",
-    "GOOGLE": "Registrarse con Google",
-    "GITHUB": "Registrarse con GitHub",
-    "TWITTER": "Registrarse con Twitter",
-    "DISCORD": "Registrarse con Discord"
+    "HAVE_ACCOUNT": "¿Ya tienes cuenta?",
+    "LOGIN_LINK": "Inicia sesión aquí"
   },
   "RESET": {
     "TITLE": "Restablecer Contraseña",
-    "EMAIL": "Correo Electrónico",
+    "EMAIL": "Correo electrónico",
     "EMAIL_PLACEHOLDER": "Ingresa tu correo electrónico",
     "LOADING": "Enviando...",
-    "BUTTON": "Enviar Enlace de Restablecimiento"
+    "BUTTON": "Enviar enlace de restablecimiento"
   },
   "HOME": {
-    "TITLE": "Descubrir Música",
-    "SUBTITLE": "Encuentra tu próxima canción favorita",
-    "POPULAR_ALBUMS": "Álbumes Populares",
-    "POPULAR_ARTISTS": "Artistas Populares", 
-    "POPULAR_GENRES": "Géneros Populares",
-    "VIEW_ALL": "Ver todo",
+    "TITLE": "Bienvenido a StreamFlow Music",
+    "SUBTITLE": "Descubre música increíble",
     "POPULAR_SONGS": "Canciones Populares",
+    "NO_POPULAR_SONGS": "No hay canciones populares disponibles",
     "RANDOM_SONGS": "Canciones Aleatorias",
-    "RETY": "Reintentar"
+    "NO_RANDOM_SONGS": "No hay canciones aleatorias disponibles",
+    "MIXES": "Mezclas para ti",
+    "SEE_ALL": "Ver todo",
+    "LOADING": "Cargando..."
   },
-  "USER_PROFILE": {
+  "SEARCH": {
+    "TITLE": "Buscar música",
+    "PLACEHOLDER": "Buscar canciones, artistas, álbumes...",
+    "NO_RESULTS": "No se encontraron resultados",
+    "TRY_DIFFERENT": "Intenta con otras palabras clave.",
+    "CLEAR": "Limpiar búsqueda",
+    "RESULTS_FOR": "Resultados para \"{{query}}\"",
+    "SONGS": "Canciones",
+    "SEARCHING": "Buscando...",
+    "BROWSE_GENRES": "Explorar géneros"
+  },
+  "PLAYER": {
+    "NO_SONG": "Ninguna canción seleccionada",
+    "SELECT_SONG": "Selecciona una canción para comenzar",
+    "PLAY": "Reproducir",
+    "PAUSE": "Pausar",
+    "NEXT": "Siguiente",
+    "PREVIOUS": "Anterior",
+    "VOLUME": "Volumen",
+    "MUTE": "Silenciar",
+    "UNMUTE": "Activar sonido"
+  },
+  "PROFILE": {
     "TITLE": "Mi Perfil",
-    "SUBTITLE": "Personaliza tu información y mantén tu perfil actualizado",
-    "USER_DESCRIPTION": "Amante de la música",
-    "EDIT_BUTTON": "Editar Perfil",
-    "EMAIL_LABEL": "Correo Electrónico",
-    "EMAIL_PLACEHOLDER": "Ingresa tu correo electrónico",
-    "EMAIL_REQUIRED": "El correo electrónico es requerido",
-    "EMAIL_INVALID": "Por favor ingresa un correo electrónico válido",
-    "SAVE_BUTTON": "Guardar Cambios",
-    "CANCEL_BUTTON": "Cancelar"
+    "SUBTITLE": "Gestiona tu información personal",
+    "USER_DESCRIPTION": "Información del usuario",
+    "EDIT": "Editar perfil",
+    "SAVE": "Guardar cambios",
+    "CANCEL": "Cancelar"
   },
-  "PAGES": {
-    "ARTISTS": {
-      "TITLE": "Artistas",
-      "SUBTITLE": "Descubre artistas increíbles de todos los géneros"
+  "PLAYLIST": {
+    "TYPE": "Tipo de playlist",
+    "CREATE": "Crear playlist",
+    "ADD_TO_PLAYLIST": "Añadir a playlist",
+    "REMOVE_FROM_PLAYLIST": "Eliminar de playlist",
+    "PUBLIC": "Pública",
+    "PRIVATE": "Privada",
+    "COLLABORATIVE": "Colaborativa"
+  },
+  "PLANS": {
+    "HEADER": {
+      "TITLE": "Elige tu Plan",
+      "SUBTITLE": "Desbloquea todo el potencial de StreamFlow Music"
     },
-    "ALBUMS": {
-      "TITLE": "Álbumes",
-      "SUBTITLE": "Explora toda nuestra colección de álbumes"
+    "MOST_POPULAR": "Más popular",
+    "MONTHLY_EQUIVALENT": "equivalente mensual",
+    "BENEFITS": {
+      "TITLE": "Beneficios Premium",
+      "BENEFIT_1": {
+        "TITLE": "Audio de Alta Calidad",
+        "DESCRIPTION": "Disfruta de música en calidad lossless y alta fidelidad"
+      },
+      "BENEFIT_2": {
+        "TITLE": "Sin Anuncios",
+        "DESCRIPTION": "Escucha tu música favorita sin interrupciones publicitarias"
+      },
+      "BENEFIT_3": {
+        "TITLE": "Descargas Offline",
+        "DESCRIPTION": "Descarga tus canciones favoritas y escúchalas sin conexión"
+      },
+      "BENEFIT_4": {
+        "TITLE": "Playlists Ilimitadas",
+        "DESCRIPTION": "Crea y gestiona tantas playlists como quieras"
+      }
     },
-    "GENRES": {
-      "TITLE": "Géneros Musicales",
-      "SUBTITLE": "Explora la música por género y encuentra tu sonido favorito"
+    "FAQ": {
+      "TITLE": "Preguntas Frecuentes",
+      "QUESTION_1": "¿Puedo cancelar mi suscripción en cualquier momento?",
+      "ANSWER_1": "Sí, puedes cancelar tu suscripción en cualquier momento desde tu perfil.",
+      "QUESTION_2": "¿Hay período de prueba gratuito?",
+      "ANSWER_2": "Sí, ofrecemos 30 días de prueba gratuita para nuevos usuarios.",
+      "QUESTION_3": "¿Qué métodos de pago aceptan?",
+      "ANSWER_3": "Aceptamos tarjetas de crédito, débito y PayPal.",
+      "QUESTION_4": "¿Puedo usar mi cuenta en múltiples dispositivos?",
+      "ANSWER_4": "Sí, puedes usar tu cuenta en hasta 5 dispositivos simultáneamente.",
+      "QUESTION_5": "¿Hay descuentos para estudiantes?",
+      "ANSWER_5": "Sí, ofrecemos 50% de descuento para estudiantes verificados."
     }
   },
-  "ARTIST": {
-    "VIEW_PROFILE": "Ver perfil",
-    "VERIFIED": "Artista verificado",
-    "FOLLOWERS": "seguidores",
-    "FOLLOW": "Seguir artista",
-    "NO_VERIFIED_AVAILABLE": "No hay artistas verificados disponibles en este momento.",
-    "NO_ARTISTS_LIBRARY": "Aún no hay artistas disponibles en la biblioteca."
+  "ERRORS": {
+    "NETWORK": "Error de conexión. Verifica tu internet.",
+    "UNAUTHORIZED": "No tienes autorización para realizar esta acción.",
+    "NOT_FOUND": "El recurso solicitado no fue encontrado.",
+    "SERVER_ERROR": "Error interno del servidor. Inténtalo más tarde.",
+    "VALIDATION": "Por favor, verifica los datos ingresados.",
+    "GENERIC": "Ha ocurrido un error inesperado."
   },
   "COMMON": {
-    "LOADING_ARTISTS": "Cargando artistas...",
-    "LOADING_ALBUMS": "Cargando álbumes...",
-    "LOADING_GENRES": "Cargando géneros...",
-    "RETRY": "Reintentar",
-    "NO_ARTISTS_FOUND": "No se encontraron artistas",
-    "NO_ALBUMS_FOUND": "No se encontraron álbumes",
-    "NO_GENRES_FOUND": "No se encontraron géneros"
+    "LOADING": "Cargando...",
+    "SAVE": "Guardar",
+    "CANCEL": "Cancelar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "ADD": "Añadir",
+    "REMOVE": "Eliminar",
+    "CONFIRM": "Confirmar",
+    "YES": "Sí",
+    "NO": "No",
+    "OK": "Aceptar",
+    "CLOSE": "Cerrar"
   }
 }

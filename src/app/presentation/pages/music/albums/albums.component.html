@@ -1,31 +1,31 @@
 <div class="albums-container">
   <!-- Header -->
   <div class="albums-header">
-    <h1>{{ 'PAGES.ALBUMS.TITLE' | translate }}</h1>
-    <p class="subtitle">{{ 'PAGES.ALBUMS.SUBTITLE' | translate }}</p>
+    <h1>Álbumes</h1>
+    <p class="subtitle">Explora toda nuestra colección de álbumes</p>
   </div>
 
   <!-- Filters and Search -->
   <div class="albums-filters">
     <mat-form-field class="search-field">
-      <mat-label>{{ 'SEARCH.SEARCH_ALBUMS_ARTISTS' | translate }}</mat-label>
+      <mat-label>Buscar álbumes o artistas</mat-label>
       <input matInput 
              [value]="searchTerm()" 
              (input)="onSearchChange($event.target.value)"
-             placeholder="{{ 'SEARCH.ALBUM_PLACEHOLDER' | translate }}">
+             placeholder="Escribe aquí para buscar...">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
     <mat-form-field class="sort-field">
-      <mat-label>{{ 'SORTING.SORT_BY' | translate }}</mat-label>
+      <mat-label>Ordenar por</mat-label>
       <mat-select [value]="sortBy()" (selectionChange)="onSortChange($event.value)">
-        <mat-option value="title">{{ 'SORTING.TITLE_AZ' | translate }}</mat-option>
-        <mat-option value="-title">{{ 'SORTING.TITLE_ZA' | translate }}</mat-option>
-        <mat-option value="artist__name">{{ 'SORTING.ARTIST_AZ' | translate }}</mat-option>
-        <mat-option value="-artist__name">{{ 'SORTING.ARTIST_ZA' | translate }}</mat-option>
-        <mat-option value="-release_date">{{ 'SORTING.NEWEST' | translate }}</mat-option>
-        <mat-option value="release_date">{{ 'SORTING.OLDEST' | translate }}</mat-option>
-        <mat-option value="-play_count">{{ 'SORTING.MOST_POPULAR' | translate }}</mat-option>
+        <mat-option value="title">Título A-Z</mat-option>
+        <mat-option value="-title">Título Z-A</mat-option>
+        <mat-option value="artist__name">Artista A-Z</mat-option>
+        <mat-option value="-artist__name">Artista Z-A</mat-option>
+        <mat-option value="-release_date">Más recientes</mat-option>
+        <mat-option value="release_date">Más antiguos</mat-option>
+        <mat-option value="-play_count">Más populares</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
@@ -33,7 +33,7 @@
   <!-- Loading State -->
   <div class="loading-container" *ngIf="loading()">
     <mat-spinner diameter="50"></mat-spinner>
-    <p>{{ 'COMMON.LOADING_ALBUMS' | translate }}</p>
+    <p>Cargando álbumes...</p>
   </div>
 
   <!-- Error State -->
@@ -41,7 +41,7 @@
     <mat-icon class="error-icon">error</mat-icon>
     <p>{{ error() }}</p>
     <button mat-raised-button color="primary" (click)="loadAlbums()">
-      {{ 'COMMON.RETRY' | translate }}
+      Reintentar
     </button>
   </div>
 
@@ -88,7 +88,7 @@
   <!-- Empty State -->
   <div class="empty-state" *ngIf="!loading() && !error() && filteredAlbums().length === 0">
     <mat-icon class="empty-icon">library_music</mat-icon>
-    <h2>{{ 'COMMON.NO_ALBUMS_FOUND' | translate }}</h2>
+    <h2>No se encontraron álbumes</h2>
     <p *ngIf="searchTerm()">
       No hay álbumes que coincidan con "{{ searchTerm() }}". 
       Intenta con otros términos de búsqueda.

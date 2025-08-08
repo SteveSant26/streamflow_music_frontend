@@ -1,30 +1,30 @@
 <div class="artists-container">
   <!-- Header -->
   <div class="artists-header">
-    <h1>{{ 'PAGES.ARTISTS.TITLE' | translate }}</h1>
-    <p class="subtitle">{{ 'PAGES.ARTISTS.SUBTITLE' | translate }}</p>
+    <h1>Artistas</h1>
+    <p class="subtitle">Descubre artistas increíbles de todos los géneros</p>
   </div>
 
   <!-- Filters and Search -->
   <div class="artists-filters">
     <mat-form-field class="search-field">
-      <mat-label>{{ 'SEARCH.SEARCH_ARTISTS' | translate }}</mat-label>
+      <mat-label>Buscar artistas</mat-label>
       <input matInput 
              [value]="searchTerm()" 
-             (input)="onSearchChange($any($event.target).value)"
-             placeholder="{{ 'SEARCH.ARTIST_PLACEHOLDER' | translate }}">
+             (input)="onSearchChange($event.target.value)"
+             placeholder="Escribe el nombre del artista...">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
     <mat-form-field class="sort-field">
-      <mat-label>{{ 'SORTING.SORT_BY' | translate }}</mat-label>
+      <mat-label>Ordenar por</mat-label>
       <mat-select [value]="sortBy()" (selectionChange)="onSortChange($event.value)">
-        <mat-option value="name">{{ 'SORTING.NAME_AZ' | translate }}</mat-option>
-        <mat-option value="-name">{{ 'SORTING.NAME_ZA' | translate }}</mat-option>
-        <mat-option value="-followers_count">{{ 'SORTING.MOST_POPULAR' | translate }}</mat-option>
-        <mat-option value="followers_count">{{ 'SORTING.LEAST_POPULAR' | translate }}</mat-option>
-        <mat-option value="-created_at">{{ 'SORTING.NEWEST' | translate }}</mat-option>
-        <mat-option value="created_at">{{ 'SORTING.OLDEST' | translate }}</mat-option>
+        <mat-option value="name">Nombre A-Z</mat-option>
+        <mat-option value="-name">Nombre Z-A</mat-option>
+        <mat-option value="-followers_count">Más populares</mat-option>
+        <mat-option value="followers_count">Menos populares</mat-option>
+        <mat-option value="-created_at">Más recientes</mat-option>
+        <mat-option value="created_at">Más antiguos</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -33,11 +33,9 @@
         <mat-chip 
           [class.selected]="verifiedOnly()"
           (click)="toggleVerifiedFilter()"
-          (keydown.enter)="toggleVerifiedFilter()"
-          (keydown.space)="toggleVerifiedFilter()"
           class="filter-chip">
           <mat-icon matChipAvatar>verified</mat-icon>
-          {{ 'SORTING.VERIFIED_ONLY' | translate }}
+          Solo verificados
         </mat-chip>
       </mat-chip-set>
     </div>
@@ -46,7 +44,7 @@
   <!-- Loading State -->
   <div class="loading-container" *ngIf="loading()">
     <mat-spinner diameter="50"></mat-spinner>
-    <p>{{ 'COMMON.LOADING_ARTISTS' | translate }}</p>
+    <p>Cargando artistas...</p>
   </div>
 
   <!-- Error State -->
@@ -54,7 +52,7 @@
     <mat-icon class="error-icon">error</mat-icon>
     <p>{{ error() }}</p>
     <button mat-raised-button color="primary" (click)="loadArtists()">
-      {{ 'COMMON.RETRY' | translate }}
+      Reintentar
     </button>
   </div>
 
@@ -70,7 +68,7 @@
           <button mat-fab 
                   color="primary" 
                   [routerLink]="getArtistLink(artist.id)"
-                  [title]="'ARTIST.VIEW_PROFILE' | translate">
+                  matTooltip="Ver perfil">
             <mat-icon>person</mat-icon>
           </button>
         </div>
@@ -81,13 +79,13 @@
           <h3 class="artist-name">{{ artist.name }}</h3>
           <mat-icon *ngIf="artist.is_verified" 
                    class="verified-icon" 
-                   [title]="'ARTIST.VERIFIED' | translate">
+                   matTooltip="Artista verificado">
             verified
           </mat-icon>
         </div>
         <div class="artist-stats">
           <span class="followers-count">
-            {{ formatFollowersCount(artist.followers_count) }} {{ 'ARTIST.FOLLOWERS' | translate }}
+            {{ formatFollowersCount(artist.followers_count) }} seguidores
           </span>
         </div>
       </mat-card-content>
@@ -97,9 +95,9 @@
                 [routerLink]="getArtistLink(artist.id)" 
                 color="primary">
           <mat-icon>person</mat-icon>
-          {{ 'ARTIST.VIEW_PROFILE' | translate }}
+          Ver Perfil
         </button>
-        <button mat-icon-button [title]="'ARTIST.FOLLOW' | translate">
+        <button mat-icon-button matTooltip="Seguir artista">
           <mat-icon>favorite_border</mat-icon>
         </button>
       </mat-card-actions>
@@ -109,15 +107,16 @@
   <!-- Empty State -->
   <div class="empty-state" *ngIf="!loading() && !error() && filteredArtists().length === 0">
     <mat-icon class="empty-icon">people</mat-icon>
-    <h2>{{ 'COMMON.NO_ARTISTS_FOUND' | translate }}</h2>
+    <h2>No se encontraron artistas</h2>
     <p *ngIf="searchTerm()">
-      {{ 'SEARCH.NO_ARTISTS_MATCH' | translate: {term: searchTerm()} }}
+      No hay artistas que coincidan con "{{ searchTerm() }}". 
+      Intenta con otros términos de búsqueda.
     </p>
     <p *ngIf="!searchTerm() && verifiedOnly()">
-      {{ 'ARTIST.NO_VERIFIED_AVAILABLE' | translate }}
+      No hay artistas verificados disponibles en este momento.
     </p>
     <p *ngIf="!searchTerm() && !verifiedOnly()">
-      {{ 'ARTIST.NO_ARTISTS_LIBRARY' | translate }}
+      Aún no hay artistas disponibles en la biblioteca.
     </p>
   </div>
 </div>

@@ -54,20 +54,8 @@ export class LanguageRepository implements ILanguageRepository {
           ? browserLanguage
           : this.DEFAULT_LANGUAGE;
 
-    console.log('🌐 Initializing language with:', languageToUse);
-    
     this.translateService.setDefaultLang(this.DEFAULT_LANGUAGE);
-    this.translateService.use(languageToUse).subscribe({
-      next: () => {
-        console.log('✅ Language loaded successfully:', languageToUse);
-        this.storeLanguage(languageToUse);
-      },
-      error: (error) => {
-        console.error('❌ Error loading language:', error);
-        // Fallback to default
-        this.translateService.use(this.DEFAULT_LANGUAGE).subscribe();
-      }
-    });
+    this.setLanguage(languageToUse);
   }
 
   private storeLanguage(language: string): void {

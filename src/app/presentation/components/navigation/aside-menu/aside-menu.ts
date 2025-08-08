@@ -126,9 +126,7 @@ export class AsideMenu implements OnInit, OnDestroy {
   }
 
   changeLanguage(language: 'en' | 'es') {
-    console.log('🔄 Changing language to:', language);
     this.languageService.changeLanguage(language);
-    console.log('✅ Language change initiated');
   }
 
   // Theme methods
