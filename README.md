@@ -4,6 +4,7 @@ Este proyecto es una aplicación frontend desarrollada en Angular, diseñada baj
 
 ## Tabla de Contenidos
 
+
 - [Características](#características)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Arquitectura](#arquitectura)
